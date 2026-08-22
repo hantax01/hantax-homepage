@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세무 칼럼 | 한택스</title>
+<meta name="description" content="사장님이 자주 묻는 세금 질문에 한택스 세무사가 직접 답합니다. 부가가치세, 종합소득세, 법인세, 급여·4대보험, 상속·증여, 정부 지원사업.">
+<link rel="canonical" href="https://www.hantax47.com/column/">
+<meta property="og:title" content="세무 칼럼 | 한택스">
+<meta property="og:description" content="사장님이 자주 묻는 세금 질문에 세무사가 직접 답합니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/column/">
+<link rel="icon" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.svg" alt="HanTax Smart" width="160" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../#strength">한택스가 다른 점</a>
+      <a href="../#report">세무리포트</a>
+      <a href="../#checklist">사전안내 30항목</a>
+      <a href="../#people">세무사</a>
+      <a href="../#services">서비스</a>
+      <a href="./">세무 칼럼</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 상담</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무 칼럼</span>
+    <h1>사장님이 자주 묻는 질문에<br>세무사가 직접 답합니다</h1>
+    <p class="lead">질문 하나에 글 하나. 답부터 먼저 쓰고, 근거 법령과 최종 수정일을 밝힙니다.</p>
+    <div class="col-cats">
+      <span>부가가치세</span><span>종합소득세</span><span>법인세·법인전환</span><span>급여·4대보험</span><span>상속·증여</span><span>정부 지원사업</span>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:48px">
+  <div class="wrap">
+    <!-- 새 글 추가: _template.html을 복사해 글을 쓰고, 아래 post-list 맨 앞에 카드 한 장을 추가합니다.
+         글이 하나라도 생기면 .empty 블록은 지웁니다. -->
+    <div class="post-list" hidden>
+      <!--
+      <a href="bugase-maeip-gongje.html" class="post">
+        <div class="cat">부가가치세</div>
+        <h2>매입세액 공제, 이건 되고 저건 안 되는 이유</h2>
+        <p>첫 두 문장 요약</p>
+        <time datetime="2026-08-22">2026.08.22 · 한진식 세무사</time>
+      </a>
+      -->
+    </div>
+
+    <div class="empty">
+      <h2>첫 칼럼을 준비하고 있어요</h2>
+      <p>그동안 써 온 글은 네이버 블로그에서 먼저 읽어보실 수 있습니다.</p>
+      <a href="http://blog.naver.com/hantax47" target="_blank" rel="noopener" class="btn btn-ghost">네이버 블로그 가기</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.svg" alt="HanTax Smart" width="140" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>상호 나이스원세무법인 스마트지점 · 대표 한진식 세무사<br>서울특별시 영등포구 63로 32, 1211호 (라이프콤비빌딩)<br>사업자등록번호 394-85-01876</p>
+    </div>
+    <div class="foot-links">
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener">카카오톡 상담</a>
+      <a href="tel:010-6288-1354">전화 상담</a>
+      <a href="http://blog.naver.com/hantax47" target="_blank" rel="noopener">네이버 블로그</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax · 나이스원세무법인 스마트지점</div>
+</footer>
+
+<script>
+const btn=document.querySelector('.menu-btn'),links=document.getElementById('nav-links');
+btn.addEventListener('click',()=>{const open=document.body.classList.toggle('menu-open');btn.setAttribute('aria-expanded',open);btn.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');});
+links.addEventListener('click',e=>{if(e.target.tagName==='A'){document.body.classList.remove('menu-open');btn.setAttribute('aria-expanded','false');}});
+</script>
+</body>
+</html>
