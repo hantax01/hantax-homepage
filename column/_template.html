@@ -52,14 +52,9 @@
 
 <header class="nav">
   <div class="wrap">
-    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.svg" alt="HanTax Smart" width="160" height="46"></a>
-    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
-    <nav class="nav-links" id="nav-links">
-      <a href="../#strength">한택스가 다른 점</a>
-      <a href="../#report">세무리포트</a>
-      <a href="../#checklist">사전안내 30항목</a>
-      <a href="../#people">세무사</a>
-      <a href="../#services">서비스</a>
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.svg" alt="HanTax Smart" width="150" height="44"></a>
+    <nav class="nav-links">
+      <a href="../">홈</a>
       <a href="./">세무 칼럼</a>
       <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 상담</a>
     </nav>
@@ -134,10 +129,5 @@
   <div class="copy">© 2026 HanTax · 나이스원세무법인 스마트지점</div>
 </footer>
 
-<script>
-const btn=document.querySelector('.menu-btn'),links=document.getElementById('nav-links');
-btn.addEventListener('click',()=>{const open=document.body.classList.toggle('menu-open');btn.setAttribute('aria-expanded',open);btn.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');});
-links.addEventListener('click',e=>{if(e.target.tagName==='A'){document.body.classList.remove('menu-open');btn.setAttribute('aria-expanded','false');}});
-</script>
 </body>
 </html>
