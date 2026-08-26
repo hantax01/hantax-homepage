@@ -44,9 +44,7 @@ h2 em{font-style:normal;color:var(--blue)}
 /* ---------- hero ---------- */
 .hero{padding:190px 0 120px;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--soft),var(--paper))}
 .hero::before{content:"";position:absolute;top:-220px;right:-160px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(27,74,155,.09),transparent 68%)}
-.hero .wrap{position:relative;text-align:center}
-.hero .lead{margin-left:auto;margin-right:auto}
-.hero .btns{justify-content:center}
+.hero .wrap{position:relative}
 .hero h1{font-family:var(--serif);font-size:clamp(40px,6.4vw,72px);font-weight:900;letter-spacing:-.03em;line-height:1.25;margin-bottom:26px}
 .hero h1 em{font-style:normal;color:var(--blue)}
 .hero .lead{font-size:18px;max-width:none;margin-bottom:40px}
@@ -121,7 +119,7 @@ h2 em{font-style:normal;color:var(--blue)}
 /* ---------- footer ---------- */
 .foot{padding:48px 0 32px;background:var(--paper);border-top:1px solid var(--line)}
 .foot .wrap{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
-.foot img{height:24px;margin-bottom:14px}
+.foot img{height:24px;width:auto;margin-bottom:14px}
 .foot p{font-size:13px;color:var(--mute);line-height:1.9}
 .foot p b{color:var(--char)}
 .foot-links{display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start}
