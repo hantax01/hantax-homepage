@@ -96,6 +96,8 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .prof img{width:100%;height:auto;border-bottom:1px solid var(--line);margin-bottom:18px}
 .prof b{display:block;font-family:var(--serif);font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.02em}
 .prof span{display:block;margin-top:4px;padding:0 20px;font-size:13.5px;color:var(--mute)}
+.team{margin-top:48px}
+.team img{width:100%;height:auto;border-radius:18px;border:1px solid var(--line)}
 .quote{margin:48px auto 0;max-width:660px;text-align:center;border:0}
 .quote p{font-family:var(--serif);font-size:clamp(19px,2.4vw,25px);font-weight:700;color:var(--ink);line-height:1.65;letter-spacing:-.02em;margin-bottom:14px}
 .quote cite{font-style:normal;font-size:14px;color:var(--mute);font-weight:600}
