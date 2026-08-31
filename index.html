@@ -52,7 +52,8 @@
 <header class="nav">
   <div class="wrap">
     <a href="#top" class="logo" aria-label="한택스 홈"><img src="assets/logo.png" alt="HanTax Smart" width="150" height="44"></a>
-    <nav class="nav-links">
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
       <a href="#report">세무리포트</a>
       <a href="#alert">사전 알림</a>
       <a href="#record">고객 정보 통합</a>
@@ -267,6 +268,9 @@
 <script>
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+const mb=document.querySelector('.menu-btn'),nl=document.getElementById('nav-links');
+mb.addEventListener('click',()=>{const open=document.body.classList.toggle('menu-open');mb.setAttribute('aria-expanded',open);mb.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');});
+nl.addEventListener('click',e=>{if(e.target.tagName==='A'){document.body.classList.remove('menu-open');mb.setAttribute('aria-expanded','false');}});
 </script>
 </body>
 </html>
