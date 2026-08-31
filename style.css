@@ -66,7 +66,7 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .qa b{color:var(--blue);font-weight:800}
 
 /* ---------- report screenshot ---------- */
-.shot-wrap{max-width:520px;justify-self:center}
+.shot-wrap{width:100%;max-width:520px;justify-self:center}
 .shot{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(11,30,63,.3),0 2px 6px rgba(0,0,0,.04)}
 .shot-bar{display:flex;align-items:center;gap:6px;padding:11px 14px;background:var(--soft);border-bottom:1px solid var(--line)}
 .shot-bar i{width:10px;height:10px;border-radius:50%;background:#D8DDE6}
@@ -74,14 +74,15 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .shot img{width:100%;height:auto}
 .shot-note{margin-top:12px;text-align:center;font-size:12.5px;color:var(--mute)}
 /* ---------- stacked shots ---------- */
-.stack{position:relative;cursor:pointer}
+.stack{position:relative}
+.stack::before{content:"";display:block}
+.stack-rep::before{padding-top:97%}
+.stack-prog::before{padding-top:56%}
 .stack .shot{position:absolute;right:0;top:0;width:84%;transition:transform .35s ease,opacity .35s ease,box-shadow .35s ease}
 .stack .shot:nth-last-child(1){transform:translate(0,44px);z-index:4}
 .stack .shot:nth-last-child(2){transform:translate(-28px,22px);z-index:3;opacity:.95}
 .stack .shot:nth-last-child(3){transform:translate(-56px,0);z-index:2;opacity:.85}
 .stack .shot:nth-last-child(4){transform:translate(-84px,-22px);z-index:1;opacity:.75}
-.stack-rep{height:460px}
-.stack-prog{height:310px}
 
 /* ---------- alert list ---------- */
 .alist{display:flex;flex-direction:column;gap:10px}
@@ -211,8 +212,10 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
   .nav-links a{padding:16px 4px;border-bottom:1px solid var(--line)}
   .nav-links .btn{margin-top:16px;justify-content:center;border-bottom:0;padding:15px}
   .people,.duo{grid-template-columns:1fr}
-  .stack{height:auto;cursor:default}
-  .stack .shot{position:static;transform:none!important;opacity:1!important;width:100%;margin-bottom:14px}
+  .stack .shot:nth-last-child(1){transform:translate(0,30px)}
+  .stack .shot:nth-last-child(2){transform:translate(-14px,15px)}
+  .stack .shot:nth-last-child(3){transform:translate(-28px,0)}
+  .stack .shot:nth-last-child(4){transform:translate(-42px,-15px)}
   .team-grid{grid-template-columns:repeat(2,1fr)}
   .cta{padding:96px 0}
   .post-list{grid-template-columns:1fr}
