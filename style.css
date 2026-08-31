@@ -40,6 +40,12 @@ h2 em{font-style:normal;color:var(--blue)}
 .nav-links{display:flex;align-items:center;gap:24px;font-size:14.5px;font-weight:600;color:var(--char)}
 .nav-links a:hover{color:var(--blue)}
 .nav-links .btn{padding:10px 20px;font-size:13.5px}
+.menu-btn{display:none;width:44px;height:44px;border:0;background:none;cursor:pointer;position:relative}
+.menu-btn span{position:absolute;left:11px;width:22px;height:2px;background:var(--ink);transition:transform .25s,opacity .25s}
+.menu-btn span:nth-child(1){top:15px}.menu-btn span:nth-child(2){top:21px}.menu-btn span:nth-child(3){top:27px}
+body.menu-open .menu-btn span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+body.menu-open .menu-btn span:nth-child(2){opacity:0}
+body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
 /* ---------- hero ---------- */
 .hero{padding:190px 0 120px;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--soft),var(--paper))}
@@ -190,7 +196,12 @@ h2 em{font-style:normal;color:var(--blue)}
   .sec{padding:84px 0}
   .hero{padding:140px 0 84px}
   .hero .lead{font-size:16.5px}
-  .nav-links a:not(.btn){display:none}
+  .menu-btn{display:block}
+  .nav-links{position:fixed;top:70px;left:0;right:0;height:calc(100vh - 70px);background:var(--paper);flex-direction:column;align-items:stretch;gap:0;padding:12px 24px;font-size:17px;transform:translateX(100%);transition:transform .25s;overflow-y:auto}
+  body.menu-open .nav-links{transform:none}
+  body.menu-open{overflow:hidden}
+  .nav-links a{padding:16px 4px;border-bottom:1px solid var(--line)}
+  .nav-links .btn{margin-top:16px;justify-content:center;border-bottom:0;padding:15px}
   .people,.duo{grid-template-columns:1fr}
   .thumbs{grid-template-columns:1fr}
   .cta{padding:96px 0}
