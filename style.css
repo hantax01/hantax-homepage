@@ -82,8 +82,8 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .stack::before{content:"";display:block}
 .stack-rep::before{padding-top:90%}
 .stack-rep .shot img{width:100%;aspect-ratio:6/5;object-fit:cover;object-position:left top}
-.stack-prog .shot img{width:100%;aspect-ratio:11/5;object-fit:cover;object-position:left top}
-.stack-prog::before{padding-top:56%}
+.stack-prog .shot img{width:100%;aspect-ratio:9/5;object-fit:cover;object-position:left top}
+.stack-prog::before{padding-top:64%}
 .stack .shot{position:absolute;right:0;top:0;width:84%;transition:transform .35s ease,opacity .35s ease,box-shadow .35s ease}
 .stack .shot:nth-last-child(1){transform:translate(0,44px);z-index:4}
 .stack .shot:nth-last-child(2){transform:translate(-28px,22px);z-index:3;opacity:.95}
