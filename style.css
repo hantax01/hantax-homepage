@@ -201,7 +201,7 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .faq details[open] summary::after{content:"–"}
 .faq details p{margin:12px 0 0;font-size:15.5px}
 .notice{margin-top:44px;padding:18px 22px;border-radius:12px;background:var(--seal-soft);font-size:14px;color:var(--char)}
-.art-cta{margin-top:48px;padding:32px;border-radius:16px;background:var(--blue);color:#fff;text-align:center}
+.art-cta{margin-top:48px;padding:32px;border-radius:16px;background:var(--navy);color:#fff;text-align:center}
 .art-cta p{color:#fff;font-size:16px;font-weight:700;margin-bottom:16px}
 .art-cta .btn-primary{background:#FEE500;color:#191919;box-shadow:none}
 
