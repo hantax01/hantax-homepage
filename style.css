@@ -124,6 +124,11 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .pc li b{color:var(--ink);font-weight:700}
 .pc p{font-size:14.5px;color:var(--char);line-height:1.85}
 
+/* ---------- mid cta ---------- */
+.midcta{padding:56px 0;background:var(--blue-soft)}
+.midcta .wrap{display:flex;align-items:center;justify-content:center;gap:14px 28px;flex-wrap:wrap;text-align:center}
+.midcta p{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--ink)}
+
 /* ---------- cta ---------- */
 .cta{background:var(--navy);color:#fff;text-align:center;padding:130px 0}
 .cta h2{color:#fff}
