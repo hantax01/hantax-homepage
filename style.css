@@ -253,7 +253,7 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
   .stack .shot:nth-last-child(4){transform:translate(-42px,-15px)}
   .team-grid{grid-template-columns:repeat(2,1fr)}
   .cta{padding:96px 0}
-  .cta .btn{width:min(100%,340px);justify-content:center}
+  .cta .btn,.hero .btn{width:min(100%,340px);justify-content:center}
   .post-list{grid-template-columns:1fr}
   .page-head{padding:100px 0 36px}.page-head h1{font-size:30px}
   .article{padding:100px 20px 72px}.article h1{font-size:27px}
