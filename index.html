@@ -46,7 +46,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="style.css?v=19">
+<link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
 
@@ -70,35 +70,34 @@
 
 <!-- 1. HERO -->
 <section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow rv">나이스원세무법인 스마트지점 · 서울 여의도</span>
-      <h1 class="rv d1">사장님의 <em>스토리</em>를<br>기억하는 세무사</h1>
-      <p class="lead rv d2">회사에는 저마다의 이야기가 있고<br>그 이야기는 숫자 뒤에 가려져 있습니다.<br>한택스는 그 이야기를 먼저 읽습니다.</p>
-      <div class="btns rv d3">
-        <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
-        <a href="tel:010-6288-1354" class="btn btn-ghost">010-6288-1354</a>
-      </div>
+  <div class="wrap">
+    <span class="eyebrow rv">나이스원세무법인 스마트지점 · 서울 여의도</span>
+    <p class="lead rv d1">회사에는 저마다의 이야기가 있고 그 이야기는 숫자 뒤에 가려져 있습니다.<br>한택스는 그 이야기를 먼저 읽습니다.</p>
+    <h1 class="rv d2">사장님의 <em>스토리</em>를 기억하는 세무사</h1>
+    <div class="btns rv d3">
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+      <a href="tel:010-6288-1354" class="btn btn-ghost">010-6288-1354</a>
     </div>
-    <div class="shot-wrap rv d3">
-      <div class="stack stack-prog" title="누르면 다음 화면이 보입니다">
-        <div class="shot">
+    <div class="rv d4">
+      <div class="stack-hero" title="누르면 다음 화면이 보입니다">
+        <div class="shot" data-i="3">
           <div class="shot-bar"><i></i><i></i><i></i><span>신고서 결재 이력</span></div>
           <img src="assets/crm/crm_appr.png?v=3" alt="신고서 결재 이력 화면 — 부가세·종합소득세 신고마다 담당자와 세무사 2단계 결재 기록이 남는 화면" width="2880" height="1800">
         </div>
-        <div class="shot">
+        <div class="shot" data-i="2">
           <div class="shot-bar"><i></i><i></i><i></i><span>활동 타임라인</span></div>
           <img src="assets/hero/hero_timeline.png?v=2" alt="최근 활동 타임라인 화면 — 상담·업무·신고·입금 기록이 날짜순으로 통합되어 보이는 화면" width="2880" height="1800">
         </div>
-        <div class="shot">
+        <div class="shot" data-i="1">
           <div class="shot-bar"><i></i><i></i><i></i><span>카카오톡 안내</span></div>
           <img src="assets/hero/hero_kakao.png?v=3" alt="카카오톡 안내 화면 — 창업감면 종료와 노란우산공제 추가 공제 여력을 담당자가 먼저 안내하는 대화" width="2880" height="1800">
         </div>
-        <div class="shot">
+        <div class="shot" data-i="0">
           <div class="shot-bar"><i></i><i></i><i></i><span>사전알림</span></div>
           <img src="assets/hero/hero_alert.png?v=3" alt="사전알림 화면 — 창업감면 종료, 노란우산공제 추가 공제 여력, 통합고용세액공제, 부가세 예정고지 등 이 회사에 해당하는 점검 항목만 골라 보여주는 화면" width="2880" height="1800">
         </div>
       </div>
+      <div class="hdots" aria-hidden="true"><button class="hdot" data-d="0"></button><button class="hdot" data-d="1"></button><button class="hdot" data-d="2"></button><button class="hdot" data-d="3"></button></div>
       <p class="shot-note">실제 프로그램 화면입니다 (예시 데이터) · 누르면 다음 화면이 보입니다</p>
     </div>
   </div>
@@ -327,6 +326,17 @@
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 document.querySelectorAll('.stack').forEach(s=>s.addEventListener('click',()=>{s.insertBefore(s.lastElementChild,s.firstElementChild);}));
+const hs=document.querySelector('.stack-hero');
+if(hs){const dots=[...document.querySelectorAll('.hdot')];
+const upd=()=>{const i=+hs.lastElementChild.dataset.i;dots.forEach((d,k)=>d.classList.toggle('on',k===i));};
+const adv=()=>{hs.insertBefore(hs.lastElementChild,hs.firstElementChild);upd();};
+let t=setInterval(adv,4500);
+const reset=()=>{clearInterval(t);t=setInterval(adv,4500);};
+hs.addEventListener('click',()=>{adv();reset();});
+dots.forEach((d,k)=>d.addEventListener('click',e=>{e.stopPropagation();let g=0;while(+hs.lastElementChild.dataset.i!==k&&g++<4)hs.insertBefore(hs.lastElementChild,hs.firstElementChild);upd();reset();}));
+hs.addEventListener('mouseenter',()=>clearInterval(t));
+hs.addEventListener('mouseleave',reset);
+upd();}
 const mb=document.querySelector('.menu-btn'),nl=document.getElementById('nav-links');
 mb.addEventListener('click',()=>{const open=document.body.classList.toggle('menu-open');mb.setAttribute('aria-expanded',open);mb.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');});
 nl.addEventListener('click',e=>{if(e.target.tagName==='A'){document.body.classList.remove('menu-open');mb.setAttribute('aria-expanded','false');}});
