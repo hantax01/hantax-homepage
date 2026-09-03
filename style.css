@@ -51,24 +51,21 @@ body.menu-open .menu-btn span:nth-child(2){opacity:0}
 body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
 /* ---------- hero ---------- */
-.hero{padding:148px 0 84px;position:relative;overflow:hidden;background:var(--navy);text-align:center}
+.hero{padding:170px 0 96px;position:relative;overflow:hidden;background:var(--navy);text-align:center}
 .hero::before{content:"";position:absolute;top:-260px;left:50%;transform:translateX(-50%);width:900px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(90,140,255,.16),transparent 65%)}
 .hero .wrap{position:relative}
 .hero .eyebrow{color:#9db9e8}
 .hero h1{font-family:var(--serif);font-size:clamp(38px,5.2vw,64px);font-weight:900;letter-spacing:-.03em;line-height:1.3;color:#fff;margin-top:16px}
 .hero h1 em{font-style:normal;color:var(--sky)}
 .hero .lead{font-size:17.5px;max-width:none;color:rgba(255,255,255,.82)}
-.hero .btns{margin-top:24px;justify-content:center}
+.hero .btns{margin-top:30px;justify-content:center}
 .hero .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
 .hero .btn-ghost:hover{border-color:#fff;color:#fff}
-.stack-hero{position:relative;max-width:780px;margin:34px auto 0;cursor:pointer}
-.stack-hero::before{content:"";display:block;padding-top:55%}
-.stack-hero .shot{position:absolute;right:0;top:0;width:76%;transition:transform .35s ease,opacity .35s ease}
+.stack-hero{position:relative;max-width:780px;margin:46px auto 0;cursor:pointer}
+.stack-hero::before{content:"";display:block;padding-top:calc(52.78% + 42px)}
+.stack-hero .shot{position:absolute;top:0;left:0;width:100%;opacity:0;transition:opacity .5s ease}
+.stack-hero .shot:last-child{opacity:1}
 .stack-hero .shot img{aspect-ratio:36/19;object-fit:cover;object-position:left top}
-.stack-hero .shot:nth-last-child(1){transform:translate(0,44px);z-index:4}
-.stack-hero .shot:nth-last-child(2){transform:translate(-48px,22px);z-index:3;opacity:.95}
-.stack-hero .shot:nth-last-child(3){transform:translate(-96px,0);z-index:2;opacity:.85}
-.stack-hero .shot:nth-last-child(4){transform:translate(-144px,-22px);z-index:1;opacity:.75}
 .hdots{display:flex;gap:8px;justify-content:center;margin-top:20px}
 .hdot{width:8px;height:8px;border-radius:99px;background:rgba(255,255,255,.28);border:0;padding:0;cursor:pointer;transition:width .25s,background .25s}
 .hdot.on{background:#FEE500;width:24px}
