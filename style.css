@@ -31,6 +31,9 @@ h2 em{font-style:normal;color:var(--blue)}
 .btn-primary{background:var(--blue);color:#fff;box-shadow:0 6px 18px rgba(27,74,155,.22)}
 .btn-primary:hover{background:var(--blue-deep)}
 .btn-ghost{background:var(--paper);color:var(--ink);border-color:var(--line)}
+.btn-kakao{background:#FEE500;color:#191919}
+.btn-kakao:hover{background:#F5DC00}
+.hero .btns{margin-top:34px}
 .btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
 
 /* ---------- nav ---------- */
@@ -55,7 +58,7 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .hero h1 em{font-style:normal;color:var(--blue)}
 .hero .lead{font-size:18px;max-width:none}
 .hnote{margin-top:20px;font-size:13px;color:var(--mute)}
-.hstats{display:flex;gap:44px;margin-top:40px;flex-wrap:wrap}
+.hstats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:44px 0 6px}
 .hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:56px;align-items:center}
 .hstats div{border-left:3px solid var(--blue-line);padding-left:16px}
 .hstats b{display:block;font-family:var(--serif);font-size:27px;font-weight:900;color:var(--ink);line-height:1.2}
