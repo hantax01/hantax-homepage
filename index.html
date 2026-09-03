@@ -325,7 +325,7 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 document.querySelectorAll('.stack').forEach(s=>s.addEventListener('click',()=>{s.insertBefore(s.lastElementChild,s.firstElementChild);}));
 const hs=document.querySelector('.stack-hero');
-if(hs){const dots=[...document.querySelectorAll('.hdot')];
+if(hs&&matchMedia('(max-width:660px)').matches){const dots=[...document.querySelectorAll('.hdot')];
 const upd=()=>{const i=+hs.lastElementChild.dataset.i;dots.forEach((d,k)=>d.classList.toggle('on',k===i));};
 const adv=()=>{hs.insertBefore(hs.lastElementChild,hs.firstElementChild);upd();};
 let t=setInterval(adv,4500);
