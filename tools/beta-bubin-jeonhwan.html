@@ -44,6 +44,17 @@
 .slide .sl label{width:110px;margin:0;font-size:14px}
 .slide .sl input{flex:1;accent-color:var(--blue)}
 .slide .sl b{width:130px;text-align:right;font-size:15px;color:var(--blue)}
+.steps{margin-top:22px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:20px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.steps .case{margin-bottom:20px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.steps .case:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
+.steps .case b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:7px}
+.steps .fx{font-variant-numeric:tabular-nums}
+.steps .fx i{font-style:normal;color:var(--mute)}
 .disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
 @media(max-width:660px){.sim-in{grid-template-columns:1fr;padding:22px}.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}}
 </style>
@@ -115,6 +126,11 @@
           </table>
         </div>
         <div class="verdict" id="verdict"></div>
+
+        <details class="steps" id="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps-body"></div>
+        </details>
 
         <div class="slide" id="slide">
           <div class="sl"><label for="s-income">소득금액</label><input type="range" id="s-income" min="30000000" max="1000000000" step="10000000"><b id="s-income-v"></b></div>
@@ -221,7 +237,41 @@ function render(income,deduct,red){
   document.getElementById('verdict').innerHTML= best.corp===null
     ? '입력하신 조건에서는 <b>지금처럼 개인사업자로 두는 편</b>이 세금 면에서 유리하게 나옵니다. 다만 법인은 세금 외에 거래처 신뢰, 자금 관리, 대표님 퇴직금 같은 요소도 함께 고려해 결정하는 것이 좋습니다.'
     : '입력하신 조건에서는 <b>법인으로 전환하고 대표님 연봉을 '+won(best.sal)+'원</b>으로 정하는 경우가 세금 면에서 가장 낮게 나옵니다. 지금보다 연간 <b>약 '+won(save)+'원</b> 차이입니다. <br><br>다만 세금이 적다고 대표님 손에 남는 돈이 많은 것은 아닙니다. 이 경우 대표님이 실제로 가져가는 돈은 <b>'+won(best.cash)+'원</b>이고, 나머지 <b>'+won(best.left)+'원</b>은 법인에 남습니다. 그 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.';
+  renderSteps(income,deduct,red,rows);
   document.getElementById('res').style.display='block';
+}
+
+/* 계산 과정 설명 */
+function pitInfo(b){ if(b<=0) return {tax:0,rate:0,ded:0}; for(const[lim,r,d]of PIT) if(b<=lim) return {tax:Math.max(0,b*r-d),rate:r,ded:d}; }
+function renderSteps(income,deduct,red,rows){
+  const rate=red/100, redTxt=red>0?' × (1 − '+red+'%)':'';
+  const pBase=Math.max(0,income-deduct), pd=pitInfo(pBase);
+  let html='<div class="case"><b>1. 개인사업자로 그대로 두는 경우</b><div class="fx">'
+    +'<i>과세표준</i> = 소득금액 '+won(income)+' − 소득공제 '+won(deduct)+' = <b style="display:inline">'+won(pBase)+'원</b><br>'
+    +'<i>산출세액</i> = '+won(pBase)+' × '+(pd.rate*100)+'% − 누진공제 '+won(pd.ded)+' = '+won(pd.tax)+'원<br>'
+    +(red>0?'<i>감면 적용</i> = '+won(pd.tax)+redTxt+' = '+won(pd.tax*(1-rate))+'원<br>':'')
+    +'<i>가져가는 돈</i> = 소득 '+won(income)+' − 세금 '+won(pd.tax*(1-rate))+' = '+won(income-pd.tax*(1-rate))+'원'
+    +'</div></div>';
+  rows.filter(r=>r.corp!==null).forEach((r,i)=>{
+    const sal=r.sal, cBase=Math.max(0,income-sal);
+    const citRaw=cBase<=200000000?cBase*.1:20000000+(cBase-200000000)*.2;
+    const citHow=cBase<=200000000?won(cBase)+' × 10%':'2억 × 10%(2,000만) + '+won(cBase-200000000)+' × 20%';
+    const edu=earnedDeduct(sal), wBase=Math.max(0,sal-edu-deduct), wd=pitInfo(wBase);
+    html+='<div class="case"><b>'+(i+2)+'. 법인으로 전환하고 대표님 연봉을 '+won(sal)+'원으로 정하는 경우</b><div class="fx">'
+      +'<i>법인 과세표준</i> = 소득금액 '+won(income)+' − 대표 연봉 '+won(sal)+' = '+won(cBase)+'원<br>'
+      +'<i>법인세</i> = '+citHow+' = '+won(citRaw)+'원'+(red>0?' → 감면 후 '+won(citRaw*(1-rate))+'원':'')+'<br>'
+      +'<i>근로소득공제</i> = '+won(edu)+'원<br>'
+      +'<i>대표 과세표준</i> = 연봉 '+won(sal)+' − 근로소득공제 '+won(edu)+' − 소득공제 '+won(deduct)+' = '+won(wBase)+'원<br>'
+      +'<i>대표 근로소득세</i> = '+won(wBase)+' × '+(wd.rate*100)+'% − 누진공제 '+won(wd.ded)+' = '+won(wd.tax)+'원<br>'
+      +'<i>세금 합계</i> = 법인 '+won(citRaw*(1-rate))+' + 개인 '+won(wd.tax)+' = '+won(r.total)+'원<br>'
+      +'<i>대표가 가져가는 돈</i> = 연봉 '+won(sal)+' − 근로소득세 '+won(wd.tax)+' = '+won(r.cash)+'원<br>'
+      +'<i>법인에 남는 돈</i> = '+won(cBase)+' − 법인세 '+won(citRaw*(1-rate))+' = '+won(r.left)+'원'
+      +'</div></div>';
+  });
+  html+='<div class="case" style="border-top:1px solid var(--line);padding-top:16px;color:var(--mute);font-size:13.5px">'
+    +'감면은 개인 종합소득세와 법인세에 적용하고, 대표님 근로소득세에는 적용하지 않았습니다. '
+    +'법인에 남는 돈을 배당이나 퇴직금으로 꺼낼 때 내는 세금은 이 계산에 포함되어 있지 않습니다.</div>';
+  document.getElementById('steps-body').innerHTML=html;
 }
 
 function readInputs(){
