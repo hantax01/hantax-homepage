@@ -50,11 +50,17 @@
 .steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
 .steps[open] summary::after{content:"접기"}
 .steps .body{padding:20px 22px;font-size:14px;line-height:1.9;color:var(--char)}
-.steps .case{margin-bottom:20px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
-.steps .case:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
-.steps .case b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:7px}
-.steps .fx{font-variant-numeric:tabular-nums}
-.steps .fx i{font-style:normal;color:var(--mute)}
+.steps .case{margin-bottom:26px}
+.steps .case:last-child{margin-bottom:0}
+.steps .case b.ttl{display:block;color:var(--ink);font-size:14.5px;margin-bottom:10px}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:9px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.stable tr.key td{background:var(--blue-soft)}
+.stable tr.key td:last-child{color:var(--blue);font-weight:800}
+.snote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px;line-height:1.8}
 .disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
 @media(max-width:660px){.sim-in{grid-template-columns:1fr;padding:22px}.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}}
 </style>
@@ -243,34 +249,47 @@ function render(income,deduct,red){
 
 /* 계산 과정 설명 */
 function pitInfo(b){ if(b<=0) return {tax:0,rate:0,ded:0}; for(const[lim,r,d]of PIT) if(b<=lim) return {tax:Math.max(0,b*r-d),rate:r,ded:d}; }
+function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
 function renderSteps(income,deduct,red,rows){
-  const rate=red/100, redTxt=red>0?' × (1 − '+red+'%)':'';
-  const pBase=Math.max(0,income-deduct), pd=pitInfo(pBase);
-  let html='<div class="case"><b>1. 개인사업자로 그대로 두는 경우</b><div class="fx">'
-    +'<i>과세표준</i> = 소득금액 '+won(income)+' − 소득공제 '+won(deduct)+' = <b style="display:inline">'+won(pBase)+'원</b><br>'
-    +'<i>산출세액</i> = '+won(pBase)+' × '+(pd.rate*100)+'% − 누진공제 '+won(pd.ded)+' = '+won(pd.tax)+'원<br>'
-    +(red>0?'<i>감면 적용</i> = '+won(pd.tax)+redTxt+' = '+won(pd.tax*(1-rate))+'원<br>':'')
-    +'<i>가져가는 돈</i> = 소득 '+won(income)+' − 세금 '+won(pd.tax*(1-rate))+' = '+won(income-pd.tax*(1-rate))+'원'
-    +'</div></div>';
+  const rate=red/100;
+  const pBase=Math.max(0,income-deduct), pd=pitInfo(pBase), pTax=pd.tax*(1-rate);
+  let html='<div class="case"><b class="ttl">1. 개인사업자로 그대로 두는 경우</b><table class="stable">'
+    +row('과세표준','소득금액 '+won(income)+' − 소득공제 '+won(deduct),won(pBase)+'원')
+    +row('산출세액',won(pBase)+' × '+(pd.rate*100)+'% − 누진공제 '+won(pd.ded),won(pd.tax)+'원')
+    +(red>0?row('감면 적용',won(pd.tax)+' × (1 − '+red+'%)',won(pTax)+'원'):'')
+    +row('세금 합계','',won(pTax)+'원',true)
+    +row('가져가는 돈','소득 '+won(income)+' − 세금 '+won(pTax),won(income-pTax)+'원',true)
+    +'</table></div>';
   rows.filter(r=>r.corp!==null).forEach((r,i)=>{
     const sal=r.sal, cBase=Math.max(0,income-sal);
     const citRaw=cBase<=200000000?cBase*.1:20000000+(cBase-200000000)*.2;
-    const citHow=cBase<=200000000?won(cBase)+' × 10%':'2억 × 10%(2,000만) + '+won(cBase-200000000)+' × 20%';
+    const citHow=cBase<=200000000?won(cBase)+' × 10%':'2억 × 10% + '+won(cBase-200000000)+' × 20%';
     const edu=earnedDeduct(sal), wBase=Math.max(0,sal-edu-deduct), wd=pitInfo(wBase);
-    html+='<div class="case"><b>'+(i+2)+'. 법인으로 전환하고 대표님 연봉을 '+won(sal)+'원으로 정하는 경우</b><div class="fx">'
-      +'<i>법인 과세표준</i> = 소득금액 '+won(income)+' − 대표 연봉 '+won(sal)+' = '+won(cBase)+'원<br>'
-      +'<i>법인세</i> = '+citHow+' = '+won(citRaw)+'원'+(red>0?' → 감면 후 '+won(citRaw*(1-rate))+'원':'')+'<br>'
-      +'<i>근로소득공제</i> = '+won(edu)+'원<br>'
-      +'<i>대표 과세표준</i> = 연봉 '+won(sal)+' − 근로소득공제 '+won(edu)+' − 소득공제 '+won(deduct)+' = '+won(wBase)+'원<br>'
-      +'<i>대표 근로소득세</i> = '+won(wBase)+' × '+(wd.rate*100)+'% − 누진공제 '+won(wd.ded)+' = '+won(wd.tax)+'원<br>'
-      +'<i>세금 합계</i> = 법인 '+won(citRaw*(1-rate))+' + 개인 '+won(wd.tax)+' = '+won(r.total)+'원<br>'
-      +'<i>대표가 가져가는 돈</i> = 연봉 '+won(sal)+' − 근로소득세 '+won(wd.tax)+' = '+won(r.cash)+'원<br>'
-      +'<i>법인에 남는 돈</i> = '+won(cBase)+' − 법인세 '+won(citRaw*(1-rate))+' = '+won(r.left)+'원'
-      +'</div></div>';
+    html+='<div class="case"><b class="ttl">'+(i+2)+'. 법인으로 전환하고 대표님 연봉을 '+won(sal)+'원으로 정하는 경우</b><table class="stable">'
+      +row('법인 과세표준','소득금액 '+won(income)+' − 연봉 '+won(sal),won(cBase)+'원')
+      +row('법인세',citHow+(red>0?' → 감면 '+red+'%':''),won(citRaw*(1-rate))+'원')
+      +row('근로소득공제','연봉 '+won(sal)+' 기준',won(edu)+'원')
+      +row('대표 과세표준','연봉 '+won(sal)+' − 근로소득공제 '+won(edu)+' − 소득공제 '+won(deduct),won(wBase)+'원')
+      +row('대표 근로소득세',won(wBase)+' × '+(wd.rate*100)+'% − 누진공제 '+won(wd.ded),won(wd.tax)+'원')
+      +row('세금 합계','법인 '+won(citRaw*(1-rate))+' + 개인 '+won(wd.tax),won(r.total)+'원',true)
+      +row('대표가 가져가는 돈','연봉 '+won(sal)+' − 근로소득세 '+won(wd.tax),won(r.cash)+'원',true)
+      +row('법인에 남는 돈',won(cBase)+' − 법인세 '+won(citRaw*(1-rate)),won(r.left)+'원')
+      +'</table></div>';
   });
-  html+='<div class="case" style="border-top:1px solid var(--line);padding-top:16px;color:var(--mute);font-size:13.5px">'
-    +'감면은 개인 종합소득세와 법인세에 적용하고, 대표님 근로소득세에는 적용하지 않았습니다. '
-    +'법인에 남는 돈을 배당이나 퇴직금으로 꺼낼 때 내는 세금은 이 계산에 포함되어 있지 않습니다.</div>';
+  // 소득금액 전액을 연봉으로 정하는 경우
+  const allEdu=earnedDeduct(income), allBase=Math.max(0,income-allEdu-deduct), aw=pitInfo(allBase);
+  html+='<div class="case"><b class="ttl">참고. 소득금액 전액을 대표님 연봉으로 정하는 경우</b><table class="stable">'
+    +row('법인 과세표준','소득금액 '+won(income)+' − 연봉 '+won(income),'0원')
+    +row('법인세','과세표준이 0이므로','0원')
+    +row('근로소득공제','연봉 '+won(income)+' 기준',won(allEdu)+'원')
+    +row('대표 과세표준','연봉 '+won(income)+' − 근로소득공제 '+won(allEdu)+' − 소득공제 '+won(deduct),won(allBase)+'원')
+    +row('대표 근로소득세',won(allBase)+' × '+(aw.rate*100)+'% − 누진공제 '+won(aw.ded),won(aw.tax)+'원')
+    +row('세금 합계','법인 0 + 개인 '+won(aw.tax),won(aw.tax)+'원',true)
+    +row('대표가 가져가는 돈','연봉 '+won(income)+' − 근로소득세 '+won(aw.tax),won(income-aw.tax)+'원',true)
+    +row('법인에 남는 돈','','0원')
+    +'</table></div>';
+  html+='<p class="snote">이익을 모두 연봉으로 가져가면 법인세는 없어지지만 대표님 개인 세율이 높아집니다. 위 조건에서는 세금 합계가 '+won(aw.tax)+'원, 대표님이 가져가는 돈은 '+won(income-aw.tax)+'원입니다. 개인사업자로 두는 경우(세금 '+won(pTax)+'원, 가져가는 돈 '+won(income-pTax)+'원)와 비교해 보시면 판단에 도움이 됩니다.<br><br>'
+    +'감면은 개인 종합소득세와 법인세에 적용하고, 대표님 근로소득세에는 적용하지 않았습니다. 법인에 남는 돈을 배당이나 퇴직금으로 꺼낼 때 내는 세금과 4대보험은 이 계산에 포함되어 있지 않습니다.</p>';
   document.getElementById('steps-body').innerHTML=html;
 }
 
