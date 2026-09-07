@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>상담 신청 | 한택스</title>
+<meta name="description" content="한택스 세무상담 신청서. 성함과 연락처, 통화 가능한 시간을 남겨주시면 담당자가 연락드립니다.">
+<link rel="canonical" href="https://www.hantax47.com/consult/">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="상담 신청 | 한택스">
+<meta property="og:description" content="세무상담 신청서를 남겨주시면 담당자가 연락드립니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/consult/">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=26">
+<style>
+.cform{max-width:640px;margin:0 auto}
+.cform .fld{margin-bottom:26px}
+.cform label{display:block;font-weight:700;font-size:15.5px;color:var(--ink);margin-bottom:8px}
+.cform label small{font-weight:400;color:var(--mute);font-size:13px;margin-left:6px}
+.cform label .req{color:var(--seal)}
+.cform .hint{font-size:13px;color:var(--mute);margin:-4px 0 8px}
+.cform input[type=text],.cform input[type=tel],.cform textarea{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
+.cform input:focus,.cform textarea:focus{outline:none;border-color:var(--blue)}
+.cform textarea{min-height:140px;resize:vertical}
+.topics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.topics label{display:flex;align-items:center;gap:9px;font-weight:500;font-size:14.5px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;margin:0}
+.topics label:has(input:checked){border-color:var(--blue);background:var(--blue-soft)}
+.topics input{width:17px;height:17px;accent-color:var(--blue)}
+.agree{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--char);background:var(--soft);border-radius:10px;padding:14px 16px}
+.agree input{width:17px;height:17px;margin-top:2px;accent-color:var(--blue)}
+.agree a{color:var(--blue);text-decoration:underline}
+.csubmit{width:100%;justify-content:center;margin-top:26px;font-size:16px;padding:17px}
+.cnote{margin-top:22px;font-size:13.5px;color:var(--mute);line-height:1.7;text-align:center}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+.done{display:none;text-align:center;padding:60px 0}
+.done .big{font-size:46px;margin-bottom:18px}
+.done h2{margin-bottom:12px}
+.done p{color:var(--char);font-size:15.5px;line-height:1.8;margin-bottom:26px}
+.err{display:none;background:var(--seal-soft);color:var(--seal);border-radius:10px;padding:13px 16px;font-size:14px;margin-top:16px;text-align:center}
+@media(max-width:560px){.topics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">상담 신청</span>
+    <h1>세무상담 신청서</h1>
+    <p class="lead">남겨주시면 담당자가 통화 가능한 시간에 맞춰 연락드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:36px">
+  <div class="wrap">
+    <form class="cform" id="cform" novalidate>
+      <div class="fld">
+        <label for="f-name">성함과 회사 상호 <span class="req">*</span></label>
+        <p class="hint">예: 한진식 / 주식회사 한택스 (개인이시면 성함만 적어주세요)</p>
+        <input type="text" id="f-name" name="name" maxlength="100" required autocomplete="name">
+      </div>
+      <div class="fld">
+        <label for="f-phone">연락처 <span class="req">*</span></label>
+        <input type="tel" id="f-phone" name="phone" maxlength="50" required autocomplete="tel" inputmode="tel" placeholder="010-0000-0000">
+      </div>
+      <div class="fld">
+        <label for="f-time">통화 가능한 시간 <span class="req">*</span></label>
+        <p class="hint">예: 오후 2~4시, 아무때나 등</p>
+        <input type="text" id="f-time" name="time" maxlength="100" required>
+      </div>
+      <div class="fld">
+        <label>문의하실 항목 <span class="req">*</span><small>복수 선택 가능</small></label>
+        <div class="topics">
+          <label><input type="checkbox" name="topics" value="사업자 세무기장">사업자 세무기장</label>
+          <label><input type="checkbox" name="topics" value="법인설립">법인설립</label>
+          <label><input type="checkbox" name="topics" value="부가세·종소세·법인세 등 신고대행">부가세·종소세·법인세 등 신고대행</label>
+          <label><input type="checkbox" name="topics" value="세무조사 대응">세무조사 대응</label>
+          <label><input type="checkbox" name="topics" value="양도·상속·증여세 등 재산세">양도·상속·증여세 등 재산세</label>
+          <label><input type="checkbox" name="topics" value="기타">기타</label>
+        </div>
+      </div>
+      <div class="fld">
+        <label for="f-detail">문의하실 상세 내용 <small>선택사항 — 남겨주시면 상담에 도움이 됩니다</small></label>
+        <textarea id="f-detail" name="detail" maxlength="2000"></textarea>
+      </div>
+      <div class="hp" aria-hidden="true"><label>웹사이트<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <label class="agree"><input type="checkbox" id="f-agree" required><span>개인정보 수집·이용에 동의합니다. 수집한 정보는 상담 연락에만 사용하고, 목적 달성 후 지체 없이 파기합니다. <a href="../privacy/" target="_blank" rel="noopener">개인정보처리방침 보기</a></span></label>
+      <button type="submit" class="btn btn-primary csubmit" id="f-submit">상담 신청하기</button>
+      <div class="err" id="f-err">전송에 실패했습니다. 잠시 후 다시 시도해 주시거나, 카카오톡·전화로 연락 주세요.</div>
+      <p class="cnote">신청서는 실시간 확인이 어려워 답변이 늦을 수 있습니다.<br>급한 경우 전화 0507-1361-6622 또는 카카오톡(@한택스)으로 연락 주시면 빠르게 도와드리겠습니다.</p>
+    </form>
+
+    <div class="done" id="cdone">
+      <div class="big">✅</div>
+      <h2>신청이 접수되었습니다</h2>
+      <p>남겨주신 시간에 맞춰 영업일 기준 1일 내에 연락드리겠습니다.<br>급하신 경우 카카오톡으로 문의 주시면 더 빠르게 도와드립니다.</p>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡으로 문의하기</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const GAS_URL='https://script.google.com/macros/s/AKfycbzbudLmwG-B1iOHNLoTlxPrmMK5bIKoRZ_gdTRMvVXOCvGpwdKO-FeJpBrbAAUtbCQQhg/exec';
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+const form=document.getElementById('cform'),err=document.getElementById('f-err'),btn=document.getElementById('f-submit');
+form.addEventListener('submit',async e=>{
+  e.preventDefault(); err.style.display='none';
+  const name=form.name.value.trim(),phone=form.phone.value.trim(),time=form.time.value.trim();
+  const topics=[...form.querySelectorAll('input[name=topics]:checked')].map(c=>c.value);
+  if(!name||!phone||!time){alert('성함, 연락처, 통화 가능한 시간을 입력해 주세요.');return;}
+  if(topics.length===0){alert('문의하실 항목을 하나 이상 선택해 주세요.');return;}
+  if(!document.getElementById('f-agree').checked){alert('개인정보 수집·이용에 동의해 주세요.');return;}
+  btn.disabled=true;btn.textContent='전송 중...';
+  try{
+    const res=await fetch(GAS_URL,{method:'POST',body:JSON.stringify({name,phone,time,topics,detail:form.detail.value.trim(),website:form.website.value})});
+    const out=await res.json();
+    if(out.ok){form.style.display='none';document.getElementById('cdone').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+    else throw new Error('fail');
+  }catch(ex){err.style.display='block';btn.disabled=false;btn.textContent='상담 신청하기';}
+});
+</script>
+</body>
+</html>
