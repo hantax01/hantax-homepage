@@ -39,6 +39,8 @@
 .rtable .tot td{font-weight:800;color:var(--ink);border-bottom:2px solid var(--line)}
 .rtable .diff td{color:var(--blue);font-weight:700}
 .rtable .neg{color:var(--seal)}
+.rtable .gap td{padding:0;height:14px;border:0}
+.rtable .cash td{font-weight:700;color:var(--ink)}
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
 .verdict b{color:var(--blue)}
 .slide{display:none;margin-top:26px;background:var(--soft);border-radius:14px;padding:22px 26px}
@@ -195,14 +197,14 @@ function compute(income,deduct,red){
   // 개인사업자 유지
   const pBase=Math.max(0,income-deduct);
   const pTax=pit(pBase)*(1-rate);
-  const rows=[{label:'개인사업자 유지',corp:null,per:pTax,total:pTax}];
+  const rows=[{label:'개인사업자 유지',corp:null,per:pTax,total:pTax,cash:income-pTax,left:0}];
   // 법인전환 3안
   [50000000,100000000,150000000].forEach(sal=>{
     const cBase=Math.max(0,income-sal);
     const cTax=cit(cBase)*(1-rate);
     const wBase=Math.max(0,sal-earnedDeduct(sal)-deduct);
     const wTax=pit(wBase);
-    rows.push({label:'법인 연봉 '+(sal/10000000)+'천만',corp:cTax,per:wTax,total:cTax+wTax,sal});
+    rows.push({label:'법인 연봉 '+(sal/10000000)+'천만',corp:cTax,per:wTax,total:cTax+wTax,sal,cash:sal-wTax,left:Math.max(0,cBase-cTax)});
   });
   return rows;
 }
@@ -221,14 +223,17 @@ function render(income,deduct,red){
       if(r.corp===null) return '<td class="'+(r.total===min?'best':'')+'">기준</td>';
       const d=base-r.total;
       return '<td class="'+(r.total===min?'best':'')+(d<0?' neg':'')+'">'+(d>=0?'−'+won(d):'+'+won(-d))+'원</td>';
-   })+'</tr>';
+   })+'</tr>'
+   +'<tr class="gap"><td colspan="5"></td></tr>'
+   +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>'<td>'+won(r.cash)+'원</td>')+'</tr>'
+   +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+(r.corp===null?'—':won(r.left)+'원')+'</td>')+'</tr>';
   document.getElementById('res-sub').textContent=
     '소득금액 '+won(income)+'원 · 소득공제 '+won(deduct)+'원'+(red>0?' · 감면 '+red+'%':' · 감면 없음');
   const best=rows.find(r=>r.total===min);
   const save=base-min;
   document.getElementById('verdict').innerHTML= best.corp===null
     ? '입력하신 조건에서는 <b>지금처럼 개인사업자로 두는 편</b>이 세금 면에서 유리하게 나옵니다. 다만 법인은 세금 외에 거래처 신뢰, 자금 관리, 대표님 퇴직금 같은 요소도 함께 고려해 결정하는 것이 좋습니다.'
-    : '입력하신 조건에서는 <b>법인으로 전환하고 대표님 연봉을 '+won(best.sal)+'원</b>으로 정하는 경우가 세금 면에서 가장 낮게 나옵니다. 지금보다 연간 <b>약 '+won(save)+'원</b> 차이입니다. 실제로는 4대보험, 배당, 퇴직금까지 함께 설계해야 정확한 비교가 됩니다.';
+    : '입력하신 조건에서는 <b>법인으로 전환하고 대표님 연봉을 '+won(best.sal)+'원</b>으로 정하는 경우가 세금 면에서 가장 낮게 나옵니다. 지금보다 연간 <b>약 '+won(save)+'원</b> 차이입니다. <br><br>다만 세금이 적다고 대표님 손에 남는 돈이 많은 것은 아닙니다. 이 경우 대표님이 실제로 가져가는 돈은 <b>'+won(best.cash)+'원</b>이고, 나머지 <b>'+won(best.left)+'원</b>은 법인에 남습니다. 그 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.';
   document.getElementById('res').style.display='block';
 }
 
