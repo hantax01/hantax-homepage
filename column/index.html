@@ -49,7 +49,7 @@
          글이 하나라도 생기면 .empty 블록은 지웁니다. -->
     <div class="post-list">
       <a href="tonghap-goyong-2026.html" class="post">
-        <div class="cat">법인세</div>
+        <div class="cat">법인세 · 종합소득세</div>
         <h2>통합고용세액공제, 2026년에 무엇이 바뀌나요?</h2>
         <p>직원이 줄면 토해내던 추징이 폐지되고, 대신 사람 수를 세는 방법이 바뀌었습니다. 12월에 채용하면 그해 공제가 없다는 것, 청년 채용이 1,700만 원 더 유리하다는 것까지 실무 포인트로 정리했습니다.</p>
         <time datetime="2026-09-07">2026.09.07 · 한진식 세무사</time>
@@ -91,7 +91,7 @@ cats.forEach(c=>c.addEventListener("click",()=>{
   if(on)c.classList.add("on");
   const sel=on?c.textContent.trim():null;
   let shown=0;
-  posts.forEach(p=>{const m=!sel||p.querySelector(".cat").textContent.trim()===sel;p.style.display=m?"":"none";if(m)shown++;});
+  posts.forEach(p=>{const m=!sel||p.querySelector(".cat").textContent.includes(sel);p.style.display=m?"":"none";if(m)shown++;});
   if(emptyMsg)emptyMsg.style.display=shown?"none":"block";
 }));
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
