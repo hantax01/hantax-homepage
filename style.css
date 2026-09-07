@@ -204,7 +204,7 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .article h1{font-family:var(--serif);font-size:34px;font-weight:700;line-height:1.35;margin-bottom:18px}
 .article .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--mute);font-weight:600;padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px}
 .answer{background:var(--blue-soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:22px 24px;margin-bottom:36px;font-size:16.5px;color:var(--ink);line-height:1.75}
-.answer b{display:block;font-size:12.5px;letter-spacing:.1em;color:var(--blue);margin-bottom:8px}
+.answer > b:first-child{display:block;font-size:12.5px;letter-spacing:.1em;color:var(--blue);margin-bottom:8px}
 .article h2{font-family:var(--sans);font-size:22px;font-weight:800;margin:44px 0 14px}
 .article h3{font-size:17.5px;font-weight:800;margin:28px 0 10px}
 .article p,.article li{font-size:16.5px;line-height:1.85;color:var(--char)}
