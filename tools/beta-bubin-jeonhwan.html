@@ -23,11 +23,6 @@
 .unit span{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--mute)}
 .unit input{padding-right:44px;text-align:right}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
-.gate{display:none;background:var(--blue-soft);border-radius:14px;padding:26px 28px;margin-top:22px;text-align:center}
-.gate h3{font-size:17px;margin-bottom:8px}
-.gate p{font-size:14.5px;color:var(--char);line-height:1.7;margin-bottom:18px}
-.gate .row{display:flex;gap:8px;max-width:400px;margin:0 auto}
-.gate input{flex:1;padding:12px 14px;border:1px solid var(--blue-line);border-radius:10px;font-size:15px;text-align:center;font-family:inherit}
 .res{display:none;margin-top:36px}
 .res h2{font-size:20px;margin-bottom:6px}
 .res .sub{font-size:14px;color:var(--mute);margin-bottom:18px}
@@ -107,14 +102,6 @@
       </div>
       <button class="btn btn-primary simbtn" id="calc">세금 비교하기</button>
 
-      <div class="gate" id="gate">
-        <h3>계산은 3회까지 무료로 이용하실 수 있어요</h3>
-        <p>네이버 플레이스에서 한택스 쿠폰을 받으시면<br>금액을 자유롭게 바꿔가며 무제한으로 비교하실 수 있습니다.</p>
-        <div class="row">
-          <input type="text" id="coupon" placeholder="쿠폰 번호 입력">
-          <button class="btn btn-primary" id="usecoupon">확인</button>
-        </div>
-      </div>
 
       <div class="res" id="res">
         <h2>세금 비교 결과</h2>
@@ -237,11 +224,6 @@ function render(income,deduct,red){
   document.getElementById('res').style.display='block';
 }
 
-/* ── 이용 횟수 / 쿠폰 ──────────────────────── */
-const KEY='htx_sim_count', CKEY='htx_sim_coupon', COUPON='HANTAX2026';
-const unlocked=()=>localStorage.getItem(CKEY)==='1';
-const count=()=>Number(localStorage.getItem(KEY)||0);
-
 function readInputs(){
   return {income:num(document.getElementById('i-income').value),
           deduct:num(document.getElementById('i-deduct').value),
@@ -250,22 +232,11 @@ function readInputs(){
 document.getElementById('calc').addEventListener('click',()=>{
   const {income,deduct,red}=readInputs();
   if(income<=0){alert('연 소득금액을 입력해 주세요.');return;}
-  if(!unlocked()&&count()>=3){document.getElementById('gate').style.display='block';return;}
-  if(!unlocked())localStorage.setItem(KEY,count()+1);
   render(income,deduct,red);
-  if(unlocked())initSlider(income);
-});
-document.getElementById('usecoupon').addEventListener('click',()=>{
-  const v=document.getElementById('coupon').value.trim().toUpperCase();
-  if(v===COUPON){
-    localStorage.setItem(CKEY,'1');
-    document.getElementById('gate').style.display='none';
-    const {income,deduct,red}=readInputs();
-    render(income,deduct,red); initSlider(income);
-  } else alert('쿠폰 번호가 맞지 않습니다. 네이버 플레이스에서 받으신 번호를 확인해 주세요.');
+  initSlider(income);
 });
 
-/* ── 쿠폰 사용자용 슬라이더 ────────────────── */
+/* ── 슬라이더 ──────────────────────────────── */
 let sliderReady=false;
 function initSlider(income){
   const box=document.getElementById('slide'); box.style.display='block';
