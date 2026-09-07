@@ -187,7 +187,10 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .page-head{padding:130px 0 48px;background:var(--soft);border-bottom:1px solid var(--line)}
 .page-head h1{font-family:var(--serif);font-size:38px;font-weight:700;margin-bottom:12px}
 .col-cats{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0}
-.col-cats span{padding:8px 14px;border-radius:100px;border:1px solid var(--line);background:var(--paper);font-size:13px;font-weight:600;color:var(--char)}
+.col-cats span{padding:8px 14px;border-radius:100px;border:1px solid var(--line);background:var(--paper);font-size:13px;font-weight:600;color:var(--char);cursor:pointer;transition:all .15s}
+.col-cats span:hover{border-color:var(--blue);color:var(--blue)}
+.col-cats span.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.cat-empty{display:none;text-align:center;color:var(--mute);font-size:15px;padding:60px 0}
 .post-list{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
 .post{display:flex;flex-direction:column;padding:28px 26px;border-radius:14px;border:1px solid var(--line);background:var(--paper);transition:border-color .2s,box-shadow .2s}
 .post:hover{border-color:var(--blue-line);box-shadow:0 14px 36px -20px rgba(18,55,111,.3)}
