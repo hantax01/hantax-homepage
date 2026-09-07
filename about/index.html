@@ -32,17 +32,20 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../style.css?v=27">
 <style>
-.pf{display:grid;grid-template-columns:250px 1fr;gap:44px;align-items:start;max-width:860px;margin:0 auto}
-.pf img{width:100%;border-radius:14px;filter:grayscale(1)}
-.pf h2{font-size:20px;margin:34px 0 12px}
-.pf h2:first-of-type{margin-top:0}
+.pf{max-width:860px;margin:0 auto}
+.pf-top{display:grid;grid-template-columns:230px 1fr;gap:40px;align-items:center}
+.pf-top img{width:100%;border-radius:14px;filter:grayscale(1)}
+.pf .intro{font-size:15.5px;line-height:1.9;color:var(--char)}
+.pf-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px}
+.pf h2{font-size:18px;margin:0 0 12px}
 .pf ul{list-style:none;padding:0}
-.pf li{padding:7px 0;border-bottom:1px solid var(--soft);font-size:15px;color:var(--char)}
+.pf li{padding:8px 0;border-bottom:1px solid var(--soft);font-size:15px;color:var(--char)}
 .pf li b{color:var(--ink)}
-.pf .past li{color:var(--mute);font-size:14.5px}
-.pf .intro{font-size:15.5px;line-height:1.85;color:var(--char);margin-bottom:6px}
-.pf .links{margin-top:26px;display:flex;gap:10px;flex-wrap:wrap}
-@media(max-width:660px){.pf{grid-template-columns:1fr}.pf img{max-width:250px}}
+.pf-past{margin-top:40px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font-size:13.5px;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:7px 14px;background:#fff}
+.pf .links{margin-top:40px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+@media(max-width:660px){.pf-top{grid-template-columns:1fr}.pf-top img{max-width:230px}.pf-cols{grid-template-columns:1fr;gap:28px}}
 </style>
 </head>
 <body>
@@ -66,6 +69,51 @@
     <span class="eyebrow">프로필</span>
     <h1>한진식 세무사</h1>
     <p class="lead">나이스원세무법인 스마트지점 대표 · 한택스 세무칼럼 저자</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="pf">
+      <div class="pf-top">
+        <img src="../assets/photo1.png" alt="한진식 세무사 프로필 사진" width="230" height="288">
+        <p class="intro">2010년 세무사시험(47기)에 합격하고 서울 여의도에서 500여 회사의 세무를 맡고 있습니다. 숫자 정리는 직접 개발한 프로그램에 맡기고, 사장님의 이야기를 기억하는 데 시간을 씁니다. 세무리포트와 사전알림 등 한택스의 프로그램을 직접 설계·개발했습니다.</p>
+      </div>
+
+      <div class="pf-cols">
+        <div>
+          <h2>자격·학력</h2>
+          <ul>
+            <li><b>세무사</b> — 2010년 제47회 세무사시험 합격</li>
+            <li><b>연세대학교 법무대학원</b> 조세전공 수료 (2018)</li>
+          </ul>
+        </div>
+        <div>
+          <h2>현재</h2>
+          <ul>
+            <li><b>나이스원세무법인 스마트지점</b> 대표 세무사</li>
+            <li><b>(사)글로벌비지니스협회</b> 자문세무사 (2013~현재)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pf-past">
+        <h2>주요 활동 이력</h2>
+        <div class="chips">
+          <span>국세청 영세납세자지원단</span>
+          <span>서울산업진흥원(SBA) 글로벌 자문단</span>
+          <span>소상공인시장진흥공단 세무강사</span>
+          <span>네이버 세무분야 지식파트너</span>
+          <span>창조경제타운 세무멘토</span>
+          <span>부평구청 결산감사위원 (2015)</span>
+        </div>
+      </div>
+
+      <div class="links">
+        <a href="../column/" class="btn btn-ghost">쓴 칼럼 보기</a>
+        <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡으로 상담하기</a>
+      </div>
+    </div>
   </div>
 </section>
 
