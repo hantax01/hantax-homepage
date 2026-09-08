@@ -161,7 +161,8 @@
           <p class="csub">가로축은 대표님 연봉, 세로축은 총 세금(법인세 + 근로소득세)입니다.</p>
           <svg id="chart" viewBox="0 0 720 310" preserveAspectRatio="xMidYMid meet" role="img" aria-label="대표님 연봉에 따른 총 세금과 실수령액 변화 그래프"></svg>
           <div class="clegend">
-            <span><i style="background:#1B4A9B"></i>법인전환 시 총 세금</span>
+            <span><i style="background:#1B4A9B"></i>지금보다 세금이 적은 구간</span>
+            <span><i style="background:#C8423A"></i>지금보다 세금이 많은 구간</span>
             <span><i style="background:#8b98a8"></i>개인사업자로 유지할 때</span>
           </div>
           <p class="cband" id="cband"></p>
@@ -327,13 +328,33 @@ function drawChart(income,deduct,red,salary){
   const under=pts.filter(p=>p.tax<pTax);
   const bandTxt=under.length? '연봉 '+shortWon(under[0].sal)+' ~ '+shortWon(under[under.length-1].sal)+' 구간이 지금보다 세금이 적습니다' : '';
 
+  // 기준선을 넘는 첫 지점(교차점) 찾기
+  let crossX=null;
+  for(let i=1;i<pts.length;i++){
+    if(pts[i-1].tax<=pTax && pts[i].tax>pTax){
+      const t=(pTax-pts[i-1].tax)/(pts[i].tax-pts[i-1].tax);
+      crossX=pts[i-1].sal+(pts[i].sal-pts[i-1].sal)*t;
+      break;
+    }
+  }
+  const lineUnder=pts.filter(p=>p.tax<=pTax).map((p,i)=>(i?'L':'M')+X(p.sal).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' ');
+  const overPts=pts.filter(p=>p.tax>pTax);
+  const lineOver=overPts.length?(crossX!==null?'M'+X(crossX).toFixed(1)+' '+Y(pTax).toFixed(1)+' ':'')
+    +overPts.map((p,i)=>((i||crossX!==null)?'L':'M')+X(p.sal).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' '):'';
+  const redBand=crossX!==null
+    ? '<rect x="'+X(crossX).toFixed(1)+'" y="'+T+'" width="'+(W-R-X(crossX)).toFixed(1)+'" height="'+(H-B-T)+'" fill="#C8423A" fill-opacity="0.06"/>'
+      +'<text x="'+(W-R-4)+'" y="'+(T+16)+'" text-anchor="end" font-size="10.5" fill="#C8423A" font-weight="700">세금이 더 많아지는 구간</text>'
+    : '';
+
   document.getElementById('chart').innerHTML=
     g
     +'<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#C9D6F0" stroke-width="1"/>'
-    +'<path d="'+area+'" fill="#1B4A9B" fill-opacity="0.06"/>'
+    +redBand
+    +'<path d="'+area+'" fill="#1B4A9B" fill-opacity="0.05"/>'
     +'<line x1="'+L+'" y1="'+Y(pTax).toFixed(1)+'" x2="'+(W-R)+'" y2="'+Y(pTax).toFixed(1)+'" stroke="#8b98a8" stroke-width="1.5" stroke-dasharray="6 5"/>'
     +'<text x="'+(L+6)+'" y="'+(Y(pTax)-8).toFixed(1)+'" text-anchor="start" font-size="11.5" fill="#5C6572" font-weight="700">개인사업자 유지 '+shortWon(pTax)+'</text>'
-    +'<path d="'+line+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
+    +'<path d="'+lineUnder+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
+    +(lineOver?'<path d="'+lineOver+'" fill="none" stroke="#C8423A" stroke-width="2.5"/>':'')
     +'<line x1="'+X(cur.sal).toFixed(1)+'" y1="'+T+'" x2="'+X(cur.sal).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
     +'<circle cx="'+X(cur.sal).toFixed(1)+'" cy="'+Y(cur.tax).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
     +'<text x="'+Math.min(W-R-50,Math.max(L+50,X(cur.sal))).toFixed(1)+'" y="'+Math.max(T+12,Y(cur.tax)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금 선택 '+shortWon(cur.tax)+'</text>'
