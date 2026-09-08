@@ -38,7 +38,9 @@
 .rtable .cash td{font-weight:700;color:var(--ink)}
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
 .verdict b{color:var(--blue)}
-.slide{display:none;margin-top:26px;background:var(--soft);border-radius:14px;padding:22px 26px}
+.slide{display:none;background:var(--soft);border-radius:14px;padding:24px 28px}
+.slnote{margin-top:16px;font-size:13px;color:var(--mute)}
+.slnote a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
 .slide .sl{display:flex;align-items:center;gap:16px;margin-bottom:14px}
 .slide .sl:last-child{margin-bottom:0}
 .slide .sl label{width:110px;margin:0;font-size:14px}
@@ -101,7 +103,7 @@
 <section class="sec" style="padding-top:40px">
   <div class="wrap">
     <div class="sim">
-      <div class="sim-in">
+      <div class="sim-in" id="sim-box">
         <div>
           <label for="i-income">연 소득금액 <small>매출에서 비용을 뺀 이익</small></label>
           <div class="unit"><input type="text" id="i-income" inputmode="numeric"><span>원</span></div>
@@ -126,6 +128,11 @@
           <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
         </div>
       </div>
+      <div class="slide" id="slide">
+        <div class="sl"><label for="s-income">연 소득금액</label><input type="range" id="s-income" min="10000000" max="1000000000" step="5000000"><b id="s-income-v"></b></div>
+        <div class="sl"><label for="s-salary">대표님 연봉</label><input type="range" id="s-salary" min="0" max="1000000000" step="5000000"><b id="s-salary-v"></b></div>
+        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
+      </div>
       <button class="btn btn-primary simbtn" id="calc">세금 비교하기</button>
 
 
@@ -147,17 +154,14 @@
           <div class="body" id="steps-body"></div>
         </details>
 
-        <div class="slide" id="slide">
-          <div class="sl"><label for="s-income">소득금액</label><input type="range" id="s-income" min="30000000" max="1000000000" step="10000000"><b id="s-income-v"></b></div>
-          <div class="sl"><label for="s-salary">대표 연봉</label><input type="range" id="s-salary" min="30000000" max="300000000" step="5000000"><b id="s-salary-v"></b></div>
-        </div>
       </div>
 
       <p class="disc">
         이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 업종, 성실신고 대상 여부, 4대보험, 배당, 퇴직금, 가지급금 등 여러 사정에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
         · 다른 소득은 없다고 가정합니다.<br>
-        · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 2억 원 초과 20%로 계산합니다.<br>
-        · 개인 종합소득세는 6~45% 누진세율로 계산하며, 지방소득세와 4대보험은 반영하지 않았습니다.<br>
+        · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 2억 원 초과 20%이며 지방소득세를 포함했습니다.<br>
+        · 개인 종합소득세는 6~45% 누진세율로 계산하며, 지방소득세(세액의 10%)를 포함했습니다.<br>
+        · 4대보험은 반영하지 않았습니다. 개인사업자는 소득과 재산으로, 법인 대표님은 연봉으로 산정되어 차이가 큽니다.<br>
         · 대표님 연봉에 대해서는 근로소득공제를 적용한 근로소득세를 함께 더해 비교합니다.<br>
         · 법인 쪽 소득공제는 대표님 개인 근로소득에 적용했습니다.
       </p>
@@ -196,7 +200,7 @@ nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classLi
 // 종합소득세·근로소득세 공통 누진세율 (2026년 기준, 지방소득세 제외)
 const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
            [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
-function pit(base){ if(base<=0)return 0; for(const[lim,r,d]of PIT) if(base<=lim) return Math.max(0,base*r-d); return 0; }
+function pit(base){ if(base<=0)return 0; for(const[lim,r,d]of PIT) if(base<=lim) return Math.max(0,(base*r-d))*1.1; return 0; }
 // 근로소득공제
 function earnedDeduct(sal){
   if(sal<=5000000) return sal*.7;
@@ -206,7 +210,8 @@ function earnedDeduct(sal){
   return Math.min(20000000,14750000+(sal-100000000)*.02);
 }
 // 법인세 (2026년: 2억 이하 10%, 초과 20%)
-function cit(base){ if(base<=0)return 0; return base<=200000000 ? base*.1 : 20000000+(base-200000000)*.2; }
+const LOCAL=1.1; // 지방소득세 10% 포함
+function cit(base){ if(base<=0)return 0; return (base<=200000000 ? base*.1 : 20000000+(base-200000000)*.2)*LOCAL; }
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 
@@ -252,30 +257,31 @@ function render(income,deduct,red,salary){
   const bestIdx=rows.indexOf(best);
   document.getElementById('verdict').innerHTML=
     '<b>'+labels[bestIdx]+'</b>가 세금 면에서 가장 낮게 나옵니다. 세금 합계는 '+won(best.total)+'원, 대표님이 실제로 가져가는 돈은 '+won(best.cash)+'원입니다.'
-    +(best.left>0?'<br><br>다만 나머지 '+won(best.left)+'원은 법인에 남습니다. 그 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.':'');
+    +(best.left>0?'<br><br>다만 나머지 '+won(best.left)+'원은 법인에 남습니다. 그 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.':'')
+    +'<br><br><span style="font-size:14px;color:var(--mute)">여기서 건강보험료와 국민연금이 추가로 빠집니다. 법인 대표님은 연봉 기준, 개인사업자는 소득과 재산 기준으로 산정되어 차이가 크므로 상담에서 함께 계산해 드립니다.</span>';
   renderSteps(income,deduct,red,rows,salary);
   document.getElementById('res').style.display='block';
 }
 
 /* 계산 과정 설명 */
-function pitInfo(b){ if(b<=0) return {tax:0,rate:0,ded:0}; for(const[lim,r,d]of PIT) if(b<=lim) return {tax:Math.max(0,b*r-d),rate:r,ded:d}; }
+function pitInfo(b){ if(b<=0) return {tax:0,rate:0,ded:0}; for(const[lim,r,d]of PIT) if(b<=lim) return {tax:Math.max(0,b*r-d)*1.1,rate:r,ded:d}; }
 function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
 function renderSteps(income,deduct,red,rows,salary){
   const rate=red/100;
   const pBase=Math.max(0,income-deduct), pd=pitInfo(pBase), pTax=pd.tax*(1-rate);
   let html='<div class="case"><b class="ttl">개인사업자로 그대로 두는 경우</b><table class="stable">'
     +row('과세표준','소득금액 − 소득공제',won(pBase)+'원')
-    +row('종합소득세',won(pBase)+' × '+(pd.rate*100)+'% − '+won(pd.ded)+(red>0?' → 감면 '+red+'%':''),won(pTax)+'원')
+    +row('종합소득세',won(pBase)+' × '+(pd.rate*100)+'% − '+won(pd.ded)+(red>0?' → 감면 '+red+'%':'')+' → 지방소득세 포함',won(pTax)+'원')
     +row('가져가는 돈','소득 − 세금',won(income-pTax)+'원',true)
     +'</table></div>';
   const titles=['법인으로 전환하고 대표님 연봉을 '+won(salary)+'원으로 정하는 경우','법인으로 전환하고 이익 전액을 연봉으로 가져가는 경우'];
   rows.filter(r=>r.corp!==null).forEach((r,i)=>{
     const sal=r.sal, cBase=Math.max(0,income-sal);
-    const citRaw=cBase<=200000000?cBase*.1:20000000+(cBase-200000000)*.2;
+    const citRaw=(cBase<=200000000?cBase*.1:20000000+(cBase-200000000)*.2)*1.1;
     const edu=earnedDeduct(sal), wBase=Math.max(0,sal-edu-deduct), wd=pitInfo(wBase);
     html+='<div class="case"><b class="ttl">'+titles[i]+'</b><table class="stable">'
-      +row('법인세','과세표준 '+won(cBase)+' × '+(cBase<=200000000?'10%':'10~20%')+(red>0?' → 감면 '+red+'%':''),won(citRaw*(1-rate))+'원')
-      +row('대표 근로소득세','과세표준 '+won(wBase)+' × '+(wd.rate*100)+'% − '+won(wd.ded),won(wd.tax)+'원')
+      +row('법인세','과세표준 '+won(cBase)+' × '+(cBase<=200000000?'10%':'10~20%')+(red>0?' → 감면 '+red+'%':'')+' → 지방소득세 포함',won(citRaw*(1-rate))+'원')
+      +row('대표 근로소득세','과세표준 '+won(wBase)+' × '+(wd.rate*100)+'% − '+won(wd.ded)+' → 지방소득세 포함',won(wd.tax)+'원')
       +row('가져가는 돈','연봉 '+won(sal)+' − 근로소득세',won(r.cash)+'원',true)
       +row('법인에 남는 돈','','+ '+won(r.left)+'원')
       +'</table></div>';
@@ -302,21 +308,31 @@ document.getElementById('calc').addEventListener('click',()=>{
 /* ── 슬라이더 ──────────────────────────────── */
 let sliderReady=false;
 function initSlider(income,salary){
-  const box=document.getElementById('slide'); box.style.display='block';
   const si=document.getElementById('s-income'), ss=document.getElementById('s-salary');
   if(!sliderReady){
     const upd=()=>{
-      document.getElementById('s-income-v').textContent=won(si.value)+'원';
-      document.getElementById('s-salary-v').textContent=won(ss.value)+'원';
+      const inc=Number(si.value); if(Number(ss.value)>inc) ss.value=inc;
+      const sal=Number(ss.value);
+      document.getElementById('s-income-v').textContent=won(inc)+'원';
+      document.getElementById('s-salary-v').textContent=won(sal)+'원';
       const deduct=num(document.getElementById('i-deduct').value), red=Number(document.getElementById('i-reduce').value);
-      render(Number(si.value),deduct,red,Math.min(Number(ss.value),Number(si.value)));
+      if(sal>0) render(inc,deduct,red,sal);
     };
     si.addEventListener('input',upd); ss.addEventListener('input',upd);
+    document.getElementById('toBox').addEventListener('click',e=>{
+      e.preventDefault();
+      document.getElementById('slide').style.display='none';
+      document.getElementById('sim-box').style.display='';
+      document.getElementById('calc').style.display='';
+    });
     sliderReady=true;
   }
   si.value=income; ss.value=salary;
   document.getElementById('s-income-v').textContent=won(income)+'원';
   document.getElementById('s-salary-v').textContent=won(salary)+'원';
+  document.getElementById('slide').style.display='block';
+  document.getElementById('sim-box').style.display='none';
+  document.getElementById('calc').style.display='none';
 }
 
 
