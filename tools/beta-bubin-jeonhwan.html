@@ -46,6 +46,13 @@
 .slide .sl label{width:110px;margin:0;font-size:14px}
 .slide .sl input{flex:1;accent-color:var(--blue)}
 .slide .sl b{width:130px;text-align:right;font-size:15px;color:var(--blue)}
+.chartbox{margin-top:30px;border:1px solid var(--line);border-radius:12px;padding:22px 22px 16px}
+.chartbox h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
+.chartbox .csub{font-size:13px;color:var(--mute);margin-bottom:14px}
+.chartbox svg{width:100%;height:auto;display:block}
+.clegend{display:flex;gap:18px;justify-content:center;margin-top:10px;font-size:13px;color:var(--char);flex-wrap:wrap}
+.clegend span{display:flex;align-items:center;gap:6px}
+.clegend i{width:16px;height:3px;border-radius:2px;display:inline-block}
 .steps{margin-top:22px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
 .steps summary::-webkit-details-marker{display:none}
@@ -147,6 +154,16 @@
             <tbody id="res-body"></tbody>
           </table>
         </div>
+        <div class="chartbox" id="chartbox">
+          <h3>대표님 연봉에 따라 어떻게 달라지나요?</h3>
+          <p class="csub">가로축은 대표님 연봉, 세로축은 금액입니다. 점선이 지금 선택하신 연봉입니다.</p>
+          <svg id="chart" viewBox="0 0 720 310" preserveAspectRatio="xMidYMid meet" role="img" aria-label="대표님 연봉에 따른 총 세금과 실수령액 변화 그래프"></svg>
+          <div class="clegend">
+            <span><i style="background:#C8423A"></i>총 세금 (법인세 + 근로소득세)</span>
+            <span><i style="background:#1B4A9B"></i>대표님이 가져가는 돈</span>
+          </div>
+        </div>
+
         <div class="verdict" id="verdict"></div>
 
         <details class="steps" id="steps">
@@ -260,7 +277,57 @@ function render(income,deduct,red,salary){
     +(best.left>0?'<br><br>다만 나머지 '+won(best.left)+'원은 법인에 남습니다. 그 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.':'')
     +'<br><br><span style="font-size:14px;color:var(--mute)">여기서 건강보험료와 국민연금이 추가로 빠집니다. 법인 대표님은 연봉 기준, 개인사업자는 소득과 재산 기준으로 산정되어 차이가 크므로 상담에서 함께 계산해 드립니다.</span>';
   renderSteps(income,deduct,red,rows,salary);
+  drawChart(income,deduct,red,salary);
   document.getElementById('res').style.display='block';
+}
+
+/* 연봉별 곡선 그래프 */
+function shortWon(v){
+  if(v>=100000000){ const e=v/100000000; return (e>=10?Math.round(e):Math.round(e*10)/10)+'억'; }
+  if(v>=10000) return Math.round(v/10000).toLocaleString('ko-KR')+'만';
+  return Math.round(v)+'';
+}
+function drawChart(income,deduct,red,salary){
+  const W=720,H=310,L=58,R=20,T=16,B=52;
+  const rate=red/100;
+  const pts=[];
+  const N=60;
+  for(let i=0;i<=N;i++){
+    const sal=income*i/N;
+    const cTax=cit(Math.max(0,income-sal))*(1-rate);
+    const wTax=pit(Math.max(0,sal-earnedDeduct(sal)-deduct));
+    pts.push({sal,tax:cTax+wTax,cash:sal-wTax});
+  }
+  const rawMax=Math.max(...pts.map(p=>Math.max(p.tax,p.cash)))*1.08||1;
+  const step=(()=>{ const rough=rawMax/4, mag=Math.pow(10,Math.floor(Math.log10(rough))), n=rough/mag;
+    return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag; })();
+  const maxY=step*4;
+  const X=v=>L+(v/income)*(W-L-R);
+  const Y=v=>H-B-(v/maxY)*(H-T-B);
+  const path=key=>pts.map((p,i)=>(i?'L':'M')+X(p.sal).toFixed(1)+' '+Y(p[key]).toFixed(1)).join(' ');
+  // 눈금
+  const yTicks=4, gy=[];
+  for(let i=0;i<=yTicks;i++){
+    const v=maxY*i/yTicks, y=Y(v);
+    gy.push('<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="#E4E8EF" stroke-width="1"/>'
+      +'<text x="'+(L-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>');
+  }
+  const xTicks=[0,income/2,income].map((v,i)=>
+    '<text x="'+X(v).toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="'+(i===0?'start':i===2?'end':'middle')+'" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>');
+  // 최저 세금 지점
+  const minP=pts.reduce((a,b)=>b.tax<a.tax?b:a);
+  const cur=pts.reduce((a,b)=>Math.abs(b.sal-salary)<Math.abs(a.sal-salary)?b:a);
+  document.getElementById('chart').innerHTML=
+    gy.join('')+xTicks.join('')
+    +'<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#C9D6F0" stroke-width="1"/>'
+    +'<path d="'+path('cash')+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
+    +'<path d="'+path('tax')+'" fill="none" stroke="#C8423A" stroke-width="2.5"/>'
+    +'<line x1="'+X(cur.sal).toFixed(1)+'" y1="'+T+'" x2="'+X(cur.sal).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
+    +'<circle cx="'+X(cur.sal).toFixed(1)+'" cy="'+Y(cur.tax).toFixed(1)+'" r="4.5" fill="#C8423A" stroke="#fff" stroke-width="2"/>'
+    +'<circle cx="'+X(cur.sal).toFixed(1)+'" cy="'+Y(cur.cash).toFixed(1)+'" r="4.5" fill="#1B4A9B" stroke="#fff" stroke-width="2"/>'
+    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+34)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님 연봉</text>'
+    +'<circle cx="'+X(minP.sal).toFixed(1)+'" cy="'+Y(minP.tax).toFixed(1)+'" r="3.5" fill="#fff" stroke="#C8423A" stroke-width="2"/>'
+    +'<text x="'+Math.min(W-R-40,Math.max(L+34,X(minP.sal))).toFixed(1)+'" y="'+(Y(minP.tax)+20).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#C8423A" font-weight="700">세금 최저 '+shortWon(minP.sal)+'</text>';
 }
 
 /* 계산 과정 설명 */
