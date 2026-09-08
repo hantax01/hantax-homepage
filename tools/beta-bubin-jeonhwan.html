@@ -33,7 +33,8 @@
 .rtable .best{background:var(--blue-soft)}
 .rtable .tot td{font-weight:800;color:var(--ink);border-bottom:2px solid var(--line)}
 .rtable .diff td{color:var(--blue);font-weight:700}
-.rtable .neg{color:var(--seal)}
+.rtable .diff small{display:block;font-size:11.5px;font-weight:600;margin-top:2px;opacity:.85}
+.rtable .diff td.neg{color:var(--seal)}
 .rtable .gap td{padding:0;height:14px;border:0}
 .rtable .cash td{font-weight:700;color:var(--ink)}
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
@@ -263,7 +264,8 @@ function render(income,deduct,red,salary){
    +'<tr class="diff"><td>지금 대비</td>'+cells(r=>{
       if(r.corp===null) return '<td class="'+(r.total===min?'best':'')+'">기준</td>';
       const d=base-r.total;
-      return '<td class="'+(r.total===min?'best':'')+(d<0?' neg':'')+'">'+(d>=0?'−'+won(d):'+'+won(-d))+'원</td>';
+      if(Math.abs(d)<1000) return '<td class="'+(r.total===min?'best':'')+'">비슷</td>';
+      return '<td class="'+(r.total===min?'best':'')+(d<0?' neg':'')+'">'+won(Math.abs(d))+'원<br><small>'+(d>0?'적게 냄':'더 냄')+'</small></td>';
    })+'</tr>'
    +'<tr class="gap"><td colspan="5"></td></tr>'
    +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>'<td>'+won(r.cash)+'원</td>')+'</tr>'
