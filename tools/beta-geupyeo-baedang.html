@@ -162,7 +162,7 @@
 
         <div class="verdict" id="verdict"></div>
 
-        <details class="steps" id="steps">
+        <details class="steps" id="steps" open>
           <summary>계산 과정 자세히 보기</summary>
           <div class="body" id="steps-body"></div>
         </details>
@@ -231,18 +231,26 @@ const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 
 /* 대표님 개인 세금 (근로소득 + 배당소득) */
 function personTax(salary,dividend){
-  const earned = salary>0 ? salary-earnedDeduct(salary) : 0;
+  const edu = salary>0 ? earnedDeduct(salary) : 0;
+  const earned = Math.max(0, salary-edu);
   if(dividend<=DIV_LIMIT){
-    const salTax=pitRaw(earned), divTax=dividend*SEP_RATE;
-    return {total:(salTax+divTax)*LOCAL, salTax:salTax*LOCAL, divTax:divTax*LOCAL, mode:'분리과세', earned};
+    const salRaw=pitRaw(earned), salInfo=pitInfo(earned), divRaw=dividend*SEP_RATE;
+    return {total:(salRaw+divRaw)*LOCAL, mode:'분리과세',
+            edu, earned, salRaw, salInfo, divRaw,
+            salLocal:salRaw*0.1, divLocal:divRaw*0.1,
+            salTax:salRaw*LOCAL, divTax:divRaw*LOCAL};
   }
   const excess=dividend-DIV_LIMIT, gross=excess*GROSS_UP;
   const baseA=Math.max(0,earned+excess+gross);
-  const rawA=pitRaw(baseA), credit=Math.min(gross,rawA);
-  const taxA=rawA-credit+DIV_LIMIT*SEP_RATE;
-  const taxB=pitRaw(earned)+dividend*SEP_RATE;
+  const infoA=pitInfo(baseA), rawA=infoA.tax, credit=Math.min(gross,rawA);
+  const sepPart=DIV_LIMIT*SEP_RATE;
+  const taxA=rawA-credit+sepPart;
+  const infoB=pitInfo(earned), rawB=infoB.tax, divB=dividend*SEP_RATE;
+  const taxB=rawB+divB;
   const pick=Math.max(taxA,taxB);
-  return {total:pick*LOCAL, mode: taxA>=taxB?'종합과세':'비교과세', earned, baseA, rawA, credit, taxA:taxA*LOCAL, taxB:taxB*LOCAL};
+  return {total:pick*LOCAL, mode: taxA>=taxB?'종합과세':'비교과세',
+          edu, earned, excess, gross, baseA, infoA, rawA, credit, sepPart, taxA,
+          infoB, rawB, divB, taxB, pick, local:pick*0.1};
 }
 
 /* 한 가지 배분안 계산 */
@@ -368,34 +376,64 @@ function drawChart(profit,total,salary){
 function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
 function renderSteps(profit,total,rows){
   const titles=['총액을 모두 급여로 받는 경우','연봉과 배당으로 나누는 경우','총액을 모두 배당으로 받는 경우'];
+  const sec=t=>'<tr><td colspan="3" style="padding-top:14px;padding-bottom:4px;color:var(--blue);font-weight:800;font-size:12.5px;letter-spacing:.04em;border-bottom:0">'+t+'</td></tr>';
   let html='';
   rows.forEach((r,i)=>{
-    const citHow = r.cBase<=200000000 ? won(r.cBase)+' × 10%' : '2억 × 10% + '+won(r.cBase-200000000)+' × 20%';
-    html+='<div class="case"><b class="ttl">'+(i+1)+'. '+titles[i]+(i===1?' (연봉 '+won(r.salary)+'원 + 배당 '+won(r.dividend)+'원)':'')+'</b><table class="stable">'
+    const pt=r.pt;
+    const citRaw = r.cBase<=200000000 ? r.cBase*0.1 : 20000000+(r.cBase-200000000)*0.2;
+    const citHow = r.cBase<=200000000 ? won(r.cBase)+' × 10%' : '2억 × 10%(2,000만) + '+won(r.cBase-200000000)+' × 20%';
+    html+='<div class="case"><b class="ttl">'+(i+1)+'. '+titles[i]+(i===1?' (연봉 '+won(r.salary)+'원 + 배당 '+won(r.dividend)+'원)':'')+'</b><table class="stable">';
+
+    html+=sec('법인')
       +row('법인 과세표준','당기순이익 '+won(profit)+' − 급여 '+won(r.salary),won(r.cBase)+'원')
-      +row('법인세',citHow+' → 지방소득세 포함',won(r.cTax)+'원');
-    if(r.dividend>0) html+=row('배당 재원','법인 과세표준 − 법인세',won(r.after)+'원');
+      +row('법인세 산출세액',citHow,won(citRaw)+'원')
+      +row('지방소득세','산출세액 × 10%',won(citRaw*0.1)+'원')
+      +row('법인세 합계','',won(r.cTax)+'원',true);
+    if(r.dividend>0 || r.after>0)
+      html+=row('배당 재원','법인 과세표준 '+won(r.cBase)+' − 법인세 '+won(r.cTax),won(r.after)+'원');
+
     if(r.salary>0){
-      const edu=earnedDeduct(r.salary), wb=Math.max(0,r.salary-edu), wi=pitInfo(wb);
-      html+=row('근로소득금액','연봉 '+won(r.salary)+' − 근로소득공제 '+won(edu),won(wb)+'원');
-      if(r.dividend<=DIV_LIMIT) html+=row('근로소득세',won(wb)+' × '+(wi.rate*100)+'% − '+won(wi.ded)+' → 지방소득세 포함',won(wi.tax*LOCAL)+'원');
+      html+=sec('대표님 근로소득')
+        +row('근로소득공제','연봉 '+won(r.salary)+' 구간별 공제',won(pt.edu)+'원')
+        +row('근로소득금액','연봉 '+won(r.salary)+' − 근로소득공제 '+won(pt.edu),won(pt.earned)+'원');
     }
-    if(r.dividend>0){
-      if(r.dividend<=DIV_LIMIT){
-        html+=row('배당소득세',won(r.dividend)+' × 15.4% 분리과세',won(r.dividend*SEP_RATE*LOCAL)+'원');
-      }else{
-        const ex=r.dividend-DIV_LIMIT, gu=ex*GROSS_UP;
-        html+=row('배당 2,000만 원까지','2,000만 × 15.4% 분리과세',won(DIV_LIMIT*SEP_RATE*LOCAL)+'원')
-             +row('2,000만 원 초과분','근로소득과 합산해 종합과세 (배당가산 '+won(gu)+' 더한 뒤 같은 금액을 세액공제)','')
-             +row('개인 세금 계산','종합과세와 분리과세 중 큰 금액 적용 ('+r.mode+')',won(r.pTax)+'원');
-      }
+
+    if(r.dividend>0 && r.dividend<=DIV_LIMIT){
+      html+=sec('대표님 배당소득 (2,000만 원 이하 · 분리과세)')
+        +row('배당소득 원천징수',won(r.dividend)+' × 14%',won(pt.divRaw)+'원')
+        +row('지방소득세','원천징수세액 × 10%',won(pt.divLocal)+'원')
+        +row('배당소득세 합계','실질 15.4%',won(pt.divTax)+'원');
+      if(r.salary>0)
+        html+=row('근로소득세','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded)+' + 지방소득세',won(pt.salTax)+'원');
+    } else if(r.dividend>DIV_LIMIT){
+      html+=sec('대표님 배당소득 (2,000만 원 초과 · 종합과세 검토)')
+        +row('2,000만 원 초과분','배당 '+won(r.dividend)+' − 2,000만',won(pt.excess)+'원')
+        +row('배당가산액(그로스업)','초과분 × 10%',won(pt.gross)+'원')
+        +sec('① 종합과세로 계산하면')
+        +row('종합소득 과세표준','근로소득금액 '+won(pt.earned)+' + 초과분 '+won(pt.excess)+' + 가산액 '+won(pt.gross),won(pt.baseA)+'원')
+        +row('산출세액',won(pt.baseA)+' × '+(pt.infoA.rate*100)+'% − 누진공제 '+won(pt.infoA.ded),won(pt.rawA)+'원')
+        +row('− 배당세액공제','가산액만큼 공제 (산출세액 한도)','−'+won(pt.credit)+'원')
+        +row('+ 2,000만 원분','2,000만 × 14% 원천징수','+'+won(pt.sepPart)+'원')
+        +row('① 합계','',won(pt.taxA)+'원')
+        +sec('② 배당을 모두 분리과세했다면')
+        +row('근로소득 산출세액','과세표준 '+won(pt.earned)+' × '+(pt.infoB.rate*100)+'% − 누진공제 '+won(pt.infoB.ded),won(pt.rawB)+'원')
+        +row('+ 배당 원천징수','배당 '+won(r.dividend)+' × 14%','+'+won(pt.divB)+'원')
+        +row('② 합계','',won(pt.taxB)+'원')
+        +sec('③ 둘 중 큰 금액으로 결정')
+        +row('결정세액','① '+won(pt.taxA)+' 과 ② '+won(pt.taxB)+' 중 큰 금액 ('+pt.mode+')',won(pt.pick)+'원')
+        +row('지방소득세','결정세액 × 10%',won(pt.local)+'원');
+    } else if(r.salary>0){
+      html+=row('근로소득세','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded)+' + 지방소득세',won(pt.salTax)+'원');
     }
-    html+=row('세금 합계','법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax),won(r.total)+'원',true)
-      +row('가져가는 돈','급여 '+won(r.salary)+' + 배당 '+won(r.dividend)+' − 개인 세금',won(r.cash)+'원',true)
-      +row('법인에 남는 돈','','+ '+won(r.left)+'원')
+
+    html+=row('개인 세금 합계','',won(r.pTax)+'원',true)
+      +sec('정리')
+      +row('세금 합계','법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax),won(r.total)+'원',true)
+      +row('가져가는 돈','급여 '+won(r.salary)+' + 배당 '+won(r.dividend)+' − 개인 세금 '+won(r.pTax),won(r.cash)+'원',true)
+      +row('법인에 남는 돈','배당 재원 '+won(r.after)+' − 배당 '+won(r.dividend),won(r.left)+'원')
       +'</table></div>';
   });
-  html+='<p class="snote">급여는 법인의 비용이 되어 법인세 과세표준을 줄이지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다. 배당소득이 연 2,000만 원을 넘으면 근로소득과 합쳐 종합과세하되, 법인세와 이중과세되는 부분을 덜어주기 위해 배당가산액을 더했다가 같은 금액을 세액공제합니다. 4대보험과 이전에 쌓인 이익잉여금은 반영하지 않았습니다.</p>';
+  html+='<p class="snote">급여는 법인의 비용이 되어 법인세 과세표준을 줄이지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다. 배당소득이 연 2,000만 원을 넘으면 근로소득과 합쳐 종합과세하되, 법인세와 이중과세되는 부분을 덜어주기 위해 배당가산액을 더했다가 같은 금액을 세액공제하고, 분리과세했을 때보다 적어지지 않도록 둘 중 큰 금액으로 결정합니다. 4대보험과 이전에 쌓인 이익잉여금은 반영하지 않았습니다.</p>';
   document.getElementById('steps-body').innerHTML=html;
 }
 
