@@ -40,13 +40,14 @@
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
 .verdict b{color:var(--blue)}
 .slide{display:none;background:var(--soft);border-radius:14px;padding:24px 28px}
-.slnote{margin-top:16px;font-size:13px;color:var(--mute)}
+.slnote{margin-top:14px;font-size:13px;color:var(--mute)}
+#sltotal{color:var(--ink);font-weight:700;font-size:14px}
 .slnote a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
 .slide .sl{display:flex;align-items:center;gap:16px;margin-bottom:14px}
 .slide .sl:last-child{margin-bottom:0}
 .slide .sl label{width:110px;margin:0;font-size:14px}
 .slide .sl input{flex:1;accent-color:var(--blue)}
-.slide .sl b{width:190px;text-align:right;font-size:15px;color:var(--blue)}
+.slide .sl b{width:150px;text-align:right;font-size:15px;color:var(--blue)}
 .chartbox{margin-top:30px;border:1px solid var(--line);border-radius:12px;padding:22px 22px 16px}
 .chartbox h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
 .chartbox .csub{font-size:13px;color:var(--mute);margin-bottom:14px}
@@ -128,7 +129,9 @@
         </div>
       </div>
       <div class="slide" id="slide">
-        <div class="sl"><label for="s-salary">연봉과 배당</label><input type="range" id="s-salary" min="0" max="100" step="1"><b id="s-salary-v"></b></div>
+        <div class="sl"><label for="s-salary">대표님 연봉</label><input type="range" id="s-salary"><b id="s-salary-v"></b></div>
+        <div class="sl"><label for="s-div">배당</label><input type="range" id="s-div"><b id="s-div-v"></b></div>
+        <p class="slnote" id="sltotal"></p>
         <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
       </div>
       <button class="btn btn-primary simbtn" id="calc">세금 비교하기</button>
@@ -456,24 +459,33 @@ $('calc').addEventListener('click',()=>{
 /* ── 슬라이더 ──────────────────────────────── */
 let sliderReady=false;
 function initSlider(profit,total,salary){
-  const ss=$('s-salary');
+  const ss=$('s-salary'), sd=$('s-div');
+  const step=Math.max(1000000, Math.round(profit/200/1000000)*1000000);
+  [ss,sd].forEach(el=>{ el.min=0; el.max=profit; el.step=step; });
   if(!sliderReady){
-    ss.addEventListener('input',()=>{
-      const p=num($('i-profit').value), t=total;
-      const sal=Math.round(t*Number(ss.value)/100/1000000)*1000000;
-      $('s-salary-v').textContent='연봉 '+won(sal)+' / 배당 '+won(t-sal);
-      $('i-salary').value=sal.toLocaleString('ko-KR');
-      $('i-div').value=(t-sal).toLocaleString('ko-KR');
-      render(p,t,sal);
-    });
+    const upd=()=>{
+      const pf=num($('i-profit').value);
+      const sal=Number(ss.value), div=Number(sd.value);
+      $('s-salary-v').textContent=won(sal)+'원';
+      $('s-div-v').textContent=won(div)+'원';
+      $('sltotal').textContent='가져가는 돈 합계 '+won(sal+div)+'원';
+      $('i-salary').value=sal?sal.toLocaleString('ko-KR'):'';
+      $('i-div').value=div?div.toLocaleString('ko-KR'):'';
+      if(sal+div>0) render(pf,sal+div,sal);
+    };
+    ss.addEventListener('input',upd);
+    sd.addEventListener('input',upd);
     $('toBox').addEventListener('click',e=>{
       e.preventDefault();
       $('slide').style.display='none'; $('sim-box').style.display=''; $('calc').style.display='';
     });
     sliderReady=true;
   }
-  ss.value=total?Math.round(salary/total*100):100;
-  $('s-salary-v').textContent='연봉 '+won(salary)+' / 배당 '+won(total-salary);
+  const div=total-salary;
+  ss.value=salary; sd.value=div;
+  $('s-salary-v').textContent=won(salary)+'원';
+  $('s-div-v').textContent=won(div)+'원';
+  $('sltotal').textContent='가져가는 돈 합계 '+won(total)+'원';
   $('slide').style.display='block'; $('sim-box').style.display='none'; $('calc').style.display='none';
 }
 </script>
