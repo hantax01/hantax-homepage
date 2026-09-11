@@ -132,6 +132,13 @@
           <label for="i-div">배당</label>
           <div class="unit"><input type="text" id="i-div" inputmode="numeric"><span>원</span></div>
         </div>
+        <div class="fw">
+          <label for="i-cit">법인세 부담 <small>공제·감면을 많이 받는 회사인지</small></label>
+          <select id="i-cit">
+            <option value="0">일반 (과세표준 2억 원 이하 10%, 초과 20%)</option>
+            <option value="1">공제·감면이 많은 회사 (최저한세 7%만 부담)</option>
+          </select>
+        </div>
       </div>
       <div class="slide" id="slide">
         <div class="sl"><label for="s-salary">대표님 연봉</label><input type="range" id="s-salary"><b id="s-salary-v"></b></div>
@@ -185,6 +192,7 @@
         · 배당 재원은 올해 세후 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
         · 배당소득이 연 2,000만 원 이하면 15.4% 분리과세, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.<br>
         · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 2억 원 초과 20%이며 지방소득세를 포함했습니다.<br>
+        · <b>공제·감면이 많은 회사</b>를 선택하면 법인세를 최저한세율 7%로 계산합니다. 지방소득세는 공제·감면을 적용하지 않으므로 감면 전 세액을 기준으로 10%를 더했습니다.<br>
         · 개인 세금은 6~45% 누진세율에 지방소득세(세액의 10%)를 포함했습니다.<br>
         · <b>4대보험까지 보기</b>를 선택하면 2026년 요율로 함께 계산합니다. 대표이사는 고용·산재보험 가입 대상이 아니므로 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양(0.9448%)만 반영했습니다.<br>
         · 회사부담 보험료는 법인의 비용으로 보아 법인세를 줄이고, 본인부담 보험료는 대표님 소득공제로 반영했습니다.<br>
@@ -256,7 +264,17 @@ function earnedDeduct(s){
   if(s<=100000000) return 12000000+(s-45000000)*.05;
   return Math.min(20000000,14750000+(s-100000000)*.02);
 }
-function cit(b){ if(b<=0)return 0; return (b<=200000000 ? b*.1 : 20000000+(b-200000000)*.2)*LOCAL; }
+let MIN_TAX=false;        // 공제·감면이 많은 회사(최저한세 7%) 여부
+const MIN_RATE=0.07;
+function citNormal(b){ if(b<=0)return 0; return b<=200000000 ? b*.1 : 20000000+(b-200000000)*.2; }
+function citParts(b){
+  if(b<=0) return {main:0,local:0,total:0,normal:0};
+  const normal=citNormal(b);
+  const main = MIN_TAX ? b*MIN_RATE : normal;
+  const local = normal*0.1;   // 지방소득세는 공제·감면 전 세액 기준
+  return {main, local, total:main+local, normal};
+}
+function cit(b){ return citParts(b).total; }
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 
@@ -340,7 +358,7 @@ function render(profit,total,salary){
 
   document.getElementById('res-sub').textContent=
     '당기순이익 '+won(profit)+'원 · 연봉 '+won(sal)+'원 + 배당 '+won(div)+'원'
-    +(INS_MODE?' · 4대보험 포함':' · 세금만');
+    +(MIN_TAX?' · 최저한세 7%':'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
 
   // 배당 재원 부족 안내
   const w=document.getElementById('warn');
@@ -436,16 +454,20 @@ function renderSteps(profit,total,rows){
   let html='';
   rows.forEach((r,i)=>{
     const pt=r.pt;
-    const citRaw = r.cBase<=200000000 ? r.cBase*0.1 : 20000000+(r.cBase-200000000)*0.2;
-    const citHow = r.cBase<=200000000 ? won(r.cBase)+' × 10%' : '2억 × 10%(2,000만) + '+won(r.cBase-200000000)+' × 20%';
+    const cp = citParts(r.cBase);
+    const citHow = MIN_TAX
+      ? won(r.cBase)+' × 7% (최저한세)'
+      : (r.cBase<=200000000 ? won(r.cBase)+' × 10%' : '2억 × 10%(2,000만) + '+won(r.cBase-200000000)+' × 20%');
     html+='<div class="case"><b class="ttl">'+(i+1)+'. '+titles[i]+(i===1?' (연봉 '+won(r.salary)+'원 + 배당 '+won(r.dividend)+'원)':'')+'</b><table class="stable">';
 
     html+=sec('법인')
       +row('법인 과세표준', INS_MODE
             ? '당기순이익 '+won(profit)+' − 급여 '+won(r.salary)+' − 회사부담 보험료 '+won(r.ins.company)
             : '당기순이익 '+won(profit)+' − 급여 '+won(r.salary), won(r.cBase)+'원')
-      +row('법인세 산출세액',citHow,won(citRaw)+'원')
-      +row('지방소득세','산출세액 × 10%',won(citRaw*0.1)+'원')
+      +row('법인세',citHow,won(cp.main)+'원')
+      +row('지방소득세', MIN_TAX
+            ? '공제·감면 전 세액 '+won(cp.normal)+' × 10%'
+            : '법인세 '+won(cp.normal)+' × 10%', won(cp.local)+'원')
       +row('법인세 합계','',won(r.cTax)+'원',true);
     if(r.dividend>0 || r.after>0)
       html+=row('배당 재원','법인 과세표준 '+won(r.cBase)+' − 법인세 '+won(r.cTax),won(r.after)+'원');
@@ -519,6 +541,13 @@ function renderSteps(profit,total,rows){
 
 /* ── 입력 연동 ─────────────────────────────── */
 const $=id=>document.getElementById(id);
+document.getElementById('i-cit').addEventListener('change',()=>{
+  MIN_TAX = document.getElementById('i-cit').value==='1';
+  const pf=num(document.getElementById('i-profit').value),
+        sal=num(document.getElementById('i-salary').value),
+        dv=num(document.getElementById('i-div').value);
+  if(pf>0 && sal+dv>0) render(pf,sal+dv,sal);
+});
 document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('#modetab button').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');
@@ -532,6 +561,7 @@ document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('clic
 });
 
 $('calc').addEventListener('click',()=>{
+  MIN_TAX = $('i-cit').value==='1';
   const profit=num($('i-profit').value);
   const salary=num($('i-salary').value);
   const dividend=num($('i-div').value);
