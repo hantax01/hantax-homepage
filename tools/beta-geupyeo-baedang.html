@@ -40,6 +40,8 @@
 .rtable .diff td.neg{color:var(--seal)}
 .rtable .gap td{padding:0;height:14px;border:0}
 .rtable .cash td{font-weight:700;color:var(--ink)}
+.rtable .rate td{color:var(--char);font-weight:700}
+.rtable .rate small{display:block;font-size:11px;font-weight:400;color:var(--mute);margin-top:2px}
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
 .verdict b{color:var(--blue)}
 .slide{display:none;background:var(--soft);border-radius:14px;padding:24px 28px}
@@ -178,6 +180,7 @@
       <p class="disc">
         이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 다른 소득, 4대보험, 이익잉여금 규모, 주주 구성 등 여러 사정에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
         · 대표님께 다른 소득은 없고, 주주는 대표님 한 분이라고 가정합니다.<br>
+        · 세 가지 안은 가져가는 금액이 서로 다르므로, 금액에 관계없이 비교하실 수 있도록 <b>가져가는 돈 대비 부담률</b>을 함께 표시했습니다.<br>
         · 급여는 법인의 비용이 되어 법인세가 줄지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다.<br>
         · 배당 재원은 올해 세후 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
         · 배당소득이 연 2,000만 원 이하면 15.4% 분리과세, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.<br>
@@ -320,6 +323,11 @@ function render(profit,total,salary){
              +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.ins.self)+'원</td>')+'</tr>'
              +'<tr><td>배당 건강보험료</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.dIns.total>0?won(r.dIns.total)+'원':'—')+'</td>')+'</tr>':'')
    +'<tr class="tot"><td>'+(INS_MODE?'총 부담 합계':'합계')+'</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.total)+'원</td>')+'</tr>'
+   +'<tr class="rate"><td>가져가는 돈 대비 부담률</td>'+cells(r=>{
+      const gross=r.salary+r.dividend;
+      const pct=gross>0?(r.total/gross*100):0;
+      return '<td class="'+(r.total===min?'best':'')+'">'+pct.toFixed(1)+'%<br><small>'+won(gross)+'원 기준</small></td>';
+   })+'</tr>'
    +'<tr class="diff"><td>전액 연봉 대비</td>'+cells((r)=>{
       if(r===rows[0]) return '<td class="'+(r.total===min?'best':'')+'">기준</td>';
       const d=base-r.total;
