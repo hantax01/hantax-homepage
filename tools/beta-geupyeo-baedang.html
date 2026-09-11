@@ -14,6 +14,7 @@
 <style>
 .sim{max-width:900px;margin:0 auto}
 .sim-in{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim-in .fw{grid-column:1/-1}
 .sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
 .sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
 .sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
@@ -113,20 +114,16 @@
   <div class="wrap">
     <div class="sim">
       <div class="sim-in" id="sim-box">
-        <div>
-          <label for="i-profit">당기순이익 <small>대표님 급여를 반영하기 전 이익</small></label>
+        <div class="fw">
+          <label for="i-profit">당기순이익 <small>대표님 연봉을 빼기 전 금액</small></label>
           <div class="unit"><input type="text" id="i-profit" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-total">가져가려는 돈 총액 <small>올해 회사에서 빼갈 금액</small></label>
-          <div class="unit"><input type="text" id="i-total" inputmode="numeric"><span>원</span></div>
-        </div>
-        <div>
-          <label for="i-salary">연봉 <small>바꾸면 배당이 자동으로 맞춰집니다</small></label>
+          <label for="i-salary">대표님 연봉</label>
           <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-div">배당 <small>바꾸면 연봉이 자동으로 맞춰집니다</small></label>
+          <label for="i-div">배당</label>
           <div class="unit"><input type="text" id="i-div" inputmode="numeric"><span>원</span></div>
         </div>
       </div>
@@ -292,7 +289,7 @@ function render(profit,total,salary){
    +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+won(r.left)+'원</td>')+'</tr>';
 
   document.getElementById('res-sub').textContent=
-    '당기순이익 '+won(profit)+'원 · 가져가려는 돈 '+won(total)+'원';
+    '당기순이익 '+won(profit)+'원 · 연봉 '+won(sal)+'원 + 배당 '+won(div)+'원 = 가져가는 돈 '+won(total)+'원';
 
   // 배당 재원 부족 안내
   const w=document.getElementById('warn');
@@ -439,33 +436,19 @@ function renderSteps(profit,total,rows){
 
 /* ── 입력 연동 ─────────────────────────────── */
 const $=id=>document.getElementById(id);
-function syncFrom(which){
-  const total=num($('i-total').value);
-  if(total<=0) return;
-  if(which==='salary'){
-    const s=Math.min(num($('i-salary').value),total);
-    $('i-salary').value=s?s.toLocaleString('ko-KR'):'';
-    $('i-div').value=(total-s).toLocaleString('ko-KR');
-  }else{
-    const d=Math.min(num($('i-div').value),total);
-    $('i-div').value=d?d.toLocaleString('ko-KR'):'';
-    $('i-salary').value=(total-d).toLocaleString('ko-KR');
-  }
-}
-['i-profit','i-total','i-salary','i-div'].forEach(id=>{
+['i-profit','i-salary','i-div'].forEach(id=>{
   const el=$(id);
   el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
-  el.addEventListener('blur',()=>{ if(id==='i-salary') syncFrom('salary'); if(id==='i-div') syncFrom('div'); });
 });
 
 $('calc').addEventListener('click',()=>{
-  const profit=num($('i-profit').value), total=num($('i-total').value);
-  let salary=num($('i-salary').value);
+  const profit=num($('i-profit').value);
+  const salary=num($('i-salary').value);
+  const dividend=num($('i-div').value);
+  const total=salary+dividend;
   if(profit<=0){alert('당기순이익을 입력해 주세요.');return;}
-  if(total<=0){alert('가져가려는 돈 총액을 입력해 주세요.');return;}
-  if(total>profit){alert('가져가려는 돈이 당기순이익보다 많습니다. 금액을 확인해 주세요.');return;}
-  if(!$('i-salary').value && !$('i-div').value){ salary=total; $('i-salary').value=total.toLocaleString('ko-KR'); $('i-div').value='0'; }
-  salary=Math.min(salary,total);
+  if(total<=0){alert('연봉이나 배당 중 하나는 입력해 주세요.');return;}
+  if(salary>profit){alert('연봉이 당기순이익보다 많습니다. 금액을 확인해 주세요.');return;}
   render(profit,total,salary);
   initSlider(profit,total,salary);
 });
@@ -476,7 +459,7 @@ function initSlider(profit,total,salary){
   const ss=$('s-salary');
   if(!sliderReady){
     ss.addEventListener('input',()=>{
-      const p=num($('i-profit').value), t=num($('i-total').value);
+      const p=num($('i-profit').value), t=total;
       const sal=Math.round(t*Number(ss.value)/100/1000000)*1000000;
       $('s-salary-v').textContent='연봉 '+won(sal)+' / 배당 '+won(t-sal);
       $('i-salary').value=sal.toLocaleString('ko-KR');
