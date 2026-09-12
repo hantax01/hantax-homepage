@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업무용 차량 계산기 (준비 중) | 한택스</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=30">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim-in .fw{grid-column:1/-1}
+.sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
+.sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--mute)}
+.unit input{padding-right:44px;text-align:right}
+.sim .chk{display:flex;gap:20px;flex-wrap:wrap;align-items:center;padding-top:6px}
+.sim .chk label{display:inline-flex;align-items:center;gap:8px;margin:0;font-weight:600;font-size:14.5px;color:var(--char);cursor:pointer}
+.sim .chk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.divider{grid-column:1/-1;border-top:1px solid var(--line);padding-top:20px;margin-top:2px}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider p{font-size:13px;color:var(--mute);margin-top:5px;line-height:1.7}
+.assum{grid-column:1/-1;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.assum summary{cursor:pointer;padding:13px 18px;font-weight:700;font-size:14px;color:var(--ink);list-style:none}
+.assum summary::-webkit-details-marker{display:none}
+.assum summary::after{content:"고치기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.assum[open] summary::after{content:"접기"}
+.assum .ab{padding:4px 18px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px 16px}
+.assum .ab label{font-size:13px;margin-bottom:5px}
+.assum .ab input{padding:9px 12px;font-size:14px}
+.assum .an{grid-column:1/-1;font-size:12.5px;color:var(--mute);line-height:1.7;margin-top:2px}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:36px}
+.res h2{font-size:20px;margin-bottom:6px}
+.res .sub{font-size:14px;color:var(--mute);margin-bottom:18px}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px}
+.rtable th,.rtable td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);font-weight:400;margin-top:3px;line-height:1.6}
+.rtable .own td{background:var(--soft);font-weight:800;color:var(--ink);font-size:13.5px;text-align:left}
+.rtable .best td{background:var(--blue-soft)}
+.rtable .best td:last-child{color:var(--blue);font-weight:800}
+.rtable .nm{font-weight:700;color:var(--ink)}
+.rtable .tag{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-soft);border-radius:99px;padding:2px 8px;vertical-align:middle}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.warns{margin-top:18px;display:grid;gap:10px}
+.warn{background:#FDF3F2;border-left:4px solid var(--seal);border-radius:0 10px 10px 0;padding:14px 18px;font-size:14px;line-height:1.75;color:var(--char)}
+.warn b{color:var(--seal)}
+.slide{display:none;background:var(--soft);border-radius:14px;padding:24px 28px}
+.slnote{margin-top:16px;font-size:13px;color:var(--mute)}
+.slnote a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.slide .sl{display:flex;align-items:center;gap:16px}
+.slide .sl label{width:110px;margin:0;font-size:14px}
+.slide .sl input{flex:1;accent-color:var(--blue)}
+.slide .sl b{width:130px;text-align:right;font-size:15px;color:var(--blue)}
+.chartbox{margin-top:30px;border:1px solid var(--line);border-radius:12px;padding:22px 22px 16px}
+.chartbox h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
+.chartbox .csub{font-size:13px;color:var(--mute);margin-bottom:14px}
+.chartbox svg{width:100%;height:auto;display:block}
+.clegend{display:flex;gap:18px;justify-content:center;margin-top:10px;font-size:13px;color:var(--char);flex-wrap:wrap}
+.clegend span{display:flex;align-items:center;gap:6px}
+.clegend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.cband{margin-top:10px;text-align:center;font-size:13.5px;color:var(--blue);font-weight:700}
+.steps{margin-top:22px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:20px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.steps .case{margin-bottom:26px}
+.steps .case:last-child{margin-bottom:0}
+.steps .case b.ttl{display:block;color:var(--ink);font-size:14.5px;margin-bottom:10px}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:9px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:140px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left;white-space:normal}
+.stable tr.key td{background:var(--blue-soft)}
+.stable tr.key td:last-child{color:var(--blue);font-weight:800}
+.snote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px;line-height:1.8}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:22px}
+.assum .ab{grid-template-columns:1fr 1fr}
+.rtable{font-size:12.5px}.rtable th,.rtable td{padding:10px 5px}
+.slide .sl{display:block}
+.slide .sl label{width:auto;margin-bottom:8px}
+.slide .sl input{width:100%;margin:6px 0}
+.slide .sl b{display:block;width:auto;text-align:left;margin-top:4px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>업무용 차량, 사는 게 나을까요<br>빌리는 게 나을까요?</h1>
+    <p class="lead">현금으로 사는 경우, 할부로 사는 경우, 리스와 장기렌트를 나란히 놓고 세금까지 따져 봅니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in" id="sim-box">
+        <div>
+          <label for="i-form">사업자 형태</label>
+          <select id="i-form">
+            <option value="corp">법인</option>
+            <option value="person">개인</option>
+            <option value="both">법인과 개인 둘 다 있음</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-vat">부가가치세</label>
+          <select id="i-vat">
+            <option value="normal">일반과세</option>
+            <option value="free">면세</option>
+            <option value="simple">간이과세</option>
+          </select>
+        </div>
+        <div id="w-corp">
+          <label for="i-corp">법인 연간 과세표준 <small>이익에서 세무조정한 금액</small></label>
+          <div class="unit"><input type="text" id="i-corp" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div id="w-person">
+          <label for="i-person">개인 연간 소득금액 <small>매출에서 비용을 뺀 이익</small></label>
+          <div class="unit"><input type="text" id="i-person" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div id="w-book">
+          <label for="i-book">개인사업자 장부 <small>업무용승용차 한도를 가릅니다</small></label>
+          <select id="i-book">
+            <option value="double">복식부기의무자</option>
+            <option value="simple">간편장부대상자</option>
+            <option value="unknown">잘 모르겠습니다</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-years">예상 보유기간</label>
+          <select id="i-years">
+            <option value="3">3년</option>
+            <option value="5" selected>5년</option>
+            <option value="7">7년</option>
+            <option value="10">10년</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-driver">누가 운전하시나요</label>
+          <select id="i-driver">
+            <option value="staff">본인과 직원만</option>
+            <option value="family">가족도 운전합니다</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-hascar">사업자 명의 차량이 이미 있나요</label>
+          <select id="i-hascar">
+            <option value="no">없습니다</option>
+            <option value="yes">있습니다</option>
+          </select>
+        </div>
+        <div class="fw">
+          <div class="chk">
+            <label for="i-fund"><input type="checkbox" id="i-fund">부동산 자금출처를 신경 쓰고 있습니다</label>
+          </div>
+        </div>
+
+        <div class="divider">
+          <b>차량 정보</b>
+          <p>경차와 9인승 이상 승합차, 화물차는 업무용승용차에 들어가지 않아 비용 한도를 받지 않고 부가가치세도 돌려받습니다.</p>
+        </div>
+        <div>
+          <label for="i-kind">차량 종류</label>
+          <select id="i-kind">
+            <option value="sedan">일반 승용차 (세단, SUV)</option>
+            <option value="van">9인승 이상 승합차, 화물차 (카니발 9인승, 레이 밴 등)</option>
+            <option value="light">경차 (1,000cc 이하)</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-price">차량 가격 <small>부가가치세를 포함한 값</small></label>
+          <div class="unit"><input type="text" id="i-price" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <details class="assum">
+          <summary>리스료와 할부이자 같은 가정값</summary>
+          <div class="ab">
+            <div>
+              <label for="a-lease">월 리스료 <small>차값 대비</small></label>
+              <div class="unit"><input type="text" id="a-lease" inputmode="decimal" value="1.7"><span>%</span></div>
+            </div>
+            <div>
+              <label for="a-rent">월 렌트료 <small>차값 대비</small></label>
+              <div class="unit"><input type="text" id="a-rent" inputmode="decimal" value="2.0"><span>%</span></div>
+            </div>
+            <div>
+              <label for="a-loan">할부 연이자율</label>
+              <div class="unit"><input type="text" id="a-loan" inputmode="decimal" value="5.0"><span>%</span></div>
+            </div>
+            <div>
+              <label for="a-resid">되팔 때 값 <small>차값 대비</small></label>
+              <div class="unit"><input type="text" id="a-resid" inputmode="decimal"><span>%</span></div>
+            </div>
+            <div>
+              <label for="a-loanyear">할부 기간</label>
+              <div class="unit"><input type="text" id="a-loanyear" inputmode="numeric" value="5"><span>년</span></div>
+            </div>
+            <p class="an">되팔 때 값은 보유기간에 맞춰 자동으로 채워집니다. 실제 견적을 받으셨다면 그 숫자로 고쳐 주세요. 리스와 렌트는 보증금 없는 조건으로 보았습니다.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="slide" id="slide">
+        <div class="sl"><label for="s-price">차량 가격</label><input type="range" id="s-price" min="10000000" max="200000000" step="1000000"><b id="s-price-v"></b></div>
+        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">비교해 보기</button>
+
+      <div class="res" id="res">
+        <h2>취득 방법 비교 결과</h2>
+        <p class="sub" id="res-sub"></p>
+        <div style="overflow-x:auto">
+          <table class="rtable">
+            <thead><tr><th>취득 방법</th><th>내 돈<br>나가는 금액</th><th>비용으로<br>다 넣는 기간</th><th>줄어드는<br>세금</th><th>실제<br>부담액</th></tr></thead>
+            <tbody id="res-body"></tbody>
+          </table>
+        </div>
+
+        <div class="chartbox" id="chartbox">
+          <h3>차값에 따라 어떤 방법이 유리한가요?</h3>
+          <p class="csub">가로축은 차량 가격, 세로축은 세금까지 따진 실제 부담액입니다.</p>
+          <svg id="chart" viewBox="0 0 720 310" preserveAspectRatio="xMidYMid meet" role="img" aria-label="차량 가격에 따른 취득 방법별 실제 부담액 그래프"></svg>
+          <div class="clegend">
+            <span><i style="background:#1B4A9B"></i>현금 구입</span>
+            <span><i style="background:#5B8AD6"></i>할부 구입</span>
+            <span><i style="background:#C8423A"></i>운용리스</span>
+            <span><i style="background:#8b98a8"></i>장기렌트</span>
+          </div>
+          <p class="cband" id="cband"></p>
+        </div>
+
+        <div class="verdict" id="verdict"></div>
+        <div class="warns" id="warns"></div>
+
+        <details class="steps" id="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps-body"></div>
+        </details>
+      </div>
+
+      <p class="disc">
+        이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 견적과 세금은 차종, 계약 조건, 사업 내용에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
+        · <b>운행기록부를 써서 업무사용비율 100%</b>인 경우로 계산합니다. 쓰지 않으면 차량 관련 비용 전체가 연 1,500만 원까지만 인정됩니다.<br>
+        · 업무용승용차는 감가상각비를 <b>연 800만 원까지만</b> 비용으로 봅니다. 5년 정액법이 강제되고, 한도를 넘은 금액은 없어지지 않고 다음 해로 넘어가 800만 원 한도 안에서 차차 인정됩니다. 표의 금액은 넘어간 분까지 결국 다 인정받는 것으로 보고 계산했으므로, 회수가 늦어지는 만큼 실제 체감은 더 무겁습니다. 몇 년이 걸리는지는 계산 과정에서 보실 수 있습니다.<br>
+        · 경차와 9인승 이상 승합차, 화물차는 업무용승용차가 아니라서 이 한도를 받지 않고 부가가치세 매입세액도 공제됩니다. 일반 승용차는 부가가치세를 돌려받지 못합니다.<br>
+        · 개인사업자가 <b>간편장부대상자</b>이면 업무용승용차 비용 특례를 적용받지 않아 한도가 없습니다. 복식부기의무자만 한도가 걸립니다.<br>
+        · 업무전용자동차보험은 임직원만 운전할 수 있는 특약입니다. 법인은 가입하지 않으면 차량 비용이 전액 인정되지 않습니다.<br>
+        · 취득세는 승용차 7%, 승합차와 화물차 5%, 경차 4%로 계산하고 경차는 50만 원을 감면했습니다. 공채 매입 비용은 넣지 않았습니다.<br>
+        · 유류비와 보험료, 자동차세처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다. 리스료와 렌트료에 포함된 부분만 반영했습니다.<br>
+        · 리스는 부가가치세가 없는 금융용역이고, 장기렌트는 부가가치세가 붙습니다.<br>
+        · 세금은 지방소득세를 포함해 계산했습니다. 법인세율과 종합소득세율은 2026년 기준입니다.
+      </p>
+
+      <div class="art-cta" style="margin-top:34px">
+        <p>우리 회사는 어떻게 사는 게 좋을까요?</p>
+        <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 세율 (2026년 기준, 지방소득세 별도) ──────── */
+const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
+           [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
+const CIT=[[200000000,.09,0],[20000000000,.19,20000000],[300000000000,.21,420000000],[Infinity,.24,1320000000]];
+const LOCAL=1.1;   // 지방소득세 10%
+function bracket(tbl,b){ if(b<=0) return 0; for(const[lim,r,d]of tbl) if(b<=lim) return Math.max(0,b*r-d); return 0; }
+const taxOf=(owner,base)=>bracket(owner==='corp'?CIT:PIT,base)*LOCAL;
+
+const CAP=8000000;          // 업무용승용차 감가상각비 연 한도
+const LIFE=5;               // 5년 정액법 강제
+const LEASE_DEP=0.93;       // 리스료 중 감가상각비 상당액 (수선유지비 7% 제외)
+const RENT_DEP=0.70;        // 렌트료 중 감가상각비 상당액
+const ACQ={sedan:0.07,van:0.05,light:0.04};   // 취득세율
+const LIGHT_CUT=500000;     // 경차 취득세 감면
+const RESID={3:60,5:45,7:33,10:18};           // 보유기간별 되팔 때 값 (%)
+const KIND={sedan:'일반 승용차',van:'승합차·화물차',light:'경차'};
+const METHOD={cash:'현금 구입',loan:'할부 구입',lease:'운용리스',rent:'장기렌트'};
+const OWNER={corp:'법인 명의',person:'개인사업자 명의'};
+
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const dec=s=>Number(String(s).replace(/[^0-9.]/g,''))||0;
+
+/* 업무용승용차 한도를 받는지 */
+function capped(owner,c){
+  if(c.kind!=='sedan') return false;                     // 경차·승합·화물은 업무용승용차가 아닙니다
+  if(owner==='person'&&c.book==='simple') return false;  // 간편장부대상자는 특례 대상이 아닙니다
+  return true;
+}
+/* 연 상각액에 한도를 씌우고 넘은 금액은 다음 해로 넘깁니다 */
+function capYears(annual,years,cap,lastYears){
+  let carry=0,allowed=0;
+  for(let y=1;y<=years;y++){
+    const add=y<=(lastYears||years)?annual:0;
+    const ok=Math.min(add+carry,cap);
+    allowed+=ok; carry=add+carry-ok;
+  }
+  return {allowed,carry};
+}
+/* 원리금균등 할부의 이자 총액 */
+function interest(principal,rate,years){
+  const r=rate/100/12,n=years*12;
+  if(principal<=0||n<=0) return 0;
+  if(r<=0) return 0;
+  return principal*r/(1-Math.pow(1+r,-n))*n-principal;
+}
+
+/* ── 방법별 계산 ──────────────────────────── */
+function scenario(method,owner,c){
+  const vatOk=c.vat==='normal'&&c.kind!=='sedan';        // 매입세액 공제가 되는지
+  const cap=capped(owner,c)?CAP:Infinity;
+  const yrs=c.years, supply=c.price/1.1, vat=c.price-supply;
+  let cashOut=0,cost=0,carry=0,vatCredit=0,payback=yrs,detail=[];
+
+  if(method==='cash'||method==='loan'){
+    let acq=supply*ACQ[c.kind];
+    if(c.kind==='light') acq=Math.max(0,acq-LIGHT_CUT);
+    vatCredit=vatOk?vat:0;
+    const book=(vatOk?supply:c.price)+acq;               // 취득원가
+    const sale=c.price*c.resid/100;                      // 되팔 때 받는 돈
+    const dep=capYears(book/LIFE,yrs,cap,LIFE);
+    // 한도는 비용을 없애지 않고 늦출 뿐이라, 결국 취득원가에서 되판 값을 뺀 만큼이 전부 비용이 됩니다
+    cost=book-sale;
+    carry=dep.carry;                                     // 보유기간 안에 못 넣고 넘어가는 금액
+    payback=cap<Infinity?Math.max(LIFE,Math.ceil(book/cap)):LIFE;
+    cashOut=c.price+acq-sale;
+    detail=[['취득원가',(vatOk?'공급가액 '+won(supply):'차값 '+won(c.price))+' + 취득세 '+won(acq),won(book)+'원'],
+            ['되팔아 회수',won(c.price)+'의 '+c.resid+'%','− '+won(sale)+'원'],
+            ['비용이 되는 금액','취득원가 − 되판 값 · 감가상각과 처분손익을 합친 결과',won(cost)+'원'],
+            ['다 넣는 데 걸리는 기간',cap<Infinity?'연 800만 원씩 '+won(book)+'원을 털어야 합니다':'한도가 없어 5년 정액으로 끝납니다',payback+'년']];
+    if(method==='loan'){
+      const int=interest(c.price,c.loanRate,Math.min(c.loanYears,yrs));
+      cashOut+=int; cost+=int;                           // 할부이자는 한도 밖에서 전액 비용
+      detail.push(['할부이자',c.loanRate+'% · '+Math.min(c.loanYears,yrs)+'년 · 한도 밖에서 전액 비용','+ '+won(int)+'원']);
+    }
+  }else{
+    const isLease=method==='lease';
+    const rate=isLease?c.leaseRate:c.rentRate;
+    const total=c.price*rate/100*12*yrs;                 // 총 리스료 또는 렌트료
+    vatCredit=(!isLease&&vatOk)?total-total/1.1:0;
+    const base=vatCredit>0?total/1.1:total;
+    const part=base*(isLease?LEASE_DEP:RENT_DEP);        // 감가상각비 상당액
+    const d=capYears(part/yrs,yrs,cap);
+    cost=base;                                           // 리스료와 렌트료는 결국 전액 비용
+    carry=d.carry;
+    payback=cap<Infinity?Math.max(yrs,Math.ceil(part/cap)):yrs;
+    cashOut=total;
+    detail=[[isLease?'총 리스료':'총 렌트료','월 '+won(c.price*rate/100)+' × '+(yrs*12)+'개월',won(total)+'원'],
+            ['감가상각비 상당액',(isLease?'리스료의 93%':'렌트료의 70%')+(cap<Infinity?' · 연 800만 원 한도':' · 한도 없음'),won(part)+'원'],
+            ['비용이 되는 금액',vatCredit>0?'부가세를 뺀 공급가액':'낸 돈 전액',won(cost)+'원'],
+            ['다 넣는 데 걸리는 기간',cap<Infinity?'연 800만 원씩 '+won(part)+'원을 털어야 합니다':'한도가 없어 낸 해에 바로 끝납니다',payback+'년']];
+  }
+
+  const income=owner==='corp'?c.corpIncome:c.personIncome;
+  const save=(taxOf(owner,income)-taxOf(owner,Math.max(0,income-cost/yrs)))*yrs+vatCredit;
+  return {method,owner,cashOut,cost,carry,vatCredit,save,net:cashOut-save,payback,detail,cap};
+}
+
+function compute(c){
+  const owners=c.form==='both'?['corp','person']:[c.form];
+  const rows=[];
+  owners.forEach(o=>['cash','loan','lease','rent'].forEach(m=>rows.push(scenario(m,o,c))));
+  return rows;
+}
+
+/* ── 화면 그리기 ───────────────────────────── */
+function render(){
+  const c=readInputs();
+  const rows=compute(c);
+  const min=Math.min(...rows.map(r=>r.net));
+  const best=rows.find(r=>r.net===min);
+  const many=c.form==='both';
+
+  let html='',last='';
+  rows.forEach(r=>{
+    if(many&&r.owner!==last){ html+='<tr class="own"><td colspan="5">'+OWNER[r.owner]+'</td></tr>'; last=r.owner; }
+    const tag=(c.fund&&(r.method==='lease'||r.method==='rent'))?'<span class="tag">자금출처 유리</span>':'';
+    html+='<tr'+(r===best?' class="best"':'')+'>'
+      +'<td><span class="nm">'+METHOD[r.method]+'</span>'+tag+'</td>'
+      +'<td>'+won(r.cashOut)+'원</td>'
+      +'<td>'+r.payback+'년'+(r.carry>0?'<small>'+won(r.carry)+'원이 '+c.years+'년 뒤로 넘어감</small>':'<small>'+c.years+'년 안에 끝남</small>')+'</td>'
+      +'<td>'+won(r.save)+'원'+(r.vatCredit>0?'<small>부가세 '+won(r.vatCredit)+'원 포함</small>':'')+'</td>'
+      +'<td>'+won(r.net)+'원</td></tr>';
+  });
+  document.getElementById('res-body').innerHTML=html;
+  document.getElementById('res-sub').textContent=
+    KIND[c.kind]+' '+won(c.price)+'원 · '+c.years+'년 보유 · '+(c.vat==='normal'?'일반과세':c.vat==='free'?'면세':'간이과세')
+    +(capped(best.owner,c)?' · 감가상각 800만 원 한도 적용':' · 감가상각 한도 없음');
+
+  const second=rows.filter(r=>r!==best).sort((a,b)=>a.net-b.net)[0];
+  let v='<b>'+(many?OWNER[best.owner]+'으로 ':'')+METHOD[best.method]+'</b>이 가장 낫습니다. '
+    +'세금까지 따진 실제 부담액이 '+won(best.net)+'원으로, 다음으로 나은 '+METHOD[second.method]
+    +(many&&second.owner!==best.owner?'('+OWNER[second.owner]+')':'')+'보다 '+won(second.net-best.net)+'원 적습니다.';
+  if(best.carry>0) v+='<br><br>다만 '+won(best.carry)+'원은 '+c.years+'년 안에 다 넣지 못합니다. 없어지는 돈은 아니고 연 800만 원씩 넘어가 '+best.payback+'년째에 끝납니다. 위 금액은 그 뒤까지 다 인정받는 것으로 보고 계산했습니다.';
+  if(c.fund&&best.method!=='lease'&&best.method!=='rent'){
+    const alt=rows.filter(r=>r.method==='lease'||r.method==='rent').sort((a,b)=>a.net-b.net)[0];
+    v+='<br><br><span style="font-size:14px;color:var(--mute)">자금출처를 신경 쓰신다면 '+METHOD[alt.method]+'도 보십시오. 부담액은 '+won(alt.net-best.net)+'원 더 들지만 차가 본인 명의 재산으로 잡히지 않습니다.</span>';
+  }
+  document.getElementById('verdict').innerHTML=v;
+
+  document.getElementById('warns').innerHTML=warnings(c,rows).map(w=>'<div class="warn">'+w+'</div>').join('');
+  renderSteps(c,rows,best);
+  drawChart(c,best.owner);
+  document.getElementById('res').style.display='block';
+}
+
+function warnings(c,rows){
+  const w=[];
+  if(c.driver==='family'){
+    if(c.form!=='person') w.push('<b>가족이 운전하면 법인 차량 비용이 전액 부인될 수 있습니다.</b> 법인은 임직원만 운전할 수 있는 업무전용자동차보험에 가입해야 비용을 인정받습니다. 가족을 직원으로 등록해 실제로 근무하게 하거나, 개인 명의로 두는 쪽을 검토해 보세요.');
+    else if(c.hascar==='yes') w.push('<b>두 번째 차량부터는 개인사업자도 업무전용자동차보험이 필요합니다.</b> 가족이 운전하면 이 요건을 못 맞춰 비용이 인정되지 않을 수 있습니다.');
+    else w.push('<b>가족이 운전하는 점을 확인해 주세요.</b> 지금은 첫 차량이라 업무전용자동차보험 요건에서 비켜 있지만, 차를 한 대 더 늘리면 그때부터 요건이 생깁니다.');
+  }
+  if(c.book==='unknown'&&c.form!=='corp') w.push('<b>장부 종류를 복식부기의무자로 보고 계산했습니다.</b> 간편장부대상자라면 800만 원 한도를 받지 않아 결과가 달라집니다. 직전 연도 수입금액이 업종별 기준을 넘지 않으면 간편장부대상자입니다.');
+  if(c.vat!=='normal'&&c.kind!=='sedan') w.push('<b>부가가치세를 돌려받지 못합니다.</b> 경차나 승합차는 원래 매입세액을 공제받을 수 있지만 '+(c.vat==='free'?'면세사업자':'간이과세자')+'는 대상이 아닙니다. 차값의 10%가 그대로 부담으로 남습니다.');
+  if(c.years>=7) w.push('<b>리스와 렌트는 보통 5년까지입니다.</b> '+c.years+'년으로 잡으셨으니 그 뒤는 재계약하거나 차를 인수하게 되고, 실제 조건은 지금 계산과 달라집니다.');
+  if(c.kind==='sedan'&&c.price>=100000000) w.push('<b>1억 원이 넘는 차량은 국세청이 눈여겨봅니다.</b> 업무용 사용을 뒷받침할 운행기록부를 빠짐없이 쓰시고, 실제 업무에 쓰신다는 근거를 남겨 두세요.');
+  return w;
+}
+
+/* ── 그래프 ────────────────────────────────── */
+function shortWon(v){
+  if(Math.abs(v)>=100000000){ const e=v/100000000; return (Math.abs(e)>=10?Math.round(e):Math.round(e*10)/10)+'억'; }
+  if(Math.abs(v)>=10000) return Math.round(v/10000).toLocaleString('ko-KR')+'만';
+  return Math.round(v)+'';
+}
+function drawChart(c,owner){
+  const W=720,H=320,L=68,R=22,T=22,B=54,N=48;
+  const maxX=Math.max(c.price*2,60000000);
+  const ms=['cash','loan','lease','rent'], col={cash:'#1B4A9B',loan:'#5B8AD6',lease:'#C8423A',rent:'#8b98a8'};
+  const series={};
+  ms.forEach(m=>series[m]=[]);
+  for(let i=0;i<=N;i++){
+    const p=Math.max(1000000,maxX*i/N);
+    ms.forEach(m=>series[m].push({p,net:scenario(m,owner,Object.assign({},c,{price:p})).net}));
+  }
+  const all=ms.flatMap(m=>series[m].map(s=>s.net));
+  const rawMax=Math.max(...all)*1.1||1;
+  const step=(()=>{ const rough=rawMax/4,mag=Math.pow(10,Math.floor(Math.log10(rough))),n=rough/mag;
+    return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag; })();
+  const maxY=step*4;
+  const X=v=>L+(v/maxX)*(W-L-R);
+  const Y=v=>H-B-(Math.max(0,v)/maxY)*(H-T-B);
+
+  let g='';
+  for(let i=0;i<=4;i++){
+    const v=maxY*i/4,y=Y(v);
+    g+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="#E4E8EF" stroke-width="1"/>'
+      +'<text x="'+(L-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
+  }
+  [0,maxX/2,maxX].forEach((v,i)=>{
+    g+='<text x="'+X(v).toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="'+(i===0?'start':i===2?'end':'middle')+'" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
+  });
+  ms.forEach(m=>{
+    g+='<path d="'+series[m].map((s,i)=>(i?'L':'M')+X(s.p).toFixed(1)+' '+Y(s.net).toFixed(1)).join(' ')
+      +'" fill="none" stroke="'+col[m]+'" stroke-width="2.5"/>';
+  });
+  const cur=ms.map(m=>({m,net:scenario(m,owner,c).net})).sort((a,b)=>a.net-b.net)[0];
+  g+='<line x1="'+X(c.price).toFixed(1)+'" y1="'+T+'" x2="'+X(c.price).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
+   +'<circle cx="'+X(c.price).toFixed(1)+'" cy="'+Y(cur.net).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
+   +'<text x="'+Math.min(W-R-60,Math.max(L+60,X(c.price))).toFixed(1)+'" y="'+Math.max(T+12,Y(cur.net)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">'+METHOD[cur.m]+' '+shortWon(cur.net)+'</text>'
+   +'<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#C9D6F0" stroke-width="1"/>'
+   +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+36)+'" text-anchor="middle" font-size="11" fill="#8b98a8">차량 가격</text>';
+  document.getElementById('chart').innerHTML=g;
+
+  // 방법이 뒤바뀌는 지점 찾기
+  const winner=p=>ms.map(m=>({m,net:scenario(m,owner,Object.assign({},c,{price:p})).net})).sort((a,b)=>a.net-b.net)[0].m;
+  let flip=null, w0=winner(1000000);
+  for(let i=1;i<=N;i++){ const p=maxX*i/N; if(winner(p)!==w0){ flip=p; break; } }
+  document.getElementById('cband').textContent=
+    flip?'차값이 '+shortWon(flip)+' 선을 넘으면 '+METHOD[winner(flip)]+'이 앞섭니다'
+        :'이 조건에서는 차값과 상관없이 '+METHOD[w0]+'이 계속 앞섭니다';
+  const ow=document.querySelector('.chartbox .csub');
+  if(ow) ow.textContent='가로축은 차량 가격, 세로축은 세금까지 따진 실제 부담액입니다.'
+    +(c.form==='both'?' '+OWNER[owner]+' 기준입니다.':'');
+}
+
+/* ── 계산 과정 ─────────────────────────────── */
+function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
+function renderSteps(c,rows,best){
+  let h='<div class="case"><b class="ttl">먼저 정해지는 것</b><table class="stable">'
+   +row('업무용승용차인가',c.kind==='sedan'?'일반 승용차라서 해당합니다':KIND[c.kind]+'는 해당하지 않습니다',c.kind==='sedan'?'예':'아니오')
+   +row('감가상각 한도',capped(best.owner,c)?'연 800만 원 · 5년 정액법':(c.kind!=='sedan'?'업무용승용차가 아니라 한도 없음':'간편장부대상자라 한도 없음'),capped(best.owner,c)?'800만 원':'없음',true)
+   +row('부가세 공제',c.kind==='sedan'?'일반 승용차는 매입세액을 공제받지 못합니다':(c.vat==='normal'?'경차·승합차는 공제 대상입니다':'일반과세자가 아니라 공제받지 못합니다'),
+        (c.kind!=='sedan'&&c.vat==='normal')?'가능':'불가')
+   +row('적용 세율',(c.form==='both'?OWNER[best.owner]+' · ':'')+'소득 '+won(best.owner==='corp'?c.corpIncome:c.personIncome)+'원 구간 · 지방소득세 포함',
+        ((taxOf(best.owner,(best.owner==='corp'?c.corpIncome:c.personIncome))
+         -taxOf(best.owner,Math.max(0,(best.owner==='corp'?c.corpIncome:c.personIncome)-10000000)))/10000000*100).toFixed(1)+'%')
+   +'</table></div>';
+
+  rows.filter(r=>r.owner===best.owner).forEach(r=>{
+    h+='<div class="case"><b class="ttl">'+METHOD[r.method]+(r===best?' (가장 나은 방법)':'')+'</b><table class="stable">'
+      +r.detail.map(d=>row(d[0],d[1],d[2])).join('')
+      +row('인정받는 비용 합계','넘어간 분까지 결국 다 인정받는 기준',won(r.cost)+'원')
+      +(r.carry>0?row('보유기간 뒤로 넘어감','한도를 넘어 '+r.payback+'년째까지 나눠 인정',won(r.carry)+'원'):'')
+      +row('줄어드는 세금',r.vatCredit>0?'소득세·법인세 '+won(r.save-r.vatCredit)+' + 부가세 '+won(r.vatCredit):'소득세·법인세',won(r.save)+'원')
+      +row('실제 부담액','내 돈 '+won(r.cashOut)+' − 줄어드는 세금 '+won(r.save),won(r.net)+'원',true)
+      +'</table></div>';
+  });
+
+  h+='<p class="snote">감가상각 한도를 넘은 금액은 없어지지 않고 다음 해로 넘어가, 해마다 800만 원 한도가 남는 만큼 차차 인정됩니다. '
+   +'차값이 4천만 원이면 800만 원씩 5년에 딱 맞아떨어지고, 그보다 비싸면 회수에 더 오래 걸립니다. '
+   +'유류비와 보험료, 자동차세처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다.</p>';
+  document.getElementById('steps-body').innerHTML=h;
+}
+
+/* ── 입력 ──────────────────────────────────── */
+const shown=()=>document.getElementById('res').style.display==='block';
+function syncForm(){
+  const f=document.getElementById('i-form').value;
+  document.getElementById('w-corp').hidden=f==='person';
+  document.getElementById('w-person').hidden=f==='corp';
+  document.getElementById('w-book').hidden=f==='corp';
+}
+function syncResid(){
+  const y=document.getElementById('i-years').value;
+  document.getElementById('a-resid').value=RESID[y];
+}
+function readInputs(){
+  const f=document.getElementById('i-form').value;
+  const years=Number(document.getElementById('i-years').value);
+  return {form:f,
+    vat:document.getElementById('i-vat').value,
+    book:f==='corp'?'double':document.getElementById('i-book').value,
+    corpIncome:num(document.getElementById('i-corp').value),
+    personIncome:num(document.getElementById('i-person').value),
+    years,
+    driver:document.getElementById('i-driver').value,
+    hascar:document.getElementById('i-hascar').value,
+    fund:document.getElementById('i-fund').checked,
+    kind:document.getElementById('i-kind').value,
+    price:num(document.getElementById('i-price').value),
+    leaseRate:dec(document.getElementById('a-lease').value),
+    rentRate:dec(document.getElementById('a-rent').value),
+    loanRate:dec(document.getElementById('a-loan').value),
+    loanYears:Math.max(1,num(document.getElementById('a-loanyear').value)),
+    resid:dec(document.getElementById('a-resid').value)};
+}
+document.getElementById('calc').addEventListener('click',()=>{
+  const c=readInputs();
+  if(c.price<=0){alert('차량 가격을 입력해 주세요.');return;}
+  if(c.form!=='person'&&c.corpIncome<=0){alert('법인 연간 과세표준을 입력해 주세요. 세금이 얼마나 줄어드는지는 소득에 따라 달라집니다.');return;}
+  if(c.form!=='corp'&&c.personIncome<=0){alert('개인 연간 소득금액을 입력해 주세요. 세금이 얼마나 줄어드는지는 소득에 따라 달라집니다.');return;}
+  render(); initSlider(c.price);
+});
+['i-form','i-vat','i-book','i-years','i-driver','i-hascar','i-fund','i-kind'].forEach(id=>
+  document.getElementById(id).addEventListener('change',()=>{
+    if(id==='i-form') syncForm();
+    if(id==='i-years') syncResid();
+    if(shown()) render();
+  }));
+['a-lease','a-rent','a-loan','a-resid','a-loanyear'].forEach(id=>
+  document.getElementById(id).addEventListener('input',()=>{if(shown())render();}));
+
+/* ── 슬라이더 ──────────────────────────────── */
+let sliderReady=false;
+function initSlider(price){
+  const sp=document.getElementById('s-price');
+  if(!sliderReady){
+    sp.addEventListener('input',()=>{
+      const v=Number(sp.value);
+      document.getElementById('i-price').value=v.toLocaleString('ko-KR');
+      document.getElementById('s-price-v').textContent=won(v)+'원';
+      render();
+    });
+    document.getElementById('toBox').addEventListener('click',e=>{
+      e.preventDefault();
+      document.getElementById('slide').style.display='none';
+      document.getElementById('sim-box').style.display='';
+      document.getElementById('calc').style.display='';
+    });
+    sliderReady=true;
+  }
+  const max=Math.max(100000000,Math.ceil(price*2/10000000)*10000000);
+  sp.max=max; sp.step=1000000; sp.value=price;
+  document.getElementById('s-price-v').textContent=won(price)+'원';
+  document.getElementById('slide').style.display='block';
+  document.getElementById('sim-box').style.display='none';
+  document.getElementById('calc').style.display='none';
+}
+
+/* 숫자 입력 콤마 */
+['i-corp','i-person','i-price'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+syncForm(); syncResid();
+</script>
+</body>
+</html>
