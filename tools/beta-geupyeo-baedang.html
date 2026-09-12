@@ -188,7 +188,7 @@
 
         <div class="chartbox" id="chartbox">
           <h3>연봉을 바꿀까요, 배당을 바꿀까요?</h3>
-          <p class="csub" id="csub">가로축은 대표님이 가져가는 돈, 세로축은 지금보다 더 내는 세금입니다.</p>
+          <p class="csub" id="csub">가로축은 대표님이 가져가는 돈, 세로축은 한 푼도 가져가지 않으실 때와 비교한 세금입니다.</p>
           <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="연봉만 바꿀 때와 배당만 바꿀 때의 세금 변화 그래프"></svg>
           <div class="clegend">
             <span><i style="background:#1B4A9B"></i>연봉만 바꿀 때</span>
@@ -344,6 +344,7 @@ function scenario(profit,salary,dividendWant){
   const pt=personTax(salary,dividend,ins.self);
   const total=pt.total+ins.total+dIns.total;   // 대표님 쪽에 붙는 세금·보험료
   return {salary,dividend,cTax,cTaxFull,cSaved,pTax:pt.total,ins,dIns,total,
+          net:total-cSaved,     // 연봉도 배당도 가져가지 않았을 때와 비교한 세금
           gross:cTax+total,                    // 법인세까지 더한 전체
           cash:salary+dividend-pt.total-ins.self-dIns.total,
           left:after-dividend, mode:pt.mode, short:Math.max(0,dividendWant-dividend), after, cBase, pt};
@@ -391,11 +392,7 @@ function render(profit,total,salary){
     return '<td class="dc'+cls+'">'+(d>0?'+':'−')+amt(Math.abs(d))+'</td>';
   };
   document.getElementById('res-body').innerHTML=
-    '<tr><td>당기순이익'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+(INS_MODE?'연봉과 회사부담 보험료를 뺀 금액':'대표님 연봉을 뺀 금액')+'</small></td>'
-      +cells(r=>amt(r.cBase))+dcell(rows[0].cBase,rows[1].cBase,null)+'</tr>'
-   +'<tr><td>연봉이 없다면 낼 법인세'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+(INS_MODE?'연봉도 회사부담 보험료도 없을 때':'비교의 출발점')+'</small></td>'
-      +cells(r=>amt(r.cTaxFull))+dcell(rows[0].cTaxFull,rows[1].cTaxFull,null)+'</tr>'
-   +'<tr><td>연봉으로 줄인 법인세'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">급여는 법인의 비용이라 과세표준이 줄어듭니다</small></td>'
+    '<tr><td>연봉으로 줄인 법인세'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">급여는 법인의 비용이라 과세표준이 줄어듭니다</small></td>'
       +cells(r=>r.cSaved>1000?'−'+amt(r.cSaved):'0원')
       +dcell(-rows[0].cSaved,-rows[1].cSaved,false)+'</tr>'
    +'<tr><td>대표님 개인 세금'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉과 배당에 붙는 세금</small></td>'+cells(r=>amt(r.pTax)+(r.dividend>0?'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+r.mode+'</small>':''))
@@ -403,9 +400,9 @@ function render(profit,total,salary){
    +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>amt(r.ins.company))+dcell(rows[0].ins.company,rows[1].ins.company,false)+'</tr>'
              +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>amt(r.ins.self))+dcell(rows[0].ins.self,rows[1].ins.self,false)+'</tr>'
              +'<tr><td>배당 건강보험료</td>'+cells(r=>r.dIns.total>0?amt(r.dIns.total):'0원')+dcell(rows[0].dIns.total,rows[1].dIns.total,false)+'</tr>':'')
-   +'<tr class="tot"><td>'+(INS_MODE?'세금·보험료 합계':'세금 합계')
-      +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">법인세 + 대표님 개인 세금'+(INS_MODE?' + 4대보험':'')+'</small></td>'
-      +cells(r=>amt(r.gross))+dcell(rows[0].gross,rows[1].gross,false)+'</tr>'
+   +'<tr class="tot"><td>합계'
+      +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉도 배당도 받지 않으셨을 때와 비교</small></td>'
+      +cells(r=>(r.net<0?'−':'')+amt(Math.abs(r.net)))+dcell(rows[0].net,rows[1].net,false)+'</tr>'
    +'<tr class="rate"><td>100만 원 더 가져갈 때'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">지금 조합 그대로</small></td>'
       +cells(r=>{ const m=stepMore(r); return m===null?'재원 부족'
         : won(m)+'원<br><small>가져가는 돈의 '+(m/10000).toFixed(1)+'%</small>'; })
@@ -437,7 +434,9 @@ function render(profit,total,salary){
   } else {
     const mSal=marginal(profit,CUR_SAL,CUR_DIV,'sal'), mDiv=marginal(profit,CUR_SAL,CUR_DIV,'div');
     hl.className='headline';
-    hl.innerHTML='지금은 <b>'+won(curTotal)+'원</b>을 가져가시면서 '+(INS_MODE?'세금과 4대보험으로':'세금으로')+' <b>'+won(nowRow.gross)+'원</b>을 내고 계십니다.<br>'
+    const n=nowRow.net;
+    hl.innerHTML='지금 <b>'+won(curTotal)+'원</b>을 가져가시는 구조는, 한 푼도 가져가지 않으실 때보다 '
+      +(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(Math.abs(n))+'원</b> '+(n>=0?'더':'적게')+' 냅니다.<br>'
       +'여기서 100만 원을 더 가져가신다면 연봉으로는 <b>'+won(mSal)+'원</b>, '
       +(mDiv===null ? '배당은 재원이 남지 않아 더 받으실 수 없습니다.'
                     : '배당으로는 <b>'+won(mDiv)+'원</b>이 더 붙습니다.');
@@ -465,8 +464,8 @@ function render(profit,total,salary){
   drawChart(profit);
   const st=document.getElementById('sltotal');
   if(st){
-    const d=rows[1].gross-rows[0].gross;
-    st.innerHTML='가져가는 돈 <b>'+won(total)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+won(rows[1].gross)+'원</b>'
+    const d=rows[1].net-rows[0].net;
+    st.innerHTML='가져가는 돈 <b>'+won(total)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+(rows[1].net<0?'−':'')+won(Math.abs(rows[1].net))+'원</b>'
       +(Math.abs(d)<1000 ? ' · 지금과 같음'
         : ' · 지금보다 <b class="'+(d>0?'dn':'up')+'">'+won(Math.abs(d))+'원 '+(d>0?'더':'덜')+'</b>');
   }
@@ -484,7 +483,7 @@ function drawChart(profit){
   const nowTake=CUR_SAL+CUR_DIV;
   if(nowTake<=0){ el.innerHTML=''; return; }
   const W=720,H=320,L=70,R=26,T=26,B=58,N=50;
-  const base=scenario(profit,CUR_SAL,CUR_DIV).gross;   // 지금 내고 있는 세금이 기준선
+
   const sgn=v=>(v<0?'−':'')+shortWon(Math.abs(v));
 
   // 배당은 지금 그대로 두고 연봉만 바꿔 봅니다. 연봉을 올리면 배당 재원이
@@ -493,12 +492,12 @@ function drawChart(profit){
   for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(scenario(profit,m,CUR_DIV).short>0) hi=m; else lo=m; }
   const salMax=lo, salPts=[];
   for(let i=0;i<=N;i++){ const v=salMax*i/N, r=scenario(profit,v,CUR_DIV);
-    salPts.push({take:v+r.dividend, dy:r.gross-base}); }
+    salPts.push({take:v+r.dividend, dy:r.net}); }
 
   // 연봉은 지금 그대로 두고 배당만 바꿔 봅니다
   const divMax=scenario(profit,CUR_SAL,profit).dividend, divPts=[];
   for(let i=0;i<=N;i++){ const v=divMax*i/N, r=scenario(profit,CUR_SAL,v);
-    divPts.push({take:CUR_SAL+v, dy:r.gross-base}); }
+    divPts.push({take:CUR_SAL+v, dy:r.net}); }
 
   const xMin=Math.min(salPts[0].take,divPts[0].take), xMax=Math.max(salPts[N].take,divPts[N].take);
   const ys=[...salPts,...divPts].map(q=>q.dy);
@@ -525,7 +524,7 @@ function drawChart(profit){
     +'<line x1="'+X(nowTake).toFixed(1)+'" y1="'+T+'" x2="'+X(nowTake).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
     +'<path d="'+path(salPts)+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
     +'<path d="'+path(divPts)+'" fill="none" stroke="#C8423A" stroke-width="2.5" stroke-dasharray="5 4"/>'
-    +'<circle cx="'+X(nowTake).toFixed(1)+'" cy="'+Y(0).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
+    +'<circle cx="'+X(nowTake).toFixed(1)+'" cy="'+Y(scenario(profit,CUR_SAL,CUR_DIV).net).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
     +'<text x="'+X(nowTake).toFixed(1)+'" y="'+(T-8)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금</text>'
     +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+38)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 돈</text>';
 
@@ -542,8 +541,8 @@ function drawChart(profit){
   document.getElementById('cband').textContent=txt.join(' · ');
 
   const cs=document.querySelector('.chartbox .csub');
-  if(cs) cs.textContent='가로축은 대표님이 가져가는 돈입니다. 세로축은 지금보다 더 내는 '
-    +(INS_MODE?'세금과 4대보험':'세금')+'이라, 0 아래는 지금보다 덜 내는 구간입니다.';
+  if(cs) cs.textContent='가로축은 대표님이 가져가는 돈입니다. 세로축은 한 푼도 가져가지 않으실 때와 비교한 '
+    +(INS_MODE?'세금과 4대보험':'세금')+'이라, 0 아래는 그때보다 덜 내는 구간입니다.';
 }
 
 /* ── 계산 과정 ─────────────────────────────── */
@@ -646,6 +645,8 @@ function renderSteps(profit,total,rows){
       +row(INS_MODE?'세금·보험료 합계':'세금 합계',
            INS_MODE ? '법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax)+' + 보험료 '+won(r.ins.total+r.dIns.total)
                     : '법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax), won(r.gross)+'원',true)
+      +row('연봉을 안 받았다면','법인세 '+won(r.cTaxFull)+'만 내고 개인 세금은 없음',won(r.cTaxFull)+'원')
+      +row('그때와 비교하면',won(r.gross)+' − '+won(r.cTaxFull),(r.net<0?'−':'+')+won(Math.abs(r.net))+'원',true)
       +row('가져가는 돈',
            INS_MODE ? '급여 + 배당 − 개인 세금 '+won(r.pTax)+' − 본인부담 보험료 '+won(r.ins.self+r.dIns.total)
                     : '급여 '+won(r.salary)+' + 배당 '+won(r.dividend)+' − 개인 세금 '+won(r.pTax), won(r.cash)+'원',true)
