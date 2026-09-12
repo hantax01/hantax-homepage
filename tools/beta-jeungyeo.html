@@ -31,9 +31,14 @@
 .past .hd b{font-size:14.5px;color:var(--ink)}
 .past .hd em{font-style:normal;font-size:12.5px;color:var(--mute)}
 .past .note{font-size:13px;color:var(--mute);margin-bottom:14px;line-height:1.7}
-.grow{display:grid;grid-template-columns:150px 1fr 150px 42px;gap:10px;margin-bottom:10px;align-items:center}
+.grow{display:grid;grid-template-columns:142px 1fr 128px 106px 42px;gap:10px;margin-bottom:10px;align-items:center}
 .grow input,.grow select{padding:10px 12px;font-size:14.5px}
 .grow .unit input{padding-right:40px}
+.sim .mchk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--char);font-weight:600;cursor:pointer;white-space:nowrap;margin:0}
+.mchk input{width:16px;height:16px;accent-color:var(--blue);padding:0;flex:none;margin:0}
+.mchk input:disabled{cursor:default}
+.mchk input:disabled+span{color:var(--mute);opacity:.45}
+.chk input:disabled+label{color:var(--mute);opacity:.45;cursor:default}
 .grow .del{border:1px solid var(--line);background:#fff;border-radius:9px;height:42px;color:var(--mute);cursor:pointer;font-size:17px;line-height:1;font-family:inherit}
 .grow .del:hover{border-color:var(--seal);color:var(--seal)}
 .addbtn{border:1px dashed var(--line);background:#fff;border-radius:10px;padding:12px;width:100%;color:var(--blue);font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;margin-top:4px}
@@ -92,6 +97,7 @@
 .rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
 .grow{grid-template-columns:1fr 1fr 42px}
 .grow .gd{grid-column:1/-1}
+.grow .mchk{grid-column:1/3}
 .slide .sl{display:block}
 .slide .sl label{width:auto;margin-bottom:8px}
 .slide .sl input{width:100%;margin:6px 0}
@@ -160,7 +166,7 @@
 
         <div class="past">
           <div class="hd"><b>지난 10년 동안 이미 받은 증여</b><em>없으면 비워 두세요</em></div>
-          <p class="note">이번에 받는 날로부터 10년 안에 받은 것만 계산에 들어갑니다. 아버지와 어머니에게 받은 것은 한 분에게 받은 것으로 봅니다.</p>
+          <p class="note">이번에 받는 날로부터 10년 안에 받은 것만 계산에 들어갑니다. 아버지와 어머니에게 받은 것은 한 분에게 받은 것으로 봅니다. 그때 혼인·출산 공제를 쓰셨다면 함께 표시해 주세요. 평생 1억 원 한도라 이번에 쓸 수 있는 금액이 줄어듭니다.</p>
           <div id="gifts"></div>
           <button type="button" class="addbtn" id="addGift">+ 받은 증여 추가</button>
         </div>
@@ -207,7 +213,7 @@
         · 현금을 받는 경우로 보고 계산합니다. 부동산과 주식은 따로 평가해야 하고, 빚을 함께 넘겨받는 경우에는 양도소득세가 별도로 나옵니다.<br>
         · 세율은 과세표준 1억 원 이하 10%, 5억 원 이하 20%, 10억 원 이하 30%, 30억 원 이하 40%, 30억 원 초과 50%입니다. 증여세에는 지방소득세가 붙지 않습니다.<br>
         · 증여재산공제는 10년 동안의 한도입니다. 배우자 6억 원, 부모·조부모에게 받으면 5천만 원(미성년자 2천만 원), 자녀에게 받으면 5천만 원, 그 밖의 친척은 1천만 원입니다.<br>
-        · 혼인·출산 공제 1억 원은 부모·조부모에게 받을 때, 혼인신고일 앞뒤 2년 또는 자녀의 출생·입양일부터 2년 안에 받는 경우에만 적용됩니다. 혼인과 출산을 합쳐 평생 1억 원까지이며, 이 계산기는 아직 쓰지 않으신 것으로 봅니다.<br>
+        · 혼인·출산 공제 1억 원은 부모·조부모에게 받을 때, 혼인신고일 앞뒤 2년 또는 자녀의 출생·입양일부터 2년 안에 받는 경우에만 적용됩니다. 혼인과 출산을 합쳐 평생 1억 원까지이며, 지난 증여에서 쓰신 금액은 표시하신 대로 빼고 계산합니다.<br>
         · 할아버지·할머니에게 바로 받으면 세금이 30% 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다.<br>
         · 신고기한은 받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 깎아 주며, 이 공제를 받는 것으로 계산했습니다.<br>
         · 그 밖의 친척이나 친족이 아닌 분이 여러 명인 경우에는 한 분에게 받은 것으로 묶어 계산하므로 실제보다 세금이 크게 나올 수 있습니다.<br>
@@ -285,13 +291,21 @@ function compute(amount,donorKey,date,past,minor,marry){
   const addBack=merged?sameSum:0;
   const taxable=amount+addBack;                        // 증여세 과세가액
 
-  // 2) 증여재산공제, 합산되지 않은 같은 묶음의 증여가 10년 한도를 이미 쓴 만큼 차감
+  // 2) 증여재산공제, 합산되지 않은 같은 묶음의 증여가 이미 쓴 한도만큼 차감합니다.
+  //    옛 증여를 날짜순으로 훑으며 증여재산공제를 먼저 채우고, 남는 금액에 혼인·출산 공제를 씁니다.
+  //    혼인·출산 공제는 10년이 아니라 평생 1억 원 한도입니다.
   const limit=limitOf(me.grp,minor);
-  const usedSum=in10.filter(p=>DONOR[p.donor].grp===me.grp&&!(merged&&DONOR[p.donor].same===me.same))
-                    .reduce((a,b)=>a+b.amount,0);
-  const used=Math.min(limit,usedSum);
-  const basicRoom=Math.max(0,limit-used);
-  const marryRoom=(marry&&me.grp==='up')?MARRY_LIMIT:0;
+  let basicLeft=limit, marryLeft=MARRY_LIMIT;
+  in10.slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(p=>{
+    if(DONOR[p.donor].grp!==me.grp) return;
+    if(merged&&DONOR[p.donor].same===me.same) return;   // 이번에 합산되므로 공제도 다시 적용됩니다
+    const b=Math.min(basicLeft,p.amount); basicLeft-=b;
+    if(p.marry) marryLeft-=Math.min(marryLeft,p.amount-b);
+  });
+  const used=limit-basicLeft;
+  const marryUsed=MARRY_LIMIT-marryLeft;
+  const basicRoom=basicLeft;
+  const marryRoom=(marry&&me.grp==='up')?marryLeft:0;
   const room=basicRoom+marryRoom;
   const deduct=Math.min(room,taxable);
   const basicDed=Math.min(basicRoom,taxable);
@@ -318,9 +332,9 @@ function compute(amount,donorKey,date,past,minor,marry){
   let freeDay=null;
   if(oldest){ const d=new Date(oldest.date); d.setFullYear(d.getFullYear()+10); d.setDate(d.getDate()+1); freeDay=ymd(d); }
 
-  return {amount,taxable,addBack,merged,same,sameSum,limit,used,basicDed,marryDed,deduct,room,
+  return {amount,taxable,addBack,merged,same,sameSum,limit,used,marryUsed,basicDed,marryDed,deduct,room,
           base,info,skipRate,surtax,calc,prePaid,credit,pay,free,freeDay,
-          oldestDate:oldest?oldest.date:null,me,minor,date};
+          oldestDate:oldest?oldest.date:null,me,minor,marry,date};
 }
 
 /* ── 화면 그리기 ───────────────────────────── */
@@ -334,7 +348,7 @@ function render(){
   else if(r.sameSum>0) html+=cell('10년 안에 같은 분께 받은 증여','합계가 1천만 원이 안 되어 합산하지 않습니다','합산 없음');
   html+=cell('증여세 과세가액','',won(r.taxable)+'원');
   html+=cell('증여재산공제',r.used>0?'10년 한도 '+won(r.limit)+'원 가운데 '+won(r.used)+'원은 이미 쓰셨습니다':'10년 한도 '+won(r.limit)+'원','− '+won(r.basicDed)+'원','minus');
-  if(r.marryDed>0) html+=cell('혼인·출산 공제','','− '+won(r.marryDed)+'원','minus');
+  if(r.marry&&r.me.grp==='up') html+=cell('혼인·출산 공제',r.marryUsed>0?'평생 한도 1억 원 가운데 '+won(r.marryUsed)+'원은 이미 쓰셨습니다':'평생 한도 1억 원','− '+won(r.marryDed)+'원','minus');
   html+=cell('과세표준','',won(r.base)+'원');
   html+=cell('산출세액',r.base>0?won(r.base)+'원 × '+(r.info.rate*100)+'% − 누진공제 '+won(r.info.ded)+'원':'과세표준이 없습니다',won(r.info.tax)+'원');
   if(r.surtax>0) html+=cell('세대생략 할증','한 세대를 건너뛰어 받아서 '+Math.round(r.skipRate*100)+'% 가산','+ '+won(r.surtax)+'원');
@@ -435,7 +449,7 @@ function renderSteps(r){
   h+='<div class="case"><b class="ttl">2. 공제를 뺍니다</b><table class="stable">'
    +row('10년 공제 한도',r.me.name+' 기준'+(r.minor&&r.me.grp==='up'?' · 미성년자':''),won(r.limit)+'원')
    +(r.used>0?row('이미 쓴 공제','합산되지 않은 옛 증여에 적용된 금액','− '+won(r.used)+'원'):'')
-   +(r.marryDed>0?row('혼인·출산 공제','부모·조부모에게 받는 경우 1억 원 한도','+ '+won(r.marryDed)+'원'):'')
+   +(r.marry&&r.me.grp==='up'?row('혼인·출산 공제',r.marryUsed>0?'평생 한도 1억 원 가운데 '+won(r.marryUsed)+'원은 이미 쓰셨습니다':'부모·조부모에게 받는 경우 평생 1억 원 한도','+ '+won(r.marryDed)+'원'):'')
    +row('과세표준','과세가액 '+won(r.taxable)+'원 − 공제 '+won(r.deduct)+'원',won(r.base)+'원',true)
    +'</table></div>';
 
@@ -457,16 +471,26 @@ function renderSteps(r){
 const today=ymd(new Date());
 const OPTS=Object.keys(DONOR).map(k=>'<option value="'+k+'">'+DONOR[k].name+'</option>').join('');
 const shown=()=>document.getElementById('res').style.display==='block';
+// 혼인·출산 공제는 부모·조부모에게 받을 때만 쓸 수 있습니다
+function syncMarry(sel,chk){
+  const up=DONOR[sel.value].grp==='up';
+  chk.disabled=!up; if(!up) chk.checked=false;
+  chk.title=up?'':'부모·조부모에게 받을 때만 쓸 수 있습니다';
+}
 function addRow(){
   const div=document.createElement('div');
   div.className='grow';
   div.innerHTML='<input type="date" class="gd g-date" value="'+today+'" aria-label="받은 날짜">'
     +'<div class="unit"><input type="text" class="g-amt" inputmode="numeric" aria-label="받은 금액"><span>원</span></div>'
     +'<select class="g-donor" aria-label="주신 분">'+OPTS+'</select>'
+    +'<label class="mchk"><input type="checkbox" class="g-marry"><span>혼인·출산</span></label>'
     +'<button type="button" class="del" aria-label="이 줄 지우기">×</button>';
   div.querySelector('.del').addEventListener('click',()=>{div.remove();if(shown())render();});
   const amt=div.querySelector('.g-amt');
   amt.addEventListener('input',()=>{const v=num(amt.value);amt.value=v?v.toLocaleString('ko-KR'):'';});
+  const sel=div.querySelector('.g-donor'), mk=div.querySelector('.g-marry');
+  sel.addEventListener('change',()=>syncMarry(sel,mk));
+  syncMarry(sel,mk);
   div.querySelectorAll('input,select').forEach(el=>el.addEventListener('change',()=>{if(shown())render();}));
   document.getElementById('gifts').appendChild(div);
 }
@@ -481,9 +505,13 @@ function readInputs(){
           past:[...document.querySelectorAll('#gifts .grow')].map(d=>({
             date:d.querySelector('.g-date').value,
             amount:num(d.querySelector('.g-amt').value),
-            donor:d.querySelector('.g-donor').value}))};
+            donor:d.querySelector('.g-donor').value,
+            marry:d.querySelector('.g-marry').checked}))};
 }
 document.getElementById('i-date').value=today;
+const topSel=document.getElementById('i-donor'), topMk=document.getElementById('i-marry');
+topSel.addEventListener('change',()=>syncMarry(topSel,topMk));
+syncMarry(topSel,topMk);
 document.getElementById('calc').addEventListener('click',()=>{
   const g=readInputs();
   if(g.amount<=0){alert('이번에 받을 금액을 입력해 주세요.');return;}
