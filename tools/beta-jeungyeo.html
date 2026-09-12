@@ -308,7 +308,11 @@ function compute(amount,donorKey,date,past,minor,marry){
   const used=limit-basicLeft;
   const marryUsed=MARRY_LIMIT-marryLeft;
   const basicRoom=basicLeft;
-  const marryRoom=(marry&&me.grp==='up')?marryLeft:0;
+  // 혼인·출산 공제를 받을 수 있는 금액은 요건을 갖춘 증여의 가액까지입니다.
+  // 합산되는 옛 증여가 이 공제를 받았다면 이번 계산에서도 그대로 살아 있습니다.
+  const marryBase=(marry?amount:0)+(merged?same.filter(p=>p.marry).reduce((a,b)=>a+b.amount,0):0);
+  const marryRoom=me.grp==='up'?Math.min(marryLeft,marryBase):0;
+  const marryOn=marryRoom>0||(marry&&me.grp==='up');
   const room=basicRoom+marryRoom;
   const deduct=Math.min(room,taxable);
   const basicDed=Math.min(basicRoom,taxable);
@@ -335,7 +339,7 @@ function compute(amount,donorKey,date,past,minor,marry){
   let freeDay=null;
   if(oldest){ const d=new Date(oldest.date); d.setFullYear(d.getFullYear()+10); d.setDate(d.getDate()+1); freeDay=ymd(d); }
 
-  return {amount,taxable,addBack,merged,same,sameSum,limit,used,marryUsed,basicDed,marryDed,deduct,room,
+  return {amount,taxable,addBack,merged,same,sameSum,limit,used,marryUsed,marryOn,basicDed,marryDed,deduct,room,
           base,info,skipRate,surtax,calc,prePaid,credit,pay,free,freeDay,
           oldestDate:oldest?oldest.date:null,me,minor,marry,date};
 }
@@ -351,7 +355,7 @@ function render(){
   else if(r.sameSum>0) html+=cell('10년 안에 같은 분께 받은 증여','합계가 1천만 원이 안 되어 합산하지 않습니다','합산 없음');
   html+=cell('증여세 과세가액','',won(r.taxable)+'원');
   html+=cell('증여재산공제',r.used>0?'10년 한도 '+won(r.limit)+'원 가운데 '+won(r.used)+'원은 이미 쓰셨습니다':'10년 한도 '+won(r.limit)+'원','− '+won(r.basicDed)+'원','minus');
-  if(r.marry&&r.me.grp==='up') html+=cell('혼인·출산 공제',r.marryUsed>0?'평생 한도 1억 원 가운데 '+won(r.marryUsed)+'원은 이미 쓰셨습니다':'평생 한도 1억 원','− '+won(r.marryDed)+'원','minus');
+  if(r.marryOn) html+=cell('혼인·출산 공제',r.marryUsed>0?'평생 한도 1억 원 가운데 '+won(r.marryUsed)+'원은 이미 쓰셨습니다':'평생 한도 1억 원','− '+won(r.marryDed)+'원','minus');
   html+=cell('과세표준','',won(r.base)+'원');
   html+=cell('산출세액',r.base>0?won(r.base)+'원 × '+(r.info.rate*100)+'% − 누진공제 '+won(r.info.ded)+'원':'과세표준이 없습니다',won(r.info.tax)+'원');
   if(r.surtax>0) html+=cell('세대생략 할증','한 세대를 건너뛰어 받아서 '+Math.round(r.skipRate*100)+'% 가산','+ '+won(r.surtax)+'원');
@@ -452,7 +456,7 @@ function renderSteps(r){
   h+='<div class="case"><b class="ttl">2. 공제를 뺍니다</b><table class="stable">'
    +row('10년 공제 한도',r.me.name+' 기준'+(r.minor&&r.me.grp==='up'?' · 미성년자':''),won(r.limit)+'원')
    +(r.used>0?row('이미 쓴 공제','합산되지 않은 옛 증여에 적용된 금액','− '+won(r.used)+'원'):'')
-   +(r.marry&&r.me.grp==='up'?row('혼인·출산 공제',r.marryUsed>0?'평생 한도 1억 원 가운데 '+won(r.marryUsed)+'원은 이미 쓰셨습니다':'부모·조부모에게 받는 경우 평생 1억 원 한도','+ '+won(r.marryDed)+'원'):'')
+   +(r.marryOn?row('혼인·출산 공제',r.marryUsed>0?'평생 한도 1억 원 가운데 '+won(r.marryUsed)+'원은 이미 쓰셨습니다':'부모·조부모에게 받는 경우 평생 1억 원 한도','+ '+won(r.marryDed)+'원'):'')
    +row('과세표준','과세가액 '+won(r.taxable)+'원 − 공제 '+won(r.deduct)+'원',won(r.base)+'원',true)
    +'</table></div>';
 
