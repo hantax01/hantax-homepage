@@ -153,6 +153,10 @@
           <div class="unit"><input type="text" id="i-div" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
+          <label for="i-other">다른 소득 <small>임대·사업 등 회사 밖 소득</small></label>
+          <div class="unit"><input type="text" id="i-other" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
           <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small></label>
           <div class="unit"><input type="text" id="i-deduct" inputmode="numeric"><span>원</span></div>
         </div>
@@ -304,7 +308,7 @@ const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 function personTax(salary,dividend,selfIns){
   selfIns=selfIns||0;
   const edu = salary>0 ? earnedDeduct(salary) : 0;
-  const earned = Math.max(0, salary-edu-selfIns-DEDUCT);
+  const earned = Math.max(0, salary-edu-selfIns+OTHER-DEDUCT);   // 회사 밖 소득도 합산해 과세표준을 잡습니다
   if(dividend<=DIV_LIMIT){
     const salRaw0=pitRaw(earned), salInfo=pitInfo(earned), divRaw=dividend*SEP_RATE;
     const otherCr=Math.min(CREDIT, salRaw0);   // 산출세액을 넘겨 돌려받지는 못합니다
@@ -357,7 +361,7 @@ function marginal(profit,sal,div,mode){   // 여기서 100만 원을 더 가져�
   if(next.short>0) return null;            // 배당 재원이 모자라면 비교할 수 없습니다
   return next.gross-base.gross;
 }
-let CUR_SAL=0, CUR_DIV=0, DEDUCT=0, CREDIT=0;   // 지금 받고 있는 방식 / 소득공제 / 세액공제
+let CUR_SAL=0, CUR_DIV=0, DEDUCT=0, CREDIT=0, OTHER=0;   // 지금 받고 있는 방식 / 소득공제 / 세액공제
 let NP=0;             // 입력한 당기순이익(대표님 연봉을 뺀 재무제표 숫자)
 let ALT_SAL=0, ALT_DIV=0;   // 슬라이더로 바꿔 보는 조합
 // 연봉을 바꿔 보려면 지금 연봉을 도로 더한 이익에서 출발해야 합니다.
@@ -417,7 +421,7 @@ function render(profit,total,salary){
 
   document.getElementById('res-sub').textContent=
     '당기순이익 '+won(NP)+'원 · 지금 연봉 '+won(CUR_SAL)+'원 · 소득공제 '+won(DEDUCT)+'원'
-    +(CREDIT>0?' · 세액공제 '+won(CREDIT)+'원':'')
+    +(OTHER>0?' · 다른 소득 '+won(OTHER)+'원':'')+(CREDIT>0?' · 세액공제 '+won(CREDIT)+'원':'')
     +(MIN_TAX?' · 최저한세 7%':'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
 
   // 배당 재원 부족 안내
@@ -575,12 +579,15 @@ function renderSteps(profit,total,rows){
     if(r.dividend>0 || r.after>0)
       html+=row('배당 재원','법인 과세표준 '+won(r.cBase)+' − 법인세 '+won(r.cTax),won(r.after)+'원');
 
-    if(r.salary>0){
-      html+=sec('대표님 근로소득')
-        +row('근로소득공제','연봉 '+won(r.salary)+' 구간별 공제',won(pt.edu)+'원')
-        +(INS_MODE?row('본인부담 보험료 공제','국민연금·건강보험 본인부담분',won(pt.selfIns)+'원'):'')
+    if(r.salary>0 || OTHER>0){
+      html+=sec(OTHER>0?'대표님 근로소득과 다른 소득':'대표님 근로소득')
+        +(r.salary>0?row('근로소득공제','연봉 '+won(r.salary)+' 구간별 공제',won(pt.edu)+'원'):'')
+        +(INS_MODE&&r.salary>0?row('본인부담 보험료 공제','국민연금·건강보험 본인부담분',won(pt.selfIns)+'원'):'')
+        +(OTHER>0?row('다른 소득','임대·사업 등 직접 입력한 금액',won(OTHER)+'원'):'')
         +(DEDUCT>0?row('소득공제','인적공제·연금 등 직접 입력한 금액',won(DEDUCT)+'원'):'')
-        +row('근로소득 과세표준','연봉 − 근로소득공제'+(INS_MODE?' − 본인부담 보험료':'')+(DEDUCT>0?' − 소득공제':''),won(pt.earned)+'원');
+        +row(OTHER>0?'종합소득 과세표준 (배당 전)':'근로소득 과세표준',
+             (r.salary>0?'연봉 − 근로소득공제':'')+(INS_MODE&&r.salary>0?' − 본인부담 보험료':'')
+             +(OTHER>0?(r.salary>0?' + 다른 소득':'다른 소득'):'')+(DEDUCT>0?' − 소득공제':''),won(pt.earned)+'원');
     }
 
     if(r.dividend>0 && r.dividend<=DIV_LIMIT){
@@ -592,7 +599,7 @@ function renderSteps(profit,total,rows){
           ? row('근로소득 산출세액','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded),won(pt.salRaw0)+'원')
             +row('− 세액공제','직접 입력한 금액 (산출세액 한도)','−'+won(pt.otherCr)+'원')
             +row('근로소득세','결정세액 '+won(pt.salRaw)+' + 지방소득세',won(pt.salTax)+'원')
-          : row('근로소득세','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded)+' + 지방소득세',won(pt.salTax)+'원'));
+          : row(OTHER>0?'종합소득세':'근로소득세','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded)+' + 지방소득세',won(pt.salTax)+'원'));
     } else if(r.dividend>DIV_LIMIT){
       html+=sec('대표님 배당소득 (2,000만 원 초과 · 종합과세 검토)')
         +row('2,000만 원 초과분','배당 '+won(r.dividend)+' − 2,000만',won(pt.excess)+'원')
@@ -617,7 +624,7 @@ function renderSteps(profit,total,rows){
           ? row('근로소득 산출세액','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded),won(pt.salRaw0)+'원')
             +row('− 세액공제','직접 입력한 금액 (산출세액 한도)','−'+won(pt.otherCr)+'원')
             +row('근로소득세','결정세액 '+won(pt.salRaw)+' + 지방소득세',won(pt.salTax)+'원')
-          : row('근로소득세','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded)+' + 지방소득세',won(pt.salTax)+'원'));
+          : row(OTHER>0?'종합소득세':'근로소득세','과세표준 '+won(pt.earned)+' × '+(pt.salInfo.rate*100)+'% − 누진공제 '+won(pt.salInfo.ded)+' + 지방소득세',won(pt.salTax)+'원'));
     }
 
     html+=row('개인 세금 합계','',won(r.pTax)+'원',true);
@@ -660,6 +667,7 @@ document.getElementById('i-cit').addEventListener('change',()=>{
   MIN_TAX = document.getElementById('i-cit').value==='1';
   DEDUCT = num(document.getElementById('i-deduct').value);
   CREDIT = num(document.getElementById('i-credit').value);
+  OTHER = num(document.getElementById('i-other').value);
   if(GP()>0 && ALT_SAL+ALT_DIV>0) render(GP(),ALT_SAL+ALT_DIV,ALT_SAL);
 });
 document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('click',()=>{
@@ -668,7 +676,7 @@ document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('clic
   INS_MODE = b.dataset.ins==='1';
   if(GP()>0 && ALT_SAL+ALT_DIV>0) render(GP(),ALT_SAL+ALT_DIV,ALT_SAL);
 }));
-['i-profit','i-salary','i-div','i-deduct','i-credit'].forEach(id=>{
+['i-profit','i-salary','i-div','i-other','i-deduct','i-credit'].forEach(id=>{
   const el=$(id);
   el.addEventListener('input',()=>{
     const raw=el.value.replace(/[^0-9]/g,'');
@@ -682,7 +690,7 @@ $('calc').addEventListener('click',()=>{
   const salary=num($('i-salary').value);
   const dividend=num($('i-div').value);
   CUR_SAL=salary; CUR_DIV=dividend;   // 지금 받고 있는 방식으로 기억
-  DEDUCT=num($('i-deduct').value); CREDIT=num($('i-credit').value);
+  DEDUCT=num($('i-deduct').value); CREDIT=num($('i-credit').value); OTHER=num($('i-other').value);
   const total=salary+dividend;
   if(profit<=0){alert('당기순이익을 입력해 주세요.');return;}
   if(total<=0){alert('연봉이나 배당 중 하나는 입력해 주세요.');return;}
@@ -690,6 +698,15 @@ $('calc').addEventListener('click',()=>{
   if(total>GP()){alert('연봉과 배당을 더한 금액이 '+won(GP())+'원을 넘을 수 없습니다. 당기순이익에 지금 연봉을 더한 금액입니다.');return;}
   render(GP(),total,salary);
   initSlider(GP(),total,salary);
+});
+
+/* 테스트용 기본값. 확인이 끝나면 이 블록만 지우면 됩니다. */
+window.addEventListener('load',()=>{
+  $('i-profit').value=(200000000).toLocaleString('ko-KR');
+  $('i-salary').value=(100000000).toLocaleString('ko-KR');
+  $('calc').click();
+  const ss=$('s-salary');
+  ss.value=150000000; ss.dispatchEvent(new Event('input'));
 });
 
 /* ── 슬라이더 ──────────────────────────────── */
