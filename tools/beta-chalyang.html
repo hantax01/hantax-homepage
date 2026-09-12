@@ -328,7 +328,7 @@ nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classLi
 /* ── 세율 (2026년 기준, 지방소득세 별도) ──────── */
 const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
            [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
-const CIT=[[200000000,.09,0],[20000000000,.19,20000000],[300000000000,.21,420000000],[Infinity,.24,1320000000]];
+const CIT=[[200000000,.10,0],[Infinity,.20,20000000]];   // 2026년 개정: 2억 이하 10%, 초과 20%
 const LOCAL=1.1;   // 지방소득세 10%
 function bracket(tbl,b){ if(b<=0) return 0; for(const[lim,r,d]of tbl) if(b<=lim) return Math.max(0,b*r-d); return 0; }
 const taxOf=(owner,base)=>bracket(owner==='corp'?CIT:PIT,base)*LOCAL;
