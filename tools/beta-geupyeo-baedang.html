@@ -25,7 +25,7 @@
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:36px}
 .res h2{font-size:20px;margin-bottom:6px}
-.modetab{display:inline-flex;background:var(--soft);border-radius:99px;padding:4px;margin-bottom:18px}
+.modetab{display:inline-flex;background:var(--soft);border-radius:99px;padding:4px}
 .modetab button{border:0;background:none;padding:9px 18px;border-radius:99px;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer;font-family:inherit}
 .modetab button.on{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(11,30,63,.12)}
 .res .sub{font-size:14px;color:var(--mute);margin-bottom:18px}
@@ -51,8 +51,11 @@
 .rtable .rate small{display:block;font-size:11px;font-weight:400;color:var(--mute);margin-top:2px}
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
 .verdict b{color:var(--blue)}
-.slide{display:none;background:var(--soft);border-radius:14px;padding:24px 28px}
-.slnote{margin-top:14px;font-size:13px;color:var(--mute)}
+.slide{background:var(--soft);border-radius:14px;padding:22px 26px;margin-bottom:20px}
+.slide .modetab{margin:16px 0 0;background:#fff}
+.slnote{margin-top:14px;font-size:13.5px;color:var(--char)}
+.slnote b{color:var(--ink);font-weight:700}
+.slnote b.up{color:var(--blue)} .slnote b.dn{color:var(--seal)}
 #sltotal{color:var(--ink);font-weight:700;font-size:14px}
 .slnote a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
 .slide .sl{display:flex;align-items:center;gap:16px;margin-bottom:14px}
@@ -153,23 +156,22 @@
           </select>
         </div>
       </div>
-      <div class="slide" id="slide">
-        <div class="sl"><label for="s-salary">대표님 연봉</label><input type="range" id="s-salary"><b id="s-salary-v"></b></div>
-        <div class="sl"><label for="s-div">배당</label><input type="range" id="s-div"><b id="s-div-v"></b></div>
-        <p class="slnote" id="sltotal"></p>
-        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
-      </div>
       <button class="btn btn-primary simbtn" id="calc">세금 비교하기</button>
       <div class="warn" id="warn"></div>
 
       <div class="res" id="res">
-        <div class="modetab" id="modetab">
-          <button type="button" class="on" data-ins="0">세금만 보기</button>
-          <button type="button" data-ins="1">4대보험까지 보기</button>
-        </div>
         <h2 id="res-title">가져갈 때 내는 세금</h2>
         <p class="sub" id="res-sub"></p>
         <div class="headline" id="headline"></div>
+        <div class="slide" id="slide">
+          <div class="sl"><label for="s-salary">바꿔 볼 연봉</label><input type="range" id="s-salary"><b id="s-salary-v"></b></div>
+          <div class="sl"><label for="s-div">바꿔 볼 배당</label><input type="range" id="s-div"><b id="s-div-v"></b></div>
+          <p class="slnote" id="sltotal"></p>
+          <div class="modetab" id="modetab">
+            <button type="button" class="on" data-ins="0">세금만 보기</button>
+            <button type="button" data-ins="1">4대보험까지 보기</button>
+          </div>
+        </div>
         <div style="overflow-x:auto">
           <table class="rtable">
             <thead>
@@ -338,7 +340,8 @@ function scenario(profit,salary,dividendWant){
 }
 
 let CUR_SAL=0, CUR_DIV=0, DEDUCT=0;   // 지금 받고 있는 방식 / 소득공제
-let NP=0;   // 입력한 당기순이익(대표님 연봉을 뺀 재무제표 숫자)
+let NP=0;             // 입력한 당기순이익(대표님 연봉을 뺀 재무제표 숫자)
+let ALT_SAL=0, ALT_DIV=0;   // 슬라이더로 바꿔 보는 조합
 // 연봉을 바꿔 보려면 지금 연봉을 도로 더한 이익에서 출발해야 합니다.
 // 4대보험을 함께 볼 때는 회사부담 보험료도 법인 비용이라 같이 되더합니다.
 function GP(){ return NP>0 ? NP + CUR_SAL + (INS_MODE ? salaryInsurance(CUR_SAL).company : 0) : 0; }
@@ -405,8 +408,8 @@ function render(profit,total,salary){
     hl.innerHTML='지금 받고 계신 연봉과 배당을 입력하시면, 그 돈을 가져가는 데 세금이 얼마나 붙는지 계산해 드립니다.';
   } else {
     hl.className='headline';
-    hl.innerHTML='<b>'+won(curTotal)+'원</b>을 가져가시려면 '+(INS_MODE?'세금과 4대보험으로':'세금으로')+' <b>'+won(nowRow.total)+'원</b>을 냅니다.<br>'
-      +'100만 원을 가져갈 때마다 <b>'+won(perNow)+'원</b>씩입니다.';
+    hl.innerHTML='지금은 <b>'+won(curTotal)+'원</b>을 가져가시면서 '+(INS_MODE?'세금과 4대보험으로':'세금으로')+' <b>'+won(nowRow.total)+'원</b>을 내고 계십니다.<br>'
+      +'100만 원을 가져갈 때마다 <b>'+won(perNow)+'원</b>씩입니다. 아래에서 연봉과 배당을 바꿔 보세요.';
   }
   let msg='법인 통장에 있는 돈은 아직 대표님 개인 돈이 아닙니다. 연봉으로 받으면 근로소득세가, 배당으로 받으면 법인세를 낸 뒤의 이익에 다시 배당소득세가 붙습니다. '
     +'그래서 회사에 이익이 있어도 <b>꺼내는 순간 상당한 금액이 세금으로 나갑니다.</b>';
@@ -426,6 +429,13 @@ function render(profit,total,salary){
 
   renderSteps(profit,total,rows);
   drawChart(profit,total,sal);
+  const st=document.getElementById('sltotal');
+  if(st){
+    const d=rows[1].total-rows[0].total;
+    st.innerHTML='가져가는 돈 <b>'+won(total)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+won(rows[1].total)+'원</b>'
+      +(Math.abs(d)<1000 ? ' · 지금과 같음'
+        : ' · 지금보다 <b class="'+(d>0?'dn':'up')+'">'+won(Math.abs(d))+'원 '+(d>0?'더':'덜')+'</b>');
+  }
   document.getElementById('res').style.display='block';
 }
 
@@ -597,16 +607,13 @@ const $=id=>document.getElementById(id);
 document.getElementById('i-cit').addEventListener('change',()=>{
   MIN_TAX = document.getElementById('i-cit').value==='1';
   DEDUCT = num(document.getElementById('i-deduct').value);
-  const sal=num(document.getElementById('i-salary').value),
-        dv=num(document.getElementById('i-div').value);
-  if(GP()>0 && sal+dv>0) render(GP(),sal+dv,sal);
+  if(GP()>0 && ALT_SAL+ALT_DIV>0) render(GP(),ALT_SAL+ALT_DIV,ALT_SAL);
 });
 document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('#modetab button').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');
   INS_MODE = b.dataset.ins==='1';
-  const sal=num($('i-salary').value), dv=num($('i-div').value);
-  if(GP()>0 && sal+dv>0) render(GP(),sal+dv,sal);
+  if(GP()>0 && ALT_SAL+ALT_DIV>0) render(GP(),ALT_SAL+ALT_DIV,ALT_SAL);
 }));
 ['i-profit','i-salary','i-div','i-deduct'].forEach(id=>{
   const el=$(id);
@@ -622,7 +629,7 @@ $('calc').addEventListener('click',()=>{
   const total=salary+dividend;
   if(profit<=0){alert('당기순이익을 입력해 주세요.');return;}
   if(total<=0){alert('연봉이나 배당 중 하나는 입력해 주세요.');return;}
-  NP=profit;
+  NP=profit; ALT_SAL=salary; ALT_DIV=dividend;
   if(total>GP()){alert('연봉과 배당을 더한 금액이 '+won(GP())+'원을 넘을 수 없습니다. 당기순이익에 지금 연봉을 더한 금액입니다.');return;}
   render(GP(),total,salary);
   initSlider(GP(),total,salary);
@@ -632,7 +639,7 @@ $('calc').addEventListener('click',()=>{
 let sliderReady=false;
 function initSlider(profit,total,salary){
   const ss=$('s-salary'), sd=$('s-div');
-  const step=Math.max(1000000, Math.round(profit/200/1000000)*1000000);
+  const step=1000000;   // 100만 원씩 움직여야 조작이 부드럽습니다
   [ss,sd].forEach(el=>{ el.min=0; el.max=profit; el.step=step; });
   if(!sliderReady){
     const upd=(moved)=>{
@@ -644,25 +651,17 @@ function initSlider(profit,total,salary){
       }
       $('s-salary-v').textContent=won(sal)+'원';
       $('s-div-v').textContent=won(div)+'원';
-      $('sltotal').textContent='가져가는 돈 합계 '+won(sal+div)+'원';
-      $('i-salary').value=sal?sal.toLocaleString('ko-KR'):'';
-      $('i-div').value=div?div.toLocaleString('ko-KR'):'';
+      ALT_SAL=sal; ALT_DIV=div;
       if(sal+div>0) render(pf,sal+div,sal);
     };
     ss.addEventListener('input',()=>upd('sal'));
     sd.addEventListener('input',()=>upd('div'));
-    $('toBox').addEventListener('click',e=>{
-      e.preventDefault();
-      $('slide').style.display='none'; $('sim-box').style.display=''; $('calc').style.display='';
-    });
     sliderReady=true;
   }
   const div=total-salary;
   ss.value=salary; sd.value=div;
   $('s-salary-v').textContent=won(salary)+'원';
   $('s-div-v').textContent=won(div)+'원';
-  $('sltotal').textContent='가져가는 돈 합계 '+won(total)+'원';
-  $('slide').style.display='block'; $('sim-box').style.display='none'; $('calc').style.display='none';
 }
 </script>
 </body>
