@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>급여와 배당 비교 (준비 중) | 한택스</title>
+<title>회사 돈을 가져가면 세금이 얼마나 붙나요? (준비 중) | 한택스</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="../assets/favicon.png?v=4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -114,8 +114,8 @@
 <section class="page-head">
   <div class="wrap">
     <span class="eyebrow">세무설계</span>
-    <h1>급여로 받을까요, 배당으로 받을까요?</h1>
-    <p class="lead">회사에 쌓인 이익을 대표님이 가져갈 때, 급여와 배당을 어떻게 나누느냐에 따라 세금이 달라집니다.</p>
+    <h1>회사 돈을 가져가면<br>세금이 얼마나 붙나요?</h1>
+    <p class="lead">법인 통장에 있는 돈은 아직 대표님 돈이 아닙니다. 연봉이나 배당으로 꺼낼 때 얼마를 세금으로 내는지 계산해 봅니다.</p>
   </div>
 </section>
 
@@ -135,11 +135,15 @@
           <label for="i-div">지금 배당 <small>없으면 0</small></label>
           <div class="unit"><input type="text" id="i-div" inputmode="numeric"><span>원</span></div>
         </div>
-        <div class="fw">
-          <label for="i-cit">법인세 부담 <small>공제·감면을 많이 받는 회사인지</small></label>
+        <div>
+          <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small></label>
+          <div class="unit"><input type="text" id="i-deduct" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-cit">법인세 부담 <small>공제·감면이 많은 회사인지</small></label>
           <select id="i-cit">
             <option value="0">일반 (과세표준 2억 원 이하 10%, 초과 20%)</option>
-            <option value="1">공제·감면이 많은 회사 (최저한세 7%만 부담)</option>
+            <option value="1">공제·감면이 많은 회사 (최저한세 7%)</option>
           </select>
         </div>
       </div>
@@ -157,25 +161,26 @@
           <button type="button" class="on" data-ins="0">세금만 보기</button>
           <button type="button" data-ins="1">4대보험까지 보기</button>
         </div>
-        <h2 id="res-title">세금 비교 결과</h2>
+        <h2 id="res-title">가져갈 때 내는 세금</h2>
         <p class="sub" id="res-sub"></p>
         <div class="headline" id="headline"></div>
         <div style="overflow-x:auto">
           <table class="rtable">
             <thead>
-              <tr><th>구분</th><th id="h-now">지금</th><th id="h-mix">바꾼다면</th><th id="h-best">가장 유리한 조합</th></tr>
+              <tr><th>구분</th><th id="h-now">지금</th><th id="h-mix">바꾼다면</th></tr>
             </thead>
             <tbody id="res-body"></tbody>
           </table>
         </div>
 
         <div class="chartbox" id="chartbox">
-          <h3>연봉과 배당을 어떻게 나누면 세금이 적나요?</h3>
+          <h3>얼마를 가져가면 세금이 얼마나 되나요?</h3>
           <p class="csub" id="csub">가로축은 총액 중 연봉으로 받는 금액, 세로축은 총 세금(법인세 + 대표님 개인 세금)입니다.</p>
-          <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="연봉과 배당 배분에 따른 총 세금 변화 그래프"></svg>
+          <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="가져가는 금액에 따른 총 세금 변화 그래프"></svg>
           <div class="clegend">
-            <span><i style="background:#1B4A9B"></i><span id="leg1">총 세금</span></span>
-            <span><i style="background:#8b98a8"></i>지금 받고 계신 방식</span>
+            <span><i style="background:#1B4A9B"></i>전액 연봉으로 가져갈 때</span>
+            <span><i style="background:#C8423A"></i>전액 배당으로 가져갈 때</span>
+            <span><i style="background:#0B1E3F"></i>지금</span>
           </div>
           <p class="cband" id="cband"></p>
         </div>
@@ -205,7 +210,7 @@
       </p>
 
       <div class="art-cta" style="margin-top:34px">
-        <p>우리 회사는 어떻게 나누는 게 좋을까요?</p>
+        <p>세금을 줄이면서 가져가는 방법이 있을까요?</p>
         <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
       </div>
     </div>
@@ -286,7 +291,7 @@ const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 function personTax(salary,dividend,selfIns){
   selfIns=selfIns||0;
   const edu = salary>0 ? earnedDeduct(salary) : 0;
-  const earned = Math.max(0, salary-edu-selfIns);
+  const earned = Math.max(0, salary-edu-selfIns-DEDUCT);
   if(dividend<=DIV_LIMIT){
     const salRaw=pitRaw(earned), salInfo=pitInfo(earned), divRaw=dividend*SEP_RATE;
     return {total:(salRaw+divRaw)*LOCAL, mode:'분리과세', selfIns,
@@ -322,34 +327,18 @@ function scenario(profit,salary,dividendWant){
           left:after-dividend, mode:pt.mode, short:Math.max(0,dividendWant-dividend), after, cBase, pt};
 }
 
-let CUR_SAL=0, CUR_DIV=0;   // 지금 받고 있는 방식
-function bestMix(profit,total){
-  if(total<=0) return scenario(profit,0,0);
-  const marks=[];
-  const N=120;
-  for(let i=0;i<=N;i++) marks.push(total*i/N);
-  if(total>DIV_LIMIT) marks.push(total-DIV_LIMIT);   // 배당이 딱 2,000만 원이 되는 지점
-  let best=null;
-  marks.forEach(sal=>{
-    const r=scenario(profit,Math.round(sal),total-Math.round(sal));
-    if(!best||r.total<best.total) best=r;
-  });
-  return best;
-}
+let CUR_SAL=0, CUR_DIV=0, DEDUCT=0;   // 지금 받고 있는 방식 / 소득공제
 function compute(profit,total,salary){
   const sal=Math.min(salary,profit);
-  return [ scenario(profit,CUR_SAL,CUR_DIV),      // 지금
-           scenario(profit,sal,total-sal),        // 바꾼다면
-           bestMix(profit,CUR_SAL+CUR_DIV) ];     // 가장 유리한 조합
+  return [ scenario(profit,CUR_SAL,CUR_DIV),   // 지금
+           scenario(profit,sal,total-sal) ];   // 바꾼다면
 }
 
 function render(profit,total,salary){
   const rows=compute(profit,total,salary);
   const sal=rows[1].salary, div=rows[1].dividend;
-  const bestRow=rows[2];
   document.getElementById('h-now').innerHTML='지금<br><small style="font-weight:400">연봉 '+won(CUR_SAL)+' · 배당 '+won(CUR_DIV)+'</small>';
   document.getElementById('h-mix').innerHTML='바꾼다면<br><small style="font-weight:400">연봉 '+won(sal)+' · 배당 '+won(div)+'</small>';
-  document.getElementById('h-best').innerHTML='가장 유리한 조합<br><small style="font-weight:400">연봉 '+won(bestRow.salary)+' · 배당 '+won(bestRow.dividend)+'</small>';
   const min=Math.min(...rows.map(r=>r.total));
   const base=rows[0].total;
   const cells=fn=>rows.map(r=>fn(r)).join('');
@@ -360,10 +349,11 @@ function render(profit,total,salary){
              +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.ins.self)+'원</td>')+'</tr>'
              +'<tr><td>배당 건강보험료</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.dIns.total>0?won(r.dIns.total)+'원':'—')+'</td>')+'</tr>':'')
    +'<tr class="tot"><td>'+(INS_MODE?'총 부담 합계':'합계')+'</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.total)+'원</td>')+'</tr>'
-   +'<tr class="rate"><td>가져가는 돈 대비 부담률</td>'+cells(r=>{
+   +'<tr class="rate"><td>100만 원 가져갈 때 세금</td>'+cells(r=>{
       const gross=r.salary+r.dividend;
+      const per=gross>0?(r.total/gross*1000000):0;
       const pct=gross>0?(r.total/gross*100):0;
-      return '<td class="'+(r.total===min?'best':'')+'">'+pct.toFixed(1)+'%<br><small>'+won(gross)+'원 기준</small></td>';
+      return '<td class="'+(r.total===min?'best':'')+'">'+won(per)+'원<br><small>부담률 '+pct.toFixed(1)+'%</small></td>';
    })+'</tr>'
    +'<tr class="diff"><td>지금 대비</td>'+cells((r)=>{
       if(r===rows[0]) return '<td class="'+(r.total===min?'best':'')+'">기준</td>';
@@ -371,12 +361,12 @@ function render(profit,total,salary){
       if(Math.abs(d)<1000) return '<td class="'+(r.total===min?'best':'')+'">비슷</td>';
       return '<td class="'+(r.total===min?'best':'')+(d<0?' neg':'')+'">'+won(Math.abs(d))+'원<br><small>'+(d>0?'적게 냄':'더 냄')+'</small></td>';
    })+'</tr>'
-   +'<tr class="gap"><td colspan="4"></td></tr>'
+   +'<tr class="gap"><td colspan="3"></td></tr>'
    +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>'<td>'+won(r.cash)+'원</td>')+'</tr>'
    +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+won(r.left)+'원</td>')+'</tr>';
 
   document.getElementById('res-sub').textContent=
-    '당기순이익 '+won(profit)+'원 · 연봉 '+won(sal)+'원 + 배당 '+won(div)+'원'
+    '당기순이익 '+won(profit)+'원 · 소득공제 '+won(DEDUCT)+'원'
     +(MIN_TAX?' · 최저한세 7%':'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
 
   // 배당 재원 부족 안내
@@ -387,30 +377,31 @@ function render(profit,total,salary){
     w.innerHTML='배당은 법인세를 낸 뒤 남은 이익에서만 할 수 있습니다. 올해 이익으로는 <b>'+won(shortRow.after)+'원</b>까지 배당할 수 있어, 그만큼만 반영했습니다. 그전에 쌓인 이익잉여금이 있다면 더 배당할 수 있으니 상담에서 확인해 주세요.';
   } else w.style.display='none';
 
-  const nowRow=rows[0], bestR=rows[2];
-  const save=nowRow.total-bestR.total;
+  const nowRow=rows[0], newRow=rows[1];
+  const curTotal=CUR_SAL+CUR_DIV;
+  const perNow = curTotal>0 ? nowRow.total/curTotal*1000000 : 0;
   const hl=document.getElementById('headline');
-  if(CUR_SAL+CUR_DIV<=0){
+  if(curTotal<=0){
     hl.className='headline same';
-    hl.innerHTML='지금 연봉과 배당을 입력하시면, 같은 금액을 가져가면서 부담을 줄일 수 있는 조합을 찾아 드립니다.';
-  } else if(save>10000){
+    hl.innerHTML='지금 받고 계신 연봉과 배당을 입력하시면, 그 돈을 가져가는 데 세금이 얼마나 붙는지 계산해 드립니다.';
+  } else {
     hl.className='headline';
-    hl.innerHTML='같은 '+won(CUR_SAL+CUR_DIV)+'원을 가져가면서 <b>연봉 '+won(bestR.salary)+'원 · 배당 '+won(bestR.dividend)+'원</b>으로 나누면<br>지금보다 <b>'+won(save)+'원</b> 적게 냅니다.';
-  } else {
-    hl.className='headline same';
-    hl.innerHTML='지금 받고 계신 <b>연봉 '+won(CUR_SAL)+'원 · 배당 '+won(CUR_DIV)+'원</b>이 이미 가장 유리한 조합입니다.';
+    hl.innerHTML='<b>'+won(curTotal)+'원</b>을 가져가시려면 '+(INS_MODE?'세금과 4대보험으로':'세금으로')+' <b>'+won(nowRow.total)+'원</b>을 냅니다.<br>'
+      +'100만 원을 가져갈 때마다 <b>'+won(perNow)+'원</b>씩입니다.';
   }
-  let msg='';
-  if(save>10000){
-    msg='같은 금액을 가져가더라도 연봉과 배당을 나누는 방식에 따라 '+(INS_MODE?'부담이':'세금이')+' 달라집니다. '
-      +'지금은 '+won(nowRow.total)+'원을 내지만, 연봉 '+won(bestR.salary)+'원과 배당 '+won(bestR.dividend)+'원으로 맞추면 '+won(bestR.total)+'원으로 줄어듭니다.';
+  let msg='법인 통장에 있는 돈은 아직 대표님 개인 돈이 아닙니다. 연봉으로 받으면 근로소득세가, 배당으로 받으면 법인세를 낸 뒤의 이익에 다시 배당소득세가 붙습니다. '
+    +'그래서 회사에 이익이 있어도 <b>꺼내는 순간 상당한 금액이 세금으로 나갑니다.</b>';
+  const diff=nowRow.total-newRow.total;
+  if(Math.abs(diff)>10000){
+    msg+='<br><br>연봉과 배당을 바꾼 안은 지금보다 '+won(Math.abs(diff))+'원 '+(diff>0?'적게':'많이')+' 냅니다. '
+      +'배당은 <b>연 2,000만 원까지 15.4%로 분리과세</b>되어 그 구간이 유리하지만, 그 이상은 근로소득과 합산되어 차이가 크지 않습니다.';
   } else {
-    msg='지금 방식이 이미 '+(INS_MODE?'부담이':'세금이')+' 가장 적은 조합입니다. 총 '+(INS_MODE?'부담은':'세금은')+' '+won(nowRow.total)+'원이고, 대표님이 실제로 가져가는 돈은 '+won(nowRow.cash)+'원입니다.';
+    msg+='<br><br>연봉과 배당을 어떻게 나누든 '+(INS_MODE?'부담':'세금')+' 차이는 크지 않습니다. 배당 2,000만 원까지는 15.4% 분리과세라 그 구간만 유리하고, 그 위로는 결국 비슷해집니다. '
+      +'<b>어떻게 나누느냐보다 얼마를 가져가느냐가 훨씬 큰 차이를 만듭니다.</b>';
   }
-  msg+='<br><br>배당은 <b>연 2,000만 원까지 15.4%로 분리과세</b>되고 건강보험료도 붙지 않아, 급여를 기본으로 하고 배당을 2,000만 원 선에서 더하는 조합이 유리하게 나오는 경우가 많습니다.';
-  if(rows[1].left>0) msg+=' 법인에 남는 '+won(rows[1].left)+'원을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.';
+  if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원도 언젠가 꺼내 쓰려면 같은 세금을 내야 합니다. 퇴직금처럼 세 부담이 낮은 방법이 있으니, 미리 설계해 두시면 차이가 큽니다.';
   msg+= INS_MODE
-    ? '<br><br><span style="font-size:14px;color:var(--mute)">국민연금은 기준소득월액 상한(월 637만 원)이 있어 연봉 7,600만 원쯤부터는 더 늘지 않지만, 건강보험료는 상한 없이 계속 붙습니다. 배당은 연 2,000만 원까지 건강보험료가 붙지 않아 그 구간이 특히 유리합니다.</span>'
+    ? '<br><br><span style="font-size:14px;color:var(--mute)">국민연금은 기준소득월액 상한(월 637만 원)이 있어 연봉 7,600만 원쯤부터는 더 늘지 않지만, 건강보험료는 상한 없이 계속 붙습니다. 배당은 연 2,000만 원까지 건강보험료가 붙지 않습니다.</span>'
     : '<br><br><span style="font-size:14px;color:var(--mute)">여기에 국민연금과 건강보험료가 더 빠집니다. 위 탭에서 <b>4대보험까지 보기</b>를 누르면 함께 계산한 결과를 보실 수 있습니다.</span>';
   document.getElementById('verdict').innerHTML=msg;
 
@@ -426,23 +417,23 @@ function shortWon(v){
   return Math.round(v)+'';
 }
 function drawChart(profit,totalIn,salary){
-  const W=720,H=320,L=62,R=22,T=22,B=54,N=80;
-  const total=CUR_SAL+CUR_DIV||totalIn;   // 같은 금액을 가져가며 배분만 바꿔 봅니다
-  const marks=[];
-  for(let i=0;i<=N;i++) marks.push(total*i/N);
-  // 배당이 정확히 2,000만 원이 되는 지점(분리과세 한계선)을 반드시 포함
-  if(total>DIV_LIMIT) marks.push(total-DIV_LIMIT);
-  marks.sort((a,b)=>a-b);
-  const pts=marks.map(v=>({sal:v,tax:scenario(profit,v,total-v).total}));
-  const nowTax=scenario(profit,CUR_SAL,CUR_DIV).total;   // 지금 받고 있는 방식
-  const rawMax=Math.max(nowTax,...pts.map(p=>p.tax))*1.12||1;
+  const W=720,H=320,L=64,R=22,T=22,B=54,N=60;
+  const curTotal=CUR_SAL+CUR_DIV;
+  const salPts=[], divPts=[];
+  for(let i=0;i<=N;i++){
+    const take=profit*i/N;
+    salPts.push({take,tax:scenario(profit,take,0).total});
+    const rd=scenario(profit,0,take);
+    if(rd.short<=1) divPts.push({take,tax:rd.total});   // 배당 가능한 범위까지만
+  }
+  const maxTake=profit;
+  const rawMax=Math.max(...salPts.map(p=>p.tax), ...divPts.map(p=>p.tax))*1.12||1;
   const step=(()=>{ const rough=rawMax/4, mag=Math.pow(10,Math.floor(Math.log10(rough))), n=rough/mag;
     return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag; })();
   const maxY=step*4;
-  const X=v=>L+(total?v/total:0)*(W-L-R);
+  const X=v=>L+(maxTake?v/maxTake:0)*(W-L-R);
   const Y=v=>H-B-(v/maxY)*(H-T-B);
-  const line=pts.map((p,i)=>(i?'L':'M')+X(p.sal).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' ');
-  const area=line+' L'+X(total).toFixed(1)+' '+(H-B)+' L'+L+' '+(H-B)+' Z';
+  const path=arr=>arr.map((p,i)=>(i?'L':'M')+X(p.take).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' ');
 
   let g='';
   for(let i=0;i<=4;i++){
@@ -450,45 +441,41 @@ function drawChart(profit,totalIn,salary){
     g+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="#E4E8EF" stroke-width="1"/>'
       +'<text x="'+(L-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
   }
-  [0,total/2,total].forEach((v,i)=>{
+  [0,maxTake/2,maxTake].forEach((v,i)=>{
     g+='<text x="'+X(v).toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="'+(i===0?'start':i===2?'end':'middle')+'" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
   });
 
-  const minP=pts.reduce((a,b)=>b.tax<a.tax?b:a);
-  const cur=pts.reduce((a,b)=>Math.abs(b.sal-salary)<Math.abs(a.sal-salary)?b:a);
-  const restDiv=total-minP.sal;
-  const bandTxt='연봉 '+shortWon(minP.sal)+' + 배당 '+shortWon(restDiv)+'일 때 '+(INS_MODE?'부담이':'세금이')+' 가장 적습니다'
-    +(Math.abs(restDiv-DIV_LIMIT)<1000?' (배당 2,000만 원까지는 15.4% 분리과세)':'');
-  // 지금 위치 표시
-  const nowP=pts.reduce((a,b)=>Math.abs(b.sal-CUR_SAL)<Math.abs(a.sal-CUR_SAL)?b:a);
+  const now=scenario(profit,CUR_SAL,CUR_DIV);
+  const nowPer = curTotal>0 ? now.total/curTotal*1000000 : 0;
+  const divEnd = divPts.length?divPts[divPts.length-1]:null;
 
   document.getElementById('chart').innerHTML=
     g
     +'<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#C9D6F0" stroke-width="1"/>'
-    +'<path d="'+area+'" fill="#1B4A9B" fill-opacity="0.05"/>'
-    +'<line x1="'+L+'" y1="'+Y(nowTax).toFixed(1)+'" x2="'+(W-R)+'" y2="'+Y(nowTax).toFixed(1)+'" stroke="#8b98a8" stroke-width="1.5" stroke-dasharray="6 5"/>'
-    +'<text x="'+(L+6)+'" y="'+(Y(nowTax)-8).toFixed(1)+'" text-anchor="start" font-size="11.5" fill="#5C6572" font-weight="700">지금 '+shortWon(nowTax)+'</text>'
-    +'<path d="'+line+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
-    +'<line x1="'+X(cur.sal).toFixed(1)+'" y1="'+T+'" x2="'+X(cur.sal).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
-    +'<circle cx="'+X(cur.sal).toFixed(1)+'" cy="'+Y(cur.tax).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
-    +'<text x="'+Math.min(W-R-50,Math.max(L+50,X(cur.sal))).toFixed(1)+'" y="'+Math.max(T+12,Y(cur.tax)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금 선택 '+shortWon(cur.tax)+'</text>'
-    +'<circle cx="'+X(nowP.sal).toFixed(1)+'" cy="'+Y(nowP.tax).toFixed(1)+'" r="4" fill="#8b98a8" stroke="#fff" stroke-width="2"/>'
-    +'<circle cx="'+X(minP.sal).toFixed(1)+'" cy="'+Y(minP.tax).toFixed(1)+'" r="4" fill="#fff" stroke="#1B4A9B" stroke-width="2"/>'
-    +'<text x="'+Math.min(W-R-40,Math.max(L+40,X(minP.sal))).toFixed(1)+'" y="'+(Y(minP.tax)+20).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#1B4A9B" font-weight="700">최저 '+shortWon(minP.tax)+'</text>'
-    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+36)+'" text-anchor="middle" font-size="11" fill="#8b98a8">연봉으로 받는 금액</text>';
-  document.getElementById('cband').textContent=bandTxt;
-  document.getElementById('leg1').textContent = INS_MODE ? '총 부담' : '총 세금';
-  document.getElementById('res-title').textContent = INS_MODE ? '총 부담 비교 결과' : '세금 비교 결과';
-  document.querySelector('.chartbox h3').textContent = INS_MODE ? '연봉과 배당을 어떻게 나누면 부담이 적나요?' : '연봉과 배당을 어떻게 나누면 세금이 적나요?';
-  document.getElementById('csub').textContent = INS_MODE
-    ? '지금과 같은 금액을 가져가면서 배분만 바꿔 본 결과입니다. 세로축은 총 부담(법인세 + 개인 세금 + 4대보험)입니다.'
-    : '지금과 같은 금액을 가져가면서 배분만 바꿔 본 결과입니다. 세로축은 총 세금(법인세 + 대표님 개인 세금)입니다.';
+    +'<path d="'+path(salPts)+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
+    +(divPts.length?'<path d="'+path(divPts)+'" fill="none" stroke="#C8423A" stroke-width="2.5" stroke-dasharray="5 4"/>':'')
+    +(divEnd?'<circle cx="'+X(divEnd.take).toFixed(1)+'" cy="'+Y(divEnd.tax).toFixed(1)+'" r="3.5" fill="#C8423A"/>'
+      +'<text x="'+Math.min(W-R,X(divEnd.take)+6).toFixed(1)+'" y="'+(Y(divEnd.tax)-8).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#C8423A">배당은 여기까지</text>':'')
+    +(curTotal>0
+      ? '<line x1="'+X(curTotal).toFixed(1)+'" y1="'+T+'" x2="'+X(curTotal).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
+        +'<circle cx="'+X(curTotal).toFixed(1)+'" cy="'+Y(now.total).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
+        +'<text x="'+Math.min(W-R-50,Math.max(L+60,X(curTotal))).toFixed(1)+'" y="'+Math.max(T+12,Y(now.total)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금 '+shortWon(now.total)+'</text>'
+      : '')
+    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+36)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 금액</text>';
+
+  const cs=document.querySelector('.chartbox .csub');
+  if(cs) cs.textContent = INS_MODE
+    ? '가로축은 대표님이 가져가는 금액, 세로축은 그때 내는 총 부담(법인세 + 개인 세금 + 4대보험)입니다.'
+    : '가로축은 대표님이 가져가는 금액, 세로축은 그때 내는 총 세금(법인세 + 대표님 개인 세금)입니다.';
+  document.getElementById('cband').textContent = curTotal>0
+    ? won(curTotal)+'원을 가져가면 '+(INS_MODE?'부담':'세금')+' '+won(now.total)+'원, 100만 원당 '+won(nowPer)+'원입니다'
+    : '';
 }
 
 /* ── 계산 과정 ─────────────────────────────── */
 function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
 function renderSteps(profit,total,rows){
-  const titles=['지금 받고 계신 방식','바꾼다면','가장 유리한 조합'];
+  const titles=['지금 받고 계신 방식','바꾼다면'];
   const sec=t=>'<tr><td colspan="3" style="padding-top:14px;padding-bottom:4px;color:var(--blue);font-weight:800;font-size:12.5px;letter-spacing:.04em;border-bottom:0">'+t+'</td></tr>';
   let html='';
   rows.forEach((r,i)=>{
@@ -582,6 +569,7 @@ function renderSteps(profit,total,rows){
 const $=id=>document.getElementById(id);
 document.getElementById('i-cit').addEventListener('change',()=>{
   MIN_TAX = document.getElementById('i-cit').value==='1';
+  DEDUCT = num(document.getElementById('i-deduct').value);
   const pf=num(document.getElementById('i-profit').value),
         sal=num(document.getElementById('i-salary').value),
         dv=num(document.getElementById('i-div').value);
@@ -594,7 +582,7 @@ document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('clic
   const pf=num($('i-profit').value), sal=num($('i-salary').value), dv=num($('i-div').value);
   if(pf>0 && sal+dv>0) render(pf,sal+dv,sal);
 }));
-['i-profit','i-salary','i-div'].forEach(id=>{
+['i-profit','i-salary','i-div','i-deduct'].forEach(id=>{
   const el=$(id);
   el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
@@ -604,7 +592,7 @@ $('calc').addEventListener('click',()=>{
   const profit=num($('i-profit').value);
   const salary=num($('i-salary').value);
   const dividend=num($('i-div').value);
-  CUR_SAL=salary; CUR_DIV=dividend;   // 지금 받고 있는 방식으로 기억
+  CUR_SAL=salary; CUR_DIV=dividend; DEDUCT=num($('i-deduct').value);   // 지금 받고 있는 방식·소득공제 기억
   const total=salary+dividend;
   if(profit<=0){alert('당기순이익을 입력해 주세요.');return;}
   if(total<=0){alert('연봉이나 배당 중 하나는 입력해 주세요.');return;}
