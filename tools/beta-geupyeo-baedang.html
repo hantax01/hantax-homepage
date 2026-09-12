@@ -188,11 +188,11 @@
 
         <div class="chartbox" id="chartbox">
           <h3>연봉을 바꿀까요, 배당을 바꿀까요?</h3>
-          <p class="csub" id="csub">가로축은 대표님이 가져가는 돈, 세로축은 한 푼도 가져가지 않으실 때와 비교한 세금입니다.</p>
+          <p class="csub" id="csub">같은 금액을 전액 연봉으로만, 전액 배당으로만 받아 본 비교입니다.</p>
           <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="연봉만 바꿀 때와 배당만 바꿀 때의 세금 변화 그래프"></svg>
           <div class="clegend">
-            <span><i style="background:#1B4A9B"></i>연봉만 바꿀 때</span>
-            <span><i style="background:#C8423A"></i>배당만 바꿀 때</span>
+            <span><i style="background:#1B4A9B"></i>전액 연봉으로 받을 때</span>
+            <span><i style="background:#C8423A"></i>전액 배당으로 받을 때</span>
             <span><i style="background:#0B1E3F"></i>지금</span>
           </div>
           <p class="cband" id="cband"></p>
@@ -376,6 +376,7 @@ function render(profit,total,salary){
   document.getElementById('h-mix').innerHTML='바꾼다면<br><small style="font-weight:400">연봉 '+shortWon(sal)+' · 배당 '+shortWon(div)+'</small>';
   const cells=fn=>rows.map(r=>'<td>'+fn(r)+'</td>').join('');
   const narrow=window.innerWidth<=660;
+  const baseLeft=scenario(profit,0,0).left;   // 한 푼도 가져가지 않았을 때 법인에 남는 돈
   const amt=v=>(narrow?shortWon(v):won(v))+'원';
   // 그 조합을 그대로 둔 채 100만 원을 더 가져가면 세금이 얼마나 더 붙나
   const stepMore=r=>{
@@ -403,6 +404,8 @@ function render(profit,total,salary){
    +'<tr class="tot"><td>합계'
       +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉도 배당도 받지 않으셨을 때와 비교</small></td>'
       +cells(r=>(r.net<0?'−':'')+amt(Math.abs(r.net)))+dcell(rows[0].net,rows[1].net,false)+'</tr>'
+   +'<tr class="sub-row"><td>이때 회사에서 나간 돈'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">세금이 줄어든 만큼 회사 돈도 빠져나갑니다</small></td>'
+      +cells(r=>amt(baseLeft-r.left))+dcell(baseLeft-rows[0].left,baseLeft-rows[1].left,null)+'</tr>'
    +'<tr class="rate"><td>100만 원 더 가져갈 때'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">지금 조합 그대로</small></td>'
       +cells(r=>{ const m=stepMore(r); return m===null?'재원 부족'
         : won(m)+'원<br><small>가져가는 돈의 '+(m/10000).toFixed(1)+'%</small>'; })
@@ -486,20 +489,16 @@ function drawChart(profit){
 
   const sgn=v=>(v<0?'−':'')+shortWon(Math.abs(v));
 
-  // 배당은 지금 그대로 두고 연봉만 바꿔 봅니다. 연봉을 올리면 배당 재원이
-  // 줄기 때문에, 지금 배당을 유지할 수 있는 연봉 상한을 먼저 찾습니다.
-  let lo=0, hi=profit;
-  for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(scenario(profit,m,CUR_DIV).short>0) hi=m; else lo=m; }
-  const salMax=lo, salPts=[];
-  for(let i=0;i<=N;i++){ const v=salMax*i/N, r=scenario(profit,v,CUR_DIV);
-    salPts.push({take:v+r.dividend, dy:r.net}); }
+  // 두 방법을 같은 출발선에서 비교합니다. 전액 연봉으로만, 전액 배당으로만.
+  const salPts=[];
+  for(let i=0;i<=N;i++){ const v=profit*i/N, r=scenario(profit,v,0);
+    salPts.push({take:v, dy:r.net}); }
 
-  // 연봉은 지금 그대로 두고 배당만 바꿔 봅니다
-  const divMax=scenario(profit,CUR_SAL,profit).dividend, divPts=[];
-  for(let i=0;i<=N;i++){ const v=divMax*i/N, r=scenario(profit,CUR_SAL,v);
-    divPts.push({take:CUR_SAL+v, dy:r.net}); }
+  const divMax=scenario(profit,0,profit).dividend, divPts=[];
+  for(let i=0;i<=N;i++){ const v=divMax*i/N, r=scenario(profit,0,v);
+    divPts.push({take:v, dy:r.net}); }
 
-  const xMin=Math.min(salPts[0].take,divPts[0].take), xMax=Math.max(salPts[N].take,divPts[N].take);
+  const xMin=0, xMax=Math.max(salPts[N].take,divPts[N].take);
   const ys=[...salPts,...divPts].map(q=>q.dy);
   let yLo=Math.min(0,...ys), yHi=Math.max(0,...ys);
   const rough=(yHi-yLo)/4||1, mag=Math.pow(10,Math.floor(Math.log10(rough))), nn=rough/mag;
@@ -524,25 +523,23 @@ function drawChart(profit){
     +'<line x1="'+X(nowTake).toFixed(1)+'" y1="'+T+'" x2="'+X(nowTake).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
     +'<path d="'+path(salPts)+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
     +'<path d="'+path(divPts)+'" fill="none" stroke="#C8423A" stroke-width="2.5" stroke-dasharray="5 4"/>'
+    +'<circle cx="'+X(divPts[N].take).toFixed(1)+'" cy="'+Y(divPts[N].dy).toFixed(1)+'" r="3.5" fill="#C8423A"/>'
+    +'<text x="'+Math.min(W-R,X(divPts[N].take)+4).toFixed(1)+'" y="'+(Y(divPts[N].dy)-9).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#C8423A">배당은 여기까지</text>'
     +'<circle cx="'+X(nowTake).toFixed(1)+'" cy="'+Y(scenario(profit,CUR_SAL,CUR_DIV).net).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
     +'<text x="'+X(nowTake).toFixed(1)+'" y="'+(T-8)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금</text>'
     +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+38)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 돈</text>';
 
   const near=(arr,t)=>arr.reduce((a,b)=>Math.abs(b.take-t)<Math.abs(a.take-t)?b:a).dy;
+  const best=salPts.reduce((a,b)=>b.dy<a.dy?b:a);   // 파란 선이 가장 낮은 지점
   const txt=[];
-  if(xMax>nowTake+1000000){
-    const t=nowTake+(xMax-nowTake)/2;
-    txt.push('더 가져가실 때는 '+(near(salPts,t)<near(divPts,t)?'연봉':'배당')+'으로 받는 쪽이 '+(INS_MODE?'부담이':'세금이')+' 적습니다');
-  }
-  if(nowTake>xMin+1000000){
-    const t=nowTake-(nowTake-xMin)/2;
-    txt.push('덜 가져가실 때는 '+(near(salPts,t)<near(divPts,t)?'연봉':'배당')+'을 줄이는 쪽이 더 줄어듭니다');
-  }
+  if(best.dy < -10000)
+    txt.push('연봉 '+shortWon(best.take)+'원 부근에서 '+(INS_MODE?'부담이':'세금이')+' 가장 적습니다');
+  txt.push((near(salPts,nowTake)<near(divPts,nowTake)?'연봉':'배당')+'으로 받는 쪽이 지금 금액대에서는 유리합니다');
   document.getElementById('cband').textContent=txt.join(' · ');
 
   const cs=document.querySelector('.chartbox .csub');
-  if(cs) cs.textContent='가로축은 대표님이 가져가는 돈입니다. 세로축은 한 푼도 가져가지 않으실 때와 비교한 '
-    +(INS_MODE?'세금과 4대보험':'세금')+'이라, 0 아래는 그때보다 덜 내는 구간입니다.';
+  if(cs) cs.textContent='같은 금액을 전액 연봉으로만, 전액 배당으로만 받아 본 비교입니다. 세로축은 한 푼도 가져가지 않으실 때와 비교한 '
+    +(INS_MODE?'세금과 4대보험':'세금')+'이라 0 아래는 그때보다 덜 내는 구간이고, 검은 점이 지금 쓰고 계신 조합입니다.';
 }
 
 /* ── 계산 과정 ─────────────────────────────── */
