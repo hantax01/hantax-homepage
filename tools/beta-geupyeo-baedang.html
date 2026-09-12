@@ -336,12 +336,14 @@ function scenario(profit,salary,dividendWant){
   const ins = INS_MODE ? salaryInsurance(salary) : {np:0,hi:0,ltc:0,total:0,company:0,self:0};
   const cBase=Math.max(0,profit-salary-ins.company);
   const cTax=cit(cBase);
+  const cTaxFull=cit(profit);      // 대표님 연봉을 한 푼도 주지 않았을 때의 법인세
+  const cSaved=cTaxFull-cTax;      // 연봉(과 회사부담 보험료)이 비용이 되어 줄인 법인세
   const after=Math.max(0,cBase-cTax);
   const dividend=Math.min(dividendWant,after);
   const dIns = INS_MODE ? dividendInsurance(dividend) : {ex:0,hi:0,ltc:0,total:0};
   const pt=personTax(salary,dividend,ins.self);
   const total=pt.total+ins.total+dIns.total;   // 대표님 쪽에 붙는 세금·보험료
-  return {salary,dividend,cTax,pTax:pt.total,ins,dIns,total,
+  return {salary,dividend,cTax,cTaxFull,cSaved,pTax:pt.total,ins,dIns,total,
           gross:cTax+total,                    // 법인세까지 더한 전체
           cash:salary+dividend-pt.total-ins.self-dIns.total,
           left:after-dividend, mode:pt.mode, short:Math.max(0,dividendWant-dividend), after, cBase, pt};
@@ -391,14 +393,18 @@ function render(profit,total,salary){
   document.getElementById('res-body').innerHTML=
     '<tr><td>당기순이익'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+(INS_MODE?'연봉과 회사부담 보험료를 뺀 금액':'대표님 연봉을 뺀 금액')+'</small></td>'
       +cells(r=>amt(r.cBase))+dcell(rows[0].cBase,rows[1].cBase,null)+'</tr>'
-   +'<tr><td>법인세</td>'+cells(r=>amt(r.cTax))+dcell(rows[0].cTax,rows[1].cTax,false)+'</tr>'
+   +'<tr><td>연봉이 없다면 낼 법인세'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+(INS_MODE?'연봉도 회사부담 보험료도 없을 때':'비교의 출발점')+'</small></td>'
+      +cells(r=>amt(r.cTaxFull))+dcell(rows[0].cTaxFull,rows[1].cTaxFull,null)+'</tr>'
+   +'<tr><td>연봉으로 줄인 법인세'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">급여는 법인의 비용이라 과세표준이 줄어듭니다</small></td>'
+      +cells(r=>r.cSaved>1000?'−'+amt(r.cSaved):'0원')
+      +dcell(-rows[0].cSaved,-rows[1].cSaved,false)+'</tr>'
    +'<tr><td>대표님 개인 세금'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉과 배당에 붙는 세금</small></td>'+cells(r=>amt(r.pTax)+(r.dividend>0?'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+r.mode+'</small>':''))
       +dcell(rows[0].pTax,rows[1].pTax,false)+'</tr>'
    +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>amt(r.ins.company))+dcell(rows[0].ins.company,rows[1].ins.company,false)+'</tr>'
              +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>amt(r.ins.self))+dcell(rows[0].ins.self,rows[1].ins.self,false)+'</tr>'
              +'<tr><td>배당 건강보험료</td>'+cells(r=>r.dIns.total>0?amt(r.dIns.total):'0원')+dcell(rows[0].dIns.total,rows[1].dIns.total,false)+'</tr>':'')
    +'<tr class="tot"><td>'+(INS_MODE?'세금·보험료 합계':'세금 합계')
-      +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">법인세 + 대표님 개인 세금</small></td>'
+      +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">법인세 + 대표님 개인 세금'+(INS_MODE?' + 4대보험':'')+'</small></td>'
       +cells(r=>amt(r.gross))+dcell(rows[0].gross,rows[1].gross,false)+'</tr>'
    +'<tr class="rate"><td>100만 원 더 가져갈 때'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">지금 조합 그대로</small></td>'
       +cells(r=>{ const m=stepMore(r); return m===null?'재원 부족'
@@ -447,6 +453,8 @@ function render(profit,total,salary){
     msg+='<br><br>연봉과 배당을 어떻게 나누든 '+(INS_MODE?'부담':'세금')+' 차이는 크지 않습니다. 배당 2,000만 원까지는 15.4% 분리과세라 그 구간만 유리하고, 그 위로는 결국 비슷해집니다. '
       +'<b>어떻게 나누느냐보다 얼마를 가져가느냐가 훨씬 큰 차이를 만듭니다.</b>';
   }
+  if(nowRow.cSaved>10000) msg+='<br><br>지금 연봉 '+won(CUR_SAL)+'원 덕분에 법인세를 '+won(nowRow.cSaved)+'원 줄이고 계십니다. '
+    +'연봉을 올리면 이 절감액이 커지지만 근로소득세와 4대보험이 더 빠르게 늘고, <b>배당은 아무리 늘려도 법인세가 줄지 않습니다.</b>';
   if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세 부담이 낮은 방법이 있으니 미리 설계해 두시면 차이가 큽니다.';
   msg+= INS_MODE
     ? '<br><br><span style="font-size:14px;color:var(--mute)">국민연금은 기준소득월액 상한(월 637만 원)이 있어 연봉 7,600만 원쯤부터는 더 늘지 않지만, 건강보험료는 상한 없이 계속 붙습니다. 배당은 연 2,000만 원까지 건강보험료가 붙지 않습니다.</span>'
@@ -563,7 +571,11 @@ function renderSteps(profit,total,rows){
       +row('지방소득세', MIN_TAX
             ? '공제·감면 전 세액 '+won(cp.normal)+' × 10%'
             : '법인세 '+won(cp.normal)+' × 10%', won(cp.local)+'원')
-      +row('법인세 합계','',won(r.cTax)+'원',true);
+      +row('법인세 합계','',won(r.cTax)+'원',true)
+      +row('연봉이 없었다면', INS_MODE
+            ? '과세표준 '+won(profit)+' (연봉도 회사부담 보험료도 없을 때)'
+            : '과세표준 '+won(profit)+' (연봉을 주지 않았을 때)', won(r.cTaxFull)+'원')
+      +row('연봉으로 줄인 법인세',won(r.cTaxFull)+' − '+won(r.cTax),won(r.cSaved)+'원',true);
     if(r.dividend>0 || r.after>0)
       html+=row('배당 재원','법인 과세표준 '+won(r.cBase)+' − 법인세 '+won(r.cTax),won(r.after)+'원');
 
