@@ -321,8 +321,12 @@ function scenario(profit,salary,dividendWant){
   const dividend=Math.min(dividendWant,after);
   const dIns = INS_MODE ? dividendInsurance(dividend) : {ex:0,hi:0,ltc:0,total:0};
   const pt=personTax(salary,dividend,ins.self);
-  const total=cTax+pt.total+ins.total+dIns.total;
-  return {salary,dividend,cTax,pTax:pt.total,ins,dIns,total,
+  // 법인세 중 배당으로 꺼낸 몫만 '가져가는 데 드는 세금'에 넣는다.
+  // 법인에 남겨 두는 이익에 붙은 법인세는 아직 가져간 돈이 아니므로 따로 둔다.
+  const cTaxTaken = after>0 ? cTax*dividend/after : 0;
+  const cTaxLeft = cTax-cTaxTaken;
+  const total=cTaxTaken+pt.total+ins.total+dIns.total;
+  return {salary,dividend,cTax,cTaxTaken,cTaxLeft,pTax:pt.total,ins,dIns,total,
           cash:salary+dividend-pt.total-ins.self-dIns.total,
           left:after-dividend, mode:pt.mode, short:Math.max(0,dividendWant-dividend), after, cBase, pt};
 }
@@ -343,7 +347,8 @@ function render(profit,total,salary){
   const base=rows[0].total;
   const cells=fn=>rows.map(r=>fn(r)).join('');
   document.getElementById('res-body').innerHTML=
-    '<tr><td>법인세</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.cTax)+'원</td>')+'</tr>'
+    '<tr><td>법인세</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.cTaxTaken)+'원'
+      +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+(r.dividend>0?'배당으로 꺼낸 몫':'연봉은 법인 비용이라 붙지 않음')+'</small></td>')+'</tr>'
    +'<tr><td>대표님 개인 세금</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.pTax)+'원<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+r.mode+'</small></td>')+'</tr>'
    +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.ins.company)+'원</td>')+'</tr>'
              +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.ins.self)+'원</td>')+'</tr>'
@@ -363,7 +368,8 @@ function render(profit,total,salary){
    })+'</tr>'
    +'<tr class="gap"><td colspan="3"></td></tr>'
    +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>'<td>'+won(r.cash)+'원</td>')+'</tr>'
-   +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+won(r.left)+'원</td>')+'</tr>';
+   +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+won(r.left)+'원'
+      +(r.cTaxLeft>1000?'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">법인세 '+won(r.cTaxLeft)+'원을 낸 뒤 남은 금액</small>':'')+'</td>')+'</tr>';
 
   document.getElementById('res-sub').textContent=
     '당기순이익 '+won(profit)+'원 · 소득공제 '+won(DEDUCT)+'원'
@@ -399,7 +405,7 @@ function render(profit,total,salary){
     msg+='<br><br>연봉과 배당을 어떻게 나누든 '+(INS_MODE?'부담':'세금')+' 차이는 크지 않습니다. 배당 2,000만 원까지는 15.4% 분리과세라 그 구간만 유리하고, 그 위로는 결국 비슷해집니다. '
       +'<b>어떻게 나누느냐보다 얼마를 가져가느냐가 훨씬 큰 차이를 만듭니다.</b>';
   }
-  if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원도 언젠가 꺼내 쓰려면 같은 세금을 내야 합니다. 퇴직금처럼 세 부담이 낮은 방법이 있으니, 미리 설계해 두시면 차이가 큽니다.';
+  if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세 부담이 낮은 방법이 있으니 미리 설계해 두시면 차이가 큽니다.';
   msg+= INS_MODE
     ? '<br><br><span style="font-size:14px;color:var(--mute)">국민연금은 기준소득월액 상한(월 637만 원)이 있어 연봉 7,600만 원쯤부터는 더 늘지 않지만, 건강보험료는 상한 없이 계속 붙습니다. 배당은 연 2,000만 원까지 건강보험료가 붙지 않습니다.</span>'
     : '<br><br><span style="font-size:14px;color:var(--mute)">여기에 국민연금과 건강보험료가 더 빠집니다. 위 탭에서 <b>4대보험까지 보기</b>를 누르면 함께 계산한 결과를 보실 수 있습니다.</span>';
@@ -465,8 +471,8 @@ function drawChart(profit,totalIn,salary){
 
   const cs=document.querySelector('.chartbox .csub');
   if(cs) cs.textContent = INS_MODE
-    ? '가로축은 대표님이 가져가는 금액, 세로축은 그때 내는 총 부담(법인세 + 개인 세금 + 4대보험)입니다.'
-    : '가로축은 대표님이 가져가는 금액, 세로축은 그때 내는 총 세금(법인세 + 대표님 개인 세금)입니다.';
+    ? '세로축은 그 금액을 꺼내는 데 드는 부담입니다. 법인에 남겨 두는 돈의 법인세는 뺐습니다.'
+    : '세로축은 그 금액을 꺼내는 데 드는 세금입니다. 법인에 남겨 두는 돈의 법인세는 뺐습니다.';
   document.getElementById('cband').textContent = curTotal>0
     ? won(curTotal)+'원을 가져가면 '+(INS_MODE?'부담':'세금')+' '+won(now.total)+'원, 100만 원당 '+won(nowPer)+'원입니다'
     : '';
@@ -552,16 +558,20 @@ function renderSteps(profit,total,rows){
       html+=row('보험료 합계','',won(ins.total+r.dIns.total)+'원',true);
     }
     html+=sec('정리')
+      +(r.after>0 && r.dividend>0
+        ? row('법인세 중 꺼낸 몫','법인세 '+won(r.cTax)+' × 배당 '+won(r.dividend)+' ÷ 배당 재원 '+won(r.after),won(r.cTaxTaken)+'원')
+        : row('법인세 중 꺼낸 몫','배당이 없어 꺼낸 몫도 없음','0원'))
       +row(INS_MODE?'총 부담 합계':'세금 합계',
-           INS_MODE ? '법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax)+' + 보험료 '+won(r.ins.total+r.dIns.total)
-                    : '법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax), won(r.total)+'원',true)
+           INS_MODE ? '법인세 '+won(r.cTaxTaken)+' + 개인 세금 '+won(r.pTax)+' + 보험료 '+won(r.ins.total+r.dIns.total)
+                    : '법인세 '+won(r.cTaxTaken)+' + 개인 세금 '+won(r.pTax), won(r.total)+'원',true)
       +row('가져가는 돈',
            INS_MODE ? '급여 + 배당 − 개인 세금 '+won(r.pTax)+' − 본인부담 보험료 '+won(r.ins.self+r.dIns.total)
                     : '급여 '+won(r.salary)+' + 배당 '+won(r.dividend)+' − 개인 세금 '+won(r.pTax), won(r.cash)+'원',true)
       +row('법인에 남는 돈','배당 재원 '+won(r.after)+' − 배당 '+won(r.dividend),won(r.left)+'원')
+      +(r.cTaxLeft>1000?row('남는 돈에 이미 낸 법인세','법인세 '+won(r.cTax)+' − 꺼낸 몫 '+won(r.cTaxTaken),won(r.cTaxLeft)+'원'):'')
       +'</table></div>';
   });
-  html+='<p class="snote">급여는 법인의 비용이 되어 법인세 과세표준을 줄이지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다. 배당소득이 연 2,000만 원을 넘으면 근로소득과 합쳐 종합과세하되, 법인세와 이중과세되는 부분을 덜어주기 위해 배당가산액을 더했다가 같은 금액을 세액공제하고, 분리과세했을 때보다 적어지지 않도록 둘 중 큰 금액으로 결정합니다. 4대보험과 이전에 쌓인 이익잉여금은 반영하지 않았습니다.</p>';
+  html+='<p class="snote">급여는 법인의 비용이 되어 법인세 과세표준을 줄이지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다. 배당소득이 연 2,000만 원을 넘으면 근로소득과 합쳐 종합과세하되, 법인세와 이중과세되는 부분을 덜어주기 위해 배당가산액을 더했다가 같은 금액을 세액공제하고, 분리과세했을 때보다 적어지지 않도록 둘 중 큰 금액으로 결정합니다. 법인세는 배당으로 꺼낸 몫만 세금 합계에 넣었습니다. 법인에 남겨 두는 이익에 붙은 법인세는 아직 가져간 돈이 아니어서 따로 적었습니다. 이전에 쌓인 이익잉여금은 반영하지 않았습니다.</p>';
   document.getElementById('steps-body').innerHTML=html;
 }
 
