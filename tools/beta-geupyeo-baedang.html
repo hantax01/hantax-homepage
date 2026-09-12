@@ -187,12 +187,12 @@
         </div>
 
         <div class="chartbox" id="chartbox">
-          <h3>얼마를 가져가면 세금이 얼마나 되나요?</h3>
-          <p class="csub" id="csub">가로축은 총액 중 연봉으로 받는 금액, 세로축은 총 세금(법인세 + 대표님 개인 세금)입니다.</p>
-          <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="가져가는 금액에 따른 총 세금 변화 그래프"></svg>
+          <h3>연봉을 바꿀까요, 배당을 바꿀까요?</h3>
+          <p class="csub" id="csub">가로축은 대표님이 가져가는 돈, 세로축은 지금보다 더 내는 세금입니다.</p>
+          <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="연봉만 바꿀 때와 배당만 바꿀 때의 세금 변화 그래프"></svg>
           <div class="clegend">
-            <span><i style="background:#1B4A9B"></i>전액 연봉으로 가져갈 때</span>
-            <span><i style="background:#C8423A"></i>전액 배당으로 가져갈 때</span>
+            <span><i style="background:#1B4A9B"></i>연봉만 바꿀 때</span>
+            <span><i style="background:#C8423A"></i>배당만 바꿀 때</span>
             <span><i style="background:#0B1E3F"></i>지금</span>
           </div>
           <p class="cband" id="cband"></p>
@@ -374,6 +374,14 @@ function render(profit,total,salary){
   const cells=fn=>rows.map(r=>'<td>'+fn(r)+'</td>').join('');
   const narrow=window.innerWidth<=660;
   const amt=v=>(narrow?shortWon(v):won(v))+'원';
+  // 그 조합을 그대로 둔 채 100만 원을 더 가져가면 세금이 얼마나 더 붙나
+  const stepMore=r=>{
+    const cur=r.salary+r.dividend;
+    if(cur<=0) return null;
+    const k=(cur+1000000)/cur;
+    const nx=scenario(profit,Math.round(r.salary*k),Math.round(r.dividend*k));
+    return nx.short>0 ? null : nx.gross-r.gross;
+  };
   const dcell=(a,b,goodUp)=>{               // 바꾼다면 − 지금
     const d=b-a;
     if(Math.abs(d)<1000) return '<td class="dc">같음</td>';
@@ -392,6 +400,11 @@ function render(profit,total,salary){
    +'<tr class="tot"><td>'+(INS_MODE?'세금·보험료 합계':'세금 합계')
       +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">법인세 + 대표님 개인 세금</small></td>'
       +cells(r=>amt(r.gross))+dcell(rows[0].gross,rows[1].gross,false)+'</tr>'
+   +'<tr class="rate"><td>100만 원 더 가져갈 때'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">지금 조합 그대로</small></td>'
+      +cells(r=>{ const m=stepMore(r); return m===null?'재원 부족'
+        : won(m)+'원<br><small>가져가는 돈의 '+(m/10000).toFixed(1)+'%</small>'; })
+      +((stepMore(rows[0])!==null && stepMore(rows[1])!==null)
+        ? dcell(stepMore(rows[0]),stepMore(rows[1]),false) : '<td class="dc"></td>')+'</tr>'
    +'<tr class="gap"><td colspan="4"></td></tr>'
    +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>amt(r.cash))+dcell(rows[0].cash,rows[1].cash,true)+'</tr>'
    +'<tr><td>법인에 남는 돈</td>'+cells(r=>amt(r.left))+dcell(rows[0].left,rows[1].left,true)+'</tr>';
@@ -441,7 +454,7 @@ function render(profit,total,salary){
   document.getElementById('verdict').innerHTML=msg;
 
   renderSteps(profit,total,rows);
-  drawChart(profit,total,sal);
+  drawChart(profit);
   const st=document.getElementById('sltotal');
   if(st){
     const d=rows[1].gross-rows[0].gross;
@@ -458,60 +471,71 @@ function shortWon(v){
   if(v>=10000) return Math.round(v/10000).toLocaleString('ko-KR')+'만';
   return Math.round(v)+'';
 }
-function drawChart(profit,totalIn,salary){
-  const W=720,H=320,L=64,R=22,T=22,B=54,N=60;
-  const curTotal=CUR_SAL+CUR_DIV;
-  const salPts=[], divPts=[];
-  for(let i=0;i<=N;i++){
-    const take=profit*i/N;
-    salPts.push({take,tax:scenario(profit,take,0).total});
-    const rd=scenario(profit,0,take);
-    if(rd.short<=1) divPts.push({take,tax:rd.total});   // 배당 가능한 범위까지만
-  }
-  const maxTake=profit;
-  const rawMax=Math.max(...salPts.map(p=>p.tax), ...divPts.map(p=>p.tax))*1.12||1;
-  const step=(()=>{ const rough=rawMax/4, mag=Math.pow(10,Math.floor(Math.log10(rough))), n=rough/mag;
-    return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag; })();
-  const maxY=step*4;
-  const X=v=>L+(maxTake?v/maxTake:0)*(W-L-R);
-  const Y=v=>H-B-(v/maxY)*(H-T-B);
-  const path=arr=>arr.map((p,i)=>(i?'L':'M')+X(p.take).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' ');
+function drawChart(profit){
+  const el=document.getElementById('chart');
+  const nowTake=CUR_SAL+CUR_DIV;
+  if(nowTake<=0){ el.innerHTML=''; return; }
+  const W=720,H=320,L=70,R=26,T=26,B=58,N=50;
+  const base=scenario(profit,CUR_SAL,CUR_DIV).gross;   // 지금 내고 있는 세금이 기준선
+  const sgn=v=>(v<0?'−':'')+shortWon(Math.abs(v));
+
+  // 배당은 지금 그대로 두고 연봉만 바꿔 봅니다. 연봉을 올리면 배당 재원이
+  // 줄기 때문에, 지금 배당을 유지할 수 있는 연봉 상한을 먼저 찾습니다.
+  let lo=0, hi=profit;
+  for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(scenario(profit,m,CUR_DIV).short>0) hi=m; else lo=m; }
+  const salMax=lo, salPts=[];
+  for(let i=0;i<=N;i++){ const v=salMax*i/N, r=scenario(profit,v,CUR_DIV);
+    salPts.push({take:v+r.dividend, dy:r.gross-base}); }
+
+  // 연봉은 지금 그대로 두고 배당만 바꿔 봅니다
+  const divMax=scenario(profit,CUR_SAL,profit).dividend, divPts=[];
+  for(let i=0;i<=N;i++){ const v=divMax*i/N, r=scenario(profit,CUR_SAL,v);
+    divPts.push({take:CUR_SAL+v, dy:r.gross-base}); }
+
+  const xMin=Math.min(salPts[0].take,divPts[0].take), xMax=Math.max(salPts[N].take,divPts[N].take);
+  const ys=[...salPts,...divPts].map(q=>q.dy);
+  let yLo=Math.min(0,...ys), yHi=Math.max(0,...ys);
+  const rough=(yHi-yLo)/4||1, mag=Math.pow(10,Math.floor(Math.log10(rough))), nn=rough/mag;
+  const st=(nn<=1?1:nn<=2?2:nn<=2.5?2.5:nn<=5?5:10)*mag;
+  yLo=Math.floor(yLo/st)*st; yHi=Math.ceil(yHi/st)*st;
+  const X=v=>L+(xMax>xMin?(v-xMin)/(xMax-xMin):0)*(W-L-R);
+  const Y=v=>H-B-(v-yLo)/((yHi-yLo)||1)*(H-T-B);
+  const path=a=>a.map((q,i)=>(i?'L':'M')+X(q.take).toFixed(1)+' '+Y(q.dy).toFixed(1)).join(' ');
 
   let g='';
-  for(let i=0;i<=4;i++){
-    const v=maxY*i/4, y=Y(v);
-    g+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="#E4E8EF" stroke-width="1"/>'
-      +'<text x="'+(L-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
+  for(let v=yLo; v<=yHi+1; v+=st){
+    const y=Y(v), zero=Math.abs(v)<1;
+    g+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="'+(zero?'#8b98a8':'#E4E8EF')+'" stroke-width="'+(zero?1.5:1)+'"/>'
+      +'<text x="'+(L-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b98a8">'+(zero?'0':sgn(v))+'</text>';
   }
-  [0,maxTake/2,maxTake].forEach((v,i)=>{
-    g+='<text x="'+X(v).toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="'+(i===0?'start':i===2?'end':'middle')+'" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
+  [xMin,nowTake,xMax].forEach((v,i)=>{
+    g+='<text x="'+X(v).toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="'+(i===0?'start':i===2?'end':'middle')+'" font-size="11" fill="'+(i===1?'#0B1E3F':'#8b98a8')+'" font-weight="'+(i===1?'700':'400')+'">'+shortWon(v)+'</text>';
   });
 
-  const now=scenario(profit,CUR_SAL,CUR_DIV);
-  const nowPer = curTotal>0 ? now.total/curTotal*1000000 : 0;
-  const divEnd = divPts.length?divPts[divPts.length-1]:null;
-
-  document.getElementById('chart').innerHTML=
-    g
+  el.innerHTML = g
     +'<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#C9D6F0" stroke-width="1"/>'
+    +'<line x1="'+X(nowTake).toFixed(1)+'" y1="'+T+'" x2="'+X(nowTake).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
     +'<path d="'+path(salPts)+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
-    +(divPts.length?'<path d="'+path(divPts)+'" fill="none" stroke="#C8423A" stroke-width="2.5" stroke-dasharray="5 4"/>':'')
-    +(divEnd?'<circle cx="'+X(divEnd.take).toFixed(1)+'" cy="'+Y(divEnd.tax).toFixed(1)+'" r="3.5" fill="#C8423A"/>'
-      +'<text x="'+Math.min(W-R,X(divEnd.take)+6).toFixed(1)+'" y="'+(Y(divEnd.tax)-8).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#C8423A">배당은 여기까지</text>':'')
-    +(curTotal>0
-      ? '<line x1="'+X(curTotal).toFixed(1)+'" y1="'+T+'" x2="'+X(curTotal).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
-        +'<circle cx="'+X(curTotal).toFixed(1)+'" cy="'+Y(now.total).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
-        +'<text x="'+Math.min(W-R-50,Math.max(L+60,X(curTotal))).toFixed(1)+'" y="'+Math.max(T+12,Y(now.total)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금 '+shortWon(now.total)+'</text>'
-      : '')
-    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+36)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 금액</text>';
+    +'<path d="'+path(divPts)+'" fill="none" stroke="#C8423A" stroke-width="2.5" stroke-dasharray="5 4"/>'
+    +'<circle cx="'+X(nowTake).toFixed(1)+'" cy="'+Y(0).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
+    +'<text x="'+X(nowTake).toFixed(1)+'" y="'+(T-8)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금</text>'
+    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+38)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 돈</text>';
+
+  const near=(arr,t)=>arr.reduce((a,b)=>Math.abs(b.take-t)<Math.abs(a.take-t)?b:a).dy;
+  const txt=[];
+  if(xMax>nowTake+1000000){
+    const t=nowTake+(xMax-nowTake)/2;
+    txt.push('더 가져가실 때는 '+(near(salPts,t)<near(divPts,t)?'연봉':'배당')+'으로 받는 쪽이 '+(INS_MODE?'부담이':'세금이')+' 적습니다');
+  }
+  if(nowTake>xMin+1000000){
+    const t=nowTake-(nowTake-xMin)/2;
+    txt.push('덜 가져가실 때는 '+(near(salPts,t)<near(divPts,t)?'연봉':'배당')+'을 줄이는 쪽이 더 줄어듭니다');
+  }
+  document.getElementById('cband').textContent=txt.join(' · ');
 
   const cs=document.querySelector('.chartbox .csub');
-  if(cs) cs.textContent = INS_MODE
-    ? '세로축은 대표님 개인에게 붙는 세금과 4대보험입니다. 법인세는 배당 여부와 관계없이 정해지므로 뺐습니다.'
-    : '세로축은 대표님 개인에게 붙는 세금입니다. 법인세는 배당 여부와 관계없이 정해지므로 뺐습니다.';
-  document.getElementById('cband').textContent = curTotal>0
-    ? won(curTotal)+'원을 가져갈 때 대표님 개인 '+(INS_MODE?'부담':'세금')+'은 '+won(now.total)+'원, 100만 원당 '+won(nowPer)+'원입니다'
-    : '';
+  if(cs) cs.textContent='가로축은 대표님이 가져가는 돈입니다. 세로축은 지금보다 더 내는 '
+    +(INS_MODE?'세금과 4대보험':'세금')+'이라, 0 아래는 지금보다 덜 내는 구간입니다.';
 }
 
 /* ── 계산 과정 ─────────────────────────────── */
