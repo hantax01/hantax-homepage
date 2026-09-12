@@ -149,7 +149,7 @@
           <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-div">지금 배당 <em>필수</em> <small>받지 않으셨으면 0</small></label>
+          <label for="i-div">지금 배당 <small>받지 않으셨으면 비워 두세요</small></label>
           <div class="unit"><input type="text" id="i-div" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -639,7 +639,10 @@ document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('clic
 }));
 ['i-profit','i-salary','i-div','i-deduct','i-credit'].forEach(id=>{
   const el=$(id);
-  el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+  el.addEventListener('input',()=>{
+    const raw=el.value.replace(/[^0-9]/g,'');
+    el.value = raw==='' ? '' : Number(raw).toLocaleString('ko-KR');
+  });
 });
 
 $('calc').addEventListener('click',()=>{
