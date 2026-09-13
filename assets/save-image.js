@@ -141,25 +141,63 @@ window.HantaxImage = (function () {
     return new Promise(res => cv.toBlob(res, 'image/png'));
   }
 
-  /* 기기가 할 수 있는 가장 편한 방법으로 건네줍니다 */
-  async function deliver(blob, filename) {
+  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+    || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+
+  /* 내려받기가 막힌 인앱 브라우저에서도 저장할 수 있게 이미지를 크게 띄웁니다 */
+  function showImage(blob) {
+    const url = URL.createObjectURL(blob);
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(11,30,63,.94);'
+      + 'overflow:auto;padding:18px;text-align:center;-webkit-overflow-scrolling:touch';
+    const guide = document.createElement('p');
+    guide.style.cssText = 'color:#fff;font-size:14px;line-height:1.7;margin:6px 0 14px';
+    guide.innerHTML = '이미지를 <b>길게 눌러</b> 저장하시거나, 복사해서 대화창에 붙여넣어 주세요.';
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = '계산 결과';
+    img.style.cssText = 'width:100%;max-width:560px;border-radius:8px;display:block;margin:0 auto';
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.textContent = '닫기';
+    close.style.cssText = 'margin:18px auto 6px;display:block;border:0;border-radius:8px;padding:12px 30px;'
+      + 'background:#fff;color:#0B1E3F;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer';
+    const bye = () => { ov.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+    close.addEventListener('click', bye);
+    ov.addEventListener('click', e => { if (e.target === ov) bye(); });
+    ov.appendChild(guide); ov.appendChild(img); ov.appendChild(close);
+    document.body.appendChild(ov);
+  }
+
+  /* 기기가 할 수 있는 가장 편한 방법으로 건네줍니다.
+     blobPromise를 그대로 클립보드에 넘겨야 사용자 조작 흐름이 끊기지 않습니다. */
+  async function deliver(blobPromise, filename) {
+    if (!isMobile) {
+      // PC는 공유 창을 띄워도 카카오톡에 파일이 딸려가지 않아 복사를 먼저 씁니다
+      if (navigator.clipboard && window.ClipboardItem) {
+        try {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
+          return 'copy';
+        } catch (e) {}
+      }
+      const blob = await blobPromise;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      return 'download';
+    }
+
+    const blob = await blobPromise;
     const file = new File([blob], filename, { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try { await navigator.share({ files: [file] }); return 'share'; }
       catch (e) { if (e && e.name === 'AbortError') return null; }
     }
-    if (navigator.clipboard && window.ClipboardItem) {
-      try {
-        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-        return 'copy';
-      } catch (e) {}
-    }
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-    return 'download';
+    // 인앱 브라우저는 내려받아도 사진첩에 남지 않아 화면에 띄워 줍니다
+    showImage(blob);
+    return 'longpress';
   }
 
   function toast(msg) {
@@ -178,20 +216,23 @@ window.HantaxImage = (function () {
     el._t = setTimeout(() => { el.style.opacity = '0'; }, 2600);
   }
 
-  /* 버튼 하나를 표에 붙여 줍니다 */
-  function attach(btn, getTable, getOpt) {
+  /* 버튼 하나를 표에 붙여 줍니다.
+     hooks.before / hooks.after 로 이미지를 만드는 동안만 표를 손볼 수 있습니다. */
+  function attach(btn, getTable, getOpt, hooks) {
+    hooks = hooks || {};
     btn.addEventListener('click', async () => {
       const label = btn.textContent;
       btn.disabled = true; btn.textContent = '이미지를 만드는 중';
+      if (hooks.before) { try { hooks.before(); } catch (e) {} }
       try {
-        const blob = await fromTable(getTable(), getOpt());
-        const how = await deliver(blob, (getOpt().filename || '한택스_계산결과') + '.png');
-        if (how === 'share') toast('보낼 곳을 골라 주세요');
-        else if (how === 'copy') toast('이미지를 복사했습니다. 카카오톡에 붙여넣기 하세요');
+        const blobPromise = fromTable(getTable(), getOpt());
+        const how = await deliver(blobPromise, (getOpt().filename || '한택스_계산결과') + '.png');
+        if (how === 'copy') toast('이미지를 복사했습니다. 카카오톡 대화창에 붙여넣기 하세요');
         else if (how === 'download') toast('이미지를 저장했습니다');
       } catch (e) {
         toast('이미지를 만들지 못했습니다. 화면을 캡처해 주세요');
       } finally {
+        if (hooks.after) { try { hooks.after(); } catch (e) {} }
         btn.disabled = false; btn.textContent = label;
       }
     });

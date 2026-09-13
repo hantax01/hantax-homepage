@@ -373,6 +373,7 @@ function marginal(profit,sal,div,mode){   // 여기서 100만 원을 더 가져�
   return next.gross-base.gross;
 }
 let CUR_SAL=0, CUR_DIV=0, DEDUCT=0, CREDIT=0, OTHER=0;   // 지금 받고 있는 방식 / 소득공제 / 세액공제
+let FORCE_FULL=false;   // 이미지로 만들 때만 금액을 온전히 적습니다
 let NP=0;             // 입력한 당기순이익(대표님 연봉을 뺀 재무제표 숫자)
 let ALT_SAL=0, ALT_DIV=0;   // 슬라이더로 바꿔 보는 조합
 // 연봉을 바꿔 보려면 지금 연봉을 도로 더한 이익에서 출발해야 합니다.
@@ -390,7 +391,7 @@ function render(profit,total,salary){
   document.getElementById('h-now').innerHTML='지금<br><small style="font-weight:400">연봉 '+shortWon(CUR_SAL)+' · 배당 '+shortWon(CUR_DIV)+'</small>';
   document.getElementById('h-mix').innerHTML='바꾼다면<br><small style="font-weight:400">연봉 '+shortWon(sal)+' · 배당 '+shortWon(div)+'</small>';
   const cells=fn=>rows.map(r=>'<td>'+fn(r)+'</td>').join('');
-  const narrow=window.innerWidth<=660;
+  const narrow=!FORCE_FULL && window.innerWidth<=660;
   const baseLeft=scenario(profit,0,0).left;   // 한 푼도 가져가지 않았을 때 법인에 남는 돈
   const amt=v=>(narrow?shortWon(v):won(v))+'원';
   // 그 조합을 그대로 둔 채 100만 원을 더 가져가면 세금이 얼마나 더 붙나
@@ -749,7 +750,7 @@ function initSlider(profit,total,salary){
   $('s-div-v').textContent=won(div)+'원';
 }
 </script>
-<script src="../assets/save-image.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
 <script>
 HantaxImage.attach(
   document.getElementById('save-img'),
@@ -759,7 +760,11 @@ HantaxImage.attach(
     sub: document.getElementById('res-sub').textContent,
     note: '참고용 계산입니다. 실제 신고 전에 세무사와 확인해 주세요.',
     filename: '한택스_연봉배당비교'
-  })
+  }),
+  {
+    before: ()=>{ FORCE_FULL=true;  if(GP()>0 && ALT_SAL+ALT_DIV>0) render(GP(),ALT_SAL+ALT_DIV,ALT_SAL); },
+    after:  ()=>{ FORCE_FULL=false; if(GP()>0 && ALT_SAL+ALT_DIV>0) render(GP(),ALT_SAL+ALT_DIV,ALT_SAL); }
+  }
 );
 </script>
 </body>
