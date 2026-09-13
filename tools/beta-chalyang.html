@@ -229,8 +229,8 @@
               <div class="unit"><input type="text" id="a-loanyear" inputmode="numeric" value="5"><span>년</span></div>
             </div>
             <div>
-              <label for="a-ins">연 보험료 <small>업무전용</small></label>
-              <div class="unit"><input type="text" id="a-ins" inputmode="numeric" value="1,000,000"><span>원</span></div>
+              <label for="a-ins">연 보험료 <small>차값에 맞춰 자동</small></label>
+              <div class="unit"><input type="text" id="a-ins" inputmode="numeric"><span>원</span></div>
             </div>
             <div>
               <label for="a-tax">연 자동차세 <small>지방교육세 포함</small></label>
@@ -240,7 +240,7 @@
               <label for="a-resid">보유기간 뒤 차값 <small>지금 차값 대비</small></label>
               <div class="unit"><input type="text" id="a-resid" inputmode="decimal"><span>%</span></div>
             </div>
-            <p class="an">자동차세는 차종에 맞춰 자동으로 채워집니다. 승용차는 2,000cc를 기준으로 했으니 실제 배기량에 맞게 고쳐 주세요. 보험료와 자동차세는 사는 경우와 리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 리스 상품에 포함되어 있다면 0으로 두세요. 보유기간 뒤 차값은 사는 경우에는 되팔아 회수하는 돈이고, 리스와 렌트에서는 만기에 인수하는 값이라 되팔면 그대로 상계됩니다. 리스와 렌트는 보증금 없는 조건입니다.</p>
+            <p class="an">자동차세는 차종에 맞춰 자동으로 채워집니다. 승용차는 2,000cc를 기준으로 했으니 실제 배기량에 맞게 고쳐 주세요. 보험료는 대인·대물처럼 차값과 무관한 부분에 자기차량손해를 더해 차값에 맞춰 채웁니다. 실제 견적이 있으시면 그 숫자로 고쳐 주세요. 한 번 고치시면 차값을 바꿔도 그대로 둡니다. 보험료와 자동차세는 사는 경우와 리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 리스 상품에 포함되어 있다면 0으로 두세요. 보유기간 뒤 차값은 사는 경우에는 되팔아 회수하는 돈이고, 리스와 렌트에서는 만기에 인수하는 값이라 되팔면 그대로 상계됩니다. 리스와 렌트는 보증금 없는 조건입니다.</p>
           </div>
         </details>
       </div>
@@ -345,6 +345,12 @@ const ACQ={sedan:0.07,van:0.05,light:0.04};   // 취득세율
 const LIGHT_CUT=500000;     // 경차 취득세 감면
 const CARTAX={sedan:520000,van:90000,light:100000};   // 연 자동차세 기본값 (지방교육세 포함)
 const RESID={3:60,5:45,7:33,10:18};           // 보유기간 뒤 남는 차값 (%)
+// 연 보험료 기본값: 대인·대물은 차값과 무관하고 자기차량손해만 차값에 비례합니다
+const INS_BASE=600000, INS_RATE=0.009, INS_LIGHT=0.8;
+function insuranceOf(kind,price){
+  const v=(INS_BASE+price*INS_RATE)*(kind==='light'?INS_LIGHT:1);
+  return Math.round(v/10000)*10000;
+}
 const KIND={sedan:'일반 승용차',van:'승합차·화물차',light:'경차'};
 const METHOD={cash:'현금 구입',loan:'할부 구입',lease:'운용리스',rent:'장기렌트'};
 const OWNER={corp:'법인 명의',person:'개인사업자 명의'};
@@ -499,6 +505,8 @@ function shortWon(v){
   if(Math.abs(v)>=10000) return Math.round(v/10000).toLocaleString('ko-KR')+'만';
   return Math.round(v)+'';
 }
+// 차트에서 차값을 바꿀 때 보험료도 함께 움직입니다 (직접 고치신 경우는 그대로)
+const atPrice=(c,p)=>Object.assign({},c,{price:p,insurance:insTouched?c.insurance:insuranceOf(c.kind,p)});
 function drawChart(c,owner){
   const W=720,H=320,L=68,R=22,T=22,B=54,N=48;
   const maxX=Math.max(c.price*2,60000000);
@@ -507,7 +515,7 @@ function drawChart(c,owner){
   ms.forEach(m=>series[m]=[]);
   for(let i=0;i<=N;i++){
     const p=Math.max(1000000,maxX*i/N);
-    ms.forEach(m=>series[m].push({p,net:scenario(m,owner,Object.assign({},c,{price:p})).net}));
+    ms.forEach(m=>series[m].push({p,net:scenario(m,owner,atPrice(c,p)).net}));
   }
   const all=ms.flatMap(m=>series[m].map(s=>s.net));
   const rawMax=Math.max(...all)*1.1||1;
@@ -539,7 +547,7 @@ function drawChart(c,owner){
   document.getElementById('chart').innerHTML=g;
 
   // 방법이 뒤바뀌는 지점 찾기
-  const winner=p=>ms.map(m=>({m,net:scenario(m,owner,Object.assign({},c,{price:p})).net})).sort((a,b)=>a.net-b.net)[0].m;
+  const winner=p=>ms.map(m=>({m,net:scenario(m,owner,atPrice(c,p)).net})).sort((a,b)=>a.net-b.net)[0].m;
   let flip=null, w0=winner(1000000);
   for(let i=1;i<=N;i++){ const p=maxX*i/N; if(winner(p)!==w0){ flip=p; break; } }
   document.getElementById('cband').textContent=
@@ -594,6 +602,13 @@ function syncCarTax(){
 function syncResid(){
   document.getElementById('a-resid').value=RESID[document.getElementById('i-years').value];
 }
+let insTouched=false;   // 직접 고치신 뒤에는 자동으로 덮어쓰지 않습니다
+function syncIns(){
+  if(insTouched) return;
+  document.getElementById('a-ins').value=
+    insuranceOf(document.getElementById('i-kind').value,num(document.getElementById('i-price').value)).toLocaleString('ko-KR');
+}
+document.getElementById('a-ins').addEventListener('input',()=>{insTouched=true;});
 function readInputs(){
   const f=document.getElementById('i-form').value;
   const years=Number(document.getElementById('i-years').value);
@@ -626,7 +641,7 @@ document.getElementById('calc').addEventListener('click',()=>{
 ['i-form','i-vat','i-book','i-years','i-driver','i-hascar','i-fund','i-kind'].forEach(id=>
   document.getElementById(id).addEventListener('change',()=>{
     if(id==='i-form') syncForm();
-    if(id==='i-kind') syncCarTax();
+    if(id==='i-kind'){ syncCarTax(); syncIns(); }
     if(id==='i-years') syncResid();
     if(shown()) render();
   }));
@@ -642,7 +657,7 @@ function initSlider(price){
       const v=Number(sp.value);
       document.getElementById('i-price').value=v.toLocaleString('ko-KR');
       document.getElementById('s-price-v').textContent=won(v)+'원';
-      render();
+      syncIns(); render();
     });
     document.getElementById('toBox').addEventListener('click',e=>{
       e.preventDefault();
@@ -665,7 +680,8 @@ function initSlider(price){
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
-syncForm(); syncCarTax(); syncResid();
+document.getElementById('i-price').addEventListener('input',syncIns);
+syncForm(); syncCarTax(); syncResid(); syncIns();
 </script>
 </body>
 </html>
