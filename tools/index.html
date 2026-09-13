@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세금 계산기 (준비 중) | 한택스</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=30">
+<style>
+.beta{max-width:760px;margin:0 auto 34px;background:var(--seal-soft);border-radius:12px;padding:18px 22px;
+  font-size:14px;color:var(--char);line-height:1.7}
+.beta b{color:var(--seal)}
+.tools{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.tool{display:block;border:1px solid var(--line);border-radius:14px;padding:26px 28px;background:#fff;
+  text-decoration:none;transition:border-color .15s,transform .15s,box-shadow .15s}
+.tool:hover{border-color:var(--blue-line);transform:translateY(-2px);box-shadow:0 8px 24px rgba(11,30,63,.08)}
+.tool .no{display:block;font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--blue);margin-bottom:12px}
+.tool b{display:block;font-family:var(--serif);font-size:21px;font-weight:900;color:var(--ink);
+  letter-spacing:-.02em;line-height:1.4;margin-bottom:10px}
+.tool p{font-size:14px;color:var(--mute);line-height:1.7;margin:0}
+.tool .go{display:inline-block;margin-top:16px;font-size:13.5px;font-weight:700;color:var(--blue)}
+.note{max-width:900px;margin:34px auto 0;font-size:13px;color:var(--mute);line-height:1.8;
+  padding-top:20px;border-top:1px solid var(--line)}
+@media(max-width:720px){
+.tools{grid-template-columns:1fr;gap:16px}
+.tool{padding:22px 24px}
+.tool b{font-size:19px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>세금 계산기</h1>
+    <p class="lead">대표님들께서 자주 물어보시는 결정을 숫자로 먼저 확인해 보시라고 만들었습니다. 금액을 넣으시면 계산 과정까지 펼쳐 보실 수 있습니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <p class="beta"><b>아직 다듬고 있는 화면입니다.</b> 세법 개정과 회사 사정에 따라 결과가 달라질 수 있으니, 실제 결정 전에는 꼭 상담으로 확인해 주세요.</p>
+
+    <div class="tools">
+      <a class="tool" href="beta-bubin-jeonhwan.html">
+        <span class="no">01</span>
+        <b>법인전환, 세금이<br>얼마나 달라질까요?</b>
+        <p>지금처럼 개인사업자로 두는 경우와 법인으로 바꿔 대표님 연봉을 정하는 경우를 나란히 놓고 비교합니다. 4대보험까지 함께 보실 수 있습니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+
+      <a class="tool" href="beta-geupyeo-baedang.html">
+        <span class="no">02</span>
+        <b>회사 돈을 가져가면<br>세금이 얼마나 붙나요?</b>
+        <p>법인에 쌓인 이익을 연봉이나 배당으로 꺼낼 때 세금이 얼마나 늘어나는지 봅니다. 연봉이 법인세를 줄이는 효과까지 함께 계산합니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+
+      <a class="tool" href="beta-jeungyeo.html">
+        <span class="no">03</span>
+        <b>증여, 세금이<br>얼마나 나올까요?</b>
+        <p>지난 10년 동안 받은 재산을 함께 묶어 계산합니다. 전에 받으신 것을 먼저 적고 이번에 받을 금액을 넣어 보세요.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+
+      <a class="tool" href="beta-chalyang.html">
+        <span class="no">04</span>
+        <b>업무용 차량, 사는 게<br>나을까요 빌리는 게 나을까요?</b>
+        <p>현금 구입과 할부, 리스와 장기렌트를 나란히 놓고 세금까지 따져 봅니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+    </div>
+
+    <p class="note">
+      계산 결과는 참고용입니다. 실제 세액은 회사의 자산 구성, 그동안 쌓인 이익잉여금, 받고 계신 공제와 감면에 따라 달라집니다.
+      결과 화면 아래 <b>결과를 이미지로 저장</b>을 누르시면 표를 그대로 저장하거나 카카오톡으로 보내실 수 있습니다.
+    </p>
+
+    <div class="art-cta" style="margin-top:40px">
+      <p>우리 회사는 어떻게 하는 게 좋을까요?</p>
+      <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector('.menu-btn'), nl=document.getElementById('nav-links');
+if(mb) mb.addEventListener('click',()=>{
+  const open=nl.classList.toggle('on');
+  mb.setAttribute('aria-expanded',open?'true':'false');
+});
+</script>
+</body>
+</html>
