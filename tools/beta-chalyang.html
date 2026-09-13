@@ -213,12 +213,12 @@
           <summary>리스료와 할부이자 같은 가정값</summary>
           <div class="ab">
             <div>
-              <label for="a-lease">월 리스료 <small>차값 대비</small></label>
-              <div class="unit"><input type="text" id="a-lease" inputmode="decimal" value="1.7"><span>%</span></div>
+              <label for="a-lease">월 리스료 <small>보증금에 맞춰 자동</small></label>
+              <div class="unit"><input type="text" id="a-lease" inputmode="decimal"><span>%</span></div>
             </div>
             <div>
-              <label for="a-rent">월 렌트료 <small>차값 대비</small></label>
-              <div class="unit"><input type="text" id="a-rent" inputmode="decimal" value="2.0"><span>%</span></div>
+              <label for="a-rent">월 렌트료 <small>보증금에 맞춰 자동</small></label>
+              <div class="unit"><input type="text" id="a-rent" inputmode="decimal"><span>%</span></div>
             </div>
             <div>
               <label for="a-loan">할부 연이자율</label>
@@ -237,10 +237,18 @@
               <div class="unit"><input type="text" id="a-tax" inputmode="numeric"><span>원</span></div>
             </div>
             <div>
-              <label for="a-resid">보유기간 뒤 차값 <small>지금 차값 대비</small></label>
+              <label for="a-resid">보유기간 뒤 차값 <small>팔 때 받는 시세</small></label>
               <div class="unit"><input type="text" id="a-resid" inputmode="decimal"><span>%</span></div>
             </div>
-            <p class="an">자동차세는 차종에 맞춰 자동으로 채워집니다. 승용차는 2,000cc를 기준으로 했으니 실제 배기량에 맞게 고쳐 주세요. 보험료는 대인·대물처럼 차값과 무관한 부분에 자기차량손해를 더해 차값에 맞춰 채웁니다. 실제 견적이 있으시면 그 숫자로 고쳐 주세요. 한 번 고치시면 차값을 바꿔도 그대로 둡니다. 보험료와 자동차세는 사는 경우와 리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 리스 상품에 포함되어 있다면 0으로 두세요. 보유기간 뒤 차값은 사는 경우에는 되팔아 회수하는 돈이고, 리스와 렌트에서는 만기에 인수하는 값이라 되팔면 그대로 상계됩니다. 리스와 렌트는 보증금 없는 조건입니다.</p>
+            <div>
+              <label for="a-dep">리스·렌트 보증금 <small>차값 대비</small></label>
+              <div class="unit"><input type="text" id="a-dep" inputmode="decimal" value="30"><span>%</span></div>
+            </div>
+            <div>
+              <label for="a-buy">만기 인수가 <small>계약서상 잔가</small></label>
+              <div class="unit"><input type="text" id="a-buy" inputmode="decimal" value="30"><span>%</span></div>
+            </div>
+            <p class="an">자동차세는 차종에 맞춰 자동으로 채워집니다. 승용차는 2,000cc를 기준으로 했으니 실제 배기량에 맞게 고쳐 주세요. 보험료는 대인·대물처럼 차값과 무관한 부분에 자기차량손해를 더해 차값에 맞춰 채웁니다. 실제 견적이 있으시면 그 숫자로 고쳐 주세요. 한 번 고치시면 차값을 바꿔도 그대로 둡니다. 보험료와 자동차세는 사는 경우와 리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 리스 상품에 포함되어 있다면 0으로 두세요. 보유기간 뒤 차값은 팔 때 받는 시세이고, 만기 인수가는 계약서에 적힌 잔가입니다. 리스와 렌트는 보증금을 걸고 만기에 인수가로 사서 시세대로 파는 조건으로 계산합니다. 보증금을 많이 걸수록 월 요율이 내려가도록 자동으로 맞추니, 실제 견적이 있으시면 요율을 직접 넣어 주세요.</p>
           </div>
         </details>
       </div>
@@ -293,7 +301,7 @@
         · 업무전용자동차보험은 임직원만 운전할 수 있는 특약입니다. 법인은 가입하지 않으면 차량 비용이 전액 인정되지 않습니다.<br>
         · 취득세는 승용차 7%, 승합차와 화물차 5%, 경차 4%로 계산하고 경차는 50만 원을 감면했습니다. 공채 매입 비용은 넣지 않았습니다.<br>
         · <b>보험료와 자동차세</b>는 사는 경우와 리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 두 금액 모두 감가상각 한도 밖이라 전액 비용으로 인정됩니다. 가정값에서 고치실 수 있습니다.<br>
-        · <b>보유기간이 끝난 뒤 남는 차값</b>은 사는 경우에는 되팔아 그대로 회수합니다. 리스와 렌트는 만기에 그 값을 내고 인수해야 팔 수 있으므로 인수금과 매각대금이 서로 상계됩니다. 인수하실 때 취득세가 다시 붙는 점은 넣지 않았습니다.<br>· 리스료와 렌트료에는 리스사와 렌터카사의 <b>금융비용과 마진이 이미 들어 있습니다.</b> 그래서 할부처럼 이자를 따로 받지 않습니다. 월 요율을 실제 견적으로 고치시면 그 조건이 그대로 반영됩니다.<br>
+        · <b>리스와 렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건</b>으로 계산합니다. 보증금은 맡겼다가 돌려받아 순액이 0이지만 그동안 자금이 묶입니다. 만기 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다.<br>· 리스료와 렌트료에는 리스사와 렌터카사의 <b>금융비용과 마진이 이미 들어 있습니다.</b> 그래서 할부처럼 이자를 따로 받지 않습니다. 보증금을 많이 걸수록 월 요율이 내려가도록 자동으로 맞추며, 실제 견적을 넣으시면 그 숫자를 그대로 씁니다.<br>
         · 유류비와 통행료처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다.<br>
         · 리스는 부가가치세가 없는 금융용역이고, 장기렌트는 부가가치세가 붙습니다.<br>
         · 세금은 지방소득세를 포함해 계산했습니다. 법인세율과 종합소득세율은 2026년 기준입니다.
@@ -345,6 +353,9 @@ const ACQ={sedan:0.07,van:0.05,light:0.04};   // 취득세율
 const LIGHT_CUT=500000;     // 경차 취득세 감면
 const CARTAX={sedan:520000,van:90000,light:100000};   // 연 자동차세 기본값 (지방교육세 포함)
 const RESID={3:60,5:45,7:33,10:18};           // 보유기간 뒤 남는 차값 (%)
+// 보증금 없는 조건의 월 요율. 보증금을 걸면 리스사 조달원금이 줄어 그만큼 요율이 내려갑니다
+const LEASE0=1.525, RENT0=1.725, DEP_EFFECT=0.00583;
+const rateOf=(base,dep)=>Math.max(0.3,Math.round((base-dep*DEP_EFFECT)*1000)/1000);
 // 연 보험료 기본값: 대인·대물은 차값과 무관하고 자기차량손해만 차값에 비례합니다
 const INS_BASE=600000, INS_RATE=0.009, INS_LIGHT=0.8;
 function insuranceOf(kind,price){
@@ -390,7 +401,7 @@ function scenario(method,owner,c){
   const yrs=c.years, supply=c.price/1.1, vat=c.price-supply;
   const upkeep=(c.insurance+c.carTax)*yrs;               // 보험료와 자동차세 (렌트는 렌트료에 포함)
   const sale=c.price*c.resid/100;                        // 보유기간이 끝난 뒤 남는 차값
-  let cashOut=0,cost=0,carry=0,vatCredit=0,payback=yrs,detail=[];
+  let cashOut=0,cost=0,carry=0,vatCredit=0,payback=yrs,deposit=0,detail=[];
 
   if(method==='cash'||method==='loan'){
     let acq=supply*ACQ[c.kind];
@@ -421,20 +432,27 @@ function scenario(method,owner,c){
     const part=base*(isLease?LEASE_DEP:RENT_DEP);        // 감가상각비 상당액
     const d=capYears(part/yrs,yrs,cap);
     const add=isLease?upkeep:0;                          // 렌트료에는 보험료와 자동차세가 들어 있습니다
-    cost=base+add;                                       // 리스료와 렌트료는 결국 전액 비용
+    // 만기에 계약서상 잔가로 인수하고 시세대로 되팝니다. 보증금은 예치했다 돌려받아 순액이 0입니다
+    const buyout=c.price*c.buyout/100;
+    const buyTax=buyout*ACQ[c.kind];
+    const gain=sale-buyout-buyTax;                       // 인수해서 팔 때 남는 돈
+    cost=base+add-gain;                                  // 리스료와 렌트료는 결국 전액 비용
     carry=d.carry;
     payback=cap<Infinity?Math.max(yrs,Math.ceil(part/cap)):yrs;
-    cashOut=total+add;
+    cashOut=total+add-gain;
+    deposit=c.price*c.deposit/100;
     detail=[[isLease?'총 리스료':'총 렌트료','월 '+won(c.price*rate/100)+' × '+(yrs*12)+'개월',won(total)+'원'],
             ['감가상각비 상당액',(isLease?'리스료의 93%':'렌트료의 70%')+(cap<Infinity?' · 연 800만 원 한도':' · 한도 없음'),won(part)+'원'],
             ['보험료·자동차세',isLease?'연 '+won(c.insurance+c.carTax)+' × '+yrs+'년 · 따로 부담':'렌트료에 들어 있습니다',isLease?won(add)+'원':'포함'],
-            ['만기 인수 후 매각','인수금 '+won(sale)+' 내고 되팔아 '+won(sale)+' 회수 · 서로 상계','0원'],
+            ['보증금','계약 때 '+won(deposit)+' 맡기고 만기에 돌려받습니다','0원'],
+            ['만기 인수금','계약서상 잔가 '+c.buyout+'% + 취득세 '+won(buyTax),'+ '+won(buyout+buyTax)+'원'],
+            ['되팔아 회수','시세 '+c.resid+'%로 넘깁니다','− '+won(sale)+'원'],
             ['다 넣는 데 걸리는 기간',cap<Infinity?'연 800만 원씩 '+won(part)+'원을 털어야 합니다':'한도가 없어 낸 해에 바로 끝납니다',payback+'년']];
   }
 
   const income=owner==='corp'?c.corpIncome:c.personIncome;
   const save=(taxOf(owner,income)-taxOf(owner,Math.max(0,income-cost/yrs)))*yrs+vatCredit;
-  return {method,owner,cashOut,cost,carry,vatCredit,save,net:cashOut-save,payback,detail,cap};
+  return {method,owner,cashOut,cost,carry,vatCredit,save,net:cashOut-save,payback,deposit,detail,cap};
 }
 
 function compute(c){
@@ -458,7 +476,7 @@ function render(){
     const tag=(c.fund&&(r.method==='lease'||r.method==='rent'))?'<span class="tag">자금출처 유리</span>':'';
     html+='<tr'+(r===best?' class="best"':'')+'>'
       +'<td><span class="nm">'+METHOD[r.method]+'</span>'+tag+'</td>'
-      +'<td>'+won(r.cashOut)+'원</td>'
+      +'<td>'+won(r.cashOut)+'원'+(r.deposit>0?'<small>보증금 '+won(r.deposit)+'원이 묶입니다</small>':'')+'</td>'
       +'<td>'+r.payback+'년'+(r.carry>0?'<small>'+won(r.carry)+'원이 '+c.years+'년 뒤로 넘어감</small>':'<small>'+c.years+'년 안에 끝남</small>')+'</td>'
       +'<td>'+won(r.save)+'원'+(r.vatCredit>0?'<small>부가세 '+won(r.vatCredit)+'원 포함</small>':'')+'</td>'
       +'<td>'+won(r.net)+'원</td></tr>';
@@ -602,6 +620,15 @@ function syncCarTax(){
 function syncResid(){
   document.getElementById('a-resid').value=RESID[document.getElementById('i-years').value];
 }
+let rateTouched=false;  // 견적 요율을 직접 넣으시면 보증금을 바꿔도 그대로 둡니다
+function syncRate(){
+  if(rateTouched) return;
+  const dep=dec(document.getElementById('a-dep').value);
+  document.getElementById('a-lease').value=rateOf(LEASE0,dep);
+  document.getElementById('a-rent').value=rateOf(RENT0,dep);
+}
+['a-lease','a-rent'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{rateTouched=true;}));
+document.getElementById('a-dep').addEventListener('input',syncRate);
 let insTouched=false;   // 직접 고치신 뒤에는 자동으로 덮어쓰지 않습니다
 function syncIns(){
   if(insTouched) return;
@@ -629,7 +656,9 @@ function readInputs(){
     loanYears:Math.max(1,num(document.getElementById('a-loanyear').value)),
     insurance:num(document.getElementById('a-ins').value),
     carTax:num(document.getElementById('a-tax').value),
-    resid:dec(document.getElementById('a-resid').value)};
+    resid:dec(document.getElementById('a-resid').value),
+    deposit:dec(document.getElementById('a-dep').value),
+    buyout:dec(document.getElementById('a-buy').value)};
 }
 document.getElementById('calc').addEventListener('click',()=>{
   const c=readInputs();
@@ -645,7 +674,7 @@ document.getElementById('calc').addEventListener('click',()=>{
     if(id==='i-years') syncResid();
     if(shown()) render();
   }));
-['a-lease','a-rent','a-loan','a-loanyear','a-ins','a-tax','a-resid'].forEach(id=>
+['a-lease','a-rent','a-loan','a-loanyear','a-ins','a-tax','a-resid','a-dep','a-buy'].forEach(id=>
   document.getElementById(id).addEventListener('input',()=>{if(shown())render();}));
 
 /* ── 슬라이더 ──────────────────────────────── */
@@ -681,7 +710,7 @@ function initSlider(price){
   el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 document.getElementById('i-price').addEventListener('input',syncIns);
-syncForm(); syncCarTax(); syncResid(); syncIns();
+syncForm(); syncCarTax(); syncResid(); syncIns(); syncRate();
 </script>
 </body>
 </html>
