@@ -426,9 +426,8 @@ function drawChart(g,r){
     const to=lim===Infinity?null:atBase(lim);
     return {rate,from,to:to===null?Infinity:to};
   });
-  // 다음 세율 구간이 화면 안에 들어오도록 가로축을 잡습니다
   const next=bands.find(b=>b.from!==null&&b.from>r.amount+1);
-  const maxX=Math.max(r.amount*1.5,next?next.from*1.25:0,r.free*1.6,100000000);
+  const maxX=Math.max(r.amount,10000000);   // 가로축은 이번에 받을 금액까지만 보여 줍니다
 
   const xs=new Set([r.amount]);
   for(let i=0;i<=N;i++) xs.add(maxX*i/N);
