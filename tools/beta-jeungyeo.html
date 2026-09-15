@@ -185,7 +185,7 @@
       </div>
 
       <div class="slide" id="slide">
-        <div class="sl"><label for="s-amt">이번에 받을 금액</label><input type="range" id="s-amt" min="0" max="1000000000" step="1000000"><b id="s-amt-v"></b></div>
+        <div class="sl"><label for="s-amt">이번에 받을 금액</label><input type="range" id="s-amt" min="0" max="1000" step="1"><b id="s-amt-v"></b></div>
         <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
       </div>
 
@@ -546,12 +546,20 @@ document.getElementById('calc').addEventListener('click',()=>{
   document.getElementById(id).addEventListener('change',()=>{if(shown())render();}));
 
 /* ── 슬라이더 ──────────────────────────────── */
+// 로그 눈금: 1천만 원부터 100억 원까지 한 막대에 담고, 작은 금액일수록 촘촘하게 움직입니다
+const S_MIN=10000000, S_MAX=10000000000;
+function posToAmt(t){
+  const v=S_MIN*Math.pow(S_MAX/S_MIN,t/1000);
+  const unit=v<100000000?1000000:v<1000000000?10000000:100000000;   // 1억 미만 100만, 10억 미만 1천만, 그 위 1억 단위
+  return Math.round(v/unit)*unit;
+}
+const amtToPos=v=>Math.round(1000*Math.log(Math.min(Math.max(v,S_MIN),S_MAX)/S_MIN)/Math.log(S_MAX/S_MIN));
 let sliderReady=false;
 function initSlider(amount){
   const sa=document.getElementById('s-amt');
   if(!sliderReady){
     sa.addEventListener('input',()=>{
-      const v=Number(sa.value);
+      const v=posToAmt(Number(sa.value));
       document.getElementById('i-amount').value=v.toLocaleString('ko-KR');
       document.getElementById('s-amt-v').textContent=won(v)+'원';
       render();
@@ -564,10 +572,7 @@ function initSlider(amount){
     });
     sliderReady=true;
   }
-  const max=Math.max(300000000,Math.ceil(amount*3/10000000)*10000000);
-  sa.max=max;
-  sa.step=Math.max(1000000,Math.round(max/300/1000000)*1000000);
-  sa.value=amount;
+  sa.value=amtToPos(amount);
   document.getElementById('s-amt-v').textContent=won(amount)+'원';
   document.getElementById('slide').style.display='block';
   document.getElementById('sim-box').style.display='none';
