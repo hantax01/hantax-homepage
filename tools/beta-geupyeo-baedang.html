@@ -17,6 +17,15 @@
 .sim-in .fw{grid-column:1/-1}
 .sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
 .sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
 .sim label em{display:inline-block;font-style:normal;font-size:11px;font-weight:700;color:var(--seal);background:var(--seal-soft);border-radius:4px;padding:2px 6px;margin-left:4px;vertical-align:1px}
 .sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
 .sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
@@ -143,34 +152,34 @@
     <div class="sim">
       <div class="sim-in" id="sim-box">
         <div>
-          <label for="i-profit">당기순이익 <em>필수</em> <small>연봉을 빼고 난 재무제표 숫자</small></label>
+          <label for="i-profit">당기순이익 <em>필수</em> <small>연봉을 빼고 난 재무제표 숫자</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 결산서의 손익계산서 맨 아래에 있는 금액입니다. 대표님 연봉은 이미 비용으로 빠져 있으니 적힌 숫자를 그대로 넣으시면 됩니다. 아직 결산 전이면 올해 예상 이익을 넣어 보세요.">?</button></label>
           <div class="unit"><input type="text" id="i-profit" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-cit">법인세 부담 <small>공제·감면이 많은 회사인지</small></label>
+          <label for="i-cit">법인세 부담 <small>공제·감면이 많은 회사인지</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="연구개발비나 통합고용 같은 공제와 감면을 많이 받는 회사는 세금을 무한정 줄이지 못하고 최저한세만큼은 내야 합니다. 작년 법인세 신고서에서 감면액이 컸다면 두 번째를 골라 주세요. 잘 모르시면 첫 번째로 두셔도 됩니다.">?</button></label>
           <select id="i-cit">
             <option value="0">일반 (과세표준 2억 원 이하 10%, 초과 20%)</option>
             <option value="1">공제·감면이 많은 회사 (최저한세 7%)</option>
           </select>
         </div>
         <div>
-          <label for="i-salary">지금 연봉 <em>필수</em> <small>올해 받기로 한 금액, 없으면 0</small></label>
+          <label for="i-salary">지금 연봉 <em>필수</em> <small>올해 받기로 한 금액, 없으면 0</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="대표님이 급여로 받기로 정하신 1년치 금액입니다. 4대보험과 세금을 떼기 전의 세전 금액으로 넣어 주세요. 월급이 정해져 있다면 12를 곱하시면 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-div">지금 배당 <small>받지 않으셨으면 비워 두세요</small></label>
+          <label for="i-div">지금 배당 <small>받지 않으셨으면 비워 두세요</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사에 쌓인 이익을 주주에게 나눠 주는 돈입니다. 주주총회에서 정하며, 법인세를 낸 뒤의 이익에서 나갑니다. 연봉과 달리 회사의 비용이 아니라 법인세를 줄이지 못합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-div" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-other">다른 소득 <small>임대·사업 등 회사 밖 소득</small></label>
+          <label for="i-other">다른 소득 <small>임대·사업 등 회사 밖 소득</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사 밖에서 버시는 소득입니다. 상가 임대료, 다른 사업장의 이익, 강의료나 원고료 같은 기타소득이 해당합니다. 근로소득과 합쳐서 세율 구간이 정해지기 때문에 넣어 주셔야 결과가 정확합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-other" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small></label>
+          <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="세금을 매기기 전에 소득에서 먼저 빼 주는 금액입니다. 부양가족 공제, 국민연금 보험료, 주택청약저축 등이 들어갑니다. 연말정산 원천징수영수증에서 종합소득공제 합계를 보시면 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-deduct" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-credit">세액공제 합계 <small>연금계좌·기부금 등</small></label>
+          <label for="i-credit">세액공제 합계 <small>연금계좌·기부금 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="계산이 끝난 세금에서 직접 빼 주는 금액입니다. 연금저축, 보장성 보험료, 의료비, 교육비, 기부금 등이 해당합니다. 소득공제가 소득을 줄이는 것이라면 세액공제는 세금 자체를 줄여 줍니다. 원천징수영수증의 세액공제 합계를 넣어 주세요.">?</button></label>
           <div class="unit"><input type="text" id="i-credit" inputmode="numeric"><span>원</span></div>
         </div>
       </div>
@@ -755,6 +764,7 @@ function initSlider(profit,total,salary){
   $('s-div-v').textContent=won(div)+'원';
 }
 </script>
+<script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
 <script>
 HantaxImage.attach(

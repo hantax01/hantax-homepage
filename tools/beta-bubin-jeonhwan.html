@@ -16,6 +16,15 @@
 .sim-in{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
 .sim-in .fw{grid-column:1/-1}
 .sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
 .sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
 .sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
 .sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
@@ -128,15 +137,15 @@
     <div class="sim">
       <div class="sim-in" id="sim-box">
         <div>
-          <label for="i-income">연 소득금액 <small>매출에서 비용을 뺀 이익</small></label>
+          <label for="i-income">연 소득금액 <small>매출에서 비용을 뺀 이익</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="1년 매출에서 재료비, 인건비, 임차료 같은 비용을 모두 뺀 금액입니다. 종합소득세 신고서의 소득금액 또는 손익계산서의 당기순이익을 보시면 됩니다. 대표님이 가져가신 돈은 비용이 아니므로 빼지 마세요.">?</button></label>
           <div class="unit"><input type="text" id="i-income" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small></label>
+          <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="세금을 매기기 전에 소득에서 먼저 빼 주는 금액입니다. 부양가족 공제, 국민연금 보험료, 노란우산공제 등이 들어갑니다. 작년 종합소득세 신고서의 소득공제 합계를 넣으시면 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-deduct" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-reduce">감면 종류</label>
+          <label for="i-reduce">감면 종류 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업이 업종과 지역, 규모에 따라 세금을 깎아 주는 제도입니다. 창업한 지 얼마 안 된 회사는 창업중소기업 감면으로 세금을 절반이나 전액 면제받기도 합니다. 작년 신고서에 감면세액이 있었다면 그 종류를 고르시고, 없으면 감면 없음으로 두세요.">?</button></label>
           <select id="i-reduce">
             <option value="0">감면 없음</option>
             <option value="10">중소기업특별세액감면 10%</option>
@@ -147,7 +156,7 @@
           </select>
         </div>
         <div>
-          <label for="i-salary">대표님 연봉 <small>법인전환 시 정할 금액</small></label>
+          <label for="i-salary">대표님 연봉 <small>법인전환 시 정할 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인으로 바꾸면 대표님도 회사에서 급여를 받는 직원이 됩니다. 그 급여는 회사의 비용이 되어 법인세를 줄이지만, 대표님 개인에게는 근로소득세가 붙습니다. 얼마로 정하느냐에 따라 전체 세금이 달라지므로 금액을 바꿔 가며 비교해 보세요.">?</button></label>
           <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
         </div>
       </div>
@@ -536,6 +545,7 @@ function initSlider(income,salary){
   el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 </script>
+<script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
 <script>
 HantaxImage.attach(

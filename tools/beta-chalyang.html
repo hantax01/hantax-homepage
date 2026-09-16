@@ -16,6 +16,15 @@
 .sim-in{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
 .sim-in .fw{grid-column:1/-1}
 .sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
 .sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
 .sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
 .sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
@@ -149,7 +158,7 @@
           </select>
         </div>
         <div>
-          <label for="i-vat">부가가치세</label>
+          <label for="i-vat">부가가치세 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="일반과세자는 매입한 부가가치세를 돌려받지만 간이과세자와 면세사업자는 돌려받지 못합니다. 차량 가격의 10분의 1이 걸린 문제라 결과가 꽤 달라집니다.">?</button></label>
           <select id="i-vat">
             <option value="normal">일반과세</option>
             <option value="free">면세</option>
@@ -157,15 +166,15 @@
           </select>
         </div>
         <div id="w-corp">
-          <label for="i-corp">법인 연간 과세표준 <small>이익에서 세무조정한 금액</small></label>
+          <label for="i-corp">법인 연간 과세표준 <small>이익에서 세무조정한 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인세를 매기는 기준 금액입니다. 회계상 이익에서 세법이 인정하지 않는 비용을 더하고 빼서 조정한 금액으로, 법인세 신고서 첫 장에 나옵니다. 이 금액에 따라 차량 비용으로 줄어드는 세금이 달라집니다.">?</button></label>
           <div class="unit"><input type="text" id="i-corp" inputmode="numeric"><span>원</span></div>
         </div>
         <div id="w-person">
-          <label for="i-person">개인 연간 소득금액 <small>매출에서 비용을 뺀 이익</small></label>
+          <label for="i-person">개인 연간 소득금액 <small>매출에서 비용을 뺀 이익</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="1년 매출에서 비용을 모두 뺀 금액입니다. 종합소득세 신고서의 소득금액을 보시면 됩니다. 소득이 클수록 세율이 높아 차량 비용으로 줄어드는 세금도 커집니다.">?</button></label>
           <div class="unit"><input type="text" id="i-person" inputmode="numeric"><span>원</span></div>
         </div>
         <div id="w-book">
-          <label for="i-book">개인사업자 장부 <small>업무용승용차 한도를 가릅니다</small></label>
+          <label for="i-book">개인사업자 장부 <small>업무용승용차 한도를 가릅니다</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="복식부기는 자산과 부채까지 모두 기록하는 정식 장부이고, 간편장부는 수입과 지출만 적는 간단한 장부입니다. 복식부기 대상이면 업무용승용차 비용이 연 1,500만 원으로 제한되고 운행기록부도 써야 합니다. 매출 규모에 따라 정해지며 잘 모르시면 세무사에게 확인해 보세요.">?</button></label>
           <select id="i-book">
             <option value="double">복식부기의무자</option>
             <option value="simple">간편장부대상자</option>
@@ -182,7 +191,7 @@
           </select>
         </div>
         <div>
-          <label for="i-driver">누가 운전하시나요</label>
+          <label for="i-driver">누가 운전하시나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 차량은 임직원전용 자동차보험에 들어야 비용으로 인정됩니다. 가족이나 직원이 함께 운전한다면 보험 범위를 확인하셔야 합니다. 이 보험에 들지 않으면 비용이 전액 인정되지 않습니다.">?</button></label>
           <select id="i-driver">
             <option value="staff">본인과 직원만</option>
             <option value="family">가족도 운전합니다</option>
@@ -206,7 +215,7 @@
           <p>경차와 9인승 이상 승합차, 화물차는 업무용승용차에 들어가지 않아 비용 한도를 받지 않고 부가가치세도 돌려받습니다.</p>
         </div>
         <div>
-          <label for="i-kind">차량 종류</label>
+          <label for="i-kind">차량 종류 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="경차, 9인승 이상 승합차, 화물차는 부가가치세를 돌려받을 수 있고 업무용승용차 비용 제한도 받지 않습니다. 일반 승용차는 부가가치세를 돌려받지 못하고 연 1,500만 원 한도가 적용됩니다.">?</button></label>
           <select id="i-kind">
             <option value="sedan">일반 승용차 (세단, SUV)</option>
             <option value="van">9인승 이상 승합차, 화물차 (카니발 9인승, 레이 밴 등)</option>
@@ -755,6 +764,7 @@ function initSlider(price){
 document.getElementById('i-price').addEventListener('input',()=>{syncIns(); syncRate();});
 syncForm(); syncCarTax(); syncResid(); syncIns(); syncRate();
 </script>
+<script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
 <script>
 HantaxImage.attach(
