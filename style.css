@@ -232,6 +232,13 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 
 /* ---------- responsive ---------- */
 @media(max-width:880px){
+  /* 메뉴가 일곱 개라 태블릿 폭부터 햄버거로 접습니다 */
+  .menu-btn{display:block}
+  .nav-links{position:fixed;top:70px;left:0;right:0;height:calc(100vh - 70px);background:var(--paper);flex-direction:column;align-items:stretch;gap:0;padding:12px 24px;font-size:17px;transform:translateX(100%);transition:transform .25s;overflow-y:auto}
+  body.menu-open .nav-links{transform:none}
+  body.menu-open{overflow:hidden}
+  .nav-links a{padding:16px 4px;border-bottom:1px solid var(--line)}
+  .nav-links .btn{margin-top:16px;justify-content:center;border-bottom:0;padding:15px}
   .stack-hero{grid-template-columns:1fr 1fr;gap:14px}
   .stack-hero .shot:nth-child(1),.stack-hero .shot:nth-child(2){display:none}
   .row{grid-template-columns:1fr;gap:40px}
@@ -248,12 +255,6 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
   .sec{padding:84px 0}
   .hero{padding:140px 0 84px}
   .hero .lead{font-size:16.5px}
-  .menu-btn{display:block}
-  .nav-links{position:fixed;top:70px;left:0;right:0;height:calc(100vh - 70px);background:var(--paper);flex-direction:column;align-items:stretch;gap:0;padding:12px 24px;font-size:17px;transform:translateX(100%);transition:transform .25s;overflow-y:auto}
-  body.menu-open .nav-links{transform:none}
-  body.menu-open{overflow:hidden}
-  .nav-links a{padding:16px 4px;border-bottom:1px solid var(--line)}
-  .nav-links .btn{margin-top:16px;justify-content:center;border-bottom:0;padding:15px}
   .people,.duo{grid-template-columns:1fr}
   .hstats{display:grid;grid-template-columns:1fr 1fr;gap:22px 16px}
   .hstats b{font-size:22px}
@@ -268,3 +269,16 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
   .page-head{padding:100px 0 36px}.page-head h1{font-size:30px}
   .article{padding:100px 20px 72px}.article h1{font-size:27px}
 }
+
+/* ---------- 메인 세금계산기 ---------- */
+.toolgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px}
+.toolcard{display:flex;flex-direction:column;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:24px 22px 26px;min-height:168px;transition:border-color .15s,transform .15s,box-shadow .15s}
+.toolcard:hover{border-color:var(--blue-line);transform:translateY(-3px);box-shadow:0 10px 26px rgba(11,30,63,.08)}
+.toolcard span{font-size:12.5px;font-weight:800;letter-spacing:.08em;color:var(--blue)}
+.toolcard b{font-family:var(--serif);font-size:19px;font-weight:900;line-height:1.45;color:var(--ink);letter-spacing:-.02em}
+.toolall{margin-top:26px;font-size:15px}
+.toolall a{color:var(--blue);font-weight:700;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.toolall a:hover{border-color:var(--blue)}
+@media(max-width:880px){.toolgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:660px){.toolgrid{grid-template-columns:1fr;gap:12px;margin-top:32px}.toolcard{min-height:0;padding:20px 20px 22px}.toolcard b{font-size:17.5px}}
