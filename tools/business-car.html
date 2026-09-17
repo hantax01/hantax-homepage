@@ -79,12 +79,13 @@
 .slide .sl label{width:110px;margin:0;font-size:14px}
 .slide .sl input{flex:1;accent-color:var(--blue)}
 .slide .sl b{width:130px;text-align:right;font-size:15px;color:var(--blue)}
-.saverow{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.res .reshead h2{margin-bottom:4px}
+.res .reshead .sub{margin-bottom:0}
 .savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
   font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
 .savebtn:hover{background:var(--blue-soft)}
 .savebtn:disabled{opacity:.55;cursor:default}
-.savenote{font-size:12.5px;color:var(--mute)}
 .backlink{margin-top:30px;text-align:center;font-size:14px}
 .backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
 .backlink a:hover{border-color:var(--blue)}
@@ -198,10 +199,10 @@
           </select>
         </div>
         <div>
-          <label for="i-driver">누가 운전하시나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 차량은 임직원만 운전할 수 있는 업무전용자동차보험에 들어야 비용으로 인정되고, 들지 않으면 전액 인정되지 않습니다. 개인사업자도 복식부기의무자라면 두 번째 차량부터 같은 보험이 필요합니다. 가족이 함께 운전한다면 보험 범위를 먼저 확인해 주세요.">?</button></label>
+          <label for="i-driver">누가 운전하시나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 차량은 임직원만 운전할 수 있는 업무전용자동차보험에 들어야 비용으로 인정되고, 들지 않으면 전액 인정되지 않습니다. 개인사업자도 복식부기의무자라면 두 번째 차량부터 같은 보험이 필요합니다. 직원이 아닌 가족이 함께 운전한다면 보험 범위를 먼저 확인해 주세요.">?</button></label>
           <select id="i-driver">
             <option value="staff">본인과 직원만</option>
-            <option value="family">가족도 운전합니다</option>
+            <option value="family">직원이 아닌 가족도 운전합니다</option>
           </select>
         </div>
         <div>
@@ -289,18 +290,15 @@
       <button class="btn btn-primary simbtn" id="calc">비교해 보기</button>
 
       <div class="res" id="res">
-        <h2>취득 방법 비교 결과</h2>
-        <p class="sub" id="res-sub"></p>
+        <div class="reshead">
+          <div><h2>취득 방법 비교 결과</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
         <div style="overflow-x:auto">
           <table class="rtable">
             <thead><tr><th>취득 방법</th><th>총 지출액</th><th>비용 처리 기간</th><th>절세액</th><th>실제 부담액</th></tr></thead>
             <tbody id="res-body"></tbody>
           </table>
-        </div>
-
-        <div class="saverow">
-          <button type="button" class="savebtn" id="save-img">결과를 이미지로 저장</button>
-          <span class="savenote">카카오톡으로 보내거나 저장해 두실 수 있습니다</span>
         </div>
 
         <div class="chartbox" id="chartbox">
@@ -331,6 +329,7 @@
         · <b>리스와 렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건</b>으로 계산합니다. 보증금은 만기에 돌려받으므로 비용은 아니지만 계약 기간 동안 자금이 묶입니다. 만기 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다.<br>· 월 리스료와 렌트료는 <b>이자율에서 거꾸로 계산합니다.</b> 리스사가 차를 사서 보증금을 받고 매달 요율을 걷다가 만기에 인수금을 받는 현금흐름으로 역산한 값입니다. 그래서 보증금이나 인수가, 보유기간을 바꾸면 요율이 따라 움직입니다. 실제 견적을 넣으시면 그 숫자를 그대로 씁니다.<br>· <b>리스와 렌트는 할부보다 이자율이 높습니다.</b> 기본값은 할부 7%, 리스 8.5%, 렌트 10%로 두었습니다. 렌터카는 영업용이라 취득세가 4%로 낮고 보험도 단체요율이라 실제로는 조금 유리할 수 있는데, 그 부분은 넣지 않았습니다.<br>
         · 유류비와 통행료처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다.<br>
         · 리스는 부가가치세가 없는 금융용역이고, 장기렌트는 부가가치세가 붙습니다.<br>
+        · 장기렌트는 렌트사 보험으로 처리되어 사고 이력이 대표님이나 회사의 자동차보험료에 반영되지 않습니다. 사고가 잦다면 총 지출액이 커도 장기렌트가 유리할 수 있습니다. 사고 때 면책금은 계약에 따라 부담합니다.<br>
         · 세금은 지방소득세를 포함해 계산했습니다. 법인세율과 종합소득세율은 2026년 기준입니다.
       </p>
 
@@ -552,6 +551,14 @@ function render(){
         +'이번 조건에서는 '+METHOD[alt.method]+'가 '+won(alt.net-best.net)+'원 더 듭니다.</span>';
     }
   }
+  // 장기렌트는 렌트사 보험이라 사고가 나도 대표님이나 회사의 자동차보험료가 오르지 않습니다
+  const rent=rows.filter(r=>r.owner===best.owner&&r.method==='rent')[0];
+  const rnote='<br><br><span style="font-size:14px;color:var(--mute)">';
+  if(best.method==='rent')
+    v+=rnote+'장기렌트는 렌트사 보험으로 처리되어, 사고가 나도 대표님이나 회사 명의 자동차보험료가 오르지 않는 장점도 있습니다.</span>';
+  else if(rent)
+    v+=rnote+'사고가 잦은 편이라면 장기렌트도 함께 검토해 보세요. 장기렌트는 렌트사 보험으로 처리되어 사고가 나도 대표님이나 회사 명의 자동차보험료가 오르지 않습니다. '
+      +'이번 조건에서는 '+won(rent.net-best.net)+'원 더 들지만, 사고로 늘어날 보험료를 생각하면 장기렌트가 나을 수 있습니다. 사고 때 내는 면책금은 계약마다 다르니 함께 확인해 주세요.</span>';
   document.getElementById('verdict').innerHTML=v;
 
   document.getElementById('warns').innerHTML=warnings(c,rows).map(w=>'<div class="warn">'+w+'</div>').join('');
@@ -567,10 +574,10 @@ function warnings(c,rows){
   if(personDouble&&c.hascar==='yes')
     w.push('<b>개인사업자는 두 번째 차량부터 업무전용자동차보험에 가입해야 합니다.</b> 복식부기의무자는 업무용승용차가 두 대 이상이면 한 대를 뺀 나머지 차량을 이 보험에 넣어야 합니다. '
       +'가입하지 않으면 그 차량 비용은 전혀 인정되지 않습니다. 2025년까지는 성실신고확인대상자와 전문직이 아닌 사업자에게 50%를 인정하던 한시 규정이 있었지만, 2026년부터는 업종과 관계없이 인정되지 않습니다. 계산은 보험에 가입한 것으로 보았습니다.'
-      +(c.driver==='family'?' 가족이 운전하시면 임직원만 운전하는 조건을 맞추기 어려우니 함께 확인해 주세요.':''));
+      +(c.driver==='family'?' 직원이 아닌 가족이 운전하시면 임직원만 운전하는 조건을 맞추기 어려우니 함께 확인해 주세요.':''));
   if(c.driver==='family'){
-    if(c.form!=='person') w.push('<b>가족이 운전하면 법인 차량 비용이 전액 부인될 수 있습니다.</b> 법인은 임직원만 운전할 수 있는 업무전용자동차보험에 가입해야 비용을 인정받습니다. 가족을 직원으로 등록해 실제로 근무하게 하거나, 개인 명의로 두는 쪽을 검토해 보세요.');
-    else if(c.hascar!=='yes') w.push('<b>가족이 운전하는 점을 확인해 주세요.</b> 지금은 첫 차량이라 업무전용자동차보험 가입 의무가 없지만, 차량을 한 대 더 들이면 그 차량부터 가입해야 합니다.');
+    if(c.form!=='person') w.push('<b>직원이 아닌 가족이 운전하면 법인 차량 비용이 전액 부인될 수 있습니다.</b> 법인은 임직원만 운전할 수 있는 업무전용자동차보험에 가입해야 비용을 인정받습니다. 가족을 직원으로 등록해 실제로 근무하게 하거나, 개인 명의로 두는 쪽을 검토해 보세요.');
+    else if(c.hascar!=='yes') w.push('<b>직원이 아닌 가족이 운전하는 점을 확인해 주세요.</b> 지금은 첫 차량이라 업무전용자동차보험 가입 의무가 없지만, 차량을 한 대 더 들이면 그 차량부터 가입해야 합니다.');
   }
   if(c.book==='unknown'&&c.form!=='corp') w.push('<b>장부 종류를 복식부기의무자로 보고 계산했습니다.</b> 간편장부대상자라면 800만 원 한도를 받지 않아 결과가 달라집니다. 직전 연도 수입금액이 업종별 기준을 넘지 않으면 간편장부대상자입니다.');
   if(c.vat!=='normal'&&c.kind!=='sedan') w.push('<b>부가가치세를 돌려받지 못합니다.</b> 경차나 승합차는 원래 매입세액을 공제받을 수 있지만 '+(c.vat==='free'?'면세사업자':'간이과세자')+'는 대상이 아닙니다. 차값의 10%가 그대로 부담으로 남습니다.');
