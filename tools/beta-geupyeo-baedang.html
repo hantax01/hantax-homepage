@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>회사 돈을 가져가면 세금이 얼마나 붙나요? (준비 중) | 한택스</title>
-<meta name="robots" content="noindex,nofollow">
+<title>대표 연봉·배당 세금 계산기, 회사 돈을 가져갈 때 내는 세금 | 한택스</title>
+<meta name="description" content="법인 대표가 연봉이나 배당으로 돈을 가져갈 때 법인세 절감, 소득세, 4대보험을 합쳐 세금이 얼마나 늘어나는지 계산합니다. 연봉과 배당 중 어느 쪽이 유리한지 그래프로 비교합니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/beta-geupyeo-baedang.html">
+<meta property="og:title" content="회사 돈을 가져가면 세금이 얼마나 붙나요?">
+<meta property="og:description" content="대표 연봉과 배당, 법인세 절감과 소득세·4대보험까지 합쳐 비교하는 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/beta-geupyeo-baedang.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-geupyeo-baedang.png">
+<meta property="og:site_name" content="한택스">
 <link rel="icon" href="../assets/favicon.png?v=4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -724,15 +731,6 @@ $('calc').addEventListener('click',()=>{
   if(total>GP()){alert('연봉과 배당을 더한 금액이 '+won(GP())+'원을 넘을 수 없습니다. 당기순이익에 지금 연봉을 더한 금액입니다.');return;}
   render(GP(),total,salary);
   initSlider(GP(),total,salary);
-});
-
-/* 테스트용 기본값. 확인이 끝나면 이 블록만 지우면 됩니다. */
-window.addEventListener('load',()=>{
-  $('i-profit').value=(200000000).toLocaleString('ko-KR');
-  $('i-salary').value=(100000000).toLocaleString('ko-KR');
-  $('calc').click();
-  const ss=$('s-salary');
-  ss.value=150000000; ss.dispatchEvent(new Event('input'));
 });
 
 /* ── 슬라이더 ──────────────────────────────── */
