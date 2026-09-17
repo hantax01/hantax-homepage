@@ -192,6 +192,7 @@
         <div>
           <label for="i-years">예상 보유기간</label>
           <select id="i-years">
+            <option value="2">2년</option>
             <option value="3">3년</option>
             <option value="5" selected>5년</option>
             <option value="7">7년</option>
@@ -381,7 +382,7 @@ const RENT_DEP=0.70;        // 렌트료 중 감가상각비 상당액
 const ACQ={sedan:0.07,van:0.05,light:0.04};   // 취득세율
 const LIGHT_CUT=500000;     // 경차 취득세 감면
 const CARTAX={sedan:520000,van:90000,light:100000};   // 연 자동차세 기본값 (지방교육세 포함)
-const RESID={3:60,5:45,7:33,10:18};           // 보유기간 뒤 남는 차값 (%)
+const RESID={2:70,3:60,5:45,7:33,10:18};           // 보유기간 뒤 남는 차값 (%)
 // 월 요율은 리스사 쪽 현금흐름에서 역산합니다.
 // 리스사는 차를 사서(취득세 포함) 보증금을 받고, 매달 요율을 걷고, 만기에 인수금을 받고 보증금을 돌려줍니다.
 function monthlyFee(c,annual){
