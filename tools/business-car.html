@@ -22,6 +22,8 @@
 .sim{max-width:900px;margin:0 auto}
 .sim-in{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
 .sim-in .fw{grid-column:1/-1}
+.premise{font-size:13px;color:var(--mute);line-height:1.7;margin:-4px 0 0}
+.premise b{color:var(--ink);margin-right:8px}
 .sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
 .help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
   border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
@@ -63,7 +65,6 @@
 .rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
 .rtable thead th{background:var(--soft);font-size:13px;color:var(--ink);border-bottom:2px solid var(--line)}
 .rtable td small{display:block;font-size:11.5px;color:var(--mute);font-weight:400;margin-top:3px;line-height:1.6}
-.rtable .own td{background:var(--soft);font-weight:800;color:var(--ink);font-size:13.5px;text-align:left}
 .rtable .best td{background:var(--blue-soft)}
 .rtable .best td:last-child{color:var(--blue);font-weight:800}
 .rtable .nm{font-weight:700;color:var(--ink)}
@@ -114,6 +115,18 @@
 .stable tr.key td{background:var(--blue-soft)}
 .stable tr.key td:last-child{color:var(--blue);font-weight:800}
 .snote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px;line-height:1.8}
+.prosbox{margin-top:34px;border:1px solid var(--line);border-radius:12px;padding:22px 22px 18px}
+.prosbox h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
+.prosbox .psub{font-size:13px;color:var(--mute);margin-bottom:14px}
+.ptable{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+.ptable th,.ptable td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle;line-height:1.55}
+.ptable thead th{background:var(--soft);color:var(--ink);font-weight:700;border-bottom:2px solid var(--line)}
+.ptable tbody th{text-align:left;color:var(--char);font-weight:600;white-space:nowrap;position:sticky;left:0;background:#fff}
+.ptable thead th:first-child{position:sticky;left:0}
+.ptable td{color:var(--ink)}
+.pnote{margin:16px 0 0;padding-left:18px;font-size:13.5px;color:var(--char);line-height:1.75}
+.pnote li{margin-top:8px}
+.pnote b{color:var(--ink)}
 .disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:22px}
@@ -125,6 +138,8 @@
 .slide .sl b{display:block;width:auto;text-align:left;margin-top:4px}
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
+.prosbox{padding:18px 16px 14px}
+.ptable{font-size:12.5px}
 }
 </style>
 </head>
@@ -162,7 +177,6 @@
           <select id="i-form">
             <option value="corp">법인</option>
             <option value="person">개인</option>
-            <option value="both">법인과 개인 둘 다 있음</option>
           </select>
         </div>
         <div>
@@ -181,14 +195,6 @@
           <label for="i-person">개인 연간 소득금액 <small>매출에서 비용을 뺀 이익</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="1년 매출에서 비용을 모두 뺀 금액입니다. 종합소득세 신고서의 소득금액을 보시면 됩니다. 소득이 클수록 세율이 높아 차량 비용으로 줄어드는 세금도 커집니다.">?</button></label>
           <div class="unit"><input type="text" id="i-person" inputmode="numeric"><span>원</span></div>
         </div>
-        <div id="w-book">
-          <label for="i-book">개인사업자 장부 <small>업무용승용차 한도를 가릅니다</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="복식부기는 자산과 부채까지 모두 기록하는 정식 장부이고, 간편장부는 수입과 지출만 적는 간단한 장부입니다. 복식부기 대상이면 업무용승용차 비용이 연 1,500만 원으로 제한되고 운행기록부도 써야 합니다. 매출 규모에 따라 정해지며 잘 모르시면 세무사에게 확인해 보세요.">?</button></label>
-          <select id="i-book">
-            <option value="double">복식부기의무자</option>
-            <option value="simple">간편장부대상자</option>
-            <option value="unknown">잘 모르겠습니다</option>
-          </select>
-        </div>
         <div>
           <label for="i-years">예상 보유기간</label>
           <select id="i-years">
@@ -199,20 +205,7 @@
             <option value="10">10년</option>
           </select>
         </div>
-        <div>
-          <label for="i-driver">누가 운전하시나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 차량은 임직원만 운전할 수 있는 업무전용자동차보험에 들어야 비용으로 인정되고, 들지 않으면 전액 인정되지 않습니다. 개인사업자도 복식부기의무자라면 두 번째 차량부터 같은 보험이 필요합니다. 직원이 아닌 가족이 함께 운전한다면 보험 범위를 먼저 확인해 주세요.">?</button></label>
-          <select id="i-driver">
-            <option value="staff">본인과 직원만</option>
-            <option value="family">직원이 아닌 가족도 운전합니다</option>
-          </select>
-        </div>
-        <div>
-          <label for="i-hascar">사업자 명의 차량이 이미 있나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="개인사업자 중 복식부기의무자는 업무용승용차가 두 대 이상이면 두 번째 차량부터 업무전용자동차보험에 가입해야 합니다. 가입하지 않으면 그 차량 비용은 전혀 인정되지 않습니다. 2025년까지는 성실신고확인대상자와 전문직이 아닌 사업자에게 50%를 인정하던 한시 규정이 있었지만, 2026년부터는 업종과 관계없이 인정되지 않습니다.">?</button></label>
-          <select id="i-hascar">
-            <option value="no">없습니다</option>
-            <option value="yes">있습니다</option>
-          </select>
-        </div>
+        <p class="fw premise"><b>계산 전제</b>모든 차량은 임직원 전용 자동차보험에 가입하고, 운행기록부를 써서 업무에만 쓰는 것으로 봅니다. 개인사업자는 복식부기의무자로 봅니다.</p>
 
         <div class="divider">
           <b>차량 정보</b>
@@ -318,19 +311,44 @@
         </details>
       </div>
 
+      <div class="prosbox">
+        <h3>현금·할부·리스·장기렌트, 세금 말고 무엇이 다를까요?</h3>
+        <p class="psub">계산 결과가 비슷하다면 아래 차이로 고르시면 됩니다.</p>
+        <div style="overflow-x:auto">
+          <table class="ptable">
+            <thead><tr><th></th><th>현금 구입</th><th>할부 구입</th><th>운용리스</th><th>장기렌트</th></tr></thead>
+            <tbody>
+              <tr><th>처음 드는 목돈</th><td>차값 전액</td><td>선수금 정도</td><td>보증금</td><td>보증금</td></tr>
+              <tr><th>차량 명의</th><td>사업자</td><td>사업자</td><td>리스사</td><td>렌트사</td></tr>
+              <tr><th>신용·대출 한도</th><td>영향 없음</td><td>대출로 잡힘</td><td>대출처럼 잡혀<br>한도가 줄 수 있음</td><td>대여 계약이라<br>영향이 적음</td></tr>
+              <tr><th>중도에 그만둘 때</th><td>언제든 매각</td><td>매각 후<br>남은 할부금 상환</td><td>해지 수수료<br>부담 큼</td><td>해지 수수료<br>부담 큼</td></tr>
+              <tr><th>사고가 나면</th><td>보험료 할증</td><td>보험료 할증</td><td>보험료 할증</td><td>렌트사 보험이라<br>할증 없음</td></tr>
+              <tr><th>보험료·자동차세</th><td>직접 부담</td><td>직접 부담</td><td>직접 부담</td><td>렌트료에 포함</td></tr>
+              <tr><th>자금출처 부담</th><td>큼</td><td>중간</td><td>작음</td><td>작음</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="pnote">
+          <li><b>중도에 차를 바꾸실 수도 있다면 할부가 유리합니다.</b> 리스와 장기렌트는 중도에 해지하면 남은 금액의 20~40% 수준을 해지 수수료로 내는 경우가 많아 부담이 큽니다. 비율은 계약마다 다릅니다.</li>
+          <li><b>리스는 신용과 대출 한도에 영향을 줄 수 있습니다.</b> 캐피탈사 리스는 대출과 비슷하게 신용정보에 잡혀 다른 대출 한도가 줄거나 금리가 오를 수 있습니다. 법인 리스는 법인 신용에 잡히고, 대표님이 연대보증을 서시면 개인 신용에도 영향이 갑니다. 장기렌트는 대여 계약이라 영향이 적지만 연체하면 신용에 반영됩니다.</li>
+          <li><b>사고가 잦다면 장기렌트를 함께 보세요.</b> 렌트사 보험으로 처리되어 사고가 나도 대표님이나 회사의 자동차보험료가 오르지 않습니다. 사고 때 내는 면책금은 계약마다 다릅니다.</li>
+          <li><b>부동산 취득 등으로 자금출처를 신경 쓰신다면</b> 리스나 장기렌트가 부담이 적습니다. 목돈이 한 번에 나가지 않고 차량도 리스사나 렌트사 명의로 등록됩니다.</li>
+          <li><b>법인과 개인사업자를 함께 운영하신다면 차량처럼 큰 금액은 법인으로 취득하시는 편이 유리합니다.</b> 법인 자금은 업무용으로만 쓸 수 있어서, 대표님이 개인적으로 쓰시려면 급여나 배당으로 세금을 내고 가져가셔야 합니다. 업무용 차량을 법인 돈으로 마련하시면 그 세금 없이 법인 자금을 쓰실 수 있습니다. 위에서 사업자 형태를 바꿔 각각 계산해 비교해 보세요.</li>
+        </ul>
+      </div>
+
       <p class="disc">
         이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 견적과 세금은 차종, 계약 조건, 사업 내용에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
         · <b>운행기록부를 써서 업무사용비율 100%</b>인 경우로 계산합니다. 쓰지 않으면 차량 관련 비용 전체가 연 1,500만 원까지만 인정됩니다.<br>
         · 업무용승용차는 감가상각비를 <b>연 800만 원까지만</b> 비용으로 봅니다. 5년 정액법으로 계산하고, 한도초과액은 다음 연도로 이월되어 매년 800만 원 한도 안에서 인정됩니다. 표의 금액은 이월분까지 모두 인정받는 것으로 계산했으며, 처리 기간이 길수록 절세 효과는 늦게 나타납니다. 처리 기간은 계산 과정에서 확인하실 수 있습니다.<br>
         · 경차와 9인승 이상 승합차, 화물차는 업무용승용차가 아니라서 이 한도를 받지 않고 부가가치세 매입세액도 공제됩니다. 일반 승용차는 부가가치세를 돌려받지 못합니다.<br>
-        · 개인사업자가 <b>간편장부대상자</b>이면 업무용승용차 비용 특례를 적용받지 않아 한도가 없습니다. 복식부기의무자만 한도가 걸립니다.<br>
-        · 업무전용자동차보험은 임직원만 운전할 수 있는 특약입니다. 법인은 가입하지 않으면 차량 비용이 전액 인정되지 않습니다. 개인사업자 중 복식부기의무자는 업무용승용차가 두 대 이상이면 한 대를 뺀 나머지 차량부터 가입해야 하고, 가입하지 않으면 그 차량 비용은 전혀 인정되지 않습니다. 2025년까지는 성실신고확인대상자와 전문직이 아닌 사업자에게 50%를 인정하던 한시 규정이 있었지만, 2026년부터는 업종과 관계없이 인정되지 않습니다.<br>
+        · 개인사업자는 <b>복식부기의무자</b>로 보고 계산했습니다. 간편장부대상자는 업무용승용차 비용 한도를 받지 않아 결과가 달라집니다.<br>
+        · 모든 차량이 <b>임직원 전용 자동차보험</b>에 가입한 것으로 보고 비교했습니다. 일반 자동차보험과 보험료 차이가 크지 않아 따로 비교하지 않았습니다. 법인은 가입하지 않거나 직원이 아닌 가족이 운전하면 차량 비용이 인정되지 않습니다. 개인사업자는 두 번째 업무용승용차부터 가입해야 하고, 가입하지 않은 차량은 비용이 인정되지 않습니다.<br>
         · 취득세는 승용차 7%, 승합차와 화물차 5%, 경차 4%로 계산하고 경차는 50만 원을 감면했습니다. 공채 매입 비용은 넣지 않았습니다.<br>
         · <b>보험료와 자동차세</b>는 사는 경우와 리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 두 금액 모두 감가상각 한도 밖이라 전액 비용으로 인정됩니다. 세부 조건에서 고치실 수 있습니다.<br>
         · <b>리스와 렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건</b>으로 계산합니다. 보증금은 만기에 돌려받으므로 비용은 아니지만 계약 기간 동안 자금이 묶입니다. 만기 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다.<br>· 월 리스료와 렌트료는 <b>이자율에서 거꾸로 계산합니다.</b> 리스사가 차를 사서 보증금을 받고 매달 요율을 걷다가 만기에 인수금을 받는 현금흐름으로 역산한 값입니다. 그래서 보증금이나 인수가, 보유기간을 바꾸면 요율이 따라 움직입니다. 실제 견적을 넣으시면 그 숫자를 그대로 씁니다.<br>· <b>리스와 렌트는 할부보다 이자율이 높습니다.</b> 기본값은 할부 5%, 리스 6.5%, 렌트 8.5%로 두었습니다. 렌터카는 영업용이라 취득세가 4%로 낮고 보험도 단체요율이라 실제로는 조금 유리할 수 있는데, 그 부분은 넣지 않았습니다.<br>
         · 유류비와 통행료처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다.<br>
         · 리스는 부가가치세가 없는 금융용역이고, 장기렌트는 부가가치세가 붙습니다.<br>
-        · 장기렌트는 렌트사 보험으로 처리되어 사고 이력이 대표님이나 회사의 자동차보험료에 반영되지 않습니다. 사고가 잦다면 순 지출액이 커도 장기렌트가 유리할 수 있습니다. 사고 때 면책금은 계약에 따라 부담합니다.<br>
         · 세금은 지방소득세를 포함해 계산했습니다. 법인세율과 종합소득세율은 2026년 기준입니다.
       </p>
 
@@ -404,7 +422,6 @@ function insuranceOf(kind,price){
 }
 const KIND={sedan:'일반 승용차',van:'승합차·화물차',light:'경차'};
 const METHOD={cash:'현금 구입',loan:'할부 구입',lease:'운용리스',rent:'장기렌트'};
-const OWNER={corp:'법인 명의',person:'개인사업자 명의'};
 
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
@@ -413,7 +430,6 @@ const dec=s=>Number(String(s).replace(/[^0-9.]/g,''))||0;
 /* 업무용승용차 한도를 받는지 */
 function capped(owner,c){
   if(c.kind!=='sedan') return false;                     // 경차·승합·화물은 업무용승용차가 아닙니다
-  if(owner==='person'&&c.book==='simple') return false;  // 간편장부대상자는 특례 대상이 아닙니다
   return true;
 }
 /* 연 상각액에 한도를 씌우고 넘은 금액은 다음 해로 넘깁니다 */
@@ -497,10 +513,7 @@ function scenario(method,owner,c){
 }
 
 function compute(c){
-  const owners=c.form==='both'?['corp','person']:[c.form];
-  const rows=[];
-  owners.forEach(o=>['cash','loan','lease','rent'].forEach(m=>rows.push(scenario(m,o,c))));
-  return rows;
+  return ['cash','loan','lease','rent'].map(m=>scenario(m,c.form,c));
 }
 
 /* ── 화면 그리기 ───────────────────────────── */
@@ -509,11 +522,9 @@ function render(){
   const rows=compute(c);
   const min=Math.min(...rows.map(r=>r.net));
   const best=rows.find(r=>r.net===min);
-  const many=c.form==='both';
 
-  let html='',last='';
+  let html='';
   rows.forEach(r=>{
-    if(many&&r.owner!==last){ html+='<tr class="own"><td colspan="5">'+OWNER[r.owner]+'</td></tr>'; last=r.owner; }
     html+='<tr'+(r===best?' class="best"':'')+'>'
       +'<td><span class="nm">'+METHOD[r.method]+'</span></td>'
       +'<td>'+won(r.cashOut)+'원<small>들어간 돈 '+won(r.cashOut+r.sale)+' − 매각 '+won(r.sale)+'</small>'+(r.deposit>0?'<small>보증금 '+won(r.deposit)+'원 별도 예치</small>':'')+'</td>'
@@ -527,39 +538,9 @@ function render(){
     +(capped(best.owner,c)?' · 감가상각 800만 원 한도 적용':' · 감가상각 한도 없음');
 
   const second=rows.filter(r=>r!==best).sort((a,b)=>a.net-b.net)[0];
-  let v='<b>'+(many?OWNER[best.owner]+' ':'')+METHOD[best.method]+'</b>의 실제 부담액이 '+won(best.net)+'원으로 가장 적습니다. '
-    +'다음 순위인 '+METHOD[second.method]+(many&&second.owner!==best.owner?'('+OWNER[second.owner]+')':'')
-    +'보다 '+won(second.net-best.net)+'원 적습니다.';
+  let v='<b>'+METHOD[best.method]+'</b>의 실제 부담액이 '+won(best.net)+'원으로 가장 적습니다. '
+    +'다음 순위인 '+METHOD[second.method]+'보다 '+won(second.net-best.net)+'원 적습니다.';
   if(best.carry>0) v+='<br><br>감가상각비 한도초과액 '+won(best.carry)+'원은 보유기간 '+c.years+'년 안에 비용 처리되지 않고 이월되어 '+best.payback+'년차까지 나눠 인정됩니다. 위 금액은 이월분까지 모두 인정받는 것으로 계산했습니다.';
-  if(many){
-    // 법인 자금은 업무에만 쓸 수 있어, 큰 업무용 지출은 법인 돈으로 하는 편이 자금 활용에 낫습니다
-    const bc=rows.filter(r=>r.owner==='corp').sort((a,b)=>a.net-b.net)[0];
-    const bp=rows.filter(r=>r.owner==='person').sort((a,b)=>a.net-b.net)[0];
-    v+='<br><br><b>법인과 개인사업자가 함께 있으시면 차량처럼 큰 금액은 법인으로 취득하시길 권합니다.</b> '
-      +'법인 자금은 업무용으로만 쓸 수 있어서, 대표님이 개인적으로 쓰시려면 급여나 배당으로 세금을 내고 가져가셔야 합니다. '
-      +'업무에 쓰는 차량을 법인 돈으로 마련하시면 그 세금 없이 법인 자금을 쓰실 수 있고, 개인 돈은 빠져나가지 않아 자금출처 부담도 덜합니다.';
-    if(best.owner==='person'&&bc.net-bp.net>10000)
-      v+=' 이번 조건에서 차량 세금만 따지면 개인 명의가 '+won(bc.net-bp.net)+'원 적지만, 법인 자금을 꺼내 쓸 때의 세금까지 생각하면 법인 쪽이 나은 경우가 많습니다.';
-  }
-  if(c.form==='person'){
-    const note='<br><br><span style="font-size:14px;color:var(--mute)">';
-    if(best.method==='lease'||best.method==='rent'){
-      v+=note+'리스와 장기렌트는 목돈이 한 번에 나가지 않고 차량이 리스사나 렌트사 명의로 등록되어, 부동산 취득 등으로 자금출처를 신경 쓰시는 경우에도 부담이 적습니다.</span>';
-    }else{
-      const alt=rows.filter(r=>r.method==='lease'||r.method==='rent').sort((a,b)=>a.net-b.net)[0];
-      v+=note+'부동산 취득 등을 앞두고 자금출처를 신경 쓰고 계시다면, 계산상 조금 불리하더라도 리스나 장기렌트가 나을 수 있습니다. '
-        +'차량을 구입하면 목돈이 한 번에 나가고 본인 재산으로 등록되지만, 리스와 렌트는 매달 나눠 내고 차량이 리스사나 렌트사 명의로 등록됩니다. '
-        +'이번 조건에서는 '+METHOD[alt.method]+'가 '+won(alt.net-best.net)+'원 더 듭니다.</span>';
-    }
-  }
-  // 장기렌트는 렌트사 보험이라 사고가 나도 대표님이나 회사의 자동차보험료가 오르지 않습니다
-  const rent=rows.filter(r=>r.owner===best.owner&&r.method==='rent')[0];
-  const rnote='<br><br><span style="font-size:14px;color:var(--mute)">';
-  if(best.method==='rent')
-    v+=rnote+'장기렌트는 렌트사 보험으로 처리되어, 사고가 나도 대표님이나 회사 명의 자동차보험료가 오르지 않는 장점도 있습니다.</span>';
-  else if(rent)
-    v+=rnote+'사고가 잦은 편이라면 장기렌트도 함께 검토해 보세요. 장기렌트는 렌트사 보험으로 처리되어 사고가 나도 대표님이나 회사 명의 자동차보험료가 오르지 않습니다. '
-      +'이번 조건에서는 '+won(rent.net-best.net)+'원 더 들지만, 사고로 늘어날 보험료를 생각하면 장기렌트가 나을 수 있습니다. 사고 때 내는 면책금은 계약마다 다르니 함께 확인해 주세요.</span>';
   document.getElementById('verdict').innerHTML=v;
 
   document.getElementById('warns').innerHTML=warnings(c,rows).map(w=>'<div class="warn">'+w+'</div>').join('');
@@ -571,16 +552,6 @@ function render(){
 
 function warnings(c,rows){
   const w=[];
-  const personDouble=c.form!=='corp'&&c.book!=='simple'&&c.kind==='sedan';
-  if(personDouble&&c.hascar==='yes')
-    w.push('<b>개인사업자는 두 번째 차량부터 업무전용자동차보험에 가입해야 합니다.</b> 복식부기의무자는 업무용승용차가 두 대 이상이면 한 대를 뺀 나머지 차량을 이 보험에 넣어야 합니다. '
-      +'가입하지 않으면 그 차량 비용은 전혀 인정되지 않습니다. 2025년까지는 성실신고확인대상자와 전문직이 아닌 사업자에게 50%를 인정하던 한시 규정이 있었지만, 2026년부터는 업종과 관계없이 인정되지 않습니다. 계산은 보험에 가입한 것으로 보았습니다.'
-      +(c.driver==='family'?' 직원이 아닌 가족이 운전하시면 임직원만 운전하는 조건을 맞추기 어려우니 함께 확인해 주세요.':''));
-  if(c.driver==='family'){
-    if(c.form!=='person') w.push('<b>직원이 아닌 가족이 운전하면 법인 차량 비용이 전액 부인될 수 있습니다.</b> 법인은 임직원만 운전할 수 있는 업무전용자동차보험에 가입해야 비용을 인정받습니다. 가족을 직원으로 등록해 실제로 근무하게 하거나, 개인 명의로 두는 쪽을 검토해 보세요.');
-    else if(c.hascar!=='yes') w.push('<b>직원이 아닌 가족이 운전하는 점을 확인해 주세요.</b> 지금은 첫 차량이라 업무전용자동차보험 가입 의무가 없지만, 차량을 한 대 더 들이면 그 차량부터 가입해야 합니다.');
-  }
-  if(c.book==='unknown'&&c.form!=='corp') w.push('<b>장부 종류를 복식부기의무자로 보고 계산했습니다.</b> 간편장부대상자라면 800만 원 한도를 받지 않아 결과가 달라집니다. 직전 연도 수입금액이 업종별 기준을 넘지 않으면 간편장부대상자입니다.');
   if(c.vat!=='normal'&&c.kind!=='sedan') w.push('<b>부가가치세를 돌려받지 못합니다.</b> 경차나 승합차는 원래 매입세액을 공제받을 수 있지만 '+(c.vat==='free'?'면세사업자':'간이과세자')+'는 대상이 아닙니다. 차값의 10%가 그대로 부담으로 남습니다.');
   if(c.years>=7) w.push('<b>리스와 렌트는 보통 5년까지입니다.</b> '+c.years+'년으로 잡으셨으니 그 뒤는 재계약하거나 차를 인수하게 되고, 실제 조건은 지금 계산과 달라집니다.');
   if(c.kind==='sedan'&&c.price>=100000000) w.push('<b>1억 원이 넘는 차량은 업무 사용 여부를 확인받을 가능성이 높습니다.</b> 운행기록부를 빠짐없이 작성하시고 업무에 사용한 근거를 남겨 두세요.');
@@ -637,9 +608,6 @@ function drawChart(c,owner){
   document.getElementById('cband').textContent= most.m===best.m
     ? '실제 부담액이 가장 적고 절세액도 가장 큰 방법은 '+METHOD[best.m]+'입니다'
     : '실제 부담액은 '+josa(METHOD[best.m],'이','가')+' 가장 적고, 절세액은 '+josa(METHOD[most.m],'이','가')+' 가장 큽니다. 절세액이 크다고 부담이 적은 것은 아닙니다';
-  const ow=document.querySelector('.chartbox .csub');
-  if(ow) ow.textContent='순 지출액에서 절세액을 뺀 실제 부담액입니다. 막대가 낮을수록 부담이 적습니다.'
-    +(c.form==='both'?' '+OWNER[owner]+' 기준입니다.':'');
 }
 
 /* ── 계산 과정 ─────────────────────────────── */
@@ -647,15 +615,15 @@ function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+la
 function renderSteps(c,rows,best){
   let h='<div class="case"><b class="ttl">기본 조건</b><table class="stable">'
    +row('업무용승용차 해당 여부',c.kind==='sedan'?'일반 승용차':KIND[c.kind]+' 제외',c.kind==='sedan'?'예':'아니오')
-   +row('감가상각 한도',capped(best.owner,c)?'연 800만 원 · 5년 정액법':(c.kind!=='sedan'?'업무용승용차가 아니므로 한도 없음':'간편장부대상자이므로 한도 없음'),capped(best.owner,c)?'800만 원':'없음',true)
+   +row('감가상각 한도',capped(best.owner,c)?'연 800만 원 · 5년 정액법':'업무용승용차가 아니므로 한도 없음',capped(best.owner,c)?'800만 원':'없음',true)
    +row('부가세 공제',c.kind==='sedan'?'일반 승용차는 매입세액 불공제':(c.vat==='normal'?'경차·승합차는 공제 대상':'일반과세자가 아니므로 불공제'),
         (c.kind!=='sedan'&&c.vat==='normal')?'가능':'불가')
-   +row('적용 한계세율',(c.form==='both'?OWNER[best.owner]+' · ':'')+'소득 '+won(best.owner==='corp'?c.corpIncome:c.personIncome)+'원 구간 · 지방소득세 포함',
+   +row('적용 한계세율','소득 '+won(best.owner==='corp'?c.corpIncome:c.personIncome)+'원 구간 · 지방소득세 포함',
         ((taxOf(best.owner,(best.owner==='corp'?c.corpIncome:c.personIncome))
          -taxOf(best.owner,Math.max(0,(best.owner==='corp'?c.corpIncome:c.personIncome)-10000000)))/10000000*100).toFixed(1)+'%')
    +'</table></div>';
 
-  rows.filter(r=>r.owner===best.owner).forEach(r=>{
+  rows.forEach(r=>{
     h+='<div class="case"><b class="ttl">'+METHOD[r.method]+(r===best?' (부담 가장 적음)':'')+'</b><table class="stable">'
       +r.detail.map(d=>row(d[0],d[1],d[2])).join('')
       +row('비용 인정 합계','이월분 포함',won(r.cost)+'원')
@@ -674,11 +642,14 @@ function renderSteps(c,rows,best){
 
 /* ── 입력 ──────────────────────────────────── */
 const shown=()=>document.getElementById('res').style.display==='block';
+// 법인은 간이과세자가 될 수 없습니다. 아이폰은 option 숨김이 먹지 않아 떼었다 붙입니다
+const vatSimple=document.querySelector('#i-vat option[value="simple"]');
 function syncForm(){
-  const f=document.getElementById('i-form').value;
+  const f=document.getElementById('i-form').value, vat=document.getElementById('i-vat');
   document.getElementById('w-corp').hidden=f==='person';
   document.getElementById('w-person').hidden=f==='corp';
-  document.getElementById('w-book').hidden=f==='corp';
+  if(f==='corp'){ if(vat.value==='simple') vat.value='normal'; vatSimple.remove(); }
+  else if(!vat.contains(vatSimple)) vat.appendChild(vatSimple);
 }
 function syncCarTax(){
   document.getElementById('a-tax').value=CARTAX[document.getElementById('i-kind').value].toLocaleString('ko-KR');
@@ -709,12 +680,9 @@ function readInputs(){
   const years=Number(document.getElementById('i-years').value);
   return {form:f,
     vat:document.getElementById('i-vat').value,
-    book:f==='corp'?'double':document.getElementById('i-book').value,
     corpIncome:num(document.getElementById('i-corp').value),
     personIncome:num(document.getElementById('i-person').value),
     years,
-    driver:document.getElementById('i-driver').value,
-    hascar:document.getElementById('i-hascar').value,
     kind:document.getElementById('i-kind').value,
     price:num(document.getElementById('i-price').value),
     leaseRate:dec(document.getElementById('a-lease').value),
@@ -736,13 +704,19 @@ document.getElementById('calc').addEventListener('click',()=>{
   if(c.form!=='corp'&&c.personIncome<=0){alert('개인 연간 소득금액을 입력해 주세요. 세금이 얼마나 줄어드는지는 소득에 따라 달라집니다.');return;}
   render(); initSlider(c.price);
 });
-['i-form','i-vat','i-book','i-years','i-driver','i-hascar','i-kind'].forEach(id=>
+['i-form','i-vat','i-years','i-kind'].forEach(id=>
   document.getElementById(id).addEventListener('change',()=>{
     if(id==='i-form') syncForm();
     if(id==='i-kind'){ syncCarTax(); syncIns(); }
     if(id==='i-years') syncResid();
     syncRate();
-    if(shown()) render();
+    if(!shown()) return;
+    const c=readInputs();
+    // 사업자 형태를 바꿨는데 그쪽 소득이 비어 있으면 절세액이 0으로 보이니, 결과를 접고 다시 계산하시게 합니다
+    if((c.form==='corp'?c.corpIncome:c.personIncome)<=0){
+      document.getElementById('res').style.display='none'; document.getElementById('slide').style.display='none'; return;
+    }
+    render();
   }));
 ['a-lease','a-rent','a-loan','a-loanyear','a-ins','a-tax','a-resid','a-dep','a-buy','a-leaseir','a-rentir'].forEach(id=>
   document.getElementById(id).addEventListener('input',()=>{
@@ -775,6 +749,9 @@ function initSlider(price){
   el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 document.getElementById('i-price').addEventListener('input',()=>{syncIns(); syncRate();});
+['i-corp','i-person'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{
+  if(shown()&&num(document.getElementById(id).value)>0) render();
+}));
 syncForm(); syncCarTax(); syncResid(); syncIns(); syncRate();
 </script>
 <script src="../assets/help.js?v=1"></script>
@@ -792,6 +769,4 @@ HantaxImage.attach(
 );
 </script>
 </body>
-</html>
->
 </html>
