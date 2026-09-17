@@ -203,7 +203,7 @@
 
       <div class="slide" id="slide">
         <div class="sl"><label for="s-amt">이번에 받을 금액</label><input type="range" id="s-amt" min="0" max="1000" step="1"><b id="s-amt-v"></b></div>
-        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
+        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다.</p>
       </div>
 
       <button class="btn btn-primary simbtn" id="calc">증여세 계산하기</button>
@@ -623,19 +623,11 @@ function initSlider(amount){
       document.getElementById('s-amt-v').textContent=won(v)+'원';
       render();
     });
-    document.getElementById('toBox').addEventListener('click',e=>{
-      e.preventDefault();
-      document.getElementById('slide').style.display='none';
-      document.getElementById('sim-box').style.display='';
-      document.getElementById('calc').style.display='';
-    });
     sliderReady=true;
   }
   sa.value=amtToPos(amount);
   document.getElementById('s-amt-v').textContent=won(amount)+'원';
   document.getElementById('slide').style.display='block';
-  document.getElementById('sim-box').style.display='none';
-  document.getElementById('calc').style.display='none';
 }
 
 /* 숫자 입력 콤마 */

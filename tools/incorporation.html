@@ -171,7 +171,7 @@
       <div class="slide" id="slide">
         <div class="sl"><label for="s-income">연 소득금액</label><input type="range" id="s-income" min="10000000" max="1000000000" step="5000000"><b id="s-income-v"></b></div>
         <div class="sl"><label for="s-salary">대표님 연봉</label><input type="range" id="s-salary" min="0" max="1000000000" step="5000000"><b id="s-salary-v"></b></div>
-        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
+        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다.</p>
       </div>
       <button class="btn btn-primary simbtn" id="calc">세금 비교하기</button>
 
@@ -531,20 +531,12 @@ function initSlider(income,salary){
       if(sal>0) render(inc,deduct,red,sal);
     };
     si.addEventListener('input',upd); ss.addEventListener('input',upd);
-    document.getElementById('toBox').addEventListener('click',e=>{
-      e.preventDefault();
-      document.getElementById('slide').style.display='none';
-      document.getElementById('sim-box').style.display='';
-      document.getElementById('calc').style.display='';
-    });
     sliderReady=true;
   }
   si.value=income; ss.value=salary;
   document.getElementById('s-income-v').textContent=won(income)+'원';
   document.getElementById('s-salary-v').textContent=won(salary)+'원';
   document.getElementById('slide').style.display='block';
-  document.getElementById('sim-box').style.display='none';
-  document.getElementById('calc').style.display='none';
 }
 
 

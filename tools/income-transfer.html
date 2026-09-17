@@ -164,10 +164,12 @@
           <div class="unit"><input type="text" id="i-profit" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-cit">법인세 부담 <small>공제·감면이 많은 회사인지</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="연구개발비나 통합고용 같은 공제와 감면을 많이 받는 회사는 세금을 무한정 줄이지 못하고 최저한세만큼은 내야 합니다. 작년 법인세 신고서에서 감면액이 컸다면 두 번째를 골라 주세요. 잘 모르시면 첫 번째로 두셔도 됩니다.">?</button></label>
+          <label for="i-cit">법인세 부담 <small>공제·감면이 많은 회사인지</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="연구개발비나 통합고용 같은 공제와 감면을 많이 받는 회사는 세금을 무한정 줄이지 못하고 최저한세만큼은 내야 합니다. 작년 법인세 신고서에서 감면액이 컸다면 두 번째를 골라 주세요. 그동안 쌓인 손실(이월결손금)로 올해 법인세가 없다면 세 번째를, 연구비 세액공제로 법인세가 없다면 네 번째를 골라 주세요. 이월결손금은 과세표준을 줄여 지방소득세도 없어지지만, 연구비 세액공제는 국세에만 적용되어 법인지방소득세는 그대로 냅니다. 잘 모르시면 첫 번째로 두셔도 됩니다.">?</button></label>
           <select id="i-cit">
             <option value="0">일반 (과세표준 2억 원 이하 10%, 초과 20%)</option>
             <option value="1">공제·감면이 많은 회사 (최저한세 7%)</option>
+            <option value="2">이월결손금으로 낼 법인세가 없는 회사</option>
+            <option value="3">연구비 세액공제로 낼 법인세가 없는 회사 (지방소득세만 부담)</option>
           </select>
         </div>
         <div>
@@ -325,13 +327,15 @@ function earnedDeduct(s){
   return Math.min(20000000,14750000+(s-100000000)*.02);
 }
 let MIN_TAX=false;        // 공제·감면이 많은 회사(최저한세 7%) 여부
+let CIT_MODE='0';         // 0 일반, 1 최저한세, 2 이월결손금으로 법인세 없음, 3 연구비 세액공제로 법인세 없음
 const MIN_RATE=0.07;
 function citNormal(b){ if(b<=0)return 0; return b<=200000000 ? b*.1 : 20000000+(b-200000000)*.2; }
 function citParts(b){
   if(b<=0) return {main:0,local:0,total:0,normal:0};
   const normal=citNormal(b);
-  const main = MIN_TAX ? b*MIN_RATE : normal;
-  const local = normal*0.1;   // 지방소득세는 공제·감면 전 세액 기준
+  if(CIT_MODE==='2') return {main:0,local:0,total:0,normal};   // 결손금이 과세표준을 없애 지방소득세도 없습니다
+  const main = CIT_MODE==='1' ? b*MIN_RATE : CIT_MODE==='3' ? 0 : normal;
+  const local = normal*0.1;   // 지방소득세는 국세 공제·감면 전 세액 기준
   return {main, local, total:main+local, normal};
 }
 function cit(b){ return citParts(b).total; }
@@ -457,7 +461,7 @@ function render(profit,total,salary){
   document.getElementById('res-sub').textContent=
     '당기순이익 '+won(NP)+'원 · 지금 연봉 '+won(CUR_SAL)+'원 · 소득공제 '+won(DEDUCT)+'원'
     +(OTHER>0?' · 다른 소득 '+won(OTHER)+'원':'')+(CREDIT>0?' · 세액공제 '+won(CREDIT)+'원':'')
-    +(MIN_TAX?' · 최저한세 7%':'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
+    +({'1':' · 최저한세 7%','2':' · 이월결손금','3':' · 연구비 세액공제'}[CIT_MODE]||'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
 
   // 배당 재원 부족 안내
   const w=document.getElementById('warn');
@@ -494,7 +498,8 @@ function render(profit,total,salary){
     msg+='<br><br>연봉과 배당을 어떻게 나누든 '+(INS_MODE?'부담':'세금')+' 차이는 크지 않습니다. 배당 2,000만 원까지는 15.4% 분리과세라 그 구간만 유리하고, 그 위로는 결국 비슷해집니다. '
       +'<b>어떻게 나누느냐보다 얼마를 가져가느냐가 훨씬 큰 차이를 만듭니다.</b>';
   }
-  if(nowRow.cSaved>10000) msg+='<br><br>지금 연봉 '+won(CUR_SAL)+'원 덕분에 법인세를 '+won(nowRow.cSaved)+'원 줄이고 계십니다. '
+  if(CIT_MODE==='2') msg+='<br><br>이월결손금이 남아 있는 동안은 연봉을 올려도 올해 법인세가 줄지 않습니다. 대신 결손금을 덜 쓰게 되어, 남은 결손금으로 다음 해 이후 법인세를 줄일 수 있습니다.';
+  if(nowRow.cSaved>10000) msg+='<br><br>지금 연봉 '+won(CUR_SAL)+'원 덕분에 '+(CIT_MODE==='3'?'법인지방소득세를 ':'법인세를 ')+won(nowRow.cSaved)+'원 줄이고 계십니다. '
     +'연봉을 올리면 이 절감액이 커지지만 근로소득세와 4대보험이 더 빠르게 늘고, <b>배당은 아무리 늘려도 법인세가 줄지 않습니다.</b>';
   if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세 부담이 낮은 방법이 있으니 미리 설계해 두시면 차이가 큽니다.';
   msg+= INS_MODE
@@ -590,8 +595,9 @@ function renderSteps(profit,total,rows){
   rows.forEach((r,i)=>{
     const pt=r.pt;
     const cp = citParts(r.cBase);
-    const citHow = MIN_TAX
-      ? won(r.cBase)+' × 7% (최저한세)'
+    const citHow = CIT_MODE==='1' ? won(r.cBase)+' × 7% (최저한세)'
+      : CIT_MODE==='2' ? '이월결손금으로 과세표준이 없어 0원'
+      : CIT_MODE==='3' ? '연구비 세액공제로 납부할 세액 0원'
       : (r.cBase<=200000000 ? won(r.cBase)+' × 10%' : '2억 × 10%(2,000만) + '+won(r.cBase-200000000)+' × 20%');
     html+='<div class="case"><b class="ttl">'+(i+1)+'. '+titles[i]+(i===1?' (연봉 '+won(r.salary)+'원 + 배당 '+won(r.dividend)+'원)':'')+'</b><table class="stable">';
 
@@ -603,9 +609,9 @@ function renderSteps(profit,total,rows){
             ? '되더한 이익 '+won(profit)+' − 급여 '+won(r.salary)+' − 회사부담 보험료 '+won(r.ins.company)
             : '되더한 이익 '+won(profit)+' − 급여 '+won(r.salary), won(r.cBase)+'원')
       +row('법인세',citHow,won(cp.main)+'원')
-      +row('지방소득세', MIN_TAX
-            ? '공제·감면 전 세액 '+won(cp.normal)+' × 10%'
-            : '법인세 '+won(cp.normal)+' × 10%', won(cp.local)+'원')
+      +row('지방소득세', CIT_MODE==='2' ? '이월결손금으로 과세표준이 없어 0원'
+            : CIT_MODE==='0' ? '법인세 '+won(cp.normal)+' × 10%'
+            : '공제·감면 전 세액 '+won(cp.normal)+' × 10%', won(cp.local)+'원')
       +row('법인세 합계','',won(r.cTax)+'원',true)
       +row('연봉이 없었다면', INS_MODE
             ? '과세표준 '+won(profit)+' (연봉도 회사부담 보험료도 없을 때)'
@@ -699,7 +705,7 @@ function renderSteps(profit,total,rows){
 /* ── 입력 연동 ─────────────────────────────── */
 const $=id=>document.getElementById(id);
 document.getElementById('i-cit').addEventListener('change',()=>{
-  MIN_TAX = document.getElementById('i-cit').value==='1';
+  CIT_MODE = document.getElementById('i-cit').value; MIN_TAX = CIT_MODE==='1';
   DEDUCT = num(document.getElementById('i-deduct').value);
   CREDIT = num(document.getElementById('i-credit').value);
   OTHER = num(document.getElementById('i-other').value);
@@ -720,7 +726,7 @@ document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('clic
 });
 
 $('calc').addEventListener('click',()=>{
-  MIN_TAX = $('i-cit').value==='1';
+  CIT_MODE = $('i-cit').value; MIN_TAX = CIT_MODE==='1';
   const profit=num($('i-profit').value);
   const salary=num($('i-salary').value);
   const dividend=num($('i-div').value);

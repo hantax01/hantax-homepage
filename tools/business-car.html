@@ -283,7 +283,7 @@
 
       <div class="slide" id="slide">
         <div class="sl"><label for="s-price">차량 가격</label><input type="range" id="s-price" min="10000000" max="200000000" step="1000000"><b id="s-price-v"></b></div>
-        <p class="slnote">차량 가격을 조정하면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
+        <p class="slnote">차량 가격을 조정하면 아래 결과가 바로 다시 계산됩니다.</p>
       </div>
 
       <button class="btn btn-primary simbtn" id="calc">비교해 보기</button>
@@ -753,20 +753,12 @@ function initSlider(price){
       document.getElementById('s-price-v').textContent=won(v)+'원';
       syncIns(); syncRate(); render();
     });
-    document.getElementById('toBox').addEventListener('click',e=>{
-      e.preventDefault();
-      document.getElementById('slide').style.display='none';
-      document.getElementById('sim-box').style.display='';
-      document.getElementById('calc').style.display='';
-    });
     sliderReady=true;
   }
   const max=Math.max(100000000,Math.ceil(price*2/10000000)*10000000);
   sp.max=max; sp.step=1000000; sp.value=price;
   document.getElementById('s-price-v').textContent=won(price)+'원';
   document.getElementById('slide').style.display='block';
-  document.getElementById('sim-box').style.display='none';
-  document.getElementById('calc').style.display='none';
 }
 
 /* 숫자 입력 콤마 */
