@@ -196,7 +196,7 @@
       <p class="disc">
         이 계산기는 <b>대략의 금액을 가늠하기 위한 단순 계산</b>입니다. 실제 퇴직금과 세금은 급여 항목, 퇴직연금 가입 형태, 근무 형태에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
         · <b>퇴직금 = 1일 평균임금 × 30일 × 재직일수 ÷ 365</b>로 계산합니다. 1일 평균임금은 퇴직일 전 3개월 동안 받은 임금을 그 기간의 날수로 나눈 값입니다.<br>
-        · 상여금과 연차수당은 1년 치 가운데 3개월분(12분의 3)만 평균임금에 넣었습니다.<br>
+        · 상여금과 연차수당은 1년 치 가운데 3개월분(12분의 3)만 평균임금에 넣었습니다. 퇴사하면서 남은 연차를 정산해 주는 연차수당은 평균임금에 들어가지 않으므로 넣지 마세요.<br>
         · 급여가 달마다 달랐다면 <b>최근 3개월 급여가 달랐어요</b>를 눌러 3개월 임금 총액을 넣어 주세요. 지급받은 날이 아니라 일한 기간이 기준입니다.<br>
         · 산정기간 안에 수습기간이나 육아휴직, 산재 휴업처럼 빼야 하는 기간이 있으면 그 날수와 임금을 빼고 계산해야 하는데, 이 부분은 반영하지 않았습니다.<br>
         · <b>명세서 PDF 저장</b>을 누르면 인쇄 창이 열립니다. 대상을 PDF로 저장으로 고르시면 사람별 파일로 저장됩니다. 카카오톡 안에서 열었다면 다른 브라우저로 열어 주세요.<br>
@@ -321,7 +321,7 @@ const HELP={
   end:'마지막으로 근무한 날의 다음 날입니다. 8월 31일까지 일했다면 9월 1일을 적습니다. 퇴직금은 1년 이상 일해야 받을 수 있습니다.',
   wage:'세금과 4대보험을 떼기 전 금액입니다. 기본급에 매달 받는 수당(식대, 직책수당 등)을 더해 주세요. 퇴직 전 3개월 급여가 달랐다면 세 달의 평균을 넣어 주세요.',
   total:'퇴직일 전 3개월 동안 일한 몫의 세전 급여를 모두 더한 금액입니다. 기본급과 매달 받는 수당, 연장·야간수당을 넣고, 1년에 한두 번 받는 상여금과 연차수당은 아래 칸에 따로 넣어 주세요.',
-  bonus:'퇴직 전 1년 동안 받은 상여금과, 쓰지 못한 연차를 돈으로 받은 연차수당을 합쳐 넣어 주세요. 이 가운데 3개월분만 평균임금에 들어갑니다.'
+  bonus:'퇴직 전 1년 동안 받은 상여금과, 그 전 해에 쓰지 못한 연차를 돈으로 받은 연차수당을 합쳐 넣어 주세요. 퇴사하면서 남은 연차를 한꺼번에 정산해 주는 연차수당은 넣지 않습니다. 퇴직 때문에 생기는 돈이라 평균임금에 들어가지 않기 때문입니다. 넣으신 금액 가운데 3개월분만 평균임금에 들어갑니다.'
 };
 const helpBtn=k=>' <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="'+HELP[k]+'">?</button>';
 function addPerson(){
@@ -329,14 +329,14 @@ function addPerson(){
   div.className='person';
   div.innerHTML='<div class="ph"><span class="pno"></span><button type="button" class="pdel">지우기</button></div>'
     +'<div class="pname"><label for="n'+i+'">이름</label><input type="text" id="n'+i+'" class="p-name" maxlength="20" autocomplete="off"></div>'
-    +'<div><label for="s'+i+'">입사일'+helpBtn('start')+'</label><input type="date" id="s'+i+'" class="p-start"></div>'
-    +'<div><label for="e'+i+'">퇴직일'+helpBtn('end')+'</label><input type="date" id="e'+i+'" class="p-end"></div>'
-    +'<div><label for="w'+i+'" class="wl">월 급여 <small>세전</small>'+helpBtn('wage')+'</label>'
+    +'<div><label for="s'+i+'">입사일'+helpBtn('start')+'</label><input type="date" id="s'+i+'" class="p-start" min="1950-01-01" max="2099-12-31"></div>'
+    +'<div><label for="e'+i+'">퇴직일'+helpBtn('end')+'</label><input type="date" id="e'+i+'" class="p-end" min="1950-01-01" max="2099-12-31"></div>'
+    +'<div><label for="w'+i+'" class="wl">월급여(식대, 수당 등 포함) <small>세전</small>'+helpBtn('wage')+'</label>'
     +'<label for="t'+i+'" class="tl" style="display:none">3개월 임금 총액 <small>세전</small>'+helpBtn('total')+'</label>'
     +'<div class="unit wu"><input type="text" id="w'+i+'" class="p-wage" inputmode="numeric"><span>원</span></div>'
     +'<div class="unit tu" style="display:none"><input type="text" id="t'+i+'" class="p-total" inputmode="numeric"><span>원</span></div>'
     +'<label class="vary"><input type="checkbox" class="p-vary">최근 3개월 급여가 달랐어요</label></div>'
-    +'<div class="wide"><label for="b'+i+'">연간 상여금·연차수당 <small>없으면 비워 두세요</small>'+helpBtn('bonus')+'</label><div class="unit"><input type="text" id="b'+i+'" class="p-bonus" inputmode="numeric"><span>원</span></div></div>'
+    +'<div class="wide"><label for="b'+i+'">연간 상여금·연차수당 <small>퇴사 때 정산하는 연차수당은 빼고 넣어 주세요</small>'+helpBtn('bonus')+'</label><div class="unit"><input type="text" id="b'+i+'" class="p-bonus" inputmode="numeric"><span>원</span></div></div>'
     +'<p class="phint" style="display:none"></p>';
   div.querySelector('.pdel').addEventListener('click',()=>{ div.remove(); renumber(); if(shown()) render(false); });
   const vary=div.querySelector('.p-vary');
@@ -344,7 +344,7 @@ function addPerson(){
     const on=vary.checked, t=div.querySelector('.p-total'), w=num(div.querySelector('.p-wage').value);
     div.querySelector('.wl').style.display=div.querySelector('.wu').style.display=on?'none':'';
     div.querySelector('.tl').style.display=div.querySelector('.tu').style.display=on?'':'none';
-    if(on&&!num(t.value)&&w) t.value=(w*3).toLocaleString('ko-KR');   // 월 급여를 넣어 두셨다면 세 달 치로 채워 둡니다
+    if(on&&!num(t.value)&&w) t.value=(w*3).toLocaleString('ko-KR');   // 월급여를 넣어 두셨다면 세 달 치로 채워 둡니다
     updHint(div);
   });
   ['input','change'].forEach(ev=>div.querySelector('.p-end').addEventListener(ev,()=>updHint(div)));
@@ -392,11 +392,11 @@ function collect(strict){
     else if(!p.end) msg='퇴직일을 넣어 주세요.';
     else if(parse(p.end)<=parse(p.start)) msg='퇴직일이 입사일보다 뒤여야 합니다. 날짜를 확인해 주세요.';
     else if(p.vary&&!p.total) msg='3개월 임금 총액을 넣어 주세요.';
-    else if(!p.vary&&!p.wage) msg='월 급여를 넣어 주세요.';
+    else if(!p.vary&&!p.wage) msg='월급여를 넣어 주세요.';
     if(msg){ if(strict){ alert(p.name+'의 '+msg); return null; } continue; }
     list.push(p);
   }
-  if(strict&&!list.length){ alert('퇴직하는 분의 입사일, 퇴직일, 월 급여를 넣어 주세요.'); return null; }
+  if(strict&&!list.length){ alert('퇴직하는 분의 입사일, 퇴직일, 월급여를 넣어 주세요.'); return null; }
   return list;
 }
 
@@ -458,7 +458,7 @@ function personTable(r){
     +row('재직기간',kdate(r.start)+' ~ '+kdate(last),r.workDays.toLocaleString('ko-KR')+'일');
   if(!r.eligible) return h+row('퇴직금','1년 이상 근무하지 않아 지급 의무가 없습니다','0원','key')+'</table>';
   return h+row('평균임금 산정기간',kdate(r.from)+' ~ '+kdate(last),r.periodDays+'일')
-    +row('3개월 임금',(r.vary?'3개월 임금 총액 '+won(r.wage3):'월 급여 '+won(r.wage)+' × 3')+(r.bonus?' + 상여금·연차수당 '+won(r.bonus)+' × 3/12':''),won(r.wage3+r.bonus3)+'원')
+    +row('3개월 임금',(r.vary?'3개월 임금 총액 '+won(r.wage3):'월급여 '+won(r.wage)+' × 3')+(r.bonus?' + 상여금·연차수당 '+won(r.bonus)+' × 3/12':''),won(r.wage3+r.bonus3)+'원')
     +row('1일 평균임금','3개월 임금 ÷ '+r.periodDays+'일',won(r.avg)+'원')
     +row('퇴직금','1일 평균임금 × 30일 × '+r.workDays.toLocaleString('ko-KR')+'일 ÷ 365',won(r.pay)+'원','key')
     +sec('2. 퇴직소득세')
