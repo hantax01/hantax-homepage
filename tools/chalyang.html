@@ -67,7 +67,6 @@
 .rtable .best td{background:var(--blue-soft)}
 .rtable .best td:last-child{color:var(--blue);font-weight:800}
 .rtable .nm{font-weight:700;color:var(--ink)}
-.rtable .tag{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-soft);border-radius:99px;padding:2px 8px;vertical-align:middle}
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
 .verdict b{color:var(--blue)}
 .warns{margin-top:18px;display:grid;gap:10px}
@@ -199,23 +198,18 @@
           </select>
         </div>
         <div>
-          <label for="i-driver">누가 운전하시나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 차량은 임직원전용 자동차보험에 들어야 비용으로 인정됩니다. 가족이나 직원이 함께 운전한다면 보험 범위를 확인하셔야 합니다. 이 보험에 들지 않으면 비용이 전액 인정되지 않습니다.">?</button></label>
+          <label for="i-driver">누가 운전하시나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 차량은 임직원만 운전할 수 있는 업무전용자동차보험에 들어야 비용으로 인정되고, 들지 않으면 전액 인정되지 않습니다. 개인사업자도 복식부기의무자라면 두 번째 차량부터 같은 보험이 필요합니다. 가족이 함께 운전한다면 보험 범위를 먼저 확인해 주세요.">?</button></label>
           <select id="i-driver">
             <option value="staff">본인과 직원만</option>
             <option value="family">가족도 운전합니다</option>
           </select>
         </div>
         <div>
-          <label for="i-hascar">사업자 명의 차량이 이미 있나요</label>
+          <label for="i-hascar">사업자 명의 차량이 이미 있나요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="개인사업자 중 복식부기의무자는 업무용승용차가 두 대 이상이면 두 번째 차량부터 업무전용자동차보험에 가입해야 합니다. 가입하지 않으면 성실신고확인대상자와 전문직은 비용의 50%만, 그 밖의 복식부기의무자는 2025년까지 전액, 2026년부터는 50%만 인정받습니다.">?</button></label>
           <select id="i-hascar">
             <option value="no">없습니다</option>
             <option value="yes">있습니다</option>
           </select>
-        </div>
-        <div class="fw">
-          <div class="chk">
-            <label for="i-fund"><input type="checkbox" id="i-fund">부동산 자금출처를 신경 쓰고 있습니다</label>
-          </div>
         </div>
 
         <div class="divider">
@@ -337,7 +331,7 @@
         · 업무용승용차는 감가상각비를 <b>연 800만 원까지만</b> 비용으로 봅니다. 5년 정액법이 강제되고, 한도를 넘은 금액은 없어지지 않고 다음 해로 넘어가 800만 원 한도 안에서 차차 인정됩니다. 표의 금액은 넘어간 분까지 결국 다 인정받는 것으로 보고 계산했으므로, 회수가 늦어지는 만큼 실제 체감은 더 무겁습니다. 몇 년이 걸리는지는 계산 과정에서 보실 수 있습니다.<br>
         · 경차와 9인승 이상 승합차, 화물차는 업무용승용차가 아니라서 이 한도를 받지 않고 부가가치세 매입세액도 공제됩니다. 일반 승용차는 부가가치세를 돌려받지 못합니다.<br>
         · 개인사업자가 <b>간편장부대상자</b>이면 업무용승용차 비용 특례를 적용받지 않아 한도가 없습니다. 복식부기의무자만 한도가 걸립니다.<br>
-        · 업무전용자동차보험은 임직원만 운전할 수 있는 특약입니다. 법인은 가입하지 않으면 차량 비용이 전액 인정되지 않습니다.<br>
+        · 업무전용자동차보험은 임직원만 운전할 수 있는 특약입니다. 법인은 가입하지 않으면 차량 비용이 전액 인정되지 않습니다. 개인사업자 중 복식부기의무자는 업무용승용차가 두 대 이상이면 한 대를 뺀 나머지 차량부터 가입해야 하고, 가입하지 않으면 성실신고확인대상자와 전문직은 비용의 50%만, 그 밖의 복식부기의무자는 2025년까지 전액, 2026년부터는 50%만 인정받습니다.<br>
         · 취득세는 승용차 7%, 승합차와 화물차 5%, 경차 4%로 계산하고 경차는 50만 원을 감면했습니다. 공채 매입 비용은 넣지 않았습니다.<br>
         · <b>보험료와 자동차세</b>는 사는 경우와 리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 두 금액 모두 감가상각 한도 밖이라 전액 비용으로 인정됩니다. 가정값에서 고치실 수 있습니다.<br>
         · <b>리스와 렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건</b>으로 계산합니다. 보증금은 맡겼다가 돌려받아 순액이 0이지만 그동안 자금이 묶입니다. 만기 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다.<br>· 월 리스료와 렌트료는 <b>이자율에서 거꾸로 계산합니다.</b> 리스사가 차를 사서 보증금을 받고 매달 요율을 걷다가 만기에 인수금을 받는 현금흐름으로 역산한 값입니다. 그래서 보증금이나 인수가, 보유기간을 바꾸면 요율이 따라 움직입니다. 실제 견적을 넣으시면 그 숫자를 그대로 씁니다.<br>· <b>리스와 렌트는 할부보다 이자율이 높습니다.</b> 기본값은 할부 5%, 리스 8%, 렌트 10%로 두었습니다. 렌터카는 영업용이라 취득세가 4%로 낮고 보험도 단체요율이라 실제로는 조금 유리할 수 있는데, 그 부분은 넣지 않았습니다.<br>
@@ -469,7 +463,7 @@ function scenario(method,owner,c){
     detail=[['취득원가',(vatOk?'공급가액 '+won(supply):'차값 '+won(c.price))+' + 취득세 '+won(acq),won(book)+'원'],
             ['보험료·자동차세','연 '+won(c.insurance+c.carTax)+' × '+yrs+'년 · 한도 밖에서 전액 비용',won(upkeep)+'원'],
             ['되팔아 회수','내 차라서 '+yrs+'년 뒤 팔면 그대로 들어옵니다','− '+won(sale)+'원'],
-            ['다 넣는 데 걸리는 기간',cap<Infinity?'연 800만 원씩 '+won(book)+'원을 털어야 합니다':'한도가 없어 5년 정액으로 끝납니다',payback+'년']];
+            ['다 넣는 데 걸리는 기간',cap<Infinity?'취득원가 '+won(book)+'원을 연 800만 원씩 나눠 비용으로 넣습니다':'한도가 없어 5년 정액으로 끝납니다',payback+'년']];
     if(method==='loan'){
       const int=interest(c.price,c.loanRate,Math.min(c.loanYears,yrs));
       cashOut+=int; cost+=int;                           // 할부이자는 한도 밖에서 전액 비용
@@ -497,10 +491,10 @@ function scenario(method,owner,c){
             ['감가상각비 상당액',(isLease?'리스료의 93%':'렌트료의 70%')+(cap<Infinity?' · 연 800만 원 한도':' · 한도 없음'),won(part)+'원'],
             ['보험료·자동차세',isLease?'연 '+won(c.insurance+c.carTax)+' × '+yrs+'년 · 따로 부담':'렌트료에 들어 있습니다',isLease?won(add)+'원':'포함'],
             ['보증금','계약 때 '+won(deposit)+' 맡기고 만기에 돌려받습니다','0원'],
-            ['리스사에 주는 금융비용','연 '+(isLease?c.leaseIr:c.rentIr)+'% 기준 · 리스료에 들어 있습니다',won(Math.max(0,total-(c.price+buyTax-buyout)))+'원'],
+            [(isLease?'리스사':'렌트사')+'에 주는 금융비용','연 '+(isLease?c.leaseIr:c.rentIr)+'% 기준 · '+(isLease?'리스료':'렌트료')+'에 들어 있습니다',won(Math.max(0,total-(c.price+buyTax-buyout)))+'원'],
             ['만기 인수금','계약서상 잔가 '+c.buyout+'% + 취득세 '+won(buyTax),'+ '+won(buyout+buyTax)+'원'],
             ['되팔아 회수','시세 '+c.resid+'%로 넘깁니다','− '+won(sale)+'원'],
-            ['다 넣는 데 걸리는 기간',cap<Infinity?'연 800만 원씩 '+won(part)+'원을 털어야 합니다':'한도가 없어 낸 해에 바로 끝납니다',payback+'년']];
+            ['다 넣는 데 걸리는 기간',cap<Infinity?'감가상각비 상당액 '+won(part)+'원을 연 800만 원씩 나눠 비용으로 넣습니다':'한도가 없어 낸 해에 바로 끝납니다',payback+'년']];
   }
 
   const income=owner==='corp'?c.corpIncome:c.personIncome;
@@ -526,9 +520,8 @@ function render(){
   let html='',last='';
   rows.forEach(r=>{
     if(many&&r.owner!==last){ html+='<tr class="own"><td colspan="5">'+OWNER[r.owner]+'</td></tr>'; last=r.owner; }
-    const tag=(c.fund&&(r.method==='lease'||r.method==='rent'))?'<span class="tag">자금출처 유리</span>':'';
     html+='<tr'+(r===best?' class="best"':'')+'>'
-      +'<td><span class="nm">'+METHOD[r.method]+'</span>'+tag+'</td>'
+      +'<td><span class="nm">'+METHOD[r.method]+'</span></td>'
       +'<td>'+won(r.cashOut)+'원'+(r.deposit>0?'<small>보증금 '+won(r.deposit)+'원이 묶입니다</small>':'')+'</td>'
       +'<td>'+r.payback+'년'+(r.carry>0?'<small>'+won(r.carry)+'원이 '+c.years+'년 뒤로 넘어감</small>':'<small>'+c.years+'년 안에 끝남</small>')+'</td>'
       +'<td>'+won(r.save)+'원'+(r.vatCredit>0?'<small>부가세 '+won(r.vatCredit)+'원 포함</small>':'')+'</td>'
@@ -540,13 +533,30 @@ function render(){
     +(capped(best.owner,c)?' · 감가상각 800만 원 한도 적용':' · 감가상각 한도 없음');
 
   const second=rows.filter(r=>r!==best).sort((a,b)=>a.net-b.net)[0];
-  let v='<b>'+(many?OWNER[best.owner]+'으로 ':'')+METHOD[best.method]+'</b>이 가장 낫습니다. '
+  let v='<b>'+(many?OWNER[best.owner]+'로 ':'')+METHOD[best.method]+'</b>이 가장 낫습니다. '
     +'세금까지 따진 실제 부담액이 '+won(best.net)+'원으로, 다음으로 나은 '+METHOD[second.method]
     +(many&&second.owner!==best.owner?'('+OWNER[second.owner]+')':'')+'보다 '+won(second.net-best.net)+'원 적습니다.';
   if(best.carry>0) v+='<br><br>다만 '+won(best.carry)+'원은 '+c.years+'년 안에 다 넣지 못합니다. 없어지는 돈은 아니고 연 800만 원씩 넘어가 '+best.payback+'년째에 끝납니다. 위 금액은 그 뒤까지 다 인정받는 것으로 보고 계산했습니다.';
-  if(c.fund&&best.method!=='lease'&&best.method!=='rent'){
-    const alt=rows.filter(r=>r.method==='lease'||r.method==='rent').sort((a,b)=>a.net-b.net)[0];
-    v+='<br><br><span style="font-size:14px;color:var(--mute)">자금출처를 신경 쓰신다면 '+METHOD[alt.method]+'도 보십시오. 부담액은 '+won(alt.net-best.net)+'원 더 들지만 차가 본인 명의 재산으로 잡히지 않습니다.</span>';
+  if(many){
+    // 법인 자금은 업무에만 쓸 수 있어, 큰 업무용 지출은 법인 돈으로 하는 편이 자금 활용에 낫습니다
+    const bc=rows.filter(r=>r.owner==='corp').sort((a,b)=>a.net-b.net)[0];
+    const bp=rows.filter(r=>r.owner==='person').sort((a,b)=>a.net-b.net)[0];
+    v+='<br><br><b>법인과 개인사업자가 함께 있으시면 차량처럼 큰 금액은 법인으로 취득하시길 권합니다.</b> '
+      +'법인 자금은 업무용으로만 쓸 수 있어서, 대표님이 개인적으로 쓰시려면 급여나 배당으로 세금을 내고 가져가셔야 합니다. '
+      +'업무에 쓰는 차량을 법인 돈으로 마련하시면 그 세금 없이 법인 자금을 쓰실 수 있고, 개인 돈은 빠져나가지 않아 자금출처 부담도 덜합니다.';
+    if(best.owner==='person'&&bc.net-bp.net>10000)
+      v+=' 이번 조건에서 차량 세금만 따지면 개인 명의가 '+won(bc.net-bp.net)+'원 적지만, 법인 자금을 꺼내 쓸 때의 세금까지 생각하면 법인 쪽이 나은 경우가 많습니다.';
+  }
+  if(c.form==='person'){
+    const note='<br><br><span style="font-size:14px;color:var(--mute)">';
+    if(best.method==='lease'||best.method==='rent'){
+      v+=note+'리스와 장기렌트는 목돈이 한 번에 빠져나가지 않고 차가 리스사나 렌트사 명의로 남아, 부동산 취득 등으로 자금출처를 신경 쓰시는 경우에도 부담이 적습니다.</span>';
+    }else{
+      const alt=rows.filter(r=>r.method==='lease'||r.method==='rent').sort((a,b)=>a.net-b.net)[0];
+      v+=note+'부동산 취득 등을 앞두고 자금출처를 신경 쓰고 계시다면, 계산상 조금 불리하더라도 리스나 장기렌트가 나을 수 있습니다. '
+        +'차를 사면 목돈이 한 번에 빠져나가고 차가 재산으로 잡히지만, 리스와 렌트는 매달 나눠 내고 차가 리스사나 렌트사 명의로 남습니다. '
+        +'이번 조건에서는 '+METHOD[alt.method]+'가 '+won(alt.net-best.net)+'원 더 듭니다.</span>';
+    }
   }
   document.getElementById('verdict').innerHTML=v;
 
@@ -558,10 +568,14 @@ function render(){
 
 function warnings(c,rows){
   const w=[];
+  const personDouble=c.form!=='corp'&&c.book!=='simple'&&c.kind==='sedan';
+  if(personDouble&&c.hascar==='yes')
+    w.push('<b>개인사업자는 두 번째 차량부터 업무전용자동차보험에 가입해야 합니다.</b> 복식부기의무자는 업무용승용차가 두 대 이상이면 한 대를 뺀 나머지 차량을 이 보험에 넣어야 합니다. '
+      +'가입하지 않으면 성실신고확인대상자와 전문직은 비용의 50%만, 그 밖의 복식부기의무자는 2025년까지 전액, 2026년부터는 50%만 인정받습니다. 계산은 보험에 가입한 것으로 보았습니다.'
+      +(c.driver==='family'?' 가족이 운전하시면 임직원만 운전하는 조건을 맞추기 어려우니 함께 확인해 주세요.':''));
   if(c.driver==='family'){
     if(c.form!=='person') w.push('<b>가족이 운전하면 법인 차량 비용이 전액 부인될 수 있습니다.</b> 법인은 임직원만 운전할 수 있는 업무전용자동차보험에 가입해야 비용을 인정받습니다. 가족을 직원으로 등록해 실제로 근무하게 하거나, 개인 명의로 두는 쪽을 검토해 보세요.');
-    else if(c.hascar==='yes') w.push('<b>두 번째 차량부터는 개인사업자도 업무전용자동차보험이 필요합니다.</b> 가족이 운전하면 이 요건을 못 맞춰 비용이 인정되지 않을 수 있습니다.');
-    else w.push('<b>가족이 운전하는 점을 확인해 주세요.</b> 지금은 첫 차량이라 업무전용자동차보험 요건에서 비켜 있지만, 차를 한 대 더 늘리면 그때부터 요건이 생깁니다.');
+    else if(c.hascar!=='yes') w.push('<b>가족이 운전하는 점을 확인해 주세요.</b> 지금은 첫 차량이라 업무전용자동차보험 요건에서 비켜 있지만, 차를 한 대 더 늘리면 그때부터 요건이 생깁니다.');
   }
   if(c.book==='unknown'&&c.form!=='corp') w.push('<b>장부 종류를 복식부기의무자로 보고 계산했습니다.</b> 간편장부대상자라면 800만 원 한도를 받지 않아 결과가 달라집니다. 직전 연도 수입금액이 업종별 기준을 넘지 않으면 간편장부대상자입니다.');
   if(c.vat!=='normal'&&c.kind!=='sedan') w.push('<b>부가가치세를 돌려받지 못합니다.</b> 경차나 승합차는 원래 매입세액을 공제받을 수 있지만 '+(c.vat==='free'?'면세사업자':'간이과세자')+'는 대상이 아닙니다. 차값의 10%가 그대로 부담으로 남습니다.');
@@ -702,7 +716,6 @@ function readInputs(){
     years,
     driver:document.getElementById('i-driver').value,
     hascar:document.getElementById('i-hascar').value,
-    fund:document.getElementById('i-fund').checked,
     kind:document.getElementById('i-kind').value,
     price:num(document.getElementById('i-price').value),
     leaseRate:dec(document.getElementById('a-lease').value),
@@ -724,7 +737,7 @@ document.getElementById('calc').addEventListener('click',()=>{
   if(c.form!=='corp'&&c.personIncome<=0){alert('개인 연간 소득금액을 입력해 주세요. 세금이 얼마나 줄어드는지는 소득에 따라 달라집니다.');return;}
   render(); initSlider(c.price);
 });
-['i-form','i-vat','i-book','i-years','i-driver','i-hascar','i-fund','i-kind'].forEach(id=>
+['i-form','i-vat','i-book','i-years','i-driver','i-hascar','i-kind'].forEach(id=>
   document.getElementById(id).addEventListener('change',()=>{
     if(id==='i-form') syncForm();
     if(id==='i-kind'){ syncCarTax(); syncIns(); }
