@@ -40,6 +40,11 @@
 .person .pdel{border:0;background:none;color:var(--mute);font-family:inherit;font-size:13px;cursor:pointer;padding:4px 2px}
 .person .pdel:hover{color:var(--seal)}
 .person .wide{grid-column:span 2}
+.sim .vary{display:inline-flex;align-items:center;gap:6px;margin:8px 0 0;font-weight:600;font-size:12.5px;color:var(--char);cursor:pointer}
+.sim .vary input{width:15px;height:15px;padding:0;margin:0;accent-color:var(--blue);flex:none}
+.person .phint{grid-column:1/-1;margin:0;background:var(--blue-soft);border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.7;color:var(--char)}
+.person .phint b{color:var(--blue)}
+.coname{max-width:360px;margin-bottom:14px}
 .addbtn{border:1px dashed var(--line);background:#fff;border-radius:10px;padding:12px;width:100%;color:var(--blue);font-weight:700;cursor:pointer;font-family:inherit;font-size:14px}
 .addbtn:hover{border-color:var(--blue)}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
@@ -61,6 +66,36 @@
 .savebtn:hover{background:var(--blue-soft)}
 .savebtn:disabled{opacity:.55;cursor:default}
 .savenote{font-size:12.5px;color:var(--mute)}
+.pdfrow{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.pdfrow .pdflabel{font-size:13px;font-weight:700;color:var(--ink);margin-right:4px}
+.pdfbtn{border:1px solid var(--line);background:#fff;color:var(--ink);font-family:inherit;font-size:13px;font-weight:600;padding:7px 13px;border-radius:99px;cursor:pointer}
+.pdfbtn:hover{border-color:var(--blue);color:var(--blue)}
+.pdfbtn.all{border-color:var(--blue-line);color:var(--blue)}
+/* 명세서: 화면에서는 숨기고 인쇄할 때만 보입니다 */
+#print-area{display:none;color:#1a1f2b}
+.pst+.pst{break-before:page;page-break-before:always}
+.pst-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:2px solid #0B1E3F;padding-bottom:10px;margin-bottom:16px}
+.pst-head h1{font-size:22px;margin:0;color:#0B1E3F}
+.pst-head p{margin:0;font-size:12.5px;color:#5C6572}
+.pst-info{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px}
+.pst-info th{background:#F3F5F9;color:#5C6572;font-weight:600;text-align:left;padding:7px 10px;border:1px solid #E1E6EE;width:17%}
+.pst-info td{padding:7px 10px;border:1px solid #E1E6EE;width:33%}
+.pst-info td span{color:#8b98a8;font-size:11.5px}
+.pst-sum{width:100%;border-collapse:collapse;margin-bottom:18px}
+.pst-sum th{background:#0B1E3F;color:#fff;padding:8px;font-size:12.5px;font-weight:700;border:1px solid #0B1E3F}
+.pst-sum td{padding:11px 8px;border:1px solid #E1E6EE;text-align:center;font-weight:800;font-size:14.5px}
+.pst-sum td.net{color:#1B4A9B}
+.pst h2{font-size:14px;margin:0 0 4px;color:#0B1E3F}
+.pst .stable{font-size:11.5px}
+.pst .stable td{padding:5px 8px}
+.pst-note{font-size:10.5px;color:#8b98a8;margin-top:14px;line-height:1.6}
+.pst-foot{font-size:10px;color:#aaaaaa;text-align:right;margin-top:6px}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff!important;margin:0}
+  body>*:not(#print-area){display:none!important}
+  #print-area{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 .backlink{margin-top:30px;text-align:center;font-size:14px}
 .backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
 .backlink a:hover{border-color:var(--blue)}
@@ -123,6 +158,7 @@
   <div class="wrap">
     <div class="sim">
       <div class="sim-in" id="sim-box">
+        <div class="coname"><label for="i-co">회사명 <small>명세서에 표시됩니다. 없으면 비워 두세요</small></label><input type="text" id="i-co" maxlength="40" autocomplete="organization"></div>
         <div class="phd"><b>퇴직하는 분</b><em>여러 명을 한꺼번에 넣으실 수 있습니다</em></div>
         <div id="people"></div>
         <button type="button" class="addbtn" id="addPerson">+ 한 명 더 추가</button>
@@ -144,6 +180,10 @@
           <button type="button" class="savebtn" id="save-img">결과를 이미지로 저장</button>
           <span class="savenote">카카오톡으로 보내거나 저장해 두실 수 있습니다</span>
         </div>
+        <div class="pdfrow" id="pdfrow" style="display:none">
+          <span class="pdflabel">명세서 PDF 저장</span>
+          <span id="pdfbtns"></span>
+        </div>
 
         <div class="verdict" id="verdict"></div>
 
@@ -157,6 +197,9 @@
         이 계산기는 <b>대략의 금액을 가늠하기 위한 단순 계산</b>입니다. 실제 퇴직금과 세금은 급여 항목, 퇴직연금 가입 형태, 근무 형태에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
         · <b>퇴직금 = 1일 평균임금 × 30일 × 재직일수 ÷ 365</b>로 계산합니다. 1일 평균임금은 퇴직일 전 3개월 동안 받은 임금을 그 기간의 날수로 나눈 값입니다.<br>
         · 상여금과 연차수당은 1년 치 가운데 3개월분(12분의 3)만 평균임금에 넣었습니다.<br>
+        · 급여가 달마다 달랐다면 <b>최근 3개월 급여가 달랐어요</b>를 눌러 3개월 임금 총액을 넣어 주세요. 지급받은 날이 아니라 일한 기간이 기준입니다.<br>
+        · 산정기간 안에 수습기간이나 육아휴직, 산재 휴업처럼 빼야 하는 기간이 있으면 그 날수와 임금을 빼고 계산해야 하는데, 이 부분은 반영하지 않았습니다.<br>
+        · <b>명세서 PDF 저장</b>을 누르면 인쇄 창이 열립니다. 대상을 PDF로 저장으로 고르시면 사람별 파일로 저장됩니다. 카카오톡 안에서 열었다면 다른 브라우저로 열어 주세요.<br>
         · 평균임금이 통상임금보다 적으면 통상임금으로 계산해야 하는데, 이 부분은 반영하지 않았습니다.<br>
         · 1년 이상 근무하고 4주 평균 1주 15시간 이상 일한 분에게만 퇴직금 지급 의무가 있습니다.<br>
         · 확정기여형(DC형) 퇴직연금에 가입했다면 적립된 금액이 퇴직급여가 되므로 이 계산과 다릅니다. 확정급여형(DB형)은 이 계산과 같습니다.<br>
@@ -192,6 +235,8 @@
   </div>
   <div class="copy">© 2026 HanTax</div>
 </footer>
+
+<div id="print-area" aria-hidden="true"></div>
 
 <script>
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
@@ -251,7 +296,7 @@ function calcPerson(p){
   // 1일 평균임금: 퇴직일 전 3개월 임금 ÷ 그 기간 날수
   const from=monthsBefore(end,3);
   const periodDays=days(from,end);
-  const wage3=p.wage*3, bonus3=p.bonus*3/12;
+  const wage3=p.vary?p.total:p.wage*3, bonus3=p.bonus*3/12;   // 급여가 달랐다면 3개월 총액을 그대로 씁니다
   const avg=(wage3+bonus3)/periodDays;
   const pay=eligible?Math.floor(avg*30*workDays/365):0;
 
@@ -266,7 +311,7 @@ function calcPerson(p){
   const tax=incomeTax+localTax;
 
   return {name:p.name,start,end,workDays,fullMonths,years,eligible,from,periodDays,wage3,bonus3,avg,pay,
-          sd,conv,cd,base,info,incomeTax,localTax,tax,net:pay-tax,wage:p.wage,bonus:p.bonus};
+          sd,conv,cd,base,info,incomeTax,localTax,tax,net:pay-tax,wage:p.wage,bonus:p.bonus,vary:!!p.vary};
 }
 
 /* ── 입력 줄 ───────────────────────────────── */
@@ -275,6 +320,7 @@ const HELP={
   start:'처음 출근한 날입니다. 수습기간도 근무기간에 들어갑니다.',
   end:'마지막으로 근무한 날의 다음 날입니다. 8월 31일까지 일했다면 9월 1일을 적습니다. 퇴직금은 1년 이상 일해야 받을 수 있습니다.',
   wage:'세금과 4대보험을 떼기 전 금액입니다. 기본급에 매달 받는 수당(식대, 직책수당 등)을 더해 주세요. 퇴직 전 3개월 급여가 달랐다면 세 달의 평균을 넣어 주세요.',
+  total:'퇴직일 전 3개월 동안 일한 몫의 세전 급여를 모두 더한 금액입니다. 기본급과 매달 받는 수당, 연장·야간수당을 넣고, 1년에 한두 번 받는 상여금과 연차수당은 아래 칸에 따로 넣어 주세요.',
   bonus:'퇴직 전 1년 동안 받은 상여금과, 쓰지 못한 연차를 돈으로 받은 연차수당을 합쳐 넣어 주세요. 이 가운데 3개월분만 평균임금에 들어갑니다.'
 };
 const helpBtn=k=>' <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="'+HELP[k]+'">?</button>';
@@ -285,10 +331,24 @@ function addPerson(){
     +'<div class="pname"><label for="n'+i+'">이름</label><input type="text" id="n'+i+'" class="p-name" maxlength="20" autocomplete="off"></div>'
     +'<div><label for="s'+i+'">입사일'+helpBtn('start')+'</label><input type="date" id="s'+i+'" class="p-start"></div>'
     +'<div><label for="e'+i+'">퇴직일'+helpBtn('end')+'</label><input type="date" id="e'+i+'" class="p-end"></div>'
-    +'<div><label for="w'+i+'">월 급여 <small>세전</small>'+helpBtn('wage')+'</label><div class="unit"><input type="text" id="w'+i+'" class="p-wage" inputmode="numeric"><span>원</span></div></div>'
-    +'<div class="wide"><label for="b'+i+'">연간 상여금·연차수당 <small>없으면 비워 두세요</small>'+helpBtn('bonus')+'</label><div class="unit"><input type="text" id="b'+i+'" class="p-bonus" inputmode="numeric"><span>원</span></div></div>';
+    +'<div><label for="w'+i+'" class="wl">월 급여 <small>세전</small>'+helpBtn('wage')+'</label>'
+    +'<label for="t'+i+'" class="tl" style="display:none">3개월 임금 총액 <small>세전</small>'+helpBtn('total')+'</label>'
+    +'<div class="unit wu"><input type="text" id="w'+i+'" class="p-wage" inputmode="numeric"><span>원</span></div>'
+    +'<div class="unit tu" style="display:none"><input type="text" id="t'+i+'" class="p-total" inputmode="numeric"><span>원</span></div>'
+    +'<label class="vary"><input type="checkbox" class="p-vary">최근 3개월 급여가 달랐어요</label></div>'
+    +'<div class="wide"><label for="b'+i+'">연간 상여금·연차수당 <small>없으면 비워 두세요</small>'+helpBtn('bonus')+'</label><div class="unit"><input type="text" id="b'+i+'" class="p-bonus" inputmode="numeric"><span>원</span></div></div>'
+    +'<p class="phint" style="display:none"></p>';
   div.querySelector('.pdel').addEventListener('click',()=>{ div.remove(); renumber(); if(shown()) render(false); });
-  div.querySelectorAll('.p-wage,.p-bonus').forEach(el=>el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';}));
+  const vary=div.querySelector('.p-vary');
+  vary.addEventListener('change',()=>{
+    const on=vary.checked, t=div.querySelector('.p-total'), w=num(div.querySelector('.p-wage').value);
+    div.querySelector('.wl').style.display=div.querySelector('.wu').style.display=on?'none':'';
+    div.querySelector('.tl').style.display=div.querySelector('.tu').style.display=on?'':'none';
+    if(on&&!num(t.value)&&w) t.value=(w*3).toLocaleString('ko-KR');   // 월 급여를 넣어 두셨다면 세 달 치로 채워 둡니다
+    updHint(div);
+  });
+  ['input','change'].forEach(ev=>div.querySelector('.p-end').addEventListener(ev,()=>updHint(div)));
+  div.querySelectorAll('.p-wage,.p-bonus,.p-total').forEach(el=>el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';}));
   document.getElementById('people').appendChild(div);
   renumber();
   return div;
@@ -301,6 +361,19 @@ function renumber(){
   });
 }
 const shown=()=>document.getElementById('res').style.display==='block';
+let LAST=[];   // 마지막으로 계산한 결과 (명세서에 씁니다)
+
+/* 3개월 총액을 넣을 때 어느 기간의 급여를 더해야 하는지 알려 줍니다 */
+function updHint(div){
+  const hint=div.querySelector('.phint'), on=div.querySelector('.p-vary').checked;
+  hint.style.display=on?'':'none';
+  if(!on) return;
+  const end=parse(div.querySelector('.p-end').value);
+  if(!end){ hint.textContent='퇴직일을 넣으면 어느 기간의 급여를 더해야 하는지 알려 드립니다.'; return; }
+  const from=monthsBefore(end,3), last=new Date(end.getTime()-DAY);
+  hint.innerHTML='<b>'+kdate(from)+'부터 '+kdate(last)+'까지</b> 일한 몫의 급여를 모두 더해 주세요. 그 기간에 지급받은 날이 아니라 일한 기간이 기준입니다.'
+    +(end.getDate()!==1?' 달 중간에 걸친 달은 일한 날만큼 나눠서 넣어 주세요.':'');
+}
 
 /* 입력을 모읍니다. strict면 빠진 칸을 알려 주고 멈춥니다 */
 function collect(strict){
@@ -310,14 +383,16 @@ function collect(strict){
     const c=cards[i];
     const p={name:c.querySelector('.p-name').value.trim()||('퇴직자 '+(i+1)),
              start:c.querySelector('.p-start').value, end:c.querySelector('.p-end').value,
-             wage:num(c.querySelector('.p-wage').value), bonus:num(c.querySelector('.p-bonus').value)};
-    const touched=c.querySelector('.p-name').value.trim()||p.start||p.end||p.wage||p.bonus;
+             wage:num(c.querySelector('.p-wage').value), bonus:num(c.querySelector('.p-bonus').value),
+             total:num(c.querySelector('.p-total').value), vary:c.querySelector('.p-vary').checked};
+    const touched=c.querySelector('.p-name').value.trim()||p.start||p.end||p.wage||p.total||p.bonus;
     if(!touched) continue;
     let msg='';
     if(!p.start) msg='입사일을 넣어 주세요.';
     else if(!p.end) msg='퇴직일을 넣어 주세요.';
     else if(parse(p.end)<=parse(p.start)) msg='퇴직일이 입사일보다 뒤여야 합니다. 날짜를 확인해 주세요.';
-    else if(!p.wage) msg='월 급여를 넣어 주세요.';
+    else if(p.vary&&!p.total) msg='3개월 임금 총액을 넣어 주세요.';
+    else if(!p.vary&&!p.wage) msg='월 급여를 넣어 주세요.';
     if(msg){ if(strict){ alert(p.name+'의 '+msg); return null; } continue; }
     list.push(p);
   }
@@ -364,6 +439,11 @@ function render(strict){
   }
   document.getElementById('verdict').innerHTML=v;
   renderSteps(rows);
+  LAST=rows;
+  const ok=rows.map((r,i)=>({r,i})).filter(x=>x.r.eligible);
+  document.getElementById('pdfbtns').innerHTML=ok.map(x=>'<button type="button" class="pdfbtn" data-i="'+x.i+'">'+esc(x.r.name)+'</button>').join(' ')
+    +(ok.length>1?' <button type="button" class="pdfbtn all" data-i="all">전체 한 번에</button>':'');
+  document.getElementById('pdfrow').style.display=ok.length?'':'none';
   document.getElementById('res').style.display='block';
 }
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -371,40 +451,76 @@ function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 /* ── 계산 과정 ─────────────────────────────── */
 function row(label,mid,val,cls){ return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
 function sec(t){ return '<tr class="sec"><td colspan="3">'+t+'</td></tr>'; }
+/* 한 사람의 계산 과정 표. 화면과 명세서가 같이 씁니다 */
+function personTable(r){
+  const last=new Date(r.end.getTime()-DAY);
+  const h='<table class="stable">'+sec('1. 퇴직금')
+    +row('재직기간',kdate(r.start)+' ~ '+kdate(last),r.workDays.toLocaleString('ko-KR')+'일');
+  if(!r.eligible) return h+row('퇴직금','1년 이상 근무하지 않아 지급 의무가 없습니다','0원','key')+'</table>';
+  return h+row('평균임금 산정기간',kdate(r.from)+' ~ '+kdate(last),r.periodDays+'일')
+    +row('3개월 임금',(r.vary?'3개월 임금 총액 '+won(r.wage3):'월 급여 '+won(r.wage)+' × 3')+(r.bonus?' + 상여금·연차수당 '+won(r.bonus)+' × 3/12':''),won(r.wage3+r.bonus3)+'원')
+    +row('1일 평균임금','3개월 임금 ÷ '+r.periodDays+'일',won(r.avg)+'원')
+    +row('퇴직금','1일 평균임금 × 30일 × '+r.workDays.toLocaleString('ko-KR')+'일 ÷ 365',won(r.pay)+'원','key')
+    +sec('2. 퇴직소득세')
+    +row('근속연수','1년이 안 되는 끝수는 1년으로 봅니다',r.years+'년')
+    +row('근속연수공제',r.years<=5?'100만 원 × '+r.years+'년':r.years<=10?'500만 원 + 200만 원 × '+(r.years-5)+'년':r.years<=20?'1,500만 원 + 250만 원 × '+(r.years-10)+'년':'4,000만 원 + 300만 원 × '+(r.years-20)+'년','− '+won(r.sd)+'원')
+    +row('환산급여','(퇴직금 − 근속연수공제) × 12 ÷ '+r.years+'년',won(r.conv)+'원')
+    +row('환산급여공제','환산급여 구간에 따라 공제',won(r.cd)+'원')
+    +row('과세표준','환산급여 − 환산급여공제',won(r.base)+'원')
+    +row('환산산출세액',r.base>0?won(r.base)+' × '+Math.round(r.info.rate*100)+'% − 누진공제 '+won(r.info.ded):'과세표준이 없습니다',won(r.info.tax)+'원')
+    +row('퇴직소득세','환산산출세액 × '+r.years+'년 ÷ 12 · 10원 미만 버림',won(r.incomeTax)+'원')
+    +row('지방소득세','퇴직소득세의 10%',won(r.localTax)+'원')
+    +row('실제 받는 돈','퇴직금 − 퇴직소득세 − 지방소득세',won(r.net)+'원','key')
+    +'</table>';
+}
 function renderSteps(rows){
-  let h='';
-  rows.forEach(r=>{
-    const last=new Date(r.end.getTime()-DAY), fromLast=new Date(r.end.getTime()-DAY);
-    h+='<div class="case"><b class="ttl">'+esc(r.name)+'</b><table class="stable">'
-      +sec('1. 퇴직금')
-      +row('재직기간',kdate(r.start)+' ~ '+kdate(last),r.workDays.toLocaleString('ko-KR')+'일');
-    if(!r.eligible){
-      h+=row('퇴직금','1년 이상 근무하지 않아 지급 의무가 없습니다','0원','key')+'</table></div>';
-      return;
-    }
-    h+=row('평균임금 산정기간',kdate(r.from)+' ~ '+kdate(fromLast),r.periodDays+'일')
-      +row('3개월 임금','월 급여 '+won(r.wage)+' × 3'+(r.bonus?' + 상여금·연차수당 '+won(r.bonus)+' × 3/12':''),won(r.wage3+r.bonus3)+'원')
-      +row('1일 평균임금','3개월 임금 ÷ '+r.periodDays+'일',won(r.avg)+'원')
-      +row('퇴직금','1일 평균임금 × 30일 × '+r.workDays.toLocaleString('ko-KR')+'일 ÷ 365',won(r.pay)+'원','key')
-      +sec('2. 퇴직소득세')
-      +row('근속연수','1년이 안 되는 끝수는 1년으로 봅니다',r.years+'년')
-      +row('근속연수공제',r.years<=5?'100만 원 × '+r.years+'년':r.years<=10?'500만 원 + 200만 원 × '+(r.years-5)+'년':r.years<=20?'1,500만 원 + 250만 원 × '+(r.years-10)+'년':'4,000만 원 + 300만 원 × '+(r.years-20)+'년','− '+won(r.sd)+'원')
-      +row('환산급여','(퇴직금 − 근속연수공제) × 12 ÷ '+r.years+'년',won(r.conv)+'원')
-      +row('환산급여공제','환산급여 구간에 따라 공제',won(r.cd)+'원')
-      +row('과세표준','환산급여 − 환산급여공제',won(r.base)+'원')
-      +row('환산산출세액',r.base>0?won(r.base)+' × '+Math.round(r.info.rate*100)+'% − 누진공제 '+won(r.info.ded):'과세표준이 없습니다',won(r.info.tax)+'원')
-      +row('퇴직소득세','환산산출세액 × '+r.years+'년 ÷ 12 · 10원 미만 버림',won(r.incomeTax)+'원')
-      +row('지방소득세','퇴직소득세의 10%',won(r.localTax)+'원')
-      +row('실제 받는 돈','퇴직금 − 퇴직소득세 − 지방소득세',won(r.net)+'원','key')
-      +'</table></div>';
-  });
-  h+='<p class="snote">환산급여는 퇴직금을 1년 치 급여처럼 바꿔 세율을 매기는 방법입니다. 오래 근무할수록 근속연수공제가 커지고 세금이 근속연수만큼 나눠 계산되어 부담이 줄어듭니다.</p>';
-  document.getElementById('steps-body').innerHTML=h;
+  document.getElementById('steps-body').innerHTML=
+    rows.map(r=>'<div class="case"><b class="ttl">'+esc(r.name)+'</b>'+personTable(r)+'</div>').join('')
+    +'<p class="snote">환산급여는 퇴직금을 1년 치 급여처럼 바꿔 세율을 매기는 방법입니다. 오래 근무할수록 근속연수공제가 커지고 세금이 근속연수만큼 나눠 계산되어 부담이 줄어듭니다.</p>';
+}
+
+/* ── 명세서 PDF ────────────────────────────────── */
+function statementHtml(r){
+  const co=document.getElementById('i-co').value.trim();
+  const last=new Date(r.end.getTime()-DAY);
+  return '<section class="pst">'
+    +'<div class="pst-head"><h1>퇴직금 계산 명세서</h1><p>'+(co?esc(co)+' · ':'')+'작성일 '+kdate(new Date())+'</p></div>'
+    +'<table class="pst-info">'
+      +'<tr><th>이름</th><td>'+esc(r.name)+'</td><th>근속기간</th><td>'+period(r)+' <span>('+r.workDays.toLocaleString('ko-KR')+'일)</span></td></tr>'
+      +'<tr><th>입사일</th><td>'+kdate(r.start)+'</td><th>퇴직일</th><td>'+kdate(r.end)+' <span>(마지막 근무일 '+kdate(last)+')</span></td></tr>'
+      +'<tr><th>1일 평균임금</th><td>'+won(r.avg)+'원</td><th>세법상 근속연수</th><td>'+r.years+'년</td></tr>'
+    +'</table>'
+    +'<table class="pst-sum"><tr><th>퇴직금</th><th>퇴직소득세</th><th>지방소득세</th><th>실제 지급액</th></tr>'
+    +'<tr><td>'+won(r.pay)+'원</td><td>'+won(r.incomeTax)+'원</td><td>'+won(r.localTax)+'원</td><td class="net">'+won(r.net)+'원</td></tr></table>'
+    +'<h2>계산 과정</h2>'+personTable(r)
+    +'<p class="pst-note">이 명세서는 참고용 계산입니다. 평균임금이 통상임금보다 적은 경우, 확정기여형(DC형) 퇴직연금, 임원 퇴직금 한도는 반영하지 않았습니다. 원천징수 신고는 퇴직소득원천징수영수증으로 합니다.</p>'
+    +'<p class="pst-foot">한택스 퇴직금 계산기 · hantax47.com</p>'
+    +'</section>';
+}
+function buildPrint(list){ document.getElementById('print-area').innerHTML=list.map(statementHtml).join(''); }
+function printStatements(list){
+  if(!list.length) return;
+  if(/KAKAOTALK/i.test(navigator.userAgent)){
+    alert('카카오톡 안에서는 PDF로 저장할 수 없습니다. 화면 위쪽 메뉴에서 다른 브라우저로 열기를 누른 뒤 다시 계산해 주세요.');
+    return;
+  }
+  buildPrint(list);
+  // 인쇄 창에서 PDF로 저장할 때 파일 이름이 되도록 제목을 잠시 바꿉니다
+  const old=document.title;
+  document.title='퇴직금명세서_'+(list.length>1?'전체':list[0].name);
+  const back=()=>{ document.title=old; window.removeEventListener('afterprint',back); };
+  window.addEventListener('afterprint',back);
+  window.print();
 }
 
 /* ── 이벤트 ───────────────────────────────── */
 document.getElementById('addPerson').addEventListener('click',()=>{ addPerson().querySelector('.p-name').focus(); });
 document.getElementById('calc').addEventListener('click',()=>render(true));
+document.getElementById('pdfbtns').addEventListener('click',e=>{
+  const btn=e.target.closest('.pdfbtn');
+  if(!btn) return;
+  printStatements(btn.dataset.i==='all'?LAST.filter(r=>r.eligible):[LAST[Number(btn.dataset.i)]]);
+});
 document.getElementById('people').addEventListener('input',()=>{ if(shown()) render(false); });
 document.getElementById('people').addEventListener('change',()=>{ if(shown()) render(false); });
 addPerson();
