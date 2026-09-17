@@ -271,7 +271,7 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 }
 
 /* ---------- 메인 세금계산기 ---------- */
-.toolgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px}
+.toolgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
 .toolcard{display:flex;flex-direction:column;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;
   padding:24px 22px 26px;min-height:168px;transition:border-color .15s,transform .15s,box-shadow .15s}
 .toolcard:hover{border-color:var(--blue-line);transform:translateY(-3px);box-shadow:0 10px 26px rgba(11,30,63,.08)}

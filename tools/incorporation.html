@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>법인전환 세금 계산기, 개인사업자와 법인 비교 | 한택스</title>
+<meta name="description" content="개인사업자로 계속할 때와 법인으로 전환해 대표 연봉을 정할 때의 종합소득세, 법인세, 4대보험을 나란히 비교합니다. 2026년 세율과 중소기업 세액감면을 반영했습니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/incorporation.html">
+<meta property="og:title" content="법인전환, 세금이 얼마나 달라질까요?">
+<meta property="og:description" content="개인사업자 유지와 법인전환을 세금과 4대보험까지 비교하는 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/incorporation.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-incorporation.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim-in .fw{grid-column:1/-1}
+.sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
+.sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--mute)}
+.unit input{padding-right:44px;text-align:right}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:36px}
+.res h2{font-size:20px;margin-bottom:6px}
+.modetab{display:inline-flex;background:var(--soft);border-radius:99px;padding:4px;margin-bottom:18px}
+.modetab button{border:0;background:none;padding:9px 18px;border-radius:99px;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer;font-family:inherit}
+.modetab button.on{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(11,30,63,.12)}
+.rtable .rate td{color:var(--char);font-weight:700}
+.rtable .rate small{display:block;font-size:11px;font-weight:400;color:var(--mute);margin-top:2px}
+.res .sub{font-size:14px;color:var(--mute);margin-bottom:18px}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px}
+.rtable th,.rtable td{padding:13px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable .best{background:var(--blue-soft)}
+.rtable .tot td{font-weight:800;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable .diff td{color:var(--blue);font-weight:700}
+.rtable .diff small{display:block;font-size:11.5px;font-weight:600;margin-top:2px;opacity:.85}
+.rtable .diff td.neg{color:var(--seal)}
+.rtable .gap td{padding:0;height:14px;border:0}
+.rtable .cash td{font-weight:700;color:var(--ink)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.slide{display:none;background:var(--soft);border-radius:14px;padding:24px 28px}
+.slnote{margin-top:16px;font-size:13px;color:var(--mute)}
+.slnote a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.slide .sl{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.slide .sl:last-child{margin-bottom:0}
+.slide .sl label{width:110px;margin:0;font-size:14px}
+.slide .sl input{flex:1;accent-color:var(--blue)}
+.slide .sl b{width:130px;text-align:right;font-size:15px;color:var(--blue)}
+.saverow{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.savenote{font-size:12.5px;color:var(--mute)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+.chartbox{margin-top:30px;border:1px solid var(--line);border-radius:12px;padding:22px 22px 16px}
+.chartbox h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
+.chartbox .csub{font-size:13px;color:var(--mute);margin-bottom:14px}
+.chartbox svg{width:100%;height:auto;display:block}
+.clegend{display:flex;gap:18px;justify-content:center;margin-top:10px;font-size:13px;color:var(--char);flex-wrap:wrap}
+.clegend span{display:flex;align-items:center;gap:6px}
+.clegend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.cband{margin-top:10px;text-align:center;font-size:13.5px;color:var(--blue);font-weight:700}
+.steps{margin-top:22px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:20px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.steps .case{margin-bottom:26px}
+.steps .case:last-child{margin-bottom:0}
+.steps .case b.ttl{display:block;color:var(--ink);font-size:14.5px;margin-bottom:10px}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:9px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.stable tr.key td{background:var(--blue-soft)}
+.stable tr.key td:last-child{color:var(--blue);font-weight:800}
+.snote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px;line-height:1.8}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:22px}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+.slide .sl{display:block;margin-bottom:22px}
+.slide .sl label{width:auto;margin-bottom:8px}
+.slide .sl input{width:100%;margin:6px 0}
+.slide .sl b{display:block;width:auto;text-align:left;margin-top:4px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>법인전환, 세금이 얼마나 달라질까요?</h1>
+    <p class="lead">지금처럼 개인사업자로 두는 경우와, 법인으로 전환해 대표님 연봉을 정하는 경우를 나란히 비교해 봅니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in" id="sim-box">
+        <div>
+          <label for="i-income">연 소득금액 <small>매출에서 비용을 뺀 이익</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="1년 매출에서 재료비, 인건비, 임차료 같은 비용을 모두 뺀 금액입니다. 종합소득세 신고서의 소득금액 또는 손익계산서의 당기순이익을 보시면 됩니다. 대표님이 가져가신 돈은 비용이 아니므로 빼지 마세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-income" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="세금을 매기기 전에 소득에서 먼저 빼 주는 금액입니다. 부양가족 공제, 국민연금 보험료, 노란우산공제 등이 들어갑니다. 작년 종합소득세 신고서의 소득공제 합계를 넣으시면 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-deduct" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-reduce">감면 종류 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업이 업종과 지역, 규모에 따라 세금을 깎아 주는 제도입니다. 창업한 지 얼마 안 된 회사는 창업중소기업 감면으로 세금을 절반이나 전액 면제받기도 합니다. 작년 신고서에 감면세액이 있었다면 그 종류를 고르시고, 없으면 감면 없음으로 두세요.">?</button></label>
+          <select id="i-reduce">
+            <option value="0">감면 없음</option>
+            <option value="10">중소기업특별세액감면 10%</option>
+            <option value="20">중소기업특별세액감면 20%</option>
+            <option value="30">중소기업특별세액감면 30%</option>
+            <option value="50">창업중소기업 세액감면 50%</option>
+            <option value="100">창업중소기업 세액감면 100%</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-salary">대표님 연봉 <small>법인전환 시 정할 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인으로 바꾸면 대표님도 회사에서 급여를 받는 직원이 됩니다. 그 급여는 회사의 비용이 되어 법인세를 줄이지만, 대표님 개인에게는 근로소득세가 붙습니다. 얼마로 정하느냐에 따라 전체 세금이 달라지므로 금액을 바꿔 가며 비교해 보세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
+        </div>
+      </div>
+      <div class="slide" id="slide">
+        <div class="sl"><label for="s-income">연 소득금액</label><input type="range" id="s-income" min="10000000" max="1000000000" step="5000000"><b id="s-income-v"></b></div>
+        <div class="sl"><label for="s-salary">대표님 연봉</label><input type="range" id="s-salary" min="0" max="1000000000" step="5000000"><b id="s-salary-v"></b></div>
+        <p class="slnote">막대를 움직이면 아래 결과가 바로 다시 계산됩니다. <a href="#" id="toBox">직접 입력으로 돌아가기</a></p>
+      </div>
+      <button class="btn btn-primary simbtn" id="calc">세금 비교하기</button>
+
+
+      <div class="res" id="res">
+        <div class="modetab" id="modetab">
+          <button type="button" class="on" data-ins="0">세금만 보기</button>
+          <button type="button" data-ins="1">4대보험까지 보기</button>
+        </div>
+        <h2 id="res-title">세금 비교 결과</h2>
+        <p class="sub" id="res-sub"></p>
+        <div style="overflow-x:auto">
+          <table class="rtable">
+            <thead>
+              <tr><th>구분</th><th>개인사업자<br>유지</th><th>법인전환<br><span id="h-salary"></span></th><th>법인전환<br>연봉으로 전액</th></tr>
+            </thead>
+            <tbody id="res-body"></tbody>
+          </table>
+        </div>
+        <div class="saverow">
+          <button type="button" class="savebtn" id="save-img">결과를 이미지로 저장</button>
+          <span class="savenote">카카오톡으로 보내거나 저장해 두실 수 있습니다</span>
+        </div>
+
+        <div class="chartbox" id="chartbox">
+          <h3>대표님 연봉에 따라 세금이 어떻게 달라지나요?</h3>
+          <p class="csub">가로축은 대표님 연봉, 세로축은 총 세금(법인세 + 근로소득세)입니다.</p>
+          <svg id="chart" viewBox="0 0 720 310" preserveAspectRatio="xMidYMid meet" role="img" aria-label="대표님 연봉에 따른 총 세금과 실수령액 변화 그래프"></svg>
+          <div class="clegend">
+            <span><i style="background:#1B4A9B"></i>지금보다 세금이 적은 구간</span>
+            <span><i style="background:#C8423A"></i>지금보다 세금이 많은 구간</span>
+            <span><i style="background:#8b98a8"></i>개인사업자로 유지할 때</span>
+          </div>
+          <p class="cband" id="cband"></p>
+        </div>
+
+        <div class="verdict" id="verdict"></div>
+
+        <details class="steps" id="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps-body"></div>
+        </details>
+
+      </div>
+
+      <p class="disc">
+        이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 업종, 성실신고 대상 여부, 4대보험, 배당, 퇴직금, 가지급금 등 여러 사정에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
+        · 다른 소득은 없다고 가정합니다.<br>
+        · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 2억 원 초과 20%이며 지방소득세를 포함했습니다.<br>
+        · 개인 종합소득세는 6~45% 누진세율로 계산하며, 지방소득세(세액의 10%)를 포함했습니다.<br>
+        · <b>4대보험까지 보기</b>를 선택하면 2026년 요율로 함께 계산합니다. 국민연금 9.5%(기준소득월액 상한 월 637만 원), 건강보험 7.19%, 장기요양 0.9448%를 반영하고 고용·산재보험은 제외했습니다.<br>
+        · 개인사업자는 지역가입자로 보아 <b>소득분 보험료만</b> 전액 본인부담으로 계산했습니다. 실제로는 재산과 자동차에 따라 건강보험료가 더 나올 수 있습니다.<br>
+        · 법인 대표님은 직장가입자로 보아 연봉 기준으로 계산했고, 회사부담분은 법인 비용으로 법인세를 줄이도록 반영했습니다. 본인부담분은 소득공제로 처리했습니다.<br>
+        · 대표님 연봉에 대해서는 근로소득공제를 적용한 근로소득세를 함께 더해 비교합니다.<br>
+        · 법인 쪽 소득공제는 대표님 개인 근로소득에 적용했습니다.
+      </p>
+
+      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+
+      <div class="art-cta" style="margin-top:34px">
+        <p>우리 회사는 전환하는 게 유리할까요?</p>
+        <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 세금 계산 ─────────────────────────────── */
+// 종합소득세·근로소득세 공통 누진세율 (2026년 기준, 지방소득세 제외)
+const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
+           [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
+function pit(base){ if(base<=0)return 0; for(const[lim,r,d]of PIT) if(base<=lim) return Math.max(0,(base*r-d))*1.1; return 0; }
+// 근로소득공제
+function earnedDeduct(sal){
+  if(sal<=5000000) return sal*.7;
+  if(sal<=15000000) return 3500000+(sal-5000000)*.4;
+  if(sal<=45000000) return 7500000+(sal-15000000)*.15;
+  if(sal<=100000000) return 12000000+(sal-45000000)*.05;
+  return Math.min(20000000,14750000+(sal-100000000)*.02);
+}
+// 법인세 (2026년: 2억 이하 10%, 초과 20%)
+const LOCAL=1.1; // 지방소득세 10% 포함
+/* 2026년 4대보험 요율 (대표이사·개인사업자는 고용·산재 제외) */
+const NP_RATE=0.095, NP_MAX_M=6370000, NP_MIN_M=400000;
+const HI_RATE=0.0719, LTC_RATE=0.009448, HI_MAX_M=120080000;
+let INS_MODE=false;
+/* 개인사업자: 지역가입자, 소득분 전액 본인부담 */
+function soloInsurance(income){
+  if(income<=0) return {np:0,hi:0,ltc:0,total:0,company:0,self:0,npBase:0,hiBase:0};
+  const m=income/12;
+  const npBase=Math.min(Math.max(m,NP_MIN_M),NP_MAX_M);
+  const hiBase=Math.min(m,HI_MAX_M);
+  const np=npBase*NP_RATE*12, hi=hiBase*HI_RATE*12, ltc=hiBase*LTC_RATE*12;
+  const total=np+hi+ltc;
+  return {np,hi,ltc,total,company:0,self:total,npBase,hiBase};
+}
+/* 법인 대표: 직장가입자, 회사와 절반씩 */
+function salaryInsurance(salary){
+  if(salary<=0) return {np:0,hi:0,ltc:0,total:0,company:0,self:0,npBase:0,hiBase:0};
+  const m=salary/12;
+  const npBase=Math.min(Math.max(m,NP_MIN_M),NP_MAX_M);
+  const hiBase=Math.min(m,HI_MAX_M);
+  const np=npBase*NP_RATE*12, hi=hiBase*HI_RATE*12, ltc=hiBase*LTC_RATE*12;
+  const total=np+hi+ltc;
+  return {np,hi,ltc,total,company:total/2,self:total/2,npBase,hiBase};
+}
+function cit(base){ if(base<=0)return 0; return (base<=200000000 ? base*.1 : 20000000+(base-200000000)*.2)*LOCAL; }
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+
+function compute(income,deduct,red,salary){
+  const rate=red/100;
+  const insP = INS_MODE ? soloInsurance(income) : soloInsurance(0);
+  const pBase=Math.max(0,income-deduct-insP.self);
+  const pTax=pit(pBase)*(1-rate);
+  const rows=[{label:'개인사업자 유지',corp:null,per:pTax,ins:insP,total:pTax+insP.total,
+               cash:income-pTax-insP.self,left:0,base:pBase}];
+  [salary,income].forEach((sal,i)=>{
+    const insC = INS_MODE ? salaryInsurance(sal) : salaryInsurance(0);
+    const cBase=Math.max(0,income-sal-insC.company);
+    const cTax=cit(cBase)*(1-rate);
+    const wBase=Math.max(0,sal-earnedDeduct(sal)-deduct-insC.self);
+    const wTax=pit(wBase);
+    rows.push({label:i===0?'법인전환':'전액 연봉',corp:cTax,per:wTax,ins:insC,
+               total:cTax+wTax+insC.total,sal,cash:sal-wTax-insC.self,
+               left:Math.max(0,cBase-cTax),base:wBase});
+  });
+  return rows;
+}
+
+function render(income,deduct,red,salary){
+  const rows=compute(income,deduct,red,salary);
+  document.getElementById('h-salary').textContent='연봉 '+won(salary)+'원';
+  const min=Math.min(...rows.map(r=>r.total));
+  const base=rows[0].total;
+  const tb=document.getElementById('res-body');
+  const cells=(fn)=>rows.map(r=>fn(r)).join('');
+  tb.innerHTML=
+    '<tr><td>법인세</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':won(r.corp)+'원')+'</td>')+'</tr>'
+   +'<tr><td>대표님 개인 세금</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.per)+'원</td>')+'</tr>'
+   +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':won(r.ins.company)+'원')+'</td>')+'</tr>'
+             +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.ins.self)+'원</td>')+'</tr>':'')
+   +'<tr class="tot"><td>'+(INS_MODE?'총 부담 합계':'합계')+'</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.total)+'원</td>')+'</tr>'
+   +'<tr class="rate"><td>'+(INS_MODE?'소득 대비 부담률':'소득 대비 세율')+'</td>'+cells(r=>{
+      const pct=income>0?(r.total/income*100):0;
+      return '<td class="'+(r.total===min?'best':'')+'">'+pct.toFixed(1)+'%</td>';
+   })+'</tr>'
+   +'<tr class="diff"><td>지금 대비</td>'+cells(r=>{
+      if(r.corp===null) return '<td class="'+(r.total===min?'best':'')+'">기준</td>';
+      const d=base-r.total;
+      if(Math.abs(d)<1000) return '<td class="'+(r.total===min?'best':'')+'">비슷</td>';
+      return '<td class="'+(r.total===min?'best':'')+(d<0?' neg':'')+'">'+won(Math.abs(d))+'원<br><small>'+(d>0?'적게 냄':'더 냄')+'</small></td>';
+   })+'</tr>'
+   +'<tr class="gap"><td colspan="5"></td></tr>'
+   +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>'<td>'+won(r.cash)+'원</td>')+'</tr>'
+   +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+(r.corp===null?'해당 없음':won(r.left)+'원')+'</td>')+'</tr>';
+  document.getElementById('res-sub').textContent=
+    '소득금액 '+won(income)+'원 · 소득공제 '+won(deduct)+'원'+(red>0?' · 감면 '+red+'%':' · 감면 없음')+(INS_MODE?' · 4대보험 포함':'');
+  document.getElementById('res-title').textContent = INS_MODE ? '총 부담 비교 결과' : '세금 비교 결과';
+  const best=rows.find(r=>r.total===min);
+  const save=base-min;
+  const labels={0:'지금처럼 개인사업자로 두는 경우',1:'법인으로 전환해 대표님 연봉을 '+won(rows[1].sal)+'원으로 정하는 경우',2:'법인으로 전환해 이익 전액을 연봉으로 가져가는 경우'};
+  const bestIdx=rows.indexOf(best);
+  document.getElementById('verdict').innerHTML=
+    '<b>'+labels[bestIdx]+'</b>가 세금 면에서 가장 낮게 나옵니다. 세금 합계는 '+won(best.total)+'원, 대표님이 실제로 가져가는 돈은 '+won(best.cash)+'원입니다.'
+    +(best.left>0?'<br><br>다만 나머지 '+won(best.left)+'원은 법인에 남습니다. 그 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.':'')
+    + (INS_MODE
+       ? '<br><br><span style="font-size:14px;color:var(--mute)">개인사업자는 소득 전체에 보험료가 붙고 전액 본인이 냅니다. 법인 대표님은 연봉에만 붙고 절반은 회사가 부담하므로, 연봉을 정하는 방식으로 보험료를 조절할 수 있습니다. 다만 개인사업자는 재산과 자동차에 따라 건강보험료가 더 나올 수 있어 실제 금액은 달라집니다.</span>'
+       : '<br><br><span style="font-size:14px;color:var(--mute)">여기에 국민연금과 건강보험료가 더 빠집니다. 위 탭에서 <b>4대보험까지 보기</b>를 누르면 함께 계산한 결과를 보실 수 있습니다.</span>');
+  renderSteps(income,deduct,red,rows,salary);
+  drawChart(income,deduct,red,salary);
+  document.getElementById('res').style.display='block';
+}
+
+/* 연봉별 곡선 그래프 */
+function shortWon(v){
+  if(v>=100000000){ const e=v/100000000; return (e>=10?Math.round(e):Math.round(e*10)/10)+'억'; }
+  if(v>=10000) return Math.round(v/10000).toLocaleString('ko-KR')+'만';
+  return Math.round(v)+'';
+}
+function drawChart(income,deduct,red,salary){
+  const W=720,H=320,L=62,R=22,T=22,B=54;
+  const rate=red/100, N=80;
+  const pts=[];
+  for(let i=0;i<=N;i++){
+    const sal=income*i/N;
+    const ins = INS_MODE ? salaryInsurance(sal) : salaryInsurance(0);
+    const cTax=cit(Math.max(0,income-sal-ins.company))*(1-rate);
+    const wTax=pit(Math.max(0,sal-earnedDeduct(sal)-deduct-ins.self));
+    pts.push({sal,tax:cTax+wTax+ins.total});
+  }
+  const insP = INS_MODE ? soloInsurance(income) : soloInsurance(0);
+  const pTax=pit(Math.max(0,income-deduct-insP.self))*(1-rate)+insP.total;  // 개인사업자 유지
+  const rawMax=Math.max(pTax,...pts.map(p=>p.tax))*1.12||1;
+  const step=(()=>{ const rough=rawMax/4, mag=Math.pow(10,Math.floor(Math.log10(rough))), n=rough/mag;
+    return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag; })();
+  const maxY=step*4;
+  const X=v=>L+(v/income)*(W-L-R);
+  const Y=v=>H-B-(v/maxY)*(H-T-B);
+  const line=pts.map((p,i)=>(i?'L':'M')+X(p.sal).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' ');
+  const area=line+' L'+X(income).toFixed(1)+' '+(H-B)+' L'+L+' '+(H-B)+' Z';
+
+  let g='';
+  for(let i=0;i<=4;i++){
+    const v=maxY*i/4, y=Y(v);
+    g+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="#E4E8EF" stroke-width="1"/>'
+      +'<text x="'+(L-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
+  }
+  [0,income/2,income].forEach((v,i)=>{
+    g+='<text x="'+X(v).toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="'+(i===0?'start':i===2?'end':'middle')+'" font-size="11" fill="#8b98a8">'+(v===0?'0':shortWon(v))+'</text>';
+  });
+
+  const minP=pts.reduce((a,b)=>b.tax<a.tax?b:a);
+  const cur=pts.reduce((a,b)=>Math.abs(b.sal-salary)<Math.abs(a.sal-salary)?b:a);
+  // 개인사업자 기준선보다 낮은 구간(전환 유리 구간)
+  const under=pts.filter(p=>p.tax<pTax);
+  const bandTxt=under.length? '연봉 '+shortWon(under[0].sal)+' ~ '+shortWon(under[under.length-1].sal)+' 구간이 지금보다 '+(INS_MODE?'부담이':'세금이')+' 적습니다' : '';
+
+  // 기준선을 넘는 첫 지점(교차점) 찾기
+  let crossX=null;
+  for(let i=1;i<pts.length;i++){
+    if(pts[i-1].tax<=pTax && pts[i].tax>pTax){
+      const t=(pTax-pts[i-1].tax)/(pts[i].tax-pts[i-1].tax);
+      crossX=pts[i-1].sal+(pts[i].sal-pts[i-1].sal)*t;
+      break;
+    }
+  }
+  const lineUnder=pts.filter(p=>p.tax<=pTax).map((p,i)=>(i?'L':'M')+X(p.sal).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' ');
+  const overPts=pts.filter(p=>p.tax>pTax);
+  const lineOver=overPts.length?(crossX!==null?'M'+X(crossX).toFixed(1)+' '+Y(pTax).toFixed(1)+' ':'')
+    +overPts.map((p,i)=>((i||crossX!==null)?'L':'M')+X(p.sal).toFixed(1)+' '+Y(p.tax).toFixed(1)).join(' '):'';
+  const redBand=crossX!==null
+    ? '<rect x="'+X(crossX).toFixed(1)+'" y="'+T+'" width="'+(W-R-X(crossX)).toFixed(1)+'" height="'+(H-B-T)+'" fill="#C8423A" fill-opacity="0.06"/>'
+      +'<text x="'+(W-R-4)+'" y="'+(T+16)+'" text-anchor="end" font-size="10.5" fill="#C8423A" font-weight="700">세금이 더 많아지는 구간</text>'
+    : '';
+
+  document.getElementById('chart').innerHTML=
+    g
+    +'<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#C9D6F0" stroke-width="1"/>'
+    +redBand
+    +'<path d="'+area+'" fill="#1B4A9B" fill-opacity="0.05"/>'
+    +'<line x1="'+L+'" y1="'+Y(pTax).toFixed(1)+'" x2="'+(W-R)+'" y2="'+Y(pTax).toFixed(1)+'" stroke="#8b98a8" stroke-width="1.5" stroke-dasharray="6 5"/>'
+    +'<text x="'+(L+6)+'" y="'+(Y(pTax)-8).toFixed(1)+'" text-anchor="start" font-size="11.5" fill="#5C6572" font-weight="700">개인사업자 유지 '+shortWon(pTax)+'</text>'
+    +'<path d="'+lineUnder+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
+    +(lineOver?'<path d="'+lineOver+'" fill="none" stroke="#C8423A" stroke-width="2.5"/>':'')
+    +'<line x1="'+X(cur.sal).toFixed(1)+'" y1="'+T+'" x2="'+X(cur.sal).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
+    +'<circle cx="'+X(cur.sal).toFixed(1)+'" cy="'+Y(cur.tax).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
+    +'<text x="'+Math.min(W-R-50,Math.max(L+50,X(cur.sal))).toFixed(1)+'" y="'+Math.max(T+12,Y(cur.tax)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금 선택 '+shortWon(cur.tax)+'</text>'
+    +'<circle cx="'+X(minP.sal).toFixed(1)+'" cy="'+Y(minP.tax).toFixed(1)+'" r="4" fill="#fff" stroke="#1B4A9B" stroke-width="2"/>'
+    +'<text x="'+Math.min(W-R-40,Math.max(L+40,X(minP.sal))).toFixed(1)+'" y="'+(Y(minP.tax)+20).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#1B4A9B" font-weight="700">최저 '+shortWon(minP.tax)+'</text>'
+    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+36)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님 연봉</text>';
+  document.getElementById('cband').textContent=bandTxt;
+  const ch3=document.querySelector('.chartbox h3');
+  if(ch3) ch3.textContent = INS_MODE ? '대표님 연봉에 따라 부담이 어떻게 달라지나요?' : '대표님 연봉에 따라 세금이 어떻게 달라지나요?';
+  const cs=document.querySelector('.chartbox .csub');
+  if(cs) cs.textContent = INS_MODE
+    ? '가로축은 대표님 연봉, 세로축은 총 부담(법인세 + 개인 세금 + 4대보험)입니다.'
+    : '가로축은 대표님 연봉, 세로축은 총 세금(법인세 + 근로소득세)입니다.';
+  const lg=document.querySelector('.clegend span:first-child');
+  if(lg) lg.innerHTML='<i style="background:#1B4A9B"></i>'+(INS_MODE?'지금보다 부담이 적은 구간':'지금보다 세금이 적은 구간');
+}
+
+/* 계산 과정 설명 */
+function pitInfo(b){ if(b<=0) return {tax:0,rate:0,ded:0}; for(const[lim,r,d]of PIT) if(b<=lim) return {tax:Math.max(0,b*r-d)*1.1,rate:r,ded:d}; }
+function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
+function renderSteps(income,deduct,red,rows,salary){
+  const rate=red/100;
+  const r0=rows[0], pd=pitInfo(r0.base);
+  let html='<div class="case"><b class="ttl">개인사업자로 그대로 두는 경우</b><table class="stable">'
+    +(INS_MODE?row('4대보험','소득 '+won(income)+' 기준 · 지역가입자 전액 본인부담',won(r0.ins.total)+'원'):'')
+    +row('과세표준','소득금액 − 소득공제'+(INS_MODE?' − 본인부담 보험료 '+won(r0.ins.self):''),won(r0.base)+'원')
+    +row('종합소득세',won(r0.base)+' × '+(pd.rate*100)+'% − '+won(pd.ded)+(red>0?' → 감면 '+red+'%':'')+' → 지방소득세 포함',won(r0.per)+'원')
+    +(INS_MODE?row('총 부담','세금 '+won(r0.per)+' + 보험료 '+won(r0.ins.total),won(r0.total)+'원',true):'')
+    +row('가져가는 돈','소득 − 세금'+(INS_MODE?' − 본인부담 보험료':''),won(r0.cash)+'원',true)
+    +'</table></div>';
+  const titles=['법인으로 전환하고 대표님 연봉을 '+won(salary)+'원으로 정하는 경우','법인으로 전환하고 이익 전액을 연봉으로 가져가는 경우'];
+  rows.filter(r=>r.corp!==null).forEach((r,i)=>{
+    const sal=r.sal, cBase=Math.max(0,income-sal-r.ins.company);
+    const edu=earnedDeduct(sal), wd=pitInfo(r.base);
+    html+='<div class="case"><b class="ttl">'+titles[i]+'</b><table class="stable">'
+      +(INS_MODE?row('4대보험','연봉 '+won(sal)+' 기준 · 회사 '+won(r.ins.company)+' + 본인 '+won(r.ins.self),won(r.ins.total)+'원'):'')
+      +row('법인 과세표준', INS_MODE
+            ? '소득금액 '+won(income)+' − 연봉 '+won(sal)+' − 회사부담 보험료 '+won(r.ins.company)
+            : '소득금액 '+won(income)+' − 연봉 '+won(sal), won(cBase)+'원')
+      +row('법인세','과세표준 × '+(cBase<=200000000?'10%':'10~20%')+(red>0?' → 감면 '+red+'%':'')+' → 지방소득세 포함',won(r.corp)+'원')
+      +row('대표 과세표준','연봉 − 근로소득공제 '+won(edu)+(INS_MODE?' − 본인부담 보험료 '+won(r.ins.self):''),won(r.base)+'원')
+      +row('대표 근로소득세',won(r.base)+' × '+(wd.rate*100)+'% − '+won(wd.ded)+' → 지방소득세 포함',won(r.per)+'원')
+      +row(INS_MODE?'총 부담':'세금 합계', INS_MODE
+            ? '법인세 '+won(r.corp)+' + 근로소득세 '+won(r.per)+' + 보험료 '+won(r.ins.total)
+            : '법인세 '+won(r.corp)+' + 근로소득세 '+won(r.per), won(r.total)+'원',true)
+      +row('가져가는 돈','연봉 '+won(sal)+' − 근로소득세'+(INS_MODE?' − 본인부담 보험료':''),won(r.cash)+'원',true)
+      +row('법인에 남는 돈','','+ '+won(r.left)+'원')
+      +'</table></div>';
+  });
+  html+='<p class="snote">근로소득공제는 연봉 구간에 따라 자동 반영했습니다. 감면은 개인 종합소득세와 법인세에만 적용하고 대표님 근로소득세에는 적용하지 않았습니다.'
+    +(INS_MODE?' 개인사업자 보험료는 소득분만 계산했으므로 재산과 자동차에 따라 실제 금액은 더 클 수 있습니다.':' 4대보험은 위 탭에서 함께 볼 수 있습니다.')
+    +' 법인에 남는 돈을 배당·퇴직금으로 꺼낼 때의 세금은 포함되어 있지 않습니다.</p>';
+  document.getElementById('steps-body').innerHTML=html;
+}
+
+function readInputs(){
+  return {income:num(document.getElementById('i-income').value),
+          deduct:num(document.getElementById('i-deduct').value),
+          red:Number(document.getElementById('i-reduce').value),
+          salary:num(document.getElementById('i-salary').value)};
+}
+document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#modetab button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  INS_MODE = b.dataset.ins==='1';
+  const {income,deduct,red,salary}=readInputs();
+  if(income>0 && salary>0) render(income,deduct,red,Math.min(salary,income));
+}));
+document.getElementById('calc').addEventListener('click',()=>{
+  const {income,deduct,red,salary}=readInputs();
+  if(income<=0){alert('연 소득금액을 입력해 주세요.');return;}
+  if(salary<=0){alert('대표님 연봉을 입력해 주세요.');return;}
+  if(salary>income){alert('대표님 연봉이 소득금액보다 클 수 없습니다.');return;}
+  render(income,deduct,red,salary);
+  initSlider(income,salary);
+});
+
+/* ── 슬라이더 ──────────────────────────────── */
+let sliderReady=false;
+function initSlider(income,salary){
+  const si=document.getElementById('s-income'), ss=document.getElementById('s-salary');
+  if(!sliderReady){
+    const upd=()=>{
+      const inc=Number(si.value); if(Number(ss.value)>inc) ss.value=inc;
+      const sal=Number(ss.value);
+      document.getElementById('s-income-v').textContent=won(inc)+'원';
+      document.getElementById('s-salary-v').textContent=won(sal)+'원';
+      const deduct=num(document.getElementById('i-deduct').value), red=Number(document.getElementById('i-reduce').value);
+      if(sal>0) render(inc,deduct,red,sal);
+    };
+    si.addEventListener('input',upd); ss.addEventListener('input',upd);
+    document.getElementById('toBox').addEventListener('click',e=>{
+      e.preventDefault();
+      document.getElementById('slide').style.display='none';
+      document.getElementById('sim-box').style.display='';
+      document.getElementById('calc').style.display='';
+    });
+    sliderReady=true;
+  }
+  si.value=income; ss.value=salary;
+  document.getElementById('s-income-v').textContent=won(income)+'원';
+  document.getElementById('s-salary-v').textContent=won(salary)+'원';
+  document.getElementById('slide').style.display='block';
+  document.getElementById('sim-box').style.display='none';
+  document.getElementById('calc').style.display='none';
+}
+
+
+/* 숫자 입력 콤마 */
+['i-income','i-deduct','i-salary'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.querySelector('.rtable'),
+  ()=>({
+    title: (document.getElementById('res-title')||document.querySelector('.res h2')).textContent,
+    sub: (document.getElementById('res-sub')||{textContent:''}).textContent,
+    note: '참고용 계산입니다. 실제 신고 전에 세무사와 확인해 주세요.',
+    filename: '한택스_법인전환비교'
+  })
+);
+</script>
+</body>
+</html>
+>
+</html>
