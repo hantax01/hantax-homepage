@@ -297,14 +297,14 @@
         </div>
         <div style="overflow-x:auto">
           <table class="rtable">
-            <thead><tr><th>취득 방법</th><th>총 지출액</th><th>비용 처리 기간</th><th>절세액</th><th>실제 부담액</th></tr></thead>
+            <thead><tr><th>취득 방법</th><th>순 지출액</th><th>비용 처리 기간</th><th>절세액</th><th>실제 부담액</th></tr></thead>
             <tbody id="res-body"></tbody>
           </table>
         </div>
 
         <div class="chartbox" id="chartbox">
           <h3>방법별 실제 부담액</h3>
-          <p class="csub">총 지출액에서 절세액을 뺀 실제 부담액입니다. 막대가 낮을수록 부담이 적습니다.</p>
+          <p class="csub">순 지출액에서 절세액을 뺀 실제 부담액입니다. 막대가 낮을수록 부담이 적습니다.</p>
           <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="취득 방법별 실제 부담액 막대그래프"></svg>
           <p class="cband" id="cband"></p>
         </div>
@@ -330,7 +330,7 @@
         · <b>리스와 렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건</b>으로 계산합니다. 보증금은 만기에 돌려받으므로 비용은 아니지만 계약 기간 동안 자금이 묶입니다. 만기 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다.<br>· 월 리스료와 렌트료는 <b>이자율에서 거꾸로 계산합니다.</b> 리스사가 차를 사서 보증금을 받고 매달 요율을 걷다가 만기에 인수금을 받는 현금흐름으로 역산한 값입니다. 그래서 보증금이나 인수가, 보유기간을 바꾸면 요율이 따라 움직입니다. 실제 견적을 넣으시면 그 숫자를 그대로 씁니다.<br>· <b>리스와 렌트는 할부보다 이자율이 높습니다.</b> 기본값은 할부 5%, 리스 6.5%, 렌트 8.5%로 두었습니다. 렌터카는 영업용이라 취득세가 4%로 낮고 보험도 단체요율이라 실제로는 조금 유리할 수 있는데, 그 부분은 넣지 않았습니다.<br>
         · 유류비와 통행료처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다.<br>
         · 리스는 부가가치세가 없는 금융용역이고, 장기렌트는 부가가치세가 붙습니다.<br>
-        · 장기렌트는 렌트사 보험으로 처리되어 사고 이력이 대표님이나 회사의 자동차보험료에 반영되지 않습니다. 사고가 잦다면 총 지출액이 커도 장기렌트가 유리할 수 있습니다. 사고 때 면책금은 계약에 따라 부담합니다.<br>
+        · 장기렌트는 렌트사 보험으로 처리되어 사고 이력이 대표님이나 회사의 자동차보험료에 반영되지 않습니다. 사고가 잦다면 순 지출액이 커도 장기렌트가 유리할 수 있습니다. 사고 때 면책금은 계약에 따라 부담합니다.<br>
         · 세금은 지방소득세를 포함해 계산했습니다. 법인세율과 종합소득세율은 2026년 기준입니다.
       </p>
 
@@ -493,7 +493,7 @@ function scenario(method,owner,c){
 
   const income=owner==='corp'?c.corpIncome:c.personIncome;
   const save=(taxOf(owner,income)-taxOf(owner,Math.max(0,income-cost/yrs)))*yrs+vatCredit;
-  return {method,owner,cashOut,cost,carry,vatCredit,save,net:cashOut-save,payback,deposit,detail,cap};
+  return {method,owner,cashOut,sale,cost,carry,vatCredit,save,net:cashOut-save,payback,deposit,detail,cap};
 }
 
 function compute(c){
@@ -516,14 +516,14 @@ function render(){
     if(many&&r.owner!==last){ html+='<tr class="own"><td colspan="5">'+OWNER[r.owner]+'</td></tr>'; last=r.owner; }
     html+='<tr'+(r===best?' class="best"':'')+'>'
       +'<td><span class="nm">'+METHOD[r.method]+'</span></td>'
-      +'<td>'+won(r.cashOut)+'원'+(r.deposit>0?'<small>보증금 '+won(r.deposit)+'원 별도 예치</small>':'')+'</td>'
+      +'<td>'+won(r.cashOut)+'원<small>들어간 돈 '+won(r.cashOut+r.sale)+' − 매각 '+won(r.sale)+'</small>'+(r.deposit>0?'<small>보증금 '+won(r.deposit)+'원 별도 예치</small>':'')+'</td>'
       +'<td>'+r.payback+'년'+(r.carry>0?'<small>한도초과 '+won(r.carry)+'원 이월</small>':'<small>보유기간 내 처리</small>')+'</td>'
       +'<td>'+won(r.save)+'원'+(r.vatCredit>0?'<small>부가세 '+won(r.vatCredit)+'원 포함</small>':'')+'</td>'
       +'<td>'+won(r.net)+'원</td></tr>';
   });
   document.getElementById('res-body').innerHTML=html;
   document.getElementById('res-sub').textContent=
-    KIND[c.kind]+' '+won(c.price)+'원 · '+c.years+'년 보유 · '+(c.vat==='normal'?'일반과세':c.vat==='free'?'면세':'간이과세')
+    KIND[c.kind]+' '+won(c.price)+'원 · '+c.years+'년 보유 후 시세 '+c.resid+'%에 매각 · '+(c.vat==='normal'?'일반과세':c.vat==='free'?'면세':'간이과세')
     +(capped(best.owner,c)?' · 감가상각 800만 원 한도 적용':' · 감가상각 한도 없음');
 
   const second=rows.filter(r=>r!==best).sort((a,b)=>a.net-b.net)[0];
@@ -625,7 +625,7 @@ function drawChart(c,owner){
   }
   data.forEach((d,i)=>{
     const cx=L+gw*i+gw/2, x=cx-bw/2, on=d===best;
-    g+=bar(x,d.net,METHOD[d.m]+' 실제 부담액 '+won(d.net)+'원 (총 지출액 '+won(d.out)+'원 − 절세액 '+won(d.save)+'원)')
+    g+=bar(x,d.net,METHOD[d.m]+' 실제 부담액 '+won(d.net)+'원 (순 지출액 '+won(d.out)+'원 − 절세액 '+won(d.save)+'원)')
       +'<text x="'+cx.toFixed(1)+'" y="'+(Y(d.net)-8).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2328">'+shortWon(d.net)+'</text>'
       +'<text x="'+cx.toFixed(1)+'" y="'+(H-B+22)+'" text-anchor="middle" font-size="13" font-weight="'+(on?800:600)+'" fill="#1F2328">'+METHOD[d.m]+'</text>'
       +(on?'<text x="'+cx.toFixed(1)+'" y="'+(H-B+40)+'" text-anchor="middle" font-size="11" fill="#5C6572">부담 가장 적음</text>':'');
@@ -638,7 +638,7 @@ function drawChart(c,owner){
     ? '실제 부담액이 가장 적고 절세액도 가장 큰 방법은 '+METHOD[best.m]+'입니다'
     : '실제 부담액은 '+josa(METHOD[best.m],'이','가')+' 가장 적고, 절세액은 '+josa(METHOD[most.m],'이','가')+' 가장 큽니다. 절세액이 크다고 부담이 적은 것은 아닙니다';
   const ow=document.querySelector('.chartbox .csub');
-  if(ow) ow.textContent='총 지출액에서 절세액을 뺀 실제 부담액입니다. 막대가 낮을수록 부담이 적습니다.'
+  if(ow) ow.textContent='순 지출액에서 절세액을 뺀 실제 부담액입니다. 막대가 낮을수록 부담이 적습니다.'
     +(c.form==='both'?' '+OWNER[owner]+' 기준입니다.':'');
 }
 
@@ -661,7 +661,7 @@ function renderSteps(c,rows,best){
       +row('비용 인정 합계','이월분 포함',won(r.cost)+'원')
       +(r.carry>0?row('한도초과 이월액','보유기간 이후 '+r.payback+'년차까지 나눠 비용 처리',won(r.carry)+'원'):'')
       +row('절세액',r.vatCredit>0?'소득세·법인세 '+won(r.save-r.vatCredit)+' + 부가세 '+won(r.vatCredit):'소득세·법인세',won(r.save)+'원')
-      +row('실제 부담액','총 지출액 '+won(r.cashOut)+' − 절세액 '+won(r.save),won(r.net)+'원',true)
+      +row('실제 부담액','순 지출액 '+won(r.cashOut)+' − 절세액 '+won(r.save),won(r.net)+'원',true)
       +'</table></div>';
   });
 
