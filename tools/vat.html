@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>부가가치세 계산기 2026, 이번 부가세 얼마나 나올까요? | 한택스</title>
-<meta name="description" content="6개월(1~6월 또는 7~12월) 매출과 매입을 넣으면 이번 신고 때 낼 부가가치세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제를 반영합니다.">
+<meta name="description" content="이번 신고 기간(개인 6개월, 법인 3개월)의 매출과 매입을 넣으면 낼 부가가치세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제를 반영합니다.">
 <link rel="canonical" href="https://www.hantax47.com/tools/vat.html">
 <meta property="og:title" content="부가가치세, 이번에 얼마나 나올까요?">
 <meta property="og:description" content="매출과 매입으로 낼 부가세를 미리 계산하는 계산기">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.hantax47.com/tools/vat.html">
-<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-vat.png?v=3">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-vat.png?v=4">
 <meta property="og:site_name" content="한택스">
 <link rel="icon" href="../assets/favicon.png?v=4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,6 +41,7 @@
 .divider:first-child{border-top:0;padding-top:0}
 .divider b{font-size:14.5px;color:var(--ink)}
 .divider span{font-size:12.5px;color:var(--mute)}
+.divider b small{font-weight:500;color:var(--mute);font-size:12.5px;margin-left:4px}
 .sim .chk{grid-column:1/-1;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:18px}
 .sim .chk label{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;margin:0;font-weight:600;font-size:14px;color:var(--char);cursor:pointer}
 .sim .chk input{width:17px;height:17px;padding:0;accent-color:var(--blue);flex:none}
@@ -116,7 +117,7 @@
   <div class="wrap">
     <span class="eyebrow">세무설계</span>
     <h1>부가가치세,<br>이번에 얼마나 나올까요?</h1>
-    <p class="lead">6개월(1~6월 또는 7~12월) 동안의 매출과 매입을 넣으면 이번 신고 때 낼 부가가치세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제도 반영합니다.</p>
+    <p class="lead">이번 신고 기간(개인 6개월, 법인 3개월)의 매출과 매입을 넣으면 낼 부가가치세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제도 반영합니다.</p>
   </div>
 </section>
 
@@ -124,7 +125,12 @@
   <div class="wrap">
     <div class="sim">
       <div class="sim-in">
-        <div class="divider"><b>매출</b><span>6개월 합계 (1~6월 또는 7~12월) · 부가세 포함 금액</span></div>
+        <div>
+          <label for="i-type">사업자 구분</label>
+          <select id="i-type"><option value="indiv">개인사업자</option><option value="corp">법인</option></select>
+        </div>
+        <div></div>
+        <div class="divider"><b>매출 <small>(부가가치세 포함)</small></b><span id="period">이번 신고 기간 합계 (1~6월 또는 7~12월)</span></div>
         <div>
           <label for="i-s-tax">세금계산서 매출 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사업자 거래처에 발행한 세금계산서의 합계금액(공급가액 + 세액)입니다.">?</button></label>
           <div class="unit"><input type="text" id="i-s-tax" inputmode="numeric"><span>원</span></div>
@@ -138,7 +144,7 @@
           <div class="unit"><input type="text" id="i-s-cash" inputmode="numeric"><span>원</span></div>
         </div>
         <div></div>
-        <div class="divider"><b>매입</b><span>같은 6개월 · 부가세 포함 금액</span></div>
+        <div class="divider"><b>매입 <small>(부가가치세 포함)</small></b><span>같은 기간 합계</span></div>
         <div>
           <label for="i-b-tax">세금계산서 매입 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사업자에게 받은 세금계산서의 합계금액입니다. 부가세가 없는 계산서(면세) 매입은 빼 주세요.">?</button></label>
           <div class="unit"><input type="text" id="i-b-tax" inputmode="numeric"><span>원</span></div>
@@ -148,7 +154,7 @@
           <div class="unit"><input type="text" id="i-b-card" inputmode="numeric"><span>원</span></div>
         </div>
         <div class="chk">
-          <label><input type="checkbox" id="i-consumer">주로 개인 손님에게 직접 팝니다 <small>가게·식당·미용실 등, 직전 연도 매출 10억 원 이하 개인사업자</small></label>
+          <label id="w-consumer"><input type="checkbox" id="i-consumer">주로 개인 손님에게 직접 팝니다 <small>가게·식당·미용실 등, 직전 연도 매출 10억 원 이하 개인사업자</small></label>
           <label><input type="checkbox" id="i-food">음식점을 합니다 <small>식당·카페·주점 등</small></label>
         </div>
         <div id="w-farm" style="display:none">
@@ -185,10 +191,10 @@
       </div>
 
       <p class="disc">
-        · 개인 일반과세자의 6개월치 부가가치세를 계산합니다. 1~6월분은 7월에, 7~12월분은 다음 해 1월에 신고합니다. 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.<br>
+        · 일반과세자가 한 번 신고할 때의 부가가치세를 계산합니다. 개인사업자는 6개월마다(1~6월분은 7월, 7~12월분은 다음 해 1월), 법인은 3개월마다 신고합니다. 개인사업자는 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.<br>
         · 금액은 모두 부가세가 포함된 금액으로 넣습니다. 세금계산서는 공급가액과 세액을 더한 합계금액입니다.<br>
-        · 신용카드매출전표 등 발행세액공제는 카드·현금영수증 매출의 1.3%, 한 해 1,000만 원 한도로 반영했습니다. 직전 연도 매출 10억 원 이하 개인사업자 가운데 소매·음식·숙박업처럼 주로 개인 손님에게 파는 업종이 받을 수 있고, 법인은 받을 수 없습니다.<br>
-        · 의제매입세액공제는 개인 음식점 기준입니다. 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용하고, 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하)·70%(2억 원 이하)·60%(초과)까지로 계산했습니다(우대 한도, 2027년 말까지).<br>
+        · 신용카드매출전표 등 발행세액공제는 카드·현금영수증 매출의 1.3%, 한 해 1,000만 원 한도로 반영했습니다. 직전 연도 매출 10억 원 이하 개인사업자 가운데 소매·음식·숙박업처럼 주로 개인 손님에게 파는 업종이 받을 수 있고, 법인은 받을 수 없어 법인을 고르면 빼고 계산합니다.<br>
+        · 의제매입세액공제는 음식점 기준입니다. 개인은 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용하고, 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하)·70%(2억 원 이하)·60%(초과)까지입니다. 법인은 6/106, 과세표준의 50%까지입니다. 한도는 모두 2027년 말까지 적용되는 우대 한도입니다.<br>
         · 간이과세자는 1년에 한 번, 업종별 부가가치율로 계산하는 방식이라 이 계산기와 맞지 않습니다.
       </p>
 
@@ -220,25 +226,29 @@ const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-lin
 mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
 nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
 
-/* ── 부가가치세 (개인 일반과세자, 6개월 한 번 신고분) ─── */
+/* ── 부가가치세 (일반과세자, 한 번 신고분) ─── */
 const CARD_RATE=0.013, CARD_MAX=10000000;   // 신용카드매출전표 등 발행세액공제: 1.3%, 한 해 1,000만 원 한도
 const f10=x=>(x<0?-1:1)*Math.floor(Math.abs(x)/10+1e-9)*10;   // 10원 미만 버림 (환급액도 같은 방식)
 
-// 금액은 모두 부가세 포함. 의제매입 공제율·한도율의 1억·2억 기준은 6개월 과세표준입니다
+// 금액은 모두 부가세 포함, 한 번 신고하는 기간(개인 6개월, 법인 3개월) 합계. 개인 의제매입 공제율·한도율의 1억·2억 기준은 6개월 과세표준입니다
 function calcVat(c){
   const sales=c.salesTax+c.salesCard+c.salesCash, buy=c.buyTax+c.buyCard;
   const supply=sales/1.1;                           // 과세표준 (공급가액)
   const outTax=sales/11, inTax=buy/11;
-  let deemed=0, deemedRate=0, deemedCap=0, capRate=0;
+  let deemed=0, deemedRate=0, deemedCap=0, capRate=0, rateName='';
   if(c.food&&c.farm>0){
-    deemedRate=supply<=200000000?9/109:8/108;
-    capRate=supply<=100000000?0.75:supply<=200000000?0.70:0.60;   // 개인 음식점 우대 한도 (2027년 말까지)
+    if(c.corp){ deemedRate=6/106; rateName='6/106'; capRate=0.5; }   // 법인 음식점, 우대 한도 50% (2027년 말까지)
+    else{
+      const small=supply<=200000000;
+      deemedRate=small?9/109:8/108; rateName=small?'9/109':'8/108';
+      capRate=supply<=100000000?0.75:small?0.70:0.60;   // 개인 음식점 우대 한도 (2027년 말까지)
+    }
     deemedCap=supply*capRate;
     deemed=Math.min(c.farm,deemedCap)*deemedRate;
   }
   const pre=outTax-inTax-deemed;
-  const card=c.consumer?Math.min(c.salesCard*CARD_RATE,CARD_MAX,Math.max(0,pre)):0;   // 납부할 세액을 넘지 않습니다
-  return {sales,buy,supply,outTax,inTax,deemed,deemedRate,deemedCap,capRate,card,due:f10(pre-card)};
+  const card=c.consumer&&!c.corp?Math.min(c.salesCard*CARD_RATE,CARD_MAX,Math.max(0,pre)):0;   // 납부할 세액을 넘지 않습니다
+  return {sales,buy,supply,outTax,inTax,deemed,deemedRate,deemedCap,capRate,rateName,card,due:f10(pre-card)};
 }
 
 /* ── 입력 ─────────────────────────────────── */
@@ -249,16 +259,22 @@ const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 function read(){
-  const food=$('i-food').checked;
-  return {salesTax:num($('i-s-tax').value),salesCard:num($('i-s-card').value),salesCash:num($('i-s-cash').value),
+  const food=$('i-food').checked, corp=$('i-type').value==='corp';
+  return {corp,salesTax:num($('i-s-tax').value),salesCard:num($('i-s-card').value),salesCash:num($('i-s-cash').value),
     buyTax:num($('i-b-tax').value),buyCard:num($('i-b-card').value),
-    food,farm:food?num($('i-farm').value):0,consumer:$('i-consumer').checked};
+    food,farm:food?num($('i-farm').value):0,consumer:!corp&&$('i-consumer').checked};
 }
 // 음식점을 고르면 면세 농수산물 칸을 보이고, 개인 손님 대상 업종 체크도 함께 켭니다
 $('i-food').addEventListener('change',()=>{
   const on=$('i-food').checked;
   $('w-farm').style.display=on?'':'none';
-  if(on) $('i-consumer').checked=true;
+  if(on&&$('i-type').value!=='corp') $('i-consumer').checked=true;
+});
+// 법인은 신용카드 발행세액공제를 받을 수 없어 체크 칸을 숨기고, 신고 기간을 3개월로 안내합니다
+$('i-type').addEventListener('change',()=>{
+  const corp=$('i-type').value==='corp';
+  $('w-consumer').style.display=corp?'none':'';
+  $('period').textContent=corp?'이번 신고 기간 합계 (3개월)':'이번 신고 기간 합계 (1~6월 또는 7~12월)';
 });
 const shown=()=>$('res').style.display==='block';
 const money=v=>v<0?'환급 '+won(-v)+'원':won(v)+'원';
@@ -267,7 +283,7 @@ const money=v=>v<0?'환급 '+won(-v)+'원':won(v)+'원';
 // 의제매입 한도가 표에서 바로 보이게: 한도 금액과 과세표준 대비 비율, 넘었으면 한도까지만 반영했다고 적습니다
 function deemedNote(c,r){
   if(!c.farm) return '면세 농수산물 매입을 넣으면 반영합니다';
-  const rate=r.deemedRate>0.08?'9/109':'8/108', cap='한도 '+won(r.deemedCap)+'원 (과세표준의 '+Math.round(r.capRate*100)+'%)';
+  const rate=r.rateName, cap='한도 '+won(r.deemedCap)+'원 (과세표준의 '+Math.round(r.capRate*100)+'%)';
   return c.farm>r.deemedCap
     ?'매입 '+won(c.farm)+'원이 '+cap+'을 넘어 한도까지만 × '+rate
     :'매입 '+won(c.farm)+'원 × '+rate+' · '+cap;
@@ -282,15 +298,16 @@ function render(){
     +(c.consumer?row('신용카드매출전표 등 발행세액공제','카드·현금영수증 매출의 1.3%','− '+won(r.card)+'원','minus'):'')
     +'<tr class="tot"><td>이번에 낼 부가세</td><td class="best">'+money(r.due)+'</td></tr>';
 
-  $('res-sub').textContent='6개월 매출 '+won(r.sales)+'원 · 매입 '+won(r.buy)+'원';
+  $('res-sub').textContent=(c.corp?'법인':'개인사업자')+' · 매출 '+won(r.sales)+'원 · 매입 '+won(r.buy)+'원';
 
   const v=r.due<0
     ?'매입세액이 매출세액보다 많아 <b>'+won(-r.due)+'원을 돌려받습니다.</b> 인테리어나 설비처럼 큰 매입이 있었던 기간에 생깁니다.'
-    :'이번 6개월분 부가가치세는 <b>'+won(r.due)+'원</b>입니다.';
+    :'이번 신고분 부가가치세는 <b>'+won(r.due)+'원</b>입니다.';
   const notes=[];
-  if(r.due>0) notes.push('4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.');
-  if(!c.consumer&&c.salesCard>0) notes.push('주로 개인 손님에게 파는 업종이라면 카드·현금영수증 매출의 1.3%를 더 뺄 수 있습니다. 해당하면 위에서 체크해 보세요.');
-  if(c.consumer&&c.salesCard*CARD_RATE>CARD_MAX) notes.push('카드 매출 세액공제는 한 해 1,000만 원까지라 1,000만 원만 반영했습니다. 앞선 6개월에 이미 받았다면 그만큼 줄어듭니다.');
+  if(!c.corp&&r.due>0) notes.push('4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.');
+  if(c.corp&&c.salesCard>0) notes.push('법인은 신용카드매출전표 등 발행세액공제를 받을 수 없어 반영하지 않았습니다.');
+  if(!c.corp&&!c.consumer&&c.salesCard>0) notes.push('주로 개인 손님에게 파는 업종이라면 카드·현금영수증 매출의 1.3%를 더 뺄 수 있습니다. 해당하면 위에서 체크해 보세요.');
+  if(c.consumer&&c.salesCard*CARD_RATE>CARD_MAX) notes.push('카드 매출 세액공제는 한 해 1,000만 원까지라 1,000만 원만 반영했습니다. 올해 앞선 신고에서 이미 받았다면 그만큼 줄어듭니다.');
   if(c.food&&c.farm>r.deemedCap) notes.push('면세 농수산물 매입이 공제 한도를 넘어 '+won(r.deemedCap)+'원까지만 의제매입세액공제에 반영했습니다.');
   $('verdict').innerHTML=v+notes.map(n=>'<span class="note">'+n+'</span>').join('');
 
@@ -298,7 +315,7 @@ function render(){
   $('steps').innerHTML='<table class="stable">'
     +srow('매출세액','(세금계산서 '+won(c.salesTax)+' + 카드·현금영수증 '+won(c.salesCard)+' + 현금·기타 '+won(c.salesCash)+') × 10/110',won(r.outTax)+'원')
     +srow('매입세액','(세금계산서 '+won(c.buyTax)+' + 카드·현금영수증 '+won(c.buyCard)+') × 10/110','− '+won(r.inTax)+'원')
-    +(c.food?srow('의제매입세액공제',c.farm>0?'min(농수산물 '+won(c.farm)+', 한도 '+won(r.deemedCap)+' = 과세표준 '+won(r.supply)+' × '+Math.round(r.capRate*100)+'%) × '+(r.deemedRate>0.08?'9/109':'8/108'):'면세 농수산물 매입을 넣으면 반영합니다','− '+won(r.deemed)+'원'):'')
+    +(c.food?srow('의제매입세액공제',c.farm>0?'min(농수산물 '+won(c.farm)+', 한도 '+won(r.deemedCap)+' = 과세표준 '+won(r.supply)+' × '+Math.round(r.capRate*100)+'%) × '+r.rateName:'면세 농수산물 매입을 넣으면 반영합니다','− '+won(r.deemed)+'원'):'')
     +(c.consumer?srow('신용카드매출전표 등 발행세액공제','카드·현금영수증 매출 '+won(c.salesCard)+' × 1.3% (한 해 1,000만 원, 납부할 세액 한도)','− '+won(r.card)+'원'):'')
     +srow('이번에 낼 부가세','10원 미만 버림',money(r.due))
     +'</table>';
