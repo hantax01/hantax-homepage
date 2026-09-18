@@ -74,7 +74,43 @@
 .backlink{margin-top:30px;text-align:center;font-size:14px}
 .backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
 .backlink a:hover{border-color:var(--blue)}
+/* 고객 전용 PDF 보고서 */
+.rpt{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.rpt-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rpt-top b{font-size:15.5px;color:var(--ink)}
+.rpt-top span{font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;background:var(--blue-soft);color:var(--blue)}
+.rpt p{font-size:14px;line-height:1.7;color:var(--char);margin:0 0 12px}
+.rpt-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px}
+.rpt-form .btn{white-space:nowrap;justify-content:center}
+.rpt .rpt-no{font-size:13px;color:var(--mute);margin:10px 0 0}
+.rpt .rpt-no a{color:var(--blue);font-weight:700}
+/* 보고서: 화면에서는 숨기고 인쇄할 때만 보입니다 */
+#print-area{display:none;color:#1a1f2b}
+.pst-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:2px solid #0B1E3F;padding-bottom:10px;margin-bottom:16px}
+.pst-head h1{font-family:var(--sans);font-size:22px;font-weight:800;margin:0;color:#0B1E3F}
+.pst-head p{margin:0;font-size:12.5px;color:#5C6572;text-align:right}
+.pst-sum{width:100%;border-collapse:collapse;margin-bottom:16px}
+.pst-sum th{background:#0B1E3F;color:#fff;padding:8px;font-size:12.5px;font-weight:700;border:1px solid #0B1E3F}
+.pst-sum td{padding:11px 8px;border:1px solid #E1E6EE;text-align:center;font-weight:800;font-size:14.5px}
+.pst-sum td.net{color:#1B4A9B}
+.pst h2{font-family:var(--sans);font-size:14px;font-weight:800;letter-spacing:0;margin:14px 0 6px;color:#0B1E3F}
+.pst-tbl{width:100%;border-collapse:collapse;font-size:11.5px;font-variant-numeric:tabular-nums}
+.pst-tbl th{background:#F3F5F9;color:#5C6572;font-weight:600;text-align:left;padding:6px 9px;border:1px solid #E1E6EE;width:34%}
+.pst-tbl td{padding:6px 9px;border:1px solid #E1E6EE}
+.pst-tbl td.n{text-align:right;font-weight:700;white-space:nowrap;width:24%}
+.pst-tbl tr.tot td{background:#F3F5F9;font-weight:800;color:#1B4A9B}
+.pst ul{margin:0;padding-left:16px;font-size:11.5px;line-height:1.7;list-style:disc}
+.pst-note{font-size:10.5px;color:#5C6572;margin-top:14px;line-height:1.6;border-top:1px solid #E1E6EE;padding-top:10px}
+.pst-foot{font-size:10px;color:#aaaaaa;text-align:right;margin-top:6px}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff!important;margin:0}
+  body>*:not(#print-area){display:none!important}
+  #print-area{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 @media(max-width:660px){
+.rpt{padding:16px}
+.rpt-form{grid-template-columns:1fr}
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .range{padding:22px 16px}
 .range .val{font-size:26px}
@@ -191,6 +227,17 @@
 
         <div class="tip" id="tip"></div>
 
+        <div class="rpt">
+          <div class="rpt-top"><b>PDF 보고서로 받기</b><span>한택스 고객 전용</span></div>
+          <p>한택스 고객께는 이 결과를 계산 과정까지 담은 PDF 보고서로 드립니다. 담당자에게 받은 고객 비밀번호를 넣어 주세요.</p>
+          <div class="rpt-form">
+            <input type="text" id="r-co" placeholder="회사명 (보고서에 표시)" autocomplete="organization">
+            <input type="password" id="r-pw" placeholder="고객 비밀번호" autocomplete="off">
+            <button type="button" class="btn btn-primary" id="r-pdf">PDF 받기</button>
+          </div>
+          <p class="rpt-no">고객이 아니신가요? <a href="../consult/">상담 신청하기</a></p>
+        </div>
+
         <div class="ask">
           <p><b>재무제표만으로 낸 추정치입니다.</b> 세무조정계산서와 부동산 시가를 반영하면 평가액이 크게 달라질 수 있습니다.<br>재무제표를 보내 주시면 정확히 평가하고, 넘기기 좋은 시점까지 함께 짚어 드립니다.</p>
           <div class="btns">
@@ -229,6 +276,7 @@
   </div>
   <div class="copy">© 2026 HanTax</div>
 </footer>
+<div id="print-area" aria-hidden="true"></div>
 
 <script>
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
@@ -364,6 +412,7 @@ function render(){
     ['<b>주식 수 변동</b> 증자, 감자, 자기주식이 있었다면 연도별로 따로 셉니다.','mid','달라질 수 있음']
   ];
   $('missing').innerHTML=m.map(x=>'<li><span>'+x[0]+'</span><span class="tag '+x[1]+'">'+x[2]+'</span></li>').join('');
+  LAST={c,r,lo,hi,d,m:m.map(x=>x[0])};
 
   // 절세 여지
   $('tip').innerHTML=r.assetOnly
@@ -381,6 +430,86 @@ $('calc').addEventListener('click',()=>{
 });
 document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&!check(read())) render(); });
 document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!check(read())) render(); });
+
+/* ── 고객 전용 PDF 보고서 ──────────────────────── */
+// 고객 비밀번호의 SHA-256 값입니다. 비밀번호 자체는 코드에 두지 않습니다. 바꿀 때는 새 비밀번호의 SHA-256으로 이 줄만 교체합니다
+// ponytail: 정적 페이지라 개발자 도구로 우회할 수 있는 문지기 수준입니다. 고객별 코드·다운로드 기록이 필요해지면 서버 확인으로 옮깁니다
+const PW_HASH='da5149c0de1e41a6c6f6a95623fb8c8729f354261334ac02abb3d0f3852cd86f';
+let LAST=null;
+const PW_KEY='hx_stock_pw';
+const pwSaved=()=>{ try{ return localStorage.getItem(PW_KEY)===PW_HASH; }catch(e){ return false; } };
+const pwSave=h=>{ try{ localStorage.setItem(PW_KEY,h); }catch(e){} };
+async function sha256(t){
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const kdate=t=>t.getFullYear()+'. '+(t.getMonth()+1)+'. '+t.getDate()+'.';
+if(pwSaved()) $('r-pw').style.display='none';
+
+function reportHtml(co){
+  const {c,r,lo,hi,d,m}=LAST, w=x=>won(x)+'원', row=(k,v)=>'<tr><th>'+k+'</th><td class="n">'+v+'</td></tr>';
+  const size={small:'중소기업',mid:'중견기업 (최근 3년 평균 매출 5천억 원 미만)',large:'그 밖의 회사'}[c.size];
+  const flags=[c.major&&'최대주주와 그 가족의 주식',c.newBiz&&'사업 개시 3년 미만',c.closed&&'휴업·폐업·청산 중'].filter(Boolean);
+  const inputs=row('발행주식 총수',c.shares.toLocaleString('ko-KR')+'주')
+    +row('당기순이익 (직전 사업연도)',w(c.ni1))+row('당기순이익 (2년 전)',w(c.ni2))+row('당기순이익 (3년 전)',w(c.ni3))
+    +row('자산총계',w(c.assets))+row('자본총계',w(c.equity))
+    +row('토지·건물 장부가액',w(c.reBook))+row('토지·건물 시가',c.reMkt>0?w(c.reMkt):'장부가액으로 계산')
+    +row('회사 규모',size)+row('해당 사항',flags.length?flags.join(', '):'없음');
+  const mix=r.mode==='heavy'?(r.earn*2+r.asset*3)/5:(r.earn*3+r.asset*2)/5;
+  let steps='';
+  if(!r.assetOnly){
+    steps+=row('최근 3년 가중평균 순손익 (직전×3 + 2년 전×2 + 3년 전×1) ÷ 6',w(r.wNi))
+      +row('1주당 순손익가치 (가중평균 순손익 ÷ 주식 수 ÷ 10%)',w(r.earn)+(r.wNi<=0?' (적자라 0원)':''));
+  }
+  steps+=row('순자산 (자본총계'+(r.reGap?' + 부동산 시가 차액 '+w(r.reGap):'')+')',w(c.equity+r.reGap));
+  if(r.gw>0) steps+=row('영업권',w(r.gw));
+  steps+=row('1주당 순자산가치',w(r.asset));
+  steps+=r.assetOnly?row('평가 방식','순자산가치로만 평가')
+    :row(r.mode==='heavy'?'가중평균 (순손익가치×2 + 순자산가치×3) ÷ 5':'가중평균 (순손익가치×3 + 순자산가치×2) ÷ 5',w(mix));
+  if(r.floor) steps+=row('순자산가치의 80% 하한 적용',w(r.asset*0.8));
+  if(r.premium) steps+=row('최대주주 할증 20%',w(r.v-r.v/(1+r.premium)));
+  steps+='<tr class="tot"><th>1주당 평가액 (추정)</th><td class="n">'+w(r.v)+'</td></tr>';
+  const give=c.give>0&&r.v>0;
+  return '<section class="pst">'
+    +'<div class="pst-head"><h1>비상장주식 간이 진단 결과</h1><p>'+(co?esc(co)+'<br>':'')+'작성일 '+kdate(new Date())+'</p></div>'
+    +'<table class="pst-sum"><tr><th>1주당 평가액 (범위)</th>'+(give?'<th>넘길 '+c.give.toLocaleString('ko-KR')+'주 평가액</th>':'')+'<th>평가 방식</th></tr>'
+    +'<tr><td class="net">'+(r.v>0?w(lo)+' ~ '+w(hi):'0원')+'</td>'+(give?'<td>'+bigWon(lo*c.give)+' ~ '+bigWon(hi*c.give)+'</td>':'')
+    +'<td>'+(r.assetOnly?'순자산가치':r.mode==='heavy'?'부동산과다법인 가중평균':'순손익·순자산 가중평균')+'</td></tr></table>'
+    +'<h2>입력한 재무제표 숫자</h2><table class="pst-tbl">'+inputs+'</table>'
+    +'<h2>계산 과정</h2><table class="pst-tbl">'+steps+'</table>'
+    +'<h2>이 결과를 움직인 것</h2><ul>'+d.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
+    +'<h2>이 결과에 반영되지 않은 것</h2><ul>'+m.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
+    +'<p class="pst-note">이 자료는 재무제표 숫자로 자동 계산한 참고 자료이며, 세무조정과 자산·부채의 시가를 반영한 정식 평가서가 아닙니다. 실제로 주식을 넘길 때는 평가기준일 현재의 세무조정계산서와 자산 시가로 다시 평가해야 합니다. 결과는 세무조정에 따른 차이를 감안해 ±10% 범위로 표시했습니다.</p>'
+    +'<p class="pst-foot">한택스 · hantax47.com · 0507-1361-6622 · 한택스는 나이스원세무법인 스마트지점의 브랜드명입니다</p>'
+    +'</section>';
+}
+
+$('r-pdf').addEventListener('click',async()=>{
+  if(!LAST) return;
+  if(/KAKAOTALK/i.test(navigator.userAgent)){
+    alert('카카오톡 안에서는 PDF로 저장할 수 없습니다. 화면 위쪽 메뉴에서 다른 브라우저로 열기를 누른 뒤 다시 계산해 주세요.');
+    return;
+  }
+  if(!pwSaved()){
+    const pw=$('r-pw').value.trim();
+    if(!pw){ alert('담당자에게 받은 고객 비밀번호를 넣어 주세요.'); $('r-pw').focus(); return; }
+    if(!window.crypto||!crypto.subtle){ alert('이 브라우저에서는 PDF를 만들 수 없습니다. 크롬이나 엣지로 열어 주세요.'); return; }
+    const h=await sha256(pw);
+    if(h!==PW_HASH){ alert('비밀번호가 맞지 않습니다. 담당자에게 받은 비밀번호를 다시 확인해 주세요.'); $('r-pw').select(); return; }
+    pwSave(h); $('r-pw').style.display='none';
+  }
+  const co=$('r-co').value.trim();
+  $('print-area').innerHTML=reportHtml(co);
+  if(window.gtag) gtag('event','stock_report_pdf');
+  // 인쇄 창에서 PDF로 저장할 때 파일 이름이 되도록 제목을 잠시 바꿉니다
+  const old=document.title;
+  document.title='비상장주식_간이진단_'+(co||'결과');
+  const back=()=>{ document.title=old; window.removeEventListener('afterprint',back); };
+  window.addEventListener('afterprint',back);
+  window.print();
+});
+$('r-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('r-pdf').click(); });
 </script>
 <script src="../assets/help.js?v=1"></script>
 </body>
