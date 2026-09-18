@@ -8,6 +8,7 @@
 - `column/` — 세무 칼럼 (index.html 목록 + _template.html 글 템플릿)
 - `faq/` — 자주 묻는 질문 (아코디언 + FAQPage JSON-LD)
 - `assets/` — 로고·사진·캡처
+- **방문 통계(GA4)**: 새 페이지를 만들면 `</head>` 바로 앞에 `<script src="assets/ga.js?v=1" async></script>`(하위 폴더는 `../assets/`)를 꼭 넣을 것. 옛 주소 이동 페이지는 제외(두 번 세어짐). 버튼 클릭 집계 규칙은 `assets/ga.js` 한 곳에서 관리
 
 ## 게시 절차
 1. 수정 → Edge 헤드리스 캡처로 확인 → `git add <파일 지정> && git commit && git push origin main`
