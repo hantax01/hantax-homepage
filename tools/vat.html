@@ -188,7 +188,7 @@
         · 개인 일반과세자의 6개월치 부가가치세를 계산합니다. 1~6월분은 7월에, 7~12월분은 다음 해 1월에 신고합니다. 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.<br>
         · 금액은 모두 부가세가 포함된 금액으로 넣습니다. 세금계산서는 공급가액과 세액을 더한 합계금액입니다.<br>
         · 신용카드매출전표 등 발행세액공제는 카드·현금영수증 매출의 1.3%, 한 해 1,000만 원 한도로 반영했습니다. 직전 연도 매출 10억 원 이하 개인사업자 가운데 소매·음식·숙박업처럼 주로 개인 손님에게 파는 업종이 받을 수 있고, 법인은 받을 수 없습니다.<br>
-        · 의제매입세액공제는 개인 음식점 기준입니다. 6개월 과세표준 2억 원 이하 9/109, 초과 8/108을 적용하고, 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하)·70%(2억 원 이하)·60%(초과)까지로 계산했습니다.<br>
+        · 의제매입세액공제는 개인 음식점 기준입니다. 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용하고, 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하)·70%(2억 원 이하)·60%(초과)까지로 계산했습니다(우대 한도, 2027년 말까지).<br>
         · 간이과세자는 1년에 한 번, 업종별 부가가치율로 계산하는 방식이라 이 계산기와 맞지 않습니다.
       </p>
 
@@ -229,15 +229,16 @@ function calcVat(c){
   const sales=c.salesTax+c.salesCard+c.salesCash, buy=c.buyTax+c.buyCard;
   const supply=sales/1.1;                           // 과세표준 (공급가액)
   const outTax=sales/11, inTax=buy/11;
-  let deemed=0, deemedRate=0, deemedCap=0;
+  let deemed=0, deemedRate=0, deemedCap=0, capRate=0;
   if(c.food&&c.farm>0){
     deemedRate=supply<=200000000?9/109:8/108;
-    deemedCap=supply*(supply<=100000000?0.75:supply<=200000000?0.70:0.60);
+    capRate=supply<=100000000?0.75:supply<=200000000?0.70:0.60;   // 개인 음식점 우대 한도 (2027년 말까지)
+    deemedCap=supply*capRate;
     deemed=Math.min(c.farm,deemedCap)*deemedRate;
   }
   const pre=outTax-inTax-deemed;
   const card=c.consumer?Math.min(c.salesCard*CARD_RATE,CARD_MAX,Math.max(0,pre)):0;   // 납부할 세액을 넘지 않습니다
-  return {sales,buy,supply,outTax,inTax,deemed,deemedRate,deemedCap,card,due:f10(pre-card)};
+  return {sales,buy,supply,outTax,inTax,deemed,deemedRate,deemedCap,capRate,card,due:f10(pre-card)};
 }
 
 /* ── 입력 ─────────────────────────────────── */
@@ -263,13 +264,21 @@ const shown=()=>$('res').style.display==='block';
 const money=v=>v<0?'환급 '+won(-v)+'원':won(v)+'원';
 
 /* ── 화면 ─────────────────────────────────── */
+// 의제매입 한도가 표에서 바로 보이게: 한도 금액과 과세표준 대비 비율, 넘었으면 한도까지만 반영했다고 적습니다
+function deemedNote(c,r){
+  if(!c.farm) return '면세 농수산물 매입을 넣으면 반영합니다';
+  const rate=r.deemedRate>0.08?'9/109':'8/108', cap='한도 '+won(r.deemedCap)+'원 (과세표준의 '+Math.round(r.capRate*100)+'%)';
+  return c.farm>r.deemedCap
+    ?'매입 '+won(c.farm)+'원이 '+cap+'을 넘어 한도까지만 × '+rate
+    :'매입 '+won(c.farm)+'원 × '+rate+' · '+cap;
+}
 function render(){
   const c=read(), r=calcVat(c);
   const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
   $('rt-body').innerHTML=
       row('매출세액','매출 합계 '+won(r.sales)+'원 × 10/110',won(r.outTax)+'원')
     +row('매입세액','매입 합계 '+won(r.buy)+'원 × 10/110','− '+won(r.inTax)+'원','minus')
-    +(c.food?row('의제매입세액공제','면세 농수산물 매입','− '+won(r.deemed)+'원','minus'):'')
+    +(c.food?row('의제매입세액공제',deemedNote(c,r),'− '+won(r.deemed)+'원','minus'):'')
     +(c.consumer?row('신용카드매출전표 등 발행세액공제','카드·현금영수증 매출의 1.3%','− '+won(r.card)+'원','minus'):'')
     +'<tr class="tot"><td>이번에 낼 부가세</td><td class="best">'+money(r.due)+'</td></tr>';
 
@@ -289,7 +298,7 @@ function render(){
   $('steps').innerHTML='<table class="stable">'
     +srow('매출세액','(세금계산서 '+won(c.salesTax)+' + 카드·현금영수증 '+won(c.salesCard)+' + 현금·기타 '+won(c.salesCash)+') × 10/110',won(r.outTax)+'원')
     +srow('매입세액','(세금계산서 '+won(c.buyTax)+' + 카드·현금영수증 '+won(c.buyCard)+') × 10/110','− '+won(r.inTax)+'원')
-    +(c.food?srow('의제매입세액공제',c.farm>0?'min(농수산물 '+won(c.farm)+', 한도 '+won(r.deemedCap)+') × '+(r.deemedRate>0.08?'9/109':'8/108'):'면세 농수산물 매입을 넣으면 반영합니다','− '+won(r.deemed)+'원'):'')
+    +(c.food?srow('의제매입세액공제',c.farm>0?'min(농수산물 '+won(c.farm)+', 한도 '+won(r.deemedCap)+' = 과세표준 '+won(r.supply)+' × '+Math.round(r.capRate*100)+'%) × '+(r.deemedRate>0.08?'9/109':'8/108'):'면세 농수산물 매입을 넣으면 반영합니다','− '+won(r.deemed)+'원'):'')
     +(c.consumer?srow('신용카드매출전표 등 발행세액공제','카드·현금영수증 매출 '+won(c.salesCard)+' × 1.3% (한 해 1,000만 원, 납부할 세액 한도)','− '+won(r.card)+'원'):'')
     +srow('이번에 낼 부가세','10원 미만 버림',money(r.due))
     +'</table>';
