@@ -99,14 +99,16 @@
 .pst-tbl td{padding:6px 9px;border:1px solid #E1E6EE}
 .pst-tbl td.n{text-align:right;font-weight:700;white-space:nowrap;width:24%}
 .pst-tbl tr.tot td{background:#F3F5F9;font-weight:800;color:#1B4A9B}
+.pst-tbl.two th{width:19%}
+.pst-tbl.two td.n{width:31%;white-space:normal}
 .pst ul{margin:0;padding-left:16px;font-size:11.5px;line-height:1.7;list-style:disc}
 .pst-note{font-size:10.5px;color:#5C6572;margin-top:14px;line-height:1.6;border-top:1px solid #E1E6EE;padding-top:10px}
 .pst-foot{font-size:10px;color:#aaaaaa;text-align:right;margin-top:6px}
 @media print{
-  @page{size:A4;margin:14mm}
+  @page{size:A4;margin:0}
   body{background:#fff!important;margin:0}
   body>*:not(#print-area){display:none!important}
-  #print-area{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #print-area{display:block!important;padding:13mm 14mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @media(max-width:660px){
 .rpt{padding:16px}
@@ -412,7 +414,7 @@ function render(){
     ['<b>주식 수 변동</b> 증자, 감자, 자기주식이 있었다면 연도별로 따로 셉니다.','mid','달라질 수 있음']
   ];
   $('missing').innerHTML=m.map(x=>'<li><span>'+x[0]+'</span><span class="tag '+x[1]+'">'+x[2]+'</span></li>').join('');
-  LAST={c,r,d,m:m.map(x=>x[0])};
+  LAST={c,r,m:m.map(x=>x[0])};
 
   // 절세 여지
   $('tip').innerHTML=r.assetOnly
@@ -448,14 +450,15 @@ const kdate=t=>t.getFullYear()+'. '+(t.getMonth()+1)+'. '+t.getDate()+'.';
 if(pwSaved()) $('r-pw').style.display='none';
 
 function reportHtml(co){
-  const {c,r,d,m}=LAST, w=x=>won(x)+'원', row=(k,v)=>'<tr><th>'+k+'</th><td class="n">'+v+'</td></tr>';
-  const size={small:'중소기업',mid:'중견기업 (최근 3년 평균 매출 5천억 원 미만)',large:'그 밖의 회사'}[c.size];
+  const {c,r,m}=LAST, w=x=>won(x)+'원', row=(k,v)=>'<tr><th>'+k+'</th><td class="n">'+v+'</td></tr>';
+  const row2=(k1,v1,k2,v2)=>'<tr><th>'+k1+'</th><td class="n">'+v1+'</td><th>'+k2+'</th><td class="n">'+v2+'</td></tr>';
+  const size={small:'중소기업',mid:'중견기업 (매출 5천억 원 미만)',large:'그 밖의 회사'}[c.size];
   const flags=[c.major&&'최대주주와 그 가족의 주식',c.newBiz&&'사업 개시 3년 미만',c.closed&&'휴업·폐업·청산 중'].filter(Boolean);
-  const inputs=row('발행주식 총수',c.shares.toLocaleString('ko-KR')+'주')
-    +row('당기순이익 (직전 사업연도)',w(c.ni1))+row('당기순이익 (2년 전)',w(c.ni2))+row('당기순이익 (3년 전)',w(c.ni3))
-    +row('자산총계',w(c.assets))+row('자본총계',w(c.equity))
-    +row('토지·건물 장부가액',w(c.reBook))+row('토지·건물 시가',c.reMkt>0?w(c.reMkt):'장부가액으로 계산')
-    +row('회사 규모',size)+row('해당 사항',flags.length?flags.join(', '):'없음');
+  const inputs=row2('발행주식 총수',c.shares.toLocaleString('ko-KR')+'주','회사 규모',size)
+    +row2('당기순이익 (직전)',w(c.ni1),'자산총계',w(c.assets))
+    +row2('당기순이익 (2년 전)',w(c.ni2),'자본총계',w(c.equity))
+    +row2('당기순이익 (3년 전)',w(c.ni3),'토지·건물 장부가액',w(c.reBook))
+    +row2('해당 사항',flags.length?flags.join(', '):'없음','토지·건물 시가',c.reMkt>0?w(c.reMkt):'장부가액으로 계산');
   const mix=r.mode==='heavy'?(r.earn*2+r.asset*3)/5:(r.earn*3+r.asset*2)/5;
   let steps='';
   if(!r.assetOnly){
@@ -476,9 +479,8 @@ function reportHtml(co){
     +'<table class="pst-sum"><tr><th>1주당 평가액</th>'+(give?'<th>넘길 '+c.give.toLocaleString('ko-KR')+'주 평가액</th>':'')+'<th>평가 방식</th></tr>'
     +'<tr><td class="net">'+w(pv)+'</td>'+(give?'<td>'+w(pv*c.give)+'</td>':'')
     +'<td>'+(r.assetOnly?'순자산가치':r.mode==='heavy'?'부동산과다법인 가중평균':'순손익·순자산 가중평균')+'</td></tr></table>'
-    +'<h2>입력한 재무제표 숫자</h2><table class="pst-tbl">'+inputs+'</table>'
+    +'<h2>입력한 재무제표 숫자</h2><table class="pst-tbl two">'+inputs+'</table>'
     +'<h2>계산 과정</h2><table class="pst-tbl">'+steps+'</table>'
-    +'<h2>이 결과를 움직인 것</h2><ul>'+d.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
     +'<h2>이 결과에 반영되지 않은 것</h2><ul>'+m.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
     +'<p class="pst-note">이 자료는 재무제표 숫자로 자동 계산한 참고 자료이며, 세무조정과 자산·부채의 시가를 반영한 정식 평가서가 아닙니다. 실제로 주식을 넘길 때는 평가기준일 현재의 세무조정계산서와 자산 시가로 다시 평가해야 합니다.</p>'
     +'<p class="pst-foot">한택스 · hantax47.com · 0507-1361-6622 · 한택스는 나이스원세무법인 스마트지점의 브랜드명입니다</p>'
