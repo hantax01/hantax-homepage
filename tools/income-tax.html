@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>종합소득세 계산기 2026, 장부 신고와 경비율 신고 비교 | 한택스</title>
+<meta name="description" content="개인사업자의 한 해 매출과 경비를 넣으면 예상 종합소득세를 계산하고, 장부 없이 경비율로 신고할 때와 비교합니다. 기장세액공제와 무기장가산세를 반영합니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/income-tax.html">
+<meta property="og:title" content="종합소득세, 장부를 쓰면 얼마나 아낄까요?">
+<meta property="og:description" content="장부 신고와 경비율 신고를 나란히 비교하는 종합소득세 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/income-tax.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-income-tax.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;border-top:1px solid var(--line);padding-top:18px}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider p{font-size:13px;color:var(--mute);margin-top:4px;line-height:1.7}
+.divider a{color:var(--blue)}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable .minus td+td{color:var(--blue)}
+.rtable .plus td+td{color:var(--seal)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td.best{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict a{color:var(--blue);font-weight:700}
+.nudge{margin-top:18px;border:1px dashed var(--blue-line);border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.75;color:var(--char)}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:18px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.steps .case{margin-bottom:22px}
+.steps .case:last-child{margin-bottom:0}
+.steps .case b.ttl{display:block;color:var(--ink);font-size:14.5px;margin-bottom:8px}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:130px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>종합소득세, 장부를 쓰면<br>얼마나 아낄까요?</h1>
+    <p class="lead">개인사업자의 한 해 매출과 경비를 넣으면 예상 종합소득세를 계산하고, 장부 없이 업종 경비율로 신고할 때와 나란히 비교해 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div>
+          <label for="i-group">업종 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="업종에 따라 장부 종류와 경비율 적용, 성실신고 대상 기준이 달라집니다. 도소매는 3억 원, 제조·음식은 1억 5천만 원, 서비스는 7,500만 원이 간편장부 기준입니다.">?</button></label>
+          <select id="i-group">
+            <option value="a">도소매·부동산매매 등</option>
+            <option value="b" selected>제조·음식·숙박·건설 등</option>
+            <option value="c">서비스·부동산임대 등</option>
+          </select>
+        </div>
+        <div></div>
+        <div>
+          <label for="i-rev">올해 매출 <small>수입금액</small></label>
+          <div class="unit"><input type="text" id="i-rev" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-prior">작년 매출 <small>비우면 올해와 같다고 봅니다</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="장부 종류와 경비율 종류는 바로 전 해의 매출로 정해집니다. 작년에 사업을 시작했다면 1년으로 환산한 금액을 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-prior" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-exp">장부상 필요경비 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="장부를 쓰면 인정받는 비용입니다. 재료·상품 매입, 인건비, 임차료, 카드 수수료, 감가상각비처럼 사업에 쓴 돈을 모두 더한 금액을 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-exp" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-ded">소득공제 합계 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="본인과 부양가족 1명당 150만 원씩의 인적공제, 노란우산공제, 국민연금 보험료 등을 더한 금액입니다. 본인만 있으면 150만 원입니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-ded" inputmode="numeric" value="1,500,000"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-credit">세액공제·감면 <small>아시면</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="자녀세액공제, 연금계좌세액공제, 중소기업특별세액감면 같은 금액을 더해 넣어 주세요. 비워 두면 표준세액공제 7만 원을 적용합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-credit" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <div class="divider">
+          <b>업종 경비율을 넣으면 장부 없이 신고할 때와 비교해 드립니다</b>
+          <p>경비율은 업종코드마다 다릅니다. <a href="https://www.hometax.go.kr" target="_blank" rel="noopener">홈택스</a>의 기준·단순경비율 조회에서 확인하실 수 있습니다.</p>
+        </div>
+        <div>
+          <label for="i-simple">단순경비율</label>
+          <div class="unit"><input type="text" id="i-simple" inputmode="decimal"><span>%</span></div>
+        </div>
+        <div>
+          <label for="i-std">기준경비율</label>
+          <div class="unit"><input type="text" id="i-std" inputmode="decimal"><span>%</span></div>
+        </div>
+        <div>
+          <label for="i-main">증빙 있는 주요경비 <small>비우면 필요경비 전체</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="기준경비율로 신고할 때 따로 빼 주는 매입비용, 임차료, 인건비입니다. 세금계산서나 카드 영수증 같은 증빙이 있어야 합니다. 비워 두면 장부상 필요경비 전체를 넣어 경비율 신고 쪽에 가장 유리하게 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-main" inputmode="numeric"><span>원</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">종합소득세 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2 id="res-title">예상 종합소득세</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt"><thead id="rt-head"></thead><tbody id="rt-body"></tbody></table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <div class="nudge" id="nudge" hidden>업종 경비율을 넣으시면 장부 없이 경비율로 신고할 때와 비교해 장부를 쓰면 얼마나 아끼는지 보여 드립니다.</div>
+        <details class="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps"></div>
+        </details>
+        <div class="ask">
+          <p><b>장부 작성부터 신고까지 한택스가 맡아 드립니다.</b><br>매출과 경비 자료를 보내 주시면 인정받을 수 있는 경비와 공제를 꼼꼼히 챙겨 신고해 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="disc">
+        · 사업소득만 있는 개인사업자를 기준으로 계산합니다. 근로·이자·배당 같은 다른 소득이 있으면 합산되어 세금이 달라집니다.<br>
+        · 세율은 종합소득세 기본세율 6~45%이고, 지방소득세 10%를 더했습니다.<br>
+        · 장부 신고는 복식부기로 기장하는 경우로 봅니다. 간편장부대상자가 복식부기로 신고하면 기장세액공제로 산출세액의 20%(100만 원 한도)를 빼 줍니다.<br>
+        · 경비율 신고는 작년 매출이 단순경비율 기준(도소매 6천만 원, 제조·음식 3,600만 원, 서비스 2,400만 원) 미만이면 단순경비율로, 아니면 기준경비율로 계산합니다. 기준경비율로 계산한 소득은 단순경비율 소득의 2.8배(복식부기의무자는 3.4배)를 넘지 않게 합니다.<br>
+        · 장부 없이 경비율로 신고하면 무기장가산세로 산출세액의 20%가 붙습니다. 작년 매출 4,800만 원 미만인 소규모사업자는 빼 줍니다. 복식부기의무자는 무신고가산세(산출세액 20%와 매출의 0.07% 중 큰 금액)로 계산했습니다.<br>
+        · 올해 매출이 성실신고확인 기준(도소매 15억 원, 제조·음식 7억 5천만 원, 서비스 5억 원) 이상이면 세무사의 확인을 받아 6월 말까지 신고해야 합니다.
+      </p>
+
+      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 종합소득세 ─────────────────────────────── */
+const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
+           [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
+function pitInfo(b){ if(b<=0) return {tax:0,rate:0,ded:0}; for(const[lim,r,d]of PIT) if(b<=lim) return {tax:Math.max(0,b*r-d),rate:r,ded:d}; return {tax:0,rate:0,ded:0}; }
+// 업종별 기준: 간편장부(book), 단순경비율(simple), 성실신고확인(honest)
+const GROUPS={
+  a:{name:'도소매·부동산매매 등',book:300000000,simple:60000000,honest:1500000000},
+  b:{name:'제조·음식·숙박·건설 등',book:150000000,simple:36000000,honest:750000000},
+  c:{name:'서비스·부동산임대 등',book:75000000,simple:24000000,honest:500000000}
+};
+const SMALL=48000000;                 // 소규모사업자: 무기장가산세를 받지 않습니다
+const CAP_MULT={simple:2.8,double:3.4}; // 기준경비율 소득 상한 = 단순경비율 소득 × 배율
+const BOOK_CREDIT=0.2, BOOK_CREDIT_MAX=1000000;
+const STD_CREDIT=70000;               // 표준세액공제
+const f10=x=>Math.floor(x/10+1e-9)*10;
+
+function calcTax(c){
+  const g=GROUPS[c.group];
+  const prior=c.prior>0?c.prior:c.rev;
+  const isDouble=prior>=g.book;            // 복식부기의무자
+  const honest=c.rev>=g.honest;            // 성실신고확인대상
+  const small=prior<SMALL;
+  const creditIn=c.credit>0?c.credit:STD_CREDIT;
+  const finish=(income,bookCredit,penalty,extra)=>{
+    const base=Math.max(0,income-c.ded), info=pitInfo(base);
+    const bc=Math.min(bookCredit(info.tax),info.tax);
+    const cr=Math.min(creditIn,Math.max(0,info.tax-bc));
+    const pen=penalty(info.tax);
+    const due=f10(Math.max(0,info.tax-bc-cr+pen));
+    return Object.assign({income,base,info,bookCredit:bc,credit:cr,penalty:pen,due,local:f10(due*0.1),total:due+f10(due*0.1)},extra||{});
+  };
+  // 장부 신고 (복식부기 기장)
+  const book=finish(Math.max(0,c.rev-c.exp),
+    t=>isDouble?0:Math.min(t*BOOK_CREDIT,BOOK_CREDIT_MAX), ()=>0);
+  // 경비율 신고
+  let est=null;
+  const simpleOK=prior<g.simple&&c.rev<g.book;
+  if(c.simpleRate>0&&(simpleOK||c.stdRate>0)){
+    const simpleIncome=c.rev*(1-c.simpleRate/100);
+    let income, method, main=0;
+    if(simpleOK){ income=simpleIncome; method='simple'; }
+    else{
+      main=c.main>0?c.main:c.exp;
+      const stdIncome=c.rev-main-c.rev*c.stdRate/100;
+      income=Math.min(stdIncome,simpleIncome*(isDouble?CAP_MULT.double:CAP_MULT.simple));
+      method='std';
+    }
+    est=finish(Math.max(0,income),()=>0,
+      t=>isDouble?Math.max(t*0.2,c.rev*0.0007):(small?0:t*0.2),
+      {method,main,simpleIncome});
+  }
+  return {book,est,isDouble,honest,small,prior,g,simpleOK,creditIn};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const dec=s=>Math.min(100,Number(String(s).replace(/[^0-9.]/g,''))||0);
+['i-rev','i-prior','i-exp','i-ded','i-credit','i-main'].forEach(id=>{
+  const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+function read(){
+  return {group:$('i-group').value, rev:num($('i-rev').value), prior:num($('i-prior').value),
+    exp:num($('i-exp').value), ded:num($('i-ded').value), credit:num($('i-credit').value),
+    simpleRate:dec($('i-simple').value), stdRate:dec($('i-std').value), main:num($('i-main').value)};
+}
+const shown=()=>$('res').style.display==='block';
+
+/* ── 화면 ─────────────────────────────────── */
+function render(){
+  const c=read(), r=calcTax(c), b=r.book, e=r.est;
+  const cols=e?['장부 신고','경비율 신고']:['장부 신고'];
+  $('rt-head').innerHTML='<tr><th>구분</th>'+cols.map(x=>'<th>'+x+'</th>').join('')+'</tr>';
+  const row=(label,key,cls,sign,sub)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+label+(sub?'<small>'+sub+'</small>':'')+'</td>'
+    +[b,e].filter(Boolean).map(x=>'<td>'+(sign&&x[key]?sign+' ':'')+won(x[key])+'원</td>').join('')+'</tr>';
+  const lo=e?Math.min(b.total,e.total):b.total;
+  $('rt-body').innerHTML=
+      row('소득금액','income','','','매출 − 경비')
+    +'<tr><td>과세표준<small>소득금액 − 소득공제</small></td>'+[b,e].filter(Boolean).map(x=>'<td>'+won(x.base)+'원</td>').join('')+'</tr>'
+    +'<tr><td>산출세액</td>'+[b,e].filter(Boolean).map(x=>'<td>'+won(x.info.tax)+'원<small>'+(x.base>0?Math.round(x.info.rate*100)+'% 구간':'')+'</small></td>').join('')+'</tr>'
+    +(r.isDouble?'':row('기장세액공제','bookCredit','minus','−','간편장부대상자가 복식부기로 신고'))
+    +(e&&e.penalty?row('가산세','penalty','plus','+',r.isDouble?'장부 없이 신고한 복식부기의무자':'무기장가산세 20%'):'')
+    +row('세액공제','credit','minus','−',c.credit>0?'':'표준세액공제')
+    +row('종합소득세','due')
+    +row('지방소득세','local','','','종합소득세의 10%')
+    +'<tr class="tot"><td>납부할 세금</td>'+[b,e].filter(Boolean).map(x=>'<td class="'+(e&&x.total===lo?'best':'')+'">'+won(x.total)+'원</td>').join('')+'</tr>';
+
+  $('res-sub').textContent=r.g.name+' · 올해 매출 '+won(c.rev)+'원 · '+(r.isDouble?'복식부기의무자':'간편장부대상자');
+
+  let v;
+  if(e){
+    const diff=e.total-b.total;
+    v=diff>0
+      ?'장부를 쓰면 경비율로 신고할 때보다 <b>'+won(diff)+'원</b> 덜 냅니다.'
+        +(r.isDouble?'':' 실제 경비를 모두 인정받고 기장세액공제도 받기 때문입니다.')
+        +(e.penalty?' 장부 없이 신고하면 가산세 '+won(e.penalty)+'원이 더 붙습니다.':'')
+      :diff<0
+        ?'이 조건에서는 경비율로 신고하는 쪽이 <b>'+won(-diff)+'원</b> 적게 나옵니다. 실제 경비가 업종 평균보다 적은 편이라 그렇습니다.'
+          +' 다만 매출이 늘어 복식부기의무자가 되면 가산세가 붙으니, 경비 자료를 모아 두시는 것이 좋습니다.'
+        :'장부 신고와 경비율 신고의 세금이 같습니다.';
+  }else{
+    v='장부로 신고하면 종합소득세와 지방소득세를 합해 <b>'+won(b.total)+'원</b>을 내게 됩니다.';
+  }
+  const notes=[];
+  if(r.honest) notes.push('올해 매출이 성실신고확인 기준 이상입니다. 세무사의 확인을 받아 6월 말까지 신고해야 하고, 장부 신고가 사실상 필수입니다.');
+  if(r.isDouble) notes.push('작년 매출 기준으로 복식부기의무자입니다. 장부 없이 신고하면 신고하지 않은 것으로 보아 가산세가 붙습니다.');
+  else if(!r.small&&e) notes.push('작년 매출이 4,800만 원 이상이라 장부 없이 신고하면 무기장가산세 20%가 붙습니다.');
+  if(b.base>=150000000) notes.push('과세표준이 1억 5천만 원을 넘어 35% 이상 세율 구간입니다. <a href="incorporation.html">법인전환</a>을 검토해 볼 만한 규모입니다.');
+  $('verdict').innerHTML=v+notes.map(n=>'<span class="note">'+n+'</span>').join('');
+  $('nudge').hidden=!!e;
+
+  const srow=(l,m,val)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+val+'</td></tr>';
+  const block=(title,x,incomeMid)=>'<div class="case"><b class="ttl">'+title+'</b><table class="stable">'
+    +srow('소득금액',incomeMid,won(x.income)+'원')
+    +srow('과세표준','소득금액 − 소득공제 '+won(c.ded),won(x.base)+'원')
+    +srow('산출세액',x.base>0?won(x.base)+' × '+Math.round(x.info.rate*100)+'% − 누진공제 '+won(x.info.ded):'과세표준이 없습니다',won(x.info.tax)+'원')
+    +(x.bookCredit?srow('기장세액공제','산출세액의 20%, 100만 원 한도','− '+won(x.bookCredit)+'원'):'')
+    +(x.penalty?srow('가산세',r.isDouble?'산출세액 20%와 매출 0.07% 중 큰 금액':'산출세액의 20%','+ '+won(x.penalty)+'원'):'')
+    +srow('세액공제',c.credit>0?'넣어 주신 세액공제·감면':'표준세액공제 7만 원','− '+won(x.credit)+'원')
+    +srow('납부할 세금','종합소득세 '+won(x.due)+' + 지방소득세 '+won(x.local),won(x.total)+'원')
+    +'</table></div>';
+  let s=block('장부 신고',b,'매출 '+won(c.rev)+' − 필요경비 '+won(c.exp));
+  if(e) s+=block('경비율 신고 ('+(e.method==='simple'?'단순경비율':'기준경비율')+')',e,
+    e.method==='simple'
+      ?'매출 × (1 − 단순경비율 '+c.simpleRate+'%)'
+      :'매출 − 주요경비 '+won(e.main)+' − 매출 × 기준경비율 '+c.stdRate+'% (단순경비율 소득의 '+(r.isDouble?CAP_MULT.double:CAP_MULT.simple)+'배 한도)');
+  $('steps').innerHTML=s;
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  const c=read();
+  if(!c.rev){ alert('올해 매출을 넣어 주세요.'); return; }
+  if(c.exp>c.rev*3){ alert('필요경비가 매출보다 너무 큽니다. 금액을 확인해 주세요.'); return; }
+  render();
+});
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&read().rev) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&read().rev) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'예상 종합소득세', sub:document.getElementById('res-sub').textContent, filename:'한택스_종합소득세' })
+);
+</script>
+</body>
+</html>
