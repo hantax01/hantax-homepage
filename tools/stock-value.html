@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 회사 주식, 대략 얼마일까요? 비상장주식 간이 진단 (준비 중) | 한택스</title>
+<meta name="description" content="재무제표 숫자로 상속세 및 증여세법의 비상장주식 평가액을 대략 짚어 봅니다. 증여나 지분 정리 전에 규모를 가늠하는 간이 진단입니다.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim-in .fw{grid-column:1/-1}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:46px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.divider select{width:auto;padding:7px 10px;font-size:13.5px}
+.sim .chk{grid-column:1/-1;display:flex;flex-direction:column;gap:9px}
+.sim .chk label{display:flex;align-items:center;gap:8px;margin:0;font-weight:600;font-size:14px;color:var(--char);cursor:pointer}
+.sim .chk input{width:17px;height:17px;padding:0;accent-color:var(--blue);flex:none}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.range{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center}
+.range .lbl{font-size:14px;opacity:.85}
+.range .val{font-size:34px;font-weight:800;letter-spacing:-.5px;margin:8px 0 4px;line-height:1.25}
+.range .val small{font-size:17px;font-weight:700;opacity:.9}
+.range .sub{font-size:13.5px;opacity:.8}
+.range .give{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);font-size:15px}
+.range .give b{font-size:19px}
+.range .give a{color:#FEE500;font-weight:700;margin-left:6px;text-decoration:underline;text-underline-offset:3px}
+.box{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.box h3{font-size:15.5px;color:var(--ink);margin-bottom:10px}
+.box ul{margin:0;padding-left:18px;font-size:14.5px;line-height:1.85;color:var(--char)}
+.box li b{color:var(--ink)}
+.miss li{display:flex;justify-content:space-between;gap:12px;list-style:none;margin-left:-18px;padding:8px 0;border-bottom:1px solid var(--soft)}
+.miss li:last-child{border-bottom:0}
+.miss .tag{flex:none;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;height:fit-content;white-space:nowrap}
+.tag.hi{background:#FDEBEA;color:var(--seal)}
+.tag.mid{background:var(--blue-soft);color:var(--blue)}
+.tip{margin-top:18px;background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:18px 22px;font-size:15px;line-height:1.8;color:var(--ink)}
+.tip b{color:var(--blue)}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.range{padding:22px 16px}
+.range .val{font-size:26px}
+.box{padding:16px}
+.miss li{flex-direction:column;gap:4px}
+.miss .tag{align-self:flex-start}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>우리 회사 주식,<br>대략 얼마일까요?</h1>
+    <p class="lead">상속세 및 증여세법이 정한 비상장주식 평가 방법에 재무제표 숫자를 넣어 1주당 가치를 대략 짚어 봅니다. 자녀 증여나 지분 정리 전에 규모를 가늠하는 간이 진단입니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>재무제표에서 옮겨 적을 숫자</b>
+          <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:400;font-size:13px;color:var(--mute)">금액 단위
+            <select id="i-unit"><option value="1">원</option><option value="1000">천원</option><option value="1000000">백만원</option></select>
+          </label>
+        </div>
+        <div>
+          <label for="i-shares">발행주식 총수 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주주명부나 법인등기부에 적힌 전체 주식 수입니다. 자기주식이 있다면 그만큼 빼고 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-shares" inputmode="numeric"><span>주</span></div>
+        </div>
+        <div></div>
+        <div>
+          <label for="i-ni1">당기순이익 <small>직전 사업연도</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="손익계산서 맨 아래의 당기순이익입니다. 적자였다면 앞에 - 를 붙여 주세요. 재무제표에 △로 적힌 금액도 적자입니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-ni1" inputmode="text" class="signed"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-ni2">당기순이익 <small>2년 전</small></label>
+          <div class="unit"><input type="text" id="i-ni2" inputmode="text" class="signed"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-ni3">당기순이익 <small>3년 전</small></label>
+          <div class="unit"><input type="text" id="i-ni3" inputmode="text" class="signed"><span class="u">원</span></div>
+        </div>
+        <div></div>
+        <div>
+          <label for="i-assets">자산총계 <small>직전 사업연도 말</small></label>
+          <div class="unit"><input type="text" id="i-assets" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-equity">자본총계 <small>직전 사업연도 말</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재무상태표의 자본총계입니다. 자산에서 부채를 뺀 금액과 같습니다. 자본잠식이라 마이너스라면 앞에 - 를 붙여 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-equity" inputmode="text" class="signed"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-rebook">토지·건물 장부가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재무상태표의 토지와 건물 금액을 더해 주세요. 건물은 감가상각누계액을 뺀 금액입니다. 부동산이 없으면 비워 두세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-rebook" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-remkt">토지·건물 시가 <small>아시면</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="공시지가나 주변 시세로 짐작한 지금 가치입니다. 오래전에 산 부동산일수록 장부가액과 차이가 크고, 평가액도 크게 달라집니다. 비워 두면 장부가액으로 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-remkt" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+
+        <div class="divider"><b>회사와 주주</b></div>
+        <div>
+          <label for="i-size">회사 규모 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업과, 최근 3년 평균 매출이 5천억 원 미만인 중견기업은 최대주주 주식을 20% 더 비싸게 보는 할증을 받지 않습니다.">?</button></label>
+          <select id="i-size">
+            <option value="small">중소기업</option>
+            <option value="mid">중견기업 (최근 3년 평균 매출 5천억 원 미만)</option>
+            <option value="large">그 밖의 회사</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-give">넘길 주식 수 <small>아시면</small></label>
+          <div class="unit"><input type="text" id="i-give" inputmode="numeric"><span>주</span></div>
+        </div>
+        <div class="chk">
+          <label><input type="checkbox" id="i-major">최대주주와 그 가족이 가진 주식입니다</label>
+          <label><input type="checkbox" id="i-new">사업을 시작한 지 3년이 안 됐습니다</label>
+          <label><input type="checkbox" id="i-closed">휴업·폐업 중이거나 청산 절차를 밟고 있습니다</label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">대략 얼마인지 보기</button>
+
+      <div class="res" id="res">
+        <div class="range" id="range"></div>
+
+        <div class="box">
+          <h3>이 결과를 움직인 것</h3>
+          <ul id="drivers"></ul>
+        </div>
+
+        <div class="box">
+          <h3>이 결과에 반영되지 않은 것</h3>
+          <ul class="miss" id="missing"></ul>
+        </div>
+
+        <div class="tip" id="tip"></div>
+
+        <div class="ask">
+          <p><b>재무제표만으로 낸 추정치입니다.</b> 세무조정계산서와 부동산 시가를 반영하면 평가액이 크게 달라질 수 있습니다.<br>재무제표를 보내 주시면 정확히 평가하고, 넘기기 좋은 시점까지 함께 짚어 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="disc">
+        · 상속세 및 증여세법 시행령이 정한 비상장주식 보충적 평가 방법을 재무제표 숫자로 단순하게 옮겼습니다. 이익으로 본 가치와 순자산으로 본 가치를 섞되, 부동산이 많은 회사는 순자산 쪽 비중을 높이고, 순자산으로 본 가치의 80%보다 낮게는 보지 않습니다.<br>
+        · 사업 개시 3년 미만, 휴업·폐업·청산 중이거나 부동산이 자산의 80% 이상인 회사는 순자산으로만 평가합니다.<br>
+        · 결과는 세무조정에 따라 달라질 수 있는 폭을 감안해 범위로 보여 드립니다. 부동산 시가를 넣지 않으면 장부가액으로 계산하므로 실제보다 낮게 나올 수 있습니다.<br>
+        · 증여세를 이어서 계산하시려면 넘길 주식의 평가액을 증여세 계산기에 넣어 보세요.
+      </p>
+
+      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 비상장주식 보충적 평가 (상증법 시행령 제54조·제55조) ── */
+const CAP_RATE=0.10;        // 순손익가치 환원율
+const GW_RATE=0.10;         // 영업권 계산 때 자기자본에 곱하는 율
+const GW_ANNUITY=3.7908;    // 영업권: 초과이익을 5년 동안 10%로 할인한 연금현가계수
+const RANGE=0.10;           // 세무조정 차이를 감안해 결과를 ±10% 범위로 보여 줍니다
+
+function estimate(c){
+  const S=c.shares;
+  const reGap=c.reMkt>0?c.reMkt-c.reBook:0;                 // 부동산을 시가로 다시 보면 늘어나는 순자산
+  const wNi=(c.ni1*3+c.ni2*2+c.ni3*1)/6;                     // 최근 3년 가중평균 순손익
+  const earn=Math.max(0,wNi/S/CAP_RATE);                     // 1주당 순손익가치
+  const base=c.equity+reGap;                                 // 영업권 전 순자산
+  const reRatio=(c.assets+reGap)>0?(c.reMkt>0?c.reMkt:c.reBook)/(c.assets+reGap):0;
+  const assetOnly=c.newBiz||c.closed||reRatio>=0.8;
+  const gw=assetOnly?0:Math.max(0,wNi*0.5-Math.max(0,base)*GW_RATE)*GW_ANNUITY;   // 영업권
+  const asset=Math.max(0,base+gw)/S;                         // 1주당 순자산가치
+  let v, mode, floor=false;
+  if(assetOnly){ v=asset; mode='asset'; }
+  else{
+    const heavy=reRatio>=0.5;                                // 부동산과다법인
+    mode=heavy?'heavy':'normal';
+    v=heavy?(earn*2+asset*3)/5:(earn*3+asset*2)/5;
+    if(v<asset*0.8){ v=asset*0.8; floor=true; }             // 순자산가치 80% 하한
+  }
+  const premium=(c.major&&c.size==='large')?0.2:0;           // 최대주주 할증
+  v*=1+premium;
+  return {v,earn,asset,wNi,gw,reGap,reRatio,mode,floor,premium,assetOnly};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+// 적자 표기 -, △, (괄호)를 모두 음수로 읽습니다
+const snum=s=>{ const t=String(s).trim(); const neg=/^[-△▲(]/.test(t)||/^\(.*\)$/.test(t); const v=num(t); return neg?-v:v; };
+function fmt(el,signed){
+  el.addEventListener('input',()=>{
+    const t=el.value.trim(), neg=signed&&/^[-△▲(]/.test(t), v=num(t);
+    el.value=v?(neg?'-':'')+v.toLocaleString('ko-KR'):(neg?'-':'');
+  });
+}
+['i-shares','i-assets','i-rebook','i-remkt','i-give'].forEach(id=>fmt($(id),false));
+document.querySelectorAll('.signed').forEach(el=>fmt(el,true));
+$('i-unit').addEventListener('change',()=>{
+  const u=$('i-unit').selectedOptions[0].text;
+  document.querySelectorAll('.u').forEach(s=>s.textContent=u);
+  if(shown()) render();
+});
+const shown=()=>$('res').style.display==='block';
+
+function read(){
+  const k=Number($('i-unit').value);
+  return {shares:num($('i-shares').value),
+    ni1:snum($('i-ni1').value)*k, ni2:snum($('i-ni2').value)*k, ni3:snum($('i-ni3').value)*k,
+    assets:num($('i-assets').value)*k, equity:snum($('i-equity').value)*k,
+    reBook:num($('i-rebook').value)*k, reMkt:num($('i-remkt').value)*k,
+    size:$('i-size').value, major:$('i-major').checked, newBiz:$('i-new').checked, closed:$('i-closed').checked,
+    give:num($('i-give').value)};
+}
+function check(c){
+  if(!c.shares) return '발행주식 총수를 넣어 주세요.';
+  if(!c.assets) return '자산총계를 넣어 주세요.';
+  if(!$('i-equity').value.trim()) return '자본총계를 넣어 주세요.';
+  if(!c.newBiz&&!c.closed&&!$('i-ni1').value.trim()) return '직전 사업연도 당기순이익을 넣어 주세요.';
+  if(c.reBook>c.assets) return '토지·건물 장부가액이 자산총계보다 클 수 없습니다. 금액 단위를 확인해 주세요.';
+  return '';
+}
+
+/* 금액을 읽기 좋게 끊습니다: 1주당 가치는 유효숫자 두세 자리로 */
+function nice(x){
+  if(x<=0) return 0;
+  const step=x>=1e7?1e5:x>=1e6?1e4:x>=1e5?1e3:x>=1e4?100:10;
+  return Math.round(x/step)*step;
+}
+function bigWon(x){
+  if(x>=1e8){ const e=x/1e8; return (e>=100?Math.round(e):Math.round(e*10)/10).toLocaleString('ko-KR')+'억 원'; }
+  if(x>=1e4) return Math.round(x/1e4).toLocaleString('ko-KR')+'만 원';
+  return won(x)+'원';
+}
+
+/* ── 화면 그리기 ───────────────────────────── */
+function render(){
+  const c=read();
+  const r=estimate(c);
+  const lo=nice(r.v*(1-RANGE)), hi=nice(r.v*(1+RANGE));
+
+  let h='<div class="lbl">1주당 평가액은 대략</div>';
+  h+=r.v>0?'<div class="val">'+won(lo)+'원 <small>~</small> '+won(hi)+'원</div>'
+          :'<div class="val">0원</div>';
+  h+='<div class="sub">재무제표만으로 짚어 본 범위입니다</div>';
+  if(c.give>0&&r.v>0){
+    h+='<div class="give">넘길 '+c.give.toLocaleString('ko-KR')+'주는 대략 <b>'+bigWon(lo*c.give)+' ~ '+bigWon(hi*c.give)+'</b>'
+      +'<a href="gift-tax.html">증여세 계산해 보기</a></div>';
+  }
+  $('range').innerHTML=h;
+
+  // 결과를 움직인 것
+  const d=[];
+  if(r.assetOnly){
+    const why=c.closed?'휴업·폐업·청산 중인 회사라':c.newBiz?'사업을 시작한 지 3년이 안 된 회사라':'부동산이 자산의 80% 이상이라';
+    d.push('<b>순자산으로만 평가했습니다.</b> '+why+' 이익은 따지지 않습니다.');
+  }else{
+    d.push(r.mode==='heavy'
+      ?'<b>부동산이 자산의 절반을 넘어</b> 순자산 쪽 비중을 높여 섞었습니다.'
+      :'<b>이익과 순자산을 함께 섞어</b> 평가했습니다. 이익 쪽 비중이 조금 더 큽니다.');
+    if(r.floor) d.push('<b>이익으로 본 가치가 낮아</b> 순자산으로 본 가치의 80%까지 올려 잡았습니다. 이익이 적어도 이 아래로는 내려가지 않습니다.');
+    else if(r.earn>r.asset*1.2) d.push('<b>최근 이익이 평가액을 끌어올렸습니다.</b> 이익으로 본 가치가 순자산으로 본 가치보다 높습니다.');
+    else if(r.asset>r.earn*1.2) d.push('<b>순자산이 평가액을 끌어올렸습니다.</b> 쌓아 둔 자산이 이익보다 크게 작용했습니다.');
+    if(r.gw>0) d.push('<b>이익이 자본에 비해 커서</b> 영업권이 순자산에 더해졌습니다.');
+  }
+  if(r.premium) d.push('<b>최대주주 주식이라 20%를 더했습니다.</b> 중소기업이나 일정 규모 이하 중견기업이면 붙지 않습니다.');
+  else if(c.major) d.push('<b>최대주주 주식이지만 할증은 없습니다.</b> 중소기업과 일정 규모 이하 중견기업은 20% 할증을 받지 않습니다.');
+  if(c.reBook>0||c.reMkt>0){
+    const plus=estimate(Object.assign({},c,{reMkt:(c.reMkt>0?c.reMkt:c.reBook)+1e8})).v-r.v;
+    d.push(c.reMkt>0
+      ?'<b>부동산은 넣어 주신 시가로 반영했습니다.</b> 시가가 1억 원 더 높으면 1주당 약 '+won(nice(plus))+'원 올라갑니다.'
+      :'<b>부동산은 장부가액으로 계산했습니다.</b> 시가가 장부가액보다 1억 원 높을 때마다 1주당 약 '+won(nice(plus))+'원씩 올라갑니다.');
+  }
+  $('drivers').innerHTML=d.map(x=>'<li>'+x+'</li>').join('');
+
+  // 반영되지 않은 것
+  const m=[
+    ['<b>세무조정</b> 상증법의 순손익은 당기순이익이 아니라 세무조정을 거친 소득에서 더하고 뺀 금액입니다.','hi','크게 달라질 수 있음'],
+    ['<b>부동산 재평가</b> 토지·건물은 시가나 기준시가, 감정가로 다시 매깁니다.'+(c.reMkt>0?' 넣어 주신 시가는 추정치라 실제와 다를 수 있습니다.':''),'hi','크게 달라질 수 있음'],
+    ['<b>그 밖의 자산과 부채</b> 가진 주식, 가지급금, 퇴직금 추계액, 이연자산처럼 평가할 때 다시 따지는 항목입니다.','mid','달라질 수 있음'],
+    ['<b>평가기준일</b> 결산일이 아니라 실제로 넘기는 날을 기준으로 다시 계산합니다.','mid','달라질 수 있음'],
+    ['<b>주식 수 변동</b> 증자, 감자, 자기주식이 있었다면 연도별로 따로 셉니다.','mid','달라질 수 있음']
+  ];
+  $('missing').innerHTML=m.map(x=>'<li><span>'+x[0]+'</span><span class="tag '+x[1]+'">'+x[2]+'</span></li>').join('');
+
+  // 절세 여지
+  $('tip').innerHTML=r.assetOnly
+    ?'<b>넘기는 시점에 따라 평가액이 달라질 수 있습니다.</b> 순자산으로만 평가하는 회사도 결산 결과와 부동산 가격에 따라 해마다 금액이 바뀝니다. 증여 전에 시점을 함께 따져 보시는 것이 좋습니다.'
+    :'<b>넘기는 시점만 바꿔도 세금이 달라질 수 있습니다.</b> 평가액은 최근 3년 이익을 3:2:1로 섞어 계산합니다. 이익이 줄어든 해의 결산이 끝난 직후나, 큰 이익이 난 해가 계산에서 빠지는 해에 넘기면 같은 주식도 평가액이 낮아질 수 있습니다.';
+
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  const msg=check(read());
+  if(msg){ alert(msg); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&!check(read())) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!check(read())) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+</body>
+</html>
