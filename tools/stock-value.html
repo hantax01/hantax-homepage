@@ -412,7 +412,7 @@ function render(){
     ['<b>주식 수 변동</b> 증자, 감자, 자기주식이 있었다면 연도별로 따로 셉니다.','mid','달라질 수 있음']
   ];
   $('missing').innerHTML=m.map(x=>'<li><span>'+x[0]+'</span><span class="tag '+x[1]+'">'+x[2]+'</span></li>').join('');
-  LAST={c,r,lo,hi,d,m:m.map(x=>x[0])};
+  LAST={c,r,d,m:m.map(x=>x[0])};
 
   // 절세 여지
   $('tip').innerHTML=r.assetOnly
@@ -448,7 +448,7 @@ const kdate=t=>t.getFullYear()+'. '+(t.getMonth()+1)+'. '+t.getDate()+'.';
 if(pwSaved()) $('r-pw').style.display='none';
 
 function reportHtml(co){
-  const {c,r,lo,hi,d,m}=LAST, w=x=>won(x)+'원', row=(k,v)=>'<tr><th>'+k+'</th><td class="n">'+v+'</td></tr>';
+  const {c,r,d,m}=LAST, w=x=>won(x)+'원', row=(k,v)=>'<tr><th>'+k+'</th><td class="n">'+v+'</td></tr>';
   const size={small:'중소기업',mid:'중견기업 (최근 3년 평균 매출 5천억 원 미만)',large:'그 밖의 회사'}[c.size];
   const flags=[c.major&&'최대주주와 그 가족의 주식',c.newBiz&&'사업 개시 3년 미만',c.closed&&'휴업·폐업·청산 중'].filter(Boolean);
   const inputs=row('발행주식 총수',c.shares.toLocaleString('ko-KR')+'주')
@@ -469,18 +469,18 @@ function reportHtml(co){
     :row(r.mode==='heavy'?'가중평균 (순손익가치×2 + 순자산가치×3) ÷ 5':'가중평균 (순손익가치×3 + 순자산가치×2) ÷ 5',w(mix));
   if(r.floor) steps+=row('순자산가치의 80% 하한 적용',w(r.asset*0.8));
   if(r.premium) steps+=row('최대주주 할증 20%',w(r.v-r.v/(1+r.premium)));
-  steps+='<tr class="tot"><th>1주당 평가액 (추정)</th><td class="n">'+w(r.v)+'</td></tr>';
-  const give=c.give>0&&r.v>0;
+  steps+='<tr class="tot"><th>1주당 평가액</th><td class="n">'+w(r.v)+'</td></tr>';
+  const give=c.give>0&&r.v>0, pv=Math.round(r.v);
   return '<section class="pst">'
     +'<div class="pst-head"><h1>비상장주식 간이 진단 결과</h1><p>'+(co?esc(co)+'<br>':'')+'작성일 '+kdate(new Date())+'</p></div>'
-    +'<table class="pst-sum"><tr><th>1주당 평가액 (범위)</th>'+(give?'<th>넘길 '+c.give.toLocaleString('ko-KR')+'주 평가액</th>':'')+'<th>평가 방식</th></tr>'
-    +'<tr><td class="net">'+(r.v>0?w(lo)+' ~ '+w(hi):'0원')+'</td>'+(give?'<td>'+bigWon(lo*c.give)+' ~ '+bigWon(hi*c.give)+'</td>':'')
+    +'<table class="pst-sum"><tr><th>1주당 평가액</th>'+(give?'<th>넘길 '+c.give.toLocaleString('ko-KR')+'주 평가액</th>':'')+'<th>평가 방식</th></tr>'
+    +'<tr><td class="net">'+w(pv)+'</td>'+(give?'<td>'+w(pv*c.give)+'</td>':'')
     +'<td>'+(r.assetOnly?'순자산가치':r.mode==='heavy'?'부동산과다법인 가중평균':'순손익·순자산 가중평균')+'</td></tr></table>'
     +'<h2>입력한 재무제표 숫자</h2><table class="pst-tbl">'+inputs+'</table>'
     +'<h2>계산 과정</h2><table class="pst-tbl">'+steps+'</table>'
     +'<h2>이 결과를 움직인 것</h2><ul>'+d.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
     +'<h2>이 결과에 반영되지 않은 것</h2><ul>'+m.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
-    +'<p class="pst-note">이 자료는 재무제표 숫자로 자동 계산한 참고 자료이며, 세무조정과 자산·부채의 시가를 반영한 정식 평가서가 아닙니다. 실제로 주식을 넘길 때는 평가기준일 현재의 세무조정계산서와 자산 시가로 다시 평가해야 합니다. 결과는 세무조정에 따른 차이를 감안해 ±10% 범위로 표시했습니다.</p>'
+    +'<p class="pst-note">이 자료는 재무제표 숫자로 자동 계산한 참고 자료이며, 세무조정과 자산·부채의 시가를 반영한 정식 평가서가 아닙니다. 실제로 주식을 넘길 때는 평가기준일 현재의 세무조정계산서와 자산 시가로 다시 평가해야 합니다.</p>'
     +'<p class="pst-foot">한택스 · hantax47.com · 0507-1361-6622 · 한택스는 나이스원세무법인 스마트지점의 브랜드명입니다</p>'
     +'</section>';
 }
