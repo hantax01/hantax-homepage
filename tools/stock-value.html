@@ -180,8 +180,8 @@
           <div class="unit"><input type="text" id="i-assets" inputmode="numeric"><span class="u">원</span></div>
         </div>
         <div>
-          <label for="i-equity">자본총계 <small>직전 사업연도 말</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재무상태표의 자본총계입니다. 자산에서 부채를 뺀 금액과 같습니다. 자본잠식이라 마이너스라면 앞에 - 를 붙여 주세요.">?</button></label>
-          <div class="unit"><input type="text" id="i-equity" inputmode="text" class="signed"><span class="u">원</span></div>
+          <label for="i-debt">부채총계 <small>직전 사업연도 말</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재무상태표의 부채총계입니다. 자산총계에서 부채총계를 빼서 순자산을 구하고, 자산총계는 부동산 비중을 따질 때도 씁니다. 부채가 없으면 0을 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-debt" inputmode="numeric"><span class="u">원</span></div>
         </div>
         <div>
           <label for="i-rebook">토지·건물 장부가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재무상태표의 토지와 건물 금액을 더해 주세요. 건물은 감가상각누계액을 뺀 금액입니다. 부동산이 없으면 비워 두세요.">?</button></label>
@@ -323,10 +323,10 @@ const snum=s=>{ const t=String(s).trim(); const neg=/^[-△▲(]/.test(t)||/^\(.
 function fmt(el,signed){
   el.addEventListener('input',()=>{
     const t=el.value.trim(), neg=signed&&/^[-△▲(]/.test(t), v=num(t);
-    el.value=v?(neg?'-':'')+v.toLocaleString('ko-KR'):(neg?'-':'');
+    el.value=v?(neg?'-':'')+v.toLocaleString('ko-KR'):(neg?'-':/0/.test(t)?'0':'');   // 0도 입력으로 남깁니다(부채 0 등)
   });
 }
-['i-shares','i-assets','i-rebook','i-remkt','i-give'].forEach(id=>fmt($(id),false));
+['i-shares','i-assets','i-debt','i-rebook','i-remkt','i-give'].forEach(id=>fmt($(id),false));
 document.querySelectorAll('.signed').forEach(el=>fmt(el,true));
 $('i-unit').addEventListener('change',()=>{
   const u=$('i-unit').selectedOptions[0].text;
@@ -339,7 +339,8 @@ function read(){
   const k=Number($('i-unit').value);
   return {shares:num($('i-shares').value),
     ni1:snum($('i-ni1').value)*k, ni2:snum($('i-ni2').value)*k, ni3:snum($('i-ni3').value)*k,
-    assets:num($('i-assets').value)*k, equity:snum($('i-equity').value)*k,
+    assets:num($('i-assets').value)*k, debt:num($('i-debt').value)*k,
+    equity:(num($('i-assets').value)-num($('i-debt').value))*k,   // 순자산 = 자산총계 − 부채총계
     reBook:num($('i-rebook').value)*k, reMkt:num($('i-remkt').value)*k,
     size:$('i-size').value, major:$('i-major').checked, newBiz:$('i-new').checked, closed:$('i-closed').checked,
     give:num($('i-give').value)};
@@ -347,7 +348,7 @@ function read(){
 function check(c){
   if(!c.shares) return '발행주식 총수를 넣어 주세요.';
   if(!c.assets) return '자산총계를 넣어 주세요.';
-  if(!$('i-equity').value.trim()) return '자본총계를 넣어 주세요.';
+  if(!$('i-debt').value.trim()) return '부채총계를 넣어 주세요. 부채가 없으면 0을 넣어 주세요.';
   if(!c.newBiz&&!c.closed&&!$('i-ni1').value.trim()) return '직전 사업연도 당기순이익을 넣어 주세요.';
   if(c.reBook>c.assets) return '토지·건물 장부가액이 자산총계보다 클 수 없습니다. 금액 단위를 확인해 주세요.';
   return '';
@@ -456,7 +457,7 @@ function reportHtml(co){
   const flags=[c.major&&'최대주주와 그 가족의 주식',c.newBiz&&'사업 개시 3년 미만',c.closed&&'휴업·폐업·청산 중'].filter(Boolean);
   const inputs=row2('발행주식 총수',c.shares.toLocaleString('ko-KR')+'주','회사 규모',size)
     +row2('당기순이익 (직전)',w(c.ni1),'자산총계',w(c.assets))
-    +row2('당기순이익 (2년 전)',w(c.ni2),'자본총계',w(c.equity))
+    +row2('당기순이익 (2년 전)',w(c.ni2),'부채총계',w(c.debt))
     +row2('당기순이익 (3년 전)',w(c.ni3),'토지·건물 장부가액',w(c.reBook))
     +row2('해당 사항',flags.length?flags.join(', '):'없음','토지·건물 시가',c.reMkt>0?w(c.reMkt):'장부가액으로 계산');
   const mix=r.mode==='heavy'?(r.earn*2+r.asset*3)/5:(r.earn*3+r.asset*2)/5;
@@ -465,7 +466,7 @@ function reportHtml(co){
     steps+=row('최근 3년 가중평균 순손익 (직전×3 + 2년 전×2 + 3년 전×1) ÷ 6',w(r.wNi))
       +row('1주당 순손익가치 (가중평균 순손익 ÷ 주식 수 ÷ 10%)',w(r.earn)+(r.wNi<=0?' (적자라 0원)':''));
   }
-  steps+=row('순자산 (자본총계'+(r.reGap?' + 부동산 시가 차액 '+w(r.reGap):'')+')',w(c.equity+r.reGap));
+  steps+=row('순자산 (자산총계 − 부채총계'+(r.reGap?' + 부동산 시가 차액 '+w(r.reGap):'')+')',w(c.equity+r.reGap));
   if(r.gw>0) steps+=row('영업권',w(r.gw));
   steps+=row('1주당 순자산가치',w(r.asset));
   steps+=r.assetOnly?row('평가 방식','순자산가치로만 평가')
