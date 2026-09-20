@@ -87,6 +87,9 @@
   font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
 .savebtn:hover{background:var(--blue-soft)}
 .savebtn:disabled{opacity:.55;cursor:default}
+.guide{margin-top:34px;border:1px dashed var(--blue-line);border-radius:12px;padding:20px 22px;text-align:center}
+.guide p{font-size:14.5px;line-height:1.8;color:var(--char);margin-bottom:14px}
+.guide b{color:var(--ink)}
 .backlink{margin-top:30px;text-align:center;font-size:14px}
 .backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
 .backlink a:hover{border-color:var(--blue)}
@@ -115,18 +118,6 @@
 .stable tr.key td{background:var(--blue-soft)}
 .stable tr.key td:last-child{color:var(--blue);font-weight:800}
 .snote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px;line-height:1.8}
-.prosbox{margin-top:34px;border:1px solid var(--line);border-radius:12px;padding:22px 22px 18px}
-.prosbox h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
-.prosbox .psub{font-size:13px;color:var(--mute);margin-bottom:14px}
-.ptable{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
-.ptable th,.ptable td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle;line-height:1.55}
-.ptable thead th{background:var(--soft);color:var(--ink);font-weight:700;border-bottom:2px solid var(--line)}
-.ptable tbody th{text-align:left;color:var(--char);font-weight:600;white-space:nowrap;position:sticky;left:0;background:#fff}
-.ptable thead th:first-child{position:sticky;left:0}
-.ptable td{color:var(--ink)}
-.pnote{margin:16px 0 0;padding-left:18px;font-size:13.5px;color:var(--char);line-height:1.75}
-.pnote li{margin-top:8px}
-.pnote b{color:var(--ink)}
 .disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:22px}
@@ -138,8 +129,6 @@
 .slide .sl b{display:block;width:auto;text-align:left;margin-top:4px}
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
-.prosbox{padding:18px 16px 14px}
-.ptable{font-size:12.5px}
 }
 </style>
 <script src="../assets/ga.js?v=1" async></script>
@@ -312,32 +301,9 @@
         </details>
       </div>
 
-      <div class="prosbox">
-        <h3>현금·할부·리스·장기렌트, 세금 말고 무엇이 다를까요?</h3>
-        <p class="psub">계산 결과가 비슷하다면 아래 차이로 고르시면 됩니다.</p>
-        <div style="overflow-x:auto">
-          <table class="ptable">
-            <thead><tr><th></th><th>현금 구입</th><th>할부 구입</th><th>운용리스</th><th>장기렌트</th></tr></thead>
-            <tbody>
-              <tr><th>처음 드는 목돈</th><td>차값 전액</td><td>선수금 정도</td><td>보증금</td><td>보증금</td></tr>
-              <tr><th>차량 명의</th><td>사업자</td><td>사업자</td><td>리스사</td><td>렌트사</td></tr>
-              <tr><th>신용·대출 한도</th><td>영향 없음</td><td>대출로 잡힘</td><td>대출처럼 잡혀<br>한도가 줄 수 있음</td><td>대여 계약이라<br>영향이 적음</td></tr>
-              <tr><th>중도에 그만둘 때</th><td>언제든 매각</td><td>매각 후<br>남은 할부금 상환</td><td>해지 수수료<br>부담 큼</td><td>해지 수수료<br>부담 큼</td></tr>
-              <tr><th>사고가 나면</th><td>보험료 할증</td><td>보험료 할증</td><td>보험료 할증</td><td>렌트사 보험이라<br>할증 없음</td></tr>
-              <tr><th>취득세</th><td>승용차 7%</td><td>승용차 7%</td><td>승용차 7%</td><td>영업용이라 4%</td></tr>
-              <tr><th>보험료·자동차세</th><td>직접 부담</td><td>직접 부담</td><td>직접 부담</td><td>렌트료에 포함<br>자동차세는 영업용 요율</td></tr>
-              <tr><th>자금출처 부담</th><td>큼</td><td>중간</td><td>작음</td><td>작음</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <ul class="pnote">
-          <li><b>중도에 차를 바꾸실 수도 있다면 할부가 유리합니다.</b> 리스와 장기렌트는 중도에 해지하면 남은 금액의 20~40% 수준을 해지 수수료로 내는 경우가 많아 부담이 큽니다. 비율은 계약마다 다릅니다.</li>
-          <li><b>리스는 신용과 대출 한도에 영향을 줄 수 있습니다.</b> 캐피탈사 리스는 대출과 비슷하게 신용정보에 잡혀 다른 대출 한도가 줄거나 금리가 오를 수 있습니다. 법인 리스는 법인 신용에 잡히고, 대표님이 연대보증을 서시면 개인 신용에도 영향이 갑니다. 장기렌트는 대여 계약이라 영향이 적지만 연체하면 신용에 반영됩니다.</li>
-          <li><b>장기렌트는 세금이 조금 쌉니다.</b> 렌터카는 영업용으로 등록되어 취득세가 7%가 아닌 4%이고, 자동차세도 영업용 요율이라 2,000cc 승용차 기준 연 52만 원이 아닌 4만 원 수준입니다. 이 차이는 렌트료에 반영해 계산했습니다. 다만 만기에 차를 인수하시면 그때는 비영업용으로 등록되어 취득세 7%를 다시 내십니다.</li>
-          <li><b>사고가 잦다면 장기렌트를 함께 보세요.</b> 렌트사 보험으로 처리되어 사고가 나도 대표님이나 회사의 자동차보험료가 오르지 않습니다. 사고 때 내는 면책금은 계약마다 다릅니다.</li>
-          <li><b>부동산 취득 등으로 자금출처를 신경 쓰신다면</b> 리스나 장기렌트가 부담이 적습니다. 목돈이 한 번에 나가지 않고 차량도 리스사나 렌트사 명의로 등록됩니다.</li>
-          <li><b>법인과 개인사업자를 함께 운영하신다면 차량처럼 큰 금액은 법인으로 취득하시는 편이 유리합니다.</b> 법인 자금은 업무용으로만 쓸 수 있어서, 대표님이 개인적으로 쓰시려면 급여나 배당으로 세금을 내고 가져가셔야 합니다. 업무용 차량을 법인 돈으로 마련하시면 그 세금 없이 법인 자금을 쓰실 수 있습니다. 위에서 사업자 형태를 바꿔 각각 계산해 비교해 보세요.</li>
-        </ul>
+      <div class="guide">
+        <p><b>세금 말고 무엇이 다른지</b>는 상황에 따라 갈립니다. 사고가 잦은지, 자금출처가 신경 쓰이는지, 신용도가 중요한지, 중간에 처분할 가능성이 있는지에 따라 맞는 방법이 다릅니다.</p>
+        <a href="car-choice.html" class="btn btn-primary">어떤 방법이 맞는지 골라 보기</a>
       </div>
 
       <p class="disc">
