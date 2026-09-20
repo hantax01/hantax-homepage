@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>창업중소기업 세액감면 자가진단 2026, 우리도 받을 수 있나요? | 한택스</title>
+<meta name="description" content="청년창업 세액감면을 받을 수 있는지 열 개 남짓한 질문으로 확인합니다. 청년 여부와 사업장 지역에 따른 감면율과, 감면이 부인될 수 있는 항목까지 짚어 드립니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/startup-tax-credit.html">
+<meta property="og:title" content="창업 세액감면, 우리도 받을 수 있나요?">
+<meta property="og:description" content="질문 몇 개로 창업중소기업 세액감면 가능성과 확인할 점을 짚어 보는 자가진단">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/startup-tax-credit.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-startup-tax-credit.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:720px;margin:0 auto}
+.qbox{background:var(--soft);border-radius:14px;padding:26px 28px}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.qtop .step{font-size:12.5px;font-weight:800;letter-spacing:.08em;color:var(--blue)}
+.qtop .back{border:0;background:none;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer;padding:4px}
+.qtop .back:hover{color:var(--blue)}
+.qbar{height:4px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:22px}
+.qbar i{display:block;height:100%;background:var(--blue);transition:width .25s}
+.qbox h2{font-size:20px;font-weight:800;line-height:1.5;margin:0 0 8px;font-family:var(--sans);letter-spacing:-.01em}
+.qbox .qhelp{font-size:13.5px;line-height:1.75;color:var(--mute);margin-bottom:18px}
+.opts{display:grid;gap:9px}
+.opt{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:11px;padding:14px 16px;
+  font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;line-height:1.5}
+.opt:hover{border-color:var(--blue);background:var(--blue-soft)}
+.opt.on{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.res{display:none}
+.verdict{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center}
+.verdict .lbl{font-size:14px;opacity:.85}
+.verdict .val{font-size:32px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.3}
+.verdict .val small{font-size:18px;font-weight:700;opacity:.9}
+.verdict .sub{font-size:14px;opacity:.85;line-height:1.7}
+.box{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.box h3{font-size:15.5px;color:var(--ink);margin-bottom:10px}
+.box ul{margin:0;padding-left:18px;font-size:14.5px;line-height:1.85;color:var(--char)}
+.box li b{color:var(--ink)}
+.box li+li{margin-top:8px}
+.checks li{list-style:none;margin-left:-18px;padding:12px 0;border-bottom:1px solid var(--soft)}
+.checks li:last-child{border-bottom:0;padding-bottom:0}
+.checks b{display:block;color:var(--ink);margin-bottom:3px}
+.checks span{display:block;font-size:13.5px;color:var(--mute);line-height:1.7;margin-top:4px}
+.again{margin-top:18px;text-align:center}
+.again button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.again button:hover{background:var(--blue-soft)}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+@media(max-width:660px){
+.qbox{padding:20px 16px}.qbox h2{font-size:18px}
+.verdict{padding:22px 16px}.verdict .val{font-size:25px}
+.box{padding:16px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>창업 세액감면,<br>우리도 받을 수 있나요?</h1>
+    <p class="lead">열 개 남짓한 질문에 답하면 창업중소기업 세액감면을 얼마나 받을 수 있을지, 그리고 감면이 막힐 수 있는 부분은 없는지 짚어 드립니다. 1분이면 끝납니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="qbox" id="qbox">
+        <div class="qtop"><span class="step" id="q-step"></span><button type="button" class="back" id="q-back">이전 질문</button></div>
+        <div class="qbar"><i id="q-bar"></i></div>
+        <h2 id="q-title"></h2>
+        <p class="qhelp" id="q-help"></p>
+        <div class="opts" id="q-opts"></div>
+      </div>
+
+      <div class="res" id="res">
+        <div class="verdict" id="verdict"></div>
+        <div class="box">
+          <h3>이렇게 봤습니다</h3>
+          <ul id="reasons"></ul>
+        </div>
+        <div class="box" id="check-box">
+          <h3>확인이 필요한 항목</h3>
+          <ul class="checks" id="checks"></ul>
+        </div>
+        <div class="again"><button type="button" id="restart">처음부터 다시 하기</button></div>
+        <div class="ask">
+          <p><b>창업감면은 요건보다 "창업으로 인정되는지"에서 갈립니다.</b><br>사업자등록증과 거래 자료를 보내 주시면 받을 수 있는지, 얼마나 받는지 확인해 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="disc">
+        · 창업중소기업 세액감면(조세특례제한법 제6조)을 기준으로 한 간이 자가진단입니다. 실제 적용은 사업자등록증과 거래 자료를 확인한 뒤에 판단합니다.<br>
+        · 감면율은 창업할 때 대표님 나이와 사업장 지역으로 봅니다. 만 34세 이하 청년이 과밀억제권역 밖에서 창업하면 80%, 과밀억제권역 안에서 창업하면 50%, 청년이 아니면 과밀억제권역 밖 50%, 안쪽은 감면이 없습니다.<br>
+        · 감면 기간은 처음 소득이 난 해부터 5년입니다. 고용이 늘면 감면이 더 붙을 수 있고, 통합고용세액공제와는 함께 받을 수 없습니다.<br>
+        · 과밀억제권역은 서울 전역과 인천 일부, 경기 의정부·구리·하남·고양·수원·성남·안양·부천·광명·과천·의왕·군포·시흥 일부 등입니다. 정확한 범위는 주소로 확인해야 합니다.<br>
+        · 감면 금액이 궁금하시면 <a href="income-tax.html">종합소득세 계산기</a>나 <a href="corporate-tax.html">법인세 계산기</a>에서 세액감면 항목을 골라 보세요.<br>
+        · 감면을 잘못 받으면 나중에 세금과 가산세를 함께 내게 됩니다. 애매한 항목은 신고 전에 확인하시는 편이 안전합니다.
+      </p>
+
+      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 창업중소기업 세액감면 자가진단 ───────────── */
+// 감면율: 청년은 과밀 밖 80% · 과밀 안 50%, 청년이 아니면 과밀 밖 50% · 과밀 안 없음
+const RATE={youth:{out:0.8,in:0.5},adult:{out:0.5,in:0}};
+const BIZ=['제조업','음식점업','정보통신업 (소프트웨어·정보서비스)','건설업','운수·물류업','통신판매업 (온라인 쇼핑몰)',
+  '전문·과학·기술 서비스업 (엔지니어링·연구개발 등)','사업시설관리·사업지원 서비스업','사회복지 서비스업',
+  '직업기술 분야 학원','이·미용업, 개인·가정용품 수리업','관광숙박업'];
+
+const QUESTIONS=[
+  {id:'type',q:'사업자 형태를 골라 주세요.',
+   opts:[['indiv','개인사업자'],['corp','법인']]},
+  {id:'youth',q:'창업할 때 대표님이 만 34세 이하였나요?',
+   help:'개인은 사업자등록증의 개업일, 법인은 설립 등기일이 기준입니다. 군복무를 했다면 복무 기간만큼 늘려 봅니다. 2년을 복무했다면 만 36세까지 청년으로 봅니다.',
+   opts:[['y','만 34세 이하였습니다'],['n','아니었습니다']]},
+  {id:'biz',q:'감면을 받으려는 업종은 무엇인가요?',help:'사업자등록증의 업태·종목을 기준으로 골라 주세요.',
+   opts:BIZ.map(b=>[b,b]).concat([['none','목록에 없습니다 (도소매·부동산임대·전문직 등)'],['unknown','잘 모르겠습니다']])},
+  {id:'first',q:'맨 처음 사업자등록을 할 때부터 그 업종이 있었나요?',
+   opts:[['y','처음부터 있었습니다'],['add','나중에 업종을 추가했습니다'],['unknown','잘 모르겠습니다']]},
+  {id:'region',q:'사업장 주소가 과밀억제권역 안인가요?',
+   help:'서울 전역과 인천 일부, 경기 의정부·구리·하남·고양·수원·성남·안양·부천·광명·과천·의왕·군포 등이 과밀억제권역입니다.',
+   opts:[['out','계속 과밀억제권역 밖에 있었습니다'],['in','계속 과밀억제권역 안에 있었습니다'],
+     ['in_out','과밀 안 → 밖으로 옮겼습니다'],['out_in','과밀 밖 → 안으로 옮겼습니다'],
+     ['out_in_out','과밀 밖 → 안 → 밖으로 옮겼습니다'],['unknown','과밀인지 잘 모르겠습니다']]},
+  {id:'commute',when:a=>['out','in_out','out_in','out_in_out'].includes(a.region),
+   q:'그 사업장에 얼마나 자주 나가시나요?',
+   help:'집은 과밀 지역인데 사업장만 과밀 밖에 두는 경우, 그곳에서 실제로 사업을 하는지 봅니다.',
+   opts:[['ok','주 2~3회 이상 나갑니다'],['week1','주 1회 정도입니다'],['month','월 1~2회입니다'],['rare','거의 나가지 않습니다'],['home','집도 과밀억제권역 밖입니다']]},
+  {id:'again',q:'같은 업종으로 예전에 대표를 한 적이 있나요?',
+   opts:[['no','이 업종으로 대표는 처음입니다'],['yes','예전에 대표를 한 적이 있습니다'],['unknown','잘 모르겠습니다']]},
+  {id:'take',q:'다른 사업자에게서 사업장·장비·직원·쇼핑몰을 넘겨받았나요?',
+   opts:[['no','전혀 없습니다'],['half','절반 미만 넘겨받았습니다'],['most','절반 이상 넘겨받았습니다'],['unknown','잘 모르겠습니다']]},
+  {id:'multi',q:'대표로 되어 있는 사업자가 두 개 이상인가요?',
+   opts:[['one','하나뿐입니다'],['sep','두 개 이상이고 공간·시설·직원이 각각 다릅니다'],
+     ['mix','두 개 이상이고 구분이 뚜렷하지 않습니다'],['same','두 개 이상이고 한 사업장에서 같이 운영합니다']]},
+  {id:'related',q:'가족이나 기존 사업자와 거래처·상품이 겹치나요?',help:'가족·친척, 임원, 주주처럼 가까운 관계의 사업자를 말합니다.',
+   opts:[['no','전혀 겹치지 않습니다'],['some','렌탈·통신·청소처럼 일부만 같고 상품은 다릅니다'],
+     ['same','주요 거래처가 같거나 상품·서비스가 비슷합니다'],['unknown','잘 모르겠습니다']]},
+  {id:'share',when:a=>a.type==='corp',q:'설립한 뒤에 대표이사가 바뀌거나 지분이 달라졌나요?',
+   opts:[['keep','대표이사 그대로이고 지분도 50% 이상입니다'],['change','대표이사가 바뀌었거나 지분이 50% 미만입니다']]}
+];
+
+// 확인이 필요한 항목: [해당 조건, 제목, 준비할 것]
+const CHECKS=[
+  [a=>a.biz==='unknown','업종이 감면 대상인지 확인해야 합니다','사업자등록증의 업태·종목을 알려 주시면 감면 대상 업종인지 확인해 드립니다.'],
+  [a=>a.first==='add','맨 처음 등록한 업종이 아닙니다','나중에 추가한 업종은 그때를 창업으로 볼 수 있는지 따져야 합니다. 업종을 추가한 날짜가 나오는 사업자등록증 이력을 준비해 주세요.'],
+  [a=>a.first==='unknown','처음 등록한 업종을 확인해야 합니다','홈택스에서 사업자등록 내역 변경 이력을 뽑으면 확인할 수 있습니다.'],
+  [a=>a.region==='unknown','사업장이 과밀억제권역인지 확인해야 합니다','주소를 알려 주시면 확인해 드립니다. 지역에 따라 감면율이 80%와 50%, 또는 감면 없음으로 갈립니다.'],
+  [a=>['in_out','out_in','out_in_out'].includes(a.region),'사업장 주소를 옮긴 이력이 있습니다','창업 당시 지역을 기준으로 보기 때문에 옮긴 날짜에 따라 감면율과 남은 기간이 달라집니다. 이전 날짜와 주소를 정리해 주세요.'],
+  [a=>['week1','month','rare'].includes(a.commute),'사업장에 자주 나가지 않습니다','그 주소에서 실제로 사업을 하는지 확인합니다. 임대차계약서, 공과금 고지서, 사업장 근처 카드 사용 내역처럼 실제로 쓴 자료를 모아 두세요.'],
+  [a=>a.again==='yes','같은 업종으로 대표를 한 적이 있습니다','다시 시작한 사업은 창업으로 보지 않을 수 있습니다. 예전 사업자의 폐업일과 업종을 확인해야 합니다.'],
+  [a=>a.again==='unknown','예전 사업자 이력을 확인해야 합니다','홈택스에서 본인 사업자등록 이력을 확인하면 같은 업종으로 대표를 한 적이 있는지 알 수 있습니다.'],
+  [a=>a.take==='most','사업장·장비·직원을 절반 이상 넘겨받았습니다','넘겨받은 것이 많으면 창업이 아니라 사업을 이어받은 것으로 봅니다. 넘겨받은 자산 목록과 금액을 정리해 주세요.'],
+  [a=>a.take==='half','일부를 넘겨받았습니다','넘겨받은 비중이 얼마인지에 따라 판단이 갈립니다. 자산 목록과 금액을 정리해 두시는 것이 좋습니다.'],
+  [a=>a.take==='unknown','넘겨받은 자산이 있는지 확인해야 합니다','장비나 가게, 쇼핑몰을 다른 사업자에게서 이어받았다면 그 내역을 확인해야 합니다.'],
+  [a=>['mix','same'].includes(a.multi),'사업자 여러 개의 구분이 뚜렷하지 않습니다','하나의 사업을 나눠 놓은 것으로 볼 수 있습니다. 사업장별 공간과 직원, 매출 자료를 따로 정리해 두세요.'],
+  [a=>a.related==='same','가족이나 기존 사업자와 거래처·상품이 겹칩니다','기존 사업을 쪼갠 것으로 볼 수 있습니다. 거래처 목록과 매출 구성을 비교해 확인해야 합니다.'],
+  [a=>a.related==='unknown','특수관계자와 거래가 겹치는지 확인해야 합니다','가족이나 임원, 주주가 하는 사업자의 거래처와 상품을 비교해 보셔야 합니다.'],
+  [a=>a.share==='change','대표이사나 지분이 바뀌었습니다','감면을 받는 요건을 다시 따져야 합니다. 주주명부와 변경 이력을 준비해 주세요.']
+];
+
+const $=id=>document.getElementById(id);
+let answers={}, order=[], idx=0;
+
+const visible=()=>QUESTIONS.filter(q=>!q.when||q.when(answers));
+function show(){
+  order=visible();
+  if(idx>=order.length){ result(); return; }
+  const q=order[idx];
+  $('q-step').textContent=(idx+1)+' / '+order.length;
+  $('q-bar').style.width=Math.round(idx/order.length*100)+'%';
+  $('q-back').style.visibility=idx?'visible':'hidden';
+  $('q-title').textContent=q.q;
+  $('q-help').textContent=q.help||'';
+  $('q-help').style.display=q.help?'':'none';
+  $('q-opts').innerHTML=q.opts.map(([v,label])=>'<button type="button" class="opt'+(answers[q.id]===v?' on':'')+'" data-v="'+v+'">'+label+'</button>').join('');
+  $('qbox').style.display='';
+  $('res').style.display='none';
+}
+$('q-opts').addEventListener('click',e=>{
+  const b=e.target.closest('.opt'); if(!b) return;
+  answers[order[idx].id]=b.dataset.v;
+  idx++; show();
+});
+$('q-back').addEventListener('click',()=>{ if(idx){ idx--; show(); } });
+$('restart').addEventListener('click',()=>{ answers={}; idx=0; show(); window.scrollTo({top:$('qbox').offsetTop-90,behavior:'smooth'}); });
+
+function decide(a){
+  // 창업 당시 지역: 옮긴 경우 처음 있던 곳을 기준으로 봅니다
+  const region=a.region==='out'||a.region==='out_in'||a.region==='out_in_out'?'out'
+    :a.region==='in'||a.region==='in_out'?'in':null;
+  const rate=a.biz==='none'?0
+    :a.biz==='unknown'||region===null?null
+    :RATE[a.youth==='y'?'youth':'adult'][region];
+  return {region,rate,checks:CHECKS.filter(([f])=>f(a))};
+}
+function result(){
+  const a=answers, d=decide(a);
+  const pct=d.rate!==null?Math.round(d.rate*100):null;
+  let head;
+  if(a.biz==='none') head='<div class="lbl">이 업종은</div><div class="val">창업중소기업 세액감면<br>대상이 아닙니다</div>'
+    +'<div class="sub">도소매업, 부동산임대업, 변호사·세무사 같은 전문직 등은 감면 대상에서 빠져 있습니다.</div>';
+  else if(d.rate===null) head='<div class="lbl">아직 감면율을 정할 수 없습니다</div><div class="val">먼저 확인이<br>필요합니다</div>'
+    +'<div class="sub">아래 확인 항목을 정리하시면 감면율을 알려 드릴 수 있습니다.</div>';
+  else if(pct===0) head='<div class="lbl">지금 조건으로는</div><div class="val">감면을 받기<br>어렵습니다</div>'
+    +'<div class="sub">과밀억제권역 안에서 창업한 경우, 만 34세 이하 청년이 아니면 이 감면을 받지 못합니다.</div>';
+  else head='<div class="lbl">소득세·법인세를</div><div class="val">5년간 <small>최대</small> '+pct+'% <small>감면</small></div>'
+    +'<div class="sub">처음 소득이 난 해부터 5년 동안, 사업에서 난 소득에 대한 세금을 '+pct+'% 줄여 줍니다.</div>';
+  $('verdict').innerHTML=head;
+
+  const R=[];
+  R.push('<li><b>'+(a.youth==='y'?'창업할 때 만 34세 이하':'창업할 때 만 34세를 넘김')+'</b> · '
+    +(d.region==='out'?'과밀억제권역 밖에서 창업':d.region==='in'?'과밀억제권역 안에서 창업':'창업 지역 확인 필요'));
+  R.push('<li><b>업종</b> · '+(a.biz==='none'?'감면 대상 업종이 아님':a.biz==='unknown'?'확인 필요':a.biz+' (감면 대상 업종)'));
+  R.push('<li><b>최초 등록 업종</b> · '+(a.first==='y'?'처음부터 등록되어 있었음':a.first==='add'?'나중에 추가함':'확인 필요'));
+  if(d.rate>0) R.push('<li><b>감면 기간</b> · 처음 소득이 난 해부터 5년. 고용이 늘면 더 붙을 수 있고, 통합고용세액공제와 함께 받을 수는 없습니다.');
+  $('reasons').innerHTML=R.join('');
+
+  $('checks').innerHTML=d.checks.length
+    ? d.checks.map(([,t,s])=>'<li><b>'+t+'</b><span>'+s+'</span></li>').join('')
+    : '<li><b>걸리는 항목이 없습니다</b><span>답해 주신 내용만 보면 창업으로 인정받는 데 문제가 될 부분이 보이지 않습니다. 다만 실제 판단은 사업자등록증과 거래 자료를 봐야 합니다.</span></li>';
+  $('check-box').querySelector('h3').textContent=d.checks.length?'확인이 필요한 항목 '+d.checks.length+'가지':'확인이 필요한 항목';
+
+  $('qbox').style.display='none';
+  $('res').style.display='block';
+  if(window.gtag) gtag('event','startup_credit_result');
+}
+show();
+</script>
+</body>
+</html>
