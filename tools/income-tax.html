@@ -119,29 +119,14 @@
   <div class="wrap">
     <div class="sim">
       <div class="sim-in">
-        <div class="divider"><b>매출</b><span>올해 1~12월 합계</span></div>
+        <div class="divider"><b>사업</b><span>올해 1~12월 · 부가세 뺀 금액</span></div>
         <div>
-          <label for="i-rev">매출 <small>부가세 뺀 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="한 해 동안 사업으로 번 돈의 합계입니다. 부가가치세 신고를 했다면 1기와 2기 과세표준(공급가액)을 더한 금액입니다.">?</button></label>
+          <label for="i-rev">매출 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="한 해 동안 사업으로 번 돈의 합계입니다. 부가가치세 신고를 했다면 1기와 2기 과세표준(공급가액)을 더한 금액입니다.">?</button></label>
           <div class="unit"><input type="text" id="i-rev" inputmode="numeric"><span>원</span></div>
         </div>
-        <div></div>
-
-        <div class="divider"><b>비용</b><span>사업에 쓴 돈 · 부가세 뺀 금액</span></div>
         <div>
-          <label for="i-c-buy">상품·재료 매입 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="팔 물건이나 재료를 산 돈입니다. 식당이면 식재료, 가게면 상품 매입입니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-c-buy" inputmode="numeric"><span>원</span></div>
-        </div>
-        <div>
-          <label for="i-c-pay">인건비 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="직원 급여와 퇴직금, 회사가 낸 4대보험료입니다. 대표님 본인 급여는 비용이 되지 않습니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-c-pay" inputmode="numeric"><span>원</span></div>
-        </div>
-        <div>
-          <label for="i-c-rent">임차료 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="가게나 사무실 월세, 관리비입니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-c-rent" inputmode="numeric"><span>원</span></div>
-        </div>
-        <div>
-          <label for="i-c-etc">그 밖의 경비 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="카드 수수료, 광고비, 통신비, 차량 유지비, 소모품, 이자, 감가상각비처럼 사업에 쓴 나머지 비용을 더한 금액입니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-c-etc" inputmode="numeric"><span>원</span></div>
+          <label for="i-cost">비용 <small>사업에 쓴 돈</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="상품·재료 매입, 직원 인건비와 4대보험, 임차료, 카드 수수료, 광고비, 차량 유지비, 이자, 감가상각비처럼 사업에 쓴 돈을 모두 더한 금액입니다. 대표님 본인 급여는 비용이 되지 않습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-cost" inputmode="numeric"><span>원</span></div>
         </div>
 
         <div class="divider"><b>다른 소득</b><span>있을 때만 넣어 주세요</span></div>
@@ -269,7 +254,7 @@ const laborCreditMax=g=>g<=3.3e7?740000:g<=7e7?Math.max(660000,740000-(g-3.3e7)*
   :g<=1.2e8?Math.max(500000,660000-(g-7e7)*0.5):Math.max(200000,500000-(g-1.2e8)*0.5);
 
 function calcTax(c){
-  const cost=c.cBuy+c.cPay+c.cRent+c.cEtc;
+  const cost=c.cost;
   const biz=c.rev-cost;                                   // 사업소득금액 (적자면 다른 소득에서 뺍니다)
   const lDed=laborDed(c.wage), labor=c.wage-lDed;         // 근로소득금액
   const income=Math.max(0,biz+labor+c.other);             // 종합소득금액
@@ -294,14 +279,14 @@ function calcTax(c){
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
-['i-rev','i-c-buy','i-c-pay','i-c-rent','i-c-etc','i-wage','i-other','i-ded','i-credit','i-paid'].forEach(id=>{
+['i-rev','i-cost','i-wage','i-other','i-ded','i-credit','i-paid'].forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 $('i-people').addEventListener('input',()=>{ const v=num($('i-people').value); $('i-people').value=v?String(Math.min(v,20)):''; });
 const RELIEF_NAME={sme:'중소기업특별세액감면',start:'창업중소기업 세액감면'};
 function read(){
   const [kind,rate]=$('i-relief').value.split(':');
-  return {rev:num($('i-rev').value),cBuy:num($('i-c-buy').value),cPay:num($('i-c-pay').value),cRent:num($('i-c-rent').value),cEtc:num($('i-c-etc').value),
+  return {rev:num($('i-rev').value),cost:num($('i-cost').value),
     wage:num($('i-wage').value),other:num($('i-other').value),people:Math.max(1,num($('i-people').value)),ded:num($('i-ded').value),
     reliefKind:kind,reliefRate:Number(rate)||0,credit:num($('i-credit').value),paid:num($('i-paid').value)};
 }
@@ -344,7 +329,7 @@ function render(){
 
   const srow=(l,m,val)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+val+'</td></tr>';
   $('steps').innerHTML='<table class="stable">'
-    +srow('사업소득금액','매출 '+won(c.rev)+' − (상품·재료 '+won(c.cBuy)+' + 인건비 '+won(c.cPay)+' + 임차료 '+won(c.cRent)+' + 그 밖의 경비 '+won(c.cEtc)+')',won(r.biz)+'원')
+    +srow('사업소득금액','매출 '+won(c.rev)+' − 비용 '+won(c.cost),won(r.biz)+'원')
     +(c.wage?srow('근로소득금액','총급여 '+won(c.wage)+' − 근로소득공제 '+won(r.lDed),won(r.labor)+'원'):'')
     +srow('종합소득금액','사업'+(c.wage?' + 근로':'')+(c.other?' + 연금·기타':'')+(r.biz<0?' (적자는 다른 소득에서 뺌)':''),won(r.income)+'원')
     +srow('소득공제','기본공제 '+c.people+'명 × 150만 원'+(c.ded?' + 그 밖의 소득공제 '+won(c.ded):''),'− '+won(r.ded)+'원')
