@@ -206,7 +206,7 @@
         이 계산기는 <b>대략의 금액을 가늠하기 위한 단순 계산</b>입니다. 실제 퇴직금과 세금은 급여 항목, 퇴직연금 가입 형태, 근무 형태에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
         · <b>퇴직금 = 1일 평균임금 × 30일 × 재직일수 ÷ 365</b>로 계산합니다. 1일 평균임금은 퇴직일 전 3개월 동안 받은 임금을 그 기간의 날수로 나눈 값입니다.<br>
         · 날짜는 <b>근무 시작일</b>과 <b>마지막 근무일</b>을 넣습니다. 법에서 말하는 퇴직일은 마지막 근무일의 다음 날이라, 계산기가 하루를 더해 퇴직일로 봅니다. 재직일수는 근무 시작일부터 마지막 근무일까지의 날수입니다.<br>
-        · 상여금과 연차수당은 1년 치 가운데 3개월분(12분의 3)만 평균임금에 넣었습니다. 퇴사하면서 남은 연차를 정산해 주는 연차수당은 평균임금에 들어가지 않으므로 넣지 마세요.<br>
+        · 상여금과 연차수당은 1년 치 가운데 평균임금 산정기간 일수만큼(일수 ÷ 365) 넣었습니다. 이 값이 고용노동부 기준인 3개월분(12분의 3)보다 적으면 12분의 3을 씁니다. 산정기간이 92일이면 92/365, 89~91일이면 12분의 3이 됩니다. 퇴사하면서 남은 연차를 정산해 주는 연차수당은 평균임금에 들어가지 않으므로 넣지 마세요.<br>
         · 급여가 달마다 달랐다면 <b>최근 3개월 급여가 달랐어요</b>를 눌러 3개월 임금 총액을 넣어 주세요. 지급받은 날이 아니라 일한 기간이 기준입니다.<br>
         · 산정기간 안에 수습기간이나 육아휴직, 산재 휴업처럼 빼야 하는 기간이 있으면 그 날수와 임금을 빼고 계산해야 하는데, 이 부분은 반영하지 않았습니다.<br>
         · 표 오른쪽 위 <b>전체 이미지 저장</b>과 <b>PDF 저장</b>은 모든 분을, 이름 아래 버튼은 그분만 저장합니다. PDF 저장을 누르면 인쇄 창이 열리니 대상을 PDF로 저장으로 고르세요. 카카오톡 안에서 열었다면 PDF 저장이 되지 않으니 다른 브라우저로 열어 주세요.<br>
@@ -309,7 +309,9 @@ function calcPerson(p){
   // 1일 평균임금: 퇴직일 전 3개월 임금 ÷ 그 기간 날수
   const from=monthsBefore(end,3);
   const periodDays=days(from,end);
-  const wage3=p.vary?p.total:p.wage*3, bonus3=p.bonus*3/12;   // 급여가 달랐다면 3개월 총액을 그대로 씁니다
+  const wage3=p.vary?p.total:p.wage*3;                        // 급여가 달랐다면 3개월 총액을 그대로 씁니다
+  // 상여금·연차수당: 산정기간 일수/365(위하고 방식)와 고용노동부 기준 3/12 중 큰 값. 89~91일이면 일수/365가 3/12보다 작아 법 기준 아래로 내려가지 않게 합니다
+  const bonusF=Math.max(3/12,periodDays/365), bonus3=p.bonus*bonusF;
   const avg=(wage3+bonus3)/periodDays;
   const pay=eligible?Math.floor(avg*30*workDays/365):0;
 
@@ -324,7 +326,7 @@ function calcPerson(p){
   const tax=incomeTax+localTax;
 
   return {name:p.name,start,last,end,workDays,fullMonths,years,eligible,from,periodDays,wage3,bonus3,avg,pay,
-          sd,conv,cd,base,info,incomeTax,localTax,tax,net:pay-tax,wage:p.wage,bonus:p.bonus,vary:!!p.vary};
+          sd,conv,cd,base,info,incomeTax,localTax,tax,net:pay-tax,wage:p.wage,bonus:p.bonus,bonusF,vary:!!p.vary};
 }
 
 /* ── 입력 줄 ───────────────────────────────── */
@@ -479,7 +481,7 @@ function personTable(r){
     +row('재직기간',kdate(r.start)+' ~ '+kdate(last),r.workDays.toLocaleString('ko-KR')+'일');
   if(!r.eligible) return h+row('퇴직금','1년 이상 근무하지 않아 지급 의무가 없습니다','0원','key')+'</table>';
   return h+row('평균임금 산정기간',kdate(r.from)+' ~ '+kdate(last),r.periodDays+'일')
-    +row('3개월 임금',(r.vary?'3개월 임금 총액 '+won(r.wage3):'월급여 '+won(r.wage)+' × 3')+(r.bonus?' + 상여금·연차수당 '+won(r.bonus)+' × 3/12':''),won(r.wage3+r.bonus3)+'원')
+    +row('3개월 임금',(r.vary?'3개월 임금 총액 '+won(r.wage3):'월급여 '+won(r.wage)+' × 3')+(r.bonus?' + 상여금·연차수당 '+won(r.bonus)+' × '+(r.bonusF>0.25?r.periodDays+'/365':'3/12'):''),won(r.wage3+r.bonus3)+'원')
     +row('1일 평균임금','3개월 임금 ÷ '+r.periodDays+'일',won(r.avg)+'원')
     +row('퇴직금','1일 평균임금 × 30일 × '+r.workDays.toLocaleString('ko-KR')+'일 ÷ 365',won(r.pay)+'원','key')
     +sec('2. 퇴직소득세')
