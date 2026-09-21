@@ -241,10 +241,10 @@
 
       <p class="disc">
         이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 다른 소득, 4대보험, 이익잉여금 규모, 주주 구성 등 여러 사정에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
-        · 대표님께 다른 소득은 없고, 주주는 대표님 한 분이라고 가정합니다.<br>
-        · 세 가지 안은 가져가는 금액이 서로 다르므로, 금액에 관계없이 비교하실 수 있도록 <b>가져가는 돈 대비 부담률</b>을 함께 표시했습니다.<br>
+        · 주주는 대표님 한 분이라고 가정합니다. 다른 소득은 입력하신 금액만 반영합니다.<br>
+        · 지금과 바꾼 경우는 가져가는 금액이 다를 수 있어, <b>100만 원을 더 가져갈 때 붙는 세금</b>을 가져가는 돈 대비 비율로 함께 표시했습니다.<br>
         · 급여는 법인의 비용이 되어 법인세가 줄지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다.<br>
-        · 배당 재원은 올해 세후 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
+        · 배당할 수 있는 돈은 올해 법인세를 낸 뒤 남은 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
         · 배당소득이 연 2,000만 원 이하면 15.4% 분리과세, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.<br>
         · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 2억 원 초과 20%이며 지방소득세를 포함했습니다.<br>
         · <b>공제·감면이 많은 회사</b>를 선택하면 법인세를 최저한세율 7%로 계산합니다. 지방소득세는 공제·감면을 적용하지 않으므로 감면 전 세액을 기준으로 10%를 더했습니다.<br>
@@ -399,8 +399,8 @@ let CUR_SAL=0, CUR_DIV=0, DEDUCT=0, CREDIT=0, OTHER=0;   // 지금 받고 있는
 let FORCE_FULL=false;   // 이미지로 만들 때만 금액을 온전히 적습니다
 let NP=0;             // 입력한 당기순이익(대표님 연봉을 뺀 재무제표 숫자)
 let ALT_SAL=0, ALT_DIV=0;   // 슬라이더로 바꿔 보는 조합
-// 연봉을 바꿔 보려면 지금 연봉을 도로 더한 이익에서 출발해야 합니다.
-// 4대보험을 함께 볼 때는 회사부담 보험료도 법인 비용이라 같이 되더합니다.
+// 연봉을 바꿔 보려면 지금 연봉을 빼기 전 이익에서 출발해야 합니다.
+// 4대보험을 함께 볼 때는 회사부담 보험료도 법인 비용이라 함께 빼기 전으로 돌립니다.
 function GP(){ return NP>0 ? NP + CUR_SAL + (INS_MODE ? salaryInsurance(CUR_SAL).company : 0) : 0; }
 function compute(profit,total,salary){
   const sal=Math.min(salary,profit);
@@ -425,11 +425,12 @@ function render(profit,total,salary){
     const nx=scenario(profit,Math.round(r.salary*k),Math.round(r.dividend*k));
     return nx.short>0 ? null : nx.gross-r.gross;
   };
-  const dcell=(a,b,goodUp)=>{               // 바꾼다면 − 지금
-    const d=b-a;
+  // 바꾼다면 − 지금. 부호 대신 말로 적습니다 (세금은 더 납부/덜 납부, 돈은 더/덜 가져감 등)
+  const dcell=(a,b,goodUp,words)=>{
+    const d=b-a, w=words||['더 납부','덜 납부'];
     if(Math.abs(d)<1000) return '<td class="dc">같음</td>';
     const cls = goodUp===null ? '' : ((goodUp ? d>0 : d<0) ? ' up' : ' down');
-    return '<td class="dc'+cls+'">'+(d>0?'+':'−')+amt(Math.abs(d))+'</td>';
+    return '<td class="dc'+cls+'">'+amt(Math.abs(d))+' '+(d>0?w[0]:w[1])+'</td>';
   };
   document.getElementById('res-body').innerHTML=
     '<tr><td>연봉으로 줄인 법인세'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">급여는 법인의 비용이라 과세표준이 줄어듭니다</small></td>'
@@ -443,16 +444,16 @@ function render(profit,total,salary){
    +'<tr class="tot"><td>합계'
       +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉도 배당도 받지 않으셨을 때와 비교</small></td>'
       +cells(r=>(r.net<0?'−':'')+amt(Math.abs(r.net)))+dcell(rows[0].net,rows[1].net,false)+'</tr>'
-   +'<tr class="sub-row"><td>이때 회사에서 나간 돈'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">세금이 줄어든 만큼 회사 돈도 빠져나갑니다</small></td>'
-      +cells(r=>amt(baseLeft-r.left))+dcell(baseLeft-rows[0].left,baseLeft-rows[1].left,null)+'</tr>'
-   +'<tr class="rate"><td>100만 원 더 가져갈 때'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">지금 조합 그대로</small></td>'
-      +cells(r=>{ const m=stepMore(r); return m===null?'재원 부족'
+   +'<tr class="sub-row"><td>회사에서 나간 돈'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">한 푼도 가져가지 않았을 때보다 법인에 덜 남는 돈</small></td>'
+      +cells(r=>amt(baseLeft-r.left))+dcell(baseLeft-rows[0].left,baseLeft-rows[1].left,null,['더 나감','덜 나감'])+'</tr>'
+   +'<tr class="rate"><td>100만 원 더 가져갈 때'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉과 배당 비율은 그대로</small></td>'
+      +cells(r=>{ const m=stepMore(r); return m===null?'배당할 이익 부족'
         : won(m)+'원<br><small>가져가는 돈의 '+(m/10000).toFixed(1)+'%</small>'; })
       +((stepMore(rows[0])!==null && stepMore(rows[1])!==null)
         ? dcell(stepMore(rows[0]),stepMore(rows[1]),false) : '<td class="dc"></td>')+'</tr>'
    +'<tr class="gap"><td colspan="4"></td></tr>'
-   +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>amt(r.cash))+dcell(rows[0].cash,rows[1].cash,true)+'</tr>'
-   +'<tr><td>법인에 남는 돈</td>'+cells(r=>amt(r.left))+dcell(rows[0].left,rows[1].left,true)+'</tr>';
+   +'<tr class="cash"><td>대표님이 가져가는 돈</td>'+cells(r=>amt(r.cash))+dcell(rows[0].cash,rows[1].cash,true,['더 가져감','덜 가져감'])+'</tr>'
+   +'<tr><td>법인에 남는 돈</td>'+cells(r=>amt(r.left))+dcell(rows[0].left,rows[1].left,true,['더 남음','덜 남음'])+'</tr>';
 
   document.getElementById('res-sub').textContent=
     '당기순이익 '+won(NP)+'원 · 지금 연봉 '+won(CUR_SAL)+'원 · 소득공제 '+won(DEDUCT)+'원'
@@ -477,10 +478,10 @@ function render(profit,total,salary){
     const mSal=marginal(profit,CUR_SAL,CUR_DIV,'sal'), mDiv=marginal(profit,CUR_SAL,CUR_DIV,'div');
     hl.className='headline';
     const n=nowRow.net;
-    hl.innerHTML='지금 <b>'+won(curTotal)+'원</b>을 가져가시는 구조는, 한 푼도 가져가지 않으실 때보다 '
-      +(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(Math.abs(n))+'원</b> '+(n>=0?'더':'적게')+' 냅니다.<br>'
+    hl.innerHTML='지금처럼 <b>'+won(curTotal)+'원</b>을 가져가시면, 한 푼도 가져가지 않으실 때보다 '
+      +(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(Math.abs(n))+'원</b> '+(n>=0?'더':'덜')+' 내십니다.<br>'
       +'여기서 100만 원을 더 가져가신다면 연봉으로는 <b>'+won(mSal)+'원</b>, '
-      +(mDiv===null ? '배당은 재원이 남지 않아 더 받으실 수 없습니다.'
+      +(mDiv===null ? '배당은 더 나눠 줄 이익이 남지 않아 더 받으실 수 없습니다.'
                     : '배당으로는 <b>'+won(mDiv)+'원</b>이 더 붙습니다.');
   }
   let msg='법인 통장에 있는 돈은 아직 대표님 개인 돈이 아닙니다. 연봉으로 받으면 근로소득세가, 배당으로 받으면 이미 법인세를 낸 이익에 다시 배당소득세가 붙습니다. '
@@ -488,16 +489,16 @@ function render(profit,total,salary){
     +'연봉은 법인의 비용이라 그만큼 법인세가 줄지만, 배당은 배당을 하든 안 하든 법인세가 달라지지 않습니다.';
   const diff=nowRow.gross-newRow.gross;
   if(Math.abs(diff)>10000){
-    msg+='<br><br>연봉과 배당을 바꾼 안은 지금보다 '+won(Math.abs(diff))+'원 '+(diff>0?'적게':'많이')+' 냅니다. '
+    msg+='<br><br>연봉과 배당을 바꾸면 지금보다 '+won(Math.abs(diff))+'원 '+(diff>0?'덜':'더')+' 냅니다. '
       +'배당은 <b>연 2,000만 원까지 15.4%로 분리과세</b>되어 그 구간이 유리하지만, 그 이상은 근로소득과 합산되어 차이가 크지 않습니다.';
   } else {
     msg+='<br><br>연봉과 배당을 어떻게 나누든 '+(INS_MODE?'부담':'세금')+' 차이는 크지 않습니다. 배당 2,000만 원까지는 15.4% 분리과세라 그 구간만 유리하고, 그 위로는 결국 비슷해집니다. '
-      +'<b>어떻게 나누느냐보다 얼마를 가져가느냐가 훨씬 큰 차이를 만듭니다.</b>';
+      +'<b>어떻게 나누느냐보다 얼마를 가져가느냐에 따라 세금이 훨씬 크게 달라집니다.</b>';
   }
   if(CIT_MODE==='2') msg+='<br><br>이월결손금이 남아 있는 동안은 연봉을 올려도 올해 법인세가 줄지 않습니다. 대신 결손금을 덜 쓰게 되어, 남은 결손금으로 다음 해 이후 법인세를 줄일 수 있습니다.';
   if(nowRow.cSaved>10000) msg+='<br><br>지금 연봉 '+won(CUR_SAL)+'원 덕분에 '+(CIT_MODE==='3'?'법인지방소득세를 ':'법인세를 ')+won(nowRow.cSaved)+'원 줄이고 계십니다. '
     +'연봉을 올리면 이 절감액이 커지지만 근로소득세와 4대보험이 더 빠르게 늘고, <b>배당은 아무리 늘려도 법인세가 줄지 않습니다.</b>';
-  if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세 부담이 낮은 방법이 있으니 미리 설계해 두시면 차이가 큽니다.';
+  if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세금이 적은 방법이 있으니 미리 준비해 두시면 세금을 크게 줄일 수 있습니다.';
   msg+= INS_MODE
     ? '<br><br><span style="font-size:14px;color:var(--mute)">국민연금은 기준소득월액 상한(월 637만 원)이 있어 연봉 7,600만 원쯤부터는 더 늘지 않지만, 건강보험료는 상한 없이 계속 붙습니다. 배당은 연 2,000만 원까지 건강보험료가 붙지 않습니다.</span>'
     : '<br><br><span style="font-size:14px;color:var(--mute)">여기에 국민연금과 건강보험료가 더 빠집니다. 위 탭에서 <b>4대보험까지 보기</b>를 누르면 함께 계산한 결과를 보실 수 있습니다.</span>';
@@ -510,7 +511,7 @@ function render(profit,total,salary){
     const d=rows[1].net-rows[0].net;
     st.innerHTML='가져가는 돈 <b>'+won(total)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+(rows[1].net<0?'−':'')+won(Math.abs(rows[1].net))+'원</b>'
       +(Math.abs(d)<1000 ? ' · 지금과 같음'
-        : ' · 지금보다 <b class="'+(d>0?'dn':'up')+'">'+won(Math.abs(d))+'원 '+(d>0?'더':'덜')+'</b>');
+        : ' · 지금보다 <b class="'+(d>0?'dn':'up')+'">'+won(Math.abs(d))+'원 '+(d>0?'더 납부':'덜 납부')+'</b>');
   }
   document.getElementById('res').style.display='block';
 }
@@ -567,7 +568,8 @@ function drawChart(profit){
     +'<text x="'+Math.min(W-R,X(divPts[N].take)+4).toFixed(1)+'" y="'+(Y(divPts[N].dy)-9).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#C8423A">배당은 여기까지</text>'
     +'<circle cx="'+X(nowTake).toFixed(1)+'" cy="'+Y(scenario(profit,CUR_SAL,CUR_DIV).net).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
     +'<text x="'+X(nowTake).toFixed(1)+'" y="'+(T-8)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금</text>'
-    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+38)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 돈</text>';
+    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+38)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 돈</text>'
+    +'<text transform="rotate(-90)" x="'+(-(T+(H-T-B)/2)).toFixed(1)+'" y="13" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5C6572">'+(INS_MODE?'더 내는 세금·4대보험':'더 내는 세금')+'</text>';
 
   const near=(arr,t)=>arr.reduce((a,b)=>Math.abs(b.take-t)<Math.abs(a.take-t)?b:a).dy;
   const best=salPts.reduce((a,b)=>b.dy<a.dy?b:a);   // 파란 선이 가장 낮은 지점
@@ -598,12 +600,12 @@ function renderSteps(profit,total,rows){
     html+='<div class="case"><b class="ttl">'+(i+1)+'. '+titles[i]+(i===1?' (연봉 '+won(r.salary)+'원 + 배당 '+won(r.dividend)+'원)':'')+'</b><table class="stable">';
 
     html+=sec('법인')
-      +row('연봉을 되더한 이익', INS_MODE
-            ? '당기순이익 '+won(NP)+' + 지금 연봉 '+won(CUR_SAL)+' + 그때 회사부담 보험료 '+won(salaryInsurance(CUR_SAL).company)
+      +row('연봉을 빼기 전 이익', INS_MODE
+            ? '당기순이익 '+won(NP)+' + 지금 연봉 '+won(CUR_SAL)+' + 지금 연봉의 회사부담 보험료 '+won(salaryInsurance(CUR_SAL).company)
             : '당기순이익 '+won(NP)+' + 지금 연봉 '+won(CUR_SAL), won(profit)+'원')
       +row('법인 과세표준', INS_MODE
-            ? '되더한 이익 '+won(profit)+' − 급여 '+won(r.salary)+' − 회사부담 보험료 '+won(r.ins.company)
-            : '되더한 이익 '+won(profit)+' − 급여 '+won(r.salary), won(r.cBase)+'원')
+            ? '연봉을 빼기 전 이익 '+won(profit)+' − 급여 '+won(r.salary)+' − 회사부담 보험료 '+won(r.ins.company)
+            : '연봉을 빼기 전 이익 '+won(profit)+' − 급여 '+won(r.salary), won(r.cBase)+'원')
       +row('법인세',citHow,won(cp.main)+'원')
       +row('지방소득세', CIT_MODE==='2' ? '이월결손금으로 과세표준이 없어 0원'
             : CIT_MODE==='0' ? '법인세 '+won(cp.normal)+' × 10%'
@@ -614,7 +616,7 @@ function renderSteps(profit,total,rows){
             : '과세표준 '+won(profit)+' (연봉을 주지 않았을 때)', won(r.cTaxFull)+'원')
       +row('연봉으로 줄인 법인세',won(r.cTaxFull)+' − '+won(r.cTax),won(r.cSaved)+'원',true);
     if(r.dividend>0 || r.after>0)
-      html+=row('배당 재원','법인 과세표준 '+won(r.cBase)+' − 법인세 '+won(r.cTax),won(r.after)+'원');
+      html+=row('배당할 수 있는 이익','법인 과세표준 '+won(r.cBase)+' − 법인세 '+won(r.cTax),won(r.after)+'원');
 
     if(r.salary>0 || OTHER>0){
       html+=sec(OTHER>0?'대표님 근로소득과 다른 소득':'대표님 근로소득')
@@ -687,11 +689,11 @@ function renderSteps(profit,total,rows){
            INS_MODE ? '법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax)+' + 보험료 '+won(r.ins.total+r.dIns.total)
                     : '법인세 '+won(r.cTax)+' + 개인 세금 '+won(r.pTax), won(r.gross)+'원',true)
       +row('연봉을 안 받았다면','법인세 '+won(r.cTaxFull)+'만 내고 개인 세금은 없음',won(r.cTaxFull)+'원')
-      +row('그때와 비교하면',won(r.gross)+' − '+won(r.cTaxFull),(r.net<0?'−':'+')+won(Math.abs(r.net))+'원',true)
+      +row('그때와 비교하면',won(r.gross)+' − '+won(r.cTaxFull),won(Math.abs(r.net))+'원 '+(r.net<0?'덜 납부':'더 납부'),true)
       +row('가져가는 돈',
            INS_MODE ? '급여 + 배당 − 개인 세금 '+won(r.pTax)+' − 본인부담 보험료 '+won(r.ins.self+r.dIns.total)
                     : '급여 '+won(r.salary)+' + 배당 '+won(r.dividend)+' − 개인 세금 '+won(r.pTax), won(r.cash)+'원',true)
-      +row('법인에 남는 돈','배당 재원 '+won(r.after)+' − 배당 '+won(r.dividend),won(r.left)+'원')
+      +row('법인에 남는 돈','배당할 수 있는 이익 '+won(r.after)+' − 배당 '+won(r.dividend),won(r.left)+'원')
       +'</table></div>';
   });
   html+='<p class="snote">급여는 법인의 비용이 되어 법인세 과세표준을 줄이지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다. 배당소득이 연 2,000만 원을 넘으면 근로소득과 합쳐 종합과세하되, 법인세와 이중과세되는 부분을 덜어주기 위해 배당가산액을 더했다가 같은 금액을 세액공제하고, 분리과세했을 때보다 적어지지 않도록 둘 중 큰 금액으로 결정합니다. 배당을 하든 하지 않든 법인세는 이미 확정되므로, 배당액에 법인세를 따로 얹지 않고 법인세는 총액 그대로 보여 드립니다. 연봉을 올렸을 때 법인세가 줄어드는 효과는 표의 차이 열에서 확인하실 수 있습니다. 이전에 쌓인 이익잉여금은 반영하지 않았습니다.</p>';
