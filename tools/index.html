@@ -28,6 +28,10 @@
   letter-spacing:-.02em;line-height:1.4;margin-bottom:10px}
 .tool p{font-size:14px;color:var(--mute);line-height:1.7;margin:0}
 .tool .go{display:inline-block;margin-top:16px;font-size:13.5px;font-weight:700;color:var(--blue)}
+.tgroup{max-width:900px;margin:52px auto 16px;display:flex;align-items:baseline;gap:6px 12px;flex-wrap:wrap}
+.tgroup.first{margin-top:0}
+.tgroup h2{font-family:var(--sans);font-size:19px;font-weight:800;letter-spacing:-.01em;margin:0}
+.tgroup span{font-size:13.5px;color:var(--mute)}
 .note{max-width:900px;margin:34px auto 0;font-size:13px;color:var(--mute);line-height:1.8;
   padding-top:20px;border-top:1px solid var(--line)}
 @media(max-width:720px){
@@ -65,86 +69,86 @@
 
 <section class="sec" style="padding-top:40px">
   <div class="wrap">
+    <div class="tgroup first"><h2>매년 내는 세금</h2><span>신고하기 전에 미리 계산해 보세요</span></div>
     <div class="tools">
-      <a class="tool" href="incorporation.html">
-        <span class="no">01</span>
-        <b>법인전환, 세금이<br>얼마나 달라질까요?</b>
-        <p>지금처럼 개인사업자로 두는 경우와 법인으로 바꿔 대표님 연봉을 정하는 경우를 나란히 놓고 비교합니다. 4대보험까지 함께 보실 수 있습니다.</p>
-        <span class="go">계산해 보기</span>
-      </a>
-
-      <a class="tool" href="income-transfer.html">
-        <span class="no">02</span>
-        <b>회사 돈을 가져가면<br>세금이 얼마나 붙나요?</b>
-        <p>법인에 쌓인 이익을 연봉이나 배당으로 꺼낼 때 세금이 얼마나 늘어나는지 봅니다. 연봉이 법인세를 줄이는 효과까지 함께 계산합니다.</p>
-        <span class="go">계산해 보기</span>
-      </a>
-
-      <a class="tool" href="gift-tax.html">
-        <span class="no">03</span>
-        <b>증여, 세금이<br>얼마나 나올까요?</b>
-        <p>지난 10년 동안 받은 재산을 함께 묶어 계산합니다. 전에 받으신 것을 먼저 적고 이번에 받을 금액을 넣어 보세요.</p>
-        <span class="go">계산해 보기</span>
-      </a>
-
-      <a class="tool" href="business-car.html">
-        <span class="no">04</span>
-        <b>업무용 차량, 사는 게<br>나을까요 빌리는 게 나을까요?</b>
-        <p>현금 구입과 할부, 리스와 장기렌트를 나란히 놓고 세금까지 따져 봅니다.</p>
-        <span class="go">계산해 보기</span>
-      </a>
-
-      <a class="tool" href="severance-pay.html">
-        <span class="no">05</span>
-        <b>퇴직금과 퇴직소득세,<br>얼마일까요?</b>
-        <p>근무 시작일과 마지막 근무일, 급여를 넣으면 퇴직금과 떼어야 할 세금을 함께 계산합니다. 여러 명을 한꺼번에 넣고 명세서로 저장하실 수 있습니다.</p>
-        <span class="go">계산해 보기</span>
-      </a>
-
-      <a class="tool" href="take-home-pay.html">
-        <span class="no">06</span>
-        <b>월급, 세금 떼고<br>얼마 받을까요?</b>
-        <p>세전 월급을 넣으면 4대보험과 소득세를 뗀 실수령액을, 받고 싶은 세후 금액을 넣으면 세전 월급을 거꾸로 계산합니다.</p>
-        <span class="go">계산해 보기</span>
-      </a>
-
       <a class="tool" href="income-tax.html">
-        <span class="no">07</span>
         <b>종합소득세,<br>올해 얼마나 나올까요?</b>
         <p>한 해 매출과 비용, 근로소득 같은 다른 소득으로 예상 종합소득세를 계산합니다. 중소기업특별세액감면과 창업중소기업 세액감면도 반영합니다.</p>
         <span class="go">계산해 보기</span>
       </a>
 
-      <a class="tool" href="vat.html">
-        <span class="no">08</span>
-        <b>부가가치세,<br>이번에 얼마나 나올까요?</b>
-        <p>이번 신고 기간의 매출과 매입으로 낼 부가세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제를 반영합니다.</p>
-        <span class="go">계산해 보기</span>
-      </a>
-
       <a class="tool" href="corporate-tax.html">
-        <span class="no">10</span>
         <b>법인세,<br>올해 얼마나 나올까요?</b>
         <p>법인의 한 해 매출과 비용, 대표 급여로 예상 법인세를 계산합니다. 세액감면과 이월결손금, 대표 급여를 늘렸을 때 줄어드는 세금까지 보여 드립니다.</p>
         <span class="go">계산해 보기</span>
       </a>
 
-      <a class="tool" href="startup-tax-credit.html">
-        <span class="no">11</span>
-        <b>창업 세액감면,<br>우리도 받을 수 있나요?</b>
-        <p>청년 창업인지, 사업장이 과밀억제권역인지 등 몇 가지 질문에 답하면 감면율과 함께 감면이 막힐 수 있는 항목을 짚어 드립니다.</p>
-        <span class="go">진단해 보기</span>
+      <a class="tool" href="vat.html">
+        <b>부가가치세,<br>이번에 얼마나 나올까요?</b>
+        <p>이번 신고 기간의 매출과 매입으로 낼 부가세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제를 반영합니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+    </div>
+
+    <div class="tgroup"><h2>급여와 사람</h2><span>직원 급여와 퇴직금, 대표님 연봉</span></div>
+    <div class="tools">
+      <a class="tool" href="take-home-pay.html">
+        <b>월급, 세금 떼고<br>얼마 받을까요?</b>
+        <p>세전 월급을 넣으면 4대보험과 소득세를 뗀 실수령액을, 받고 싶은 세후 금액을 넣으면 세전 월급을 거꾸로 계산합니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+
+      <a class="tool" href="severance-pay.html">
+        <b>퇴직금과 퇴직소득세,<br>얼마일까요?</b>
+        <p>근무 시작일과 마지막 근무일, 급여를 넣으면 퇴직금과 떼어야 할 세금을 함께 계산합니다. 여러 명을 한꺼번에 넣고 명세서로 저장하실 수 있습니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+
+      <a class="tool" href="income-transfer.html">
+        <b>회사 돈을 가져가면<br>세금이 얼마나 붙나요?</b>
+        <p>법인에 쌓인 이익을 연봉이나 배당으로 꺼낼 때 세금이 얼마나 늘어나는지 봅니다. 연봉이 법인세를 줄이는 효과까지 함께 계산합니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+    </div>
+
+    <div class="tgroup"><h2>결정하기 전에</h2><span>법인전환, 차량, 창업감면을 따져 볼 때</span></div>
+    <div class="tools">
+      <a class="tool" href="incorporation.html">
+        <b>법인전환, 세금이<br>얼마나 달라질까요?</b>
+        <p>지금처럼 개인사업자로 두는 경우와 법인으로 바꿔 대표님 연봉을 정하는 경우를 나란히 놓고 비교합니다. 4대보험까지 함께 보실 수 있습니다.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+
+      <a class="tool" href="business-car.html">
+        <b>업무용 차량, 사는 게<br>나을까요 빌리는 게 나을까요?</b>
+        <p>현금 구입과 할부, 리스와 장기렌트를 나란히 놓고 세금까지 따져 봅니다.</p>
+        <span class="go">계산해 보기</span>
       </a>
 
       <a class="tool" href="car-choice.html">
-        <span class="no">12</span>
+        <span class="no">자가진단</span>
         <b>업무용 차량,<br>어떻게 사는 게 맞을까요?</b>
         <p>현금 일시취득, 할부, 리스, 장기렌트 가운데 무엇이 맞는지 일곱 가지 질문으로 골라 드립니다. 사고 빈도, 자금출처, 신용도, 번호판, 중도 처분 가능성을 봅니다.</p>
         <span class="go">골라 보기</span>
       </a>
 
+      <a class="tool" href="startup-tax-credit.html">
+        <span class="no">자가진단</span>
+        <b>창업 세액감면,<br>우리도 받을 수 있나요?</b>
+        <p>청년 창업인지, 사업장이 과밀억제권역인지 등 몇 가지 질문에 답하면 감면율과 함께 감면이 막힐 수 있는 항목을 짚어 드립니다.</p>
+        <span class="go">진단해 보기</span>
+      </a>
+    </div>
+
+    <div class="tgroup"><h2>재산을 넘기거나 팔 때</h2><span>증여와 주식 평가</span></div>
+    <div class="tools">
+      <a class="tool" href="gift-tax.html">
+        <b>증여, 세금이<br>얼마나 나올까요?</b>
+        <p>지난 10년 동안 받은 재산을 함께 묶어 계산합니다. 전에 받으신 것을 먼저 적고 이번에 받을 금액을 넣어 보세요.</p>
+        <span class="go">계산해 보기</span>
+      </a>
+
       <a class="tool" href="stock-value.html">
-        <span class="no">09</span>
         <b>비상장주식, 우리 회사 주식은<br>대략 얼마일까요?</b>
         <p>재무제표 숫자를 상속세 및 증여세법의 평가 방법에 넣어 1주당 가치를 대략 짚어 봅니다. 자녀 증여나 지분 정리 전에 규모를 가늠해 보세요.</p>
         <span class="go">계산해 보기</span>

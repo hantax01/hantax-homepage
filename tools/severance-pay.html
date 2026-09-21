@@ -100,10 +100,11 @@
 .pst-note{font-size:10.5px;color:#8b98a8;margin-top:14px;line-height:1.6}
 .pst-foot{font-size:10px;color:#aaaaaa;text-align:right;margin-top:6px}
 @media print{
-  @page{size:A4;margin:14mm}
+  @page{size:A4;margin:0}   /* 여백이 0이면 브라우저가 날짜·제목·주소·쪽번호를 찍지 않습니다. 여백은 명세서 안쪽에 둡니다 */
   body{background:#fff!important;margin:0}
   body>*:not(#print-area){display:none!important}
   #print-area{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #print-area .pst{padding:13mm 14mm}
 }
 .backlink{margin-top:30px;text-align:center;font-size:14px}
 .backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}

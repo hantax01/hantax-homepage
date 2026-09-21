@@ -100,10 +100,11 @@
 #print-area{display:none}
 #img-area{position:fixed;left:-10000px;top:0;width:800px}
 @media print{
-  @page{size:A4;margin:14mm}
+  @page{size:A4;margin:0}   /* 여백이 0이면 브라우저가 날짜·제목·주소·쪽번호를 찍지 않습니다. 여백은 명세서 안쪽에 둡니다 */
   body{background:#fff!important;margin:0}
   body>*:not(#print-area){display:none!important}
   #print-area{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #print-area .pst{padding:13mm 14mm}
 }
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
