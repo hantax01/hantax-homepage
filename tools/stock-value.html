@@ -473,12 +473,13 @@ function reportHtml(co){
     :row(r.mode==='heavy'?'가중평균 (순손익가치×2 + 순자산가치×3) ÷ 5':'가중평균 (순손익가치×3 + 순자산가치×2) ÷ 5',w(mix));
   if(r.floor) steps+=row('순자산가치의 80% 하한 적용',w(r.asset*0.8));
   if(r.premium) steps+=row('최대주주 할증 20%',w(r.v-r.v/(1+r.premium)));
-  steps+='<tr class="tot"><th>1주당 평가액</th><td class="n">'+w(r.v)+'</td></tr>';
-  const give=c.give>0&&r.v>0, pv=Math.round(r.v);
+  const give=c.give>0&&r.v>0, pv=Math.round(r.v), whole=pv*c.shares;   // 회사 전체 가치 = 1주당 평가액 × 발행주식 총수
+  steps+='<tr class="tot"><th>1주당 평가액</th><td class="n">'+w(r.v)+'</td></tr>'
+    +'<tr class="tot"><th>회사 전체 가치 (1주당 평가액 × 발행주식 '+c.shares.toLocaleString('ko-KR')+'주)</th><td class="n">'+w(whole)+'</td></tr>';
   return '<section class="pst">'
     +'<div class="pst-head"><h1>비상장주식 간이 진단 결과</h1><p>'+(co?esc(co)+'<br>':'')+'작성일 '+kdate(new Date())+'</p></div>'
-    +'<table class="pst-sum"><tr><th>1주당 평가액</th>'+(give?'<th>넘길 '+c.give.toLocaleString('ko-KR')+'주 평가액</th>':'')+'<th>평가 방식</th></tr>'
-    +'<tr><td class="net">'+w(pv)+'</td>'+(give?'<td>'+w(pv*c.give)+'</td>':'')
+    +'<table class="pst-sum"><tr><th>1주당 평가액</th><th>회사 전체 가치</th>'+(give?'<th>넘길 '+c.give.toLocaleString('ko-KR')+'주 평가액</th>':'')+'<th>평가 방식</th></tr>'
+    +'<tr><td class="net">'+w(pv)+'</td><td class="net">'+w(whole)+'</td>'+(give?'<td>'+w(pv*c.give)+'</td>':'')
     +'<td>'+(r.assetOnly?'순자산가치':r.mode==='heavy'?'부동산과다법인 가중평균':'순손익·순자산 가중평균')+'</td></tr></table>'
     +'<h2>입력한 재무제표 숫자</h2><table class="pst-tbl two">'+inputs+'</table>'
     +'<h2>계산 과정</h2><table class="pst-tbl">'+steps+'</table>'
