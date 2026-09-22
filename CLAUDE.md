@@ -13,6 +13,7 @@
 ## 게시 절차
 1. 수정 → Edge 헤드리스 캡처로 확인 → `git add <파일 지정> && git commit && git push origin main`
 2. push 후 1~2분이면 반영. 커밋 메시지는 한국어 서술형.
+3. html이 바뀐 push는 GitHub Actions(`.github/workflows/indexnow.yml`)가 새로 생기거나 바뀐 페이지를 네이버 IndexNow로 자동 알림 — 루트의 키 파일 `99a310a2bc3883ed83aa1512ead202d2.txt` 지우지 말 것. 새 페이지는 사이트맵에도 추가(구글은 서치콘솔에서 직접 색인 요청)
 
 ## 칼럼 작성 규칙 (AEO)
 - 제목 = 사장님이 실제로 묻는 **질문형 문장**
