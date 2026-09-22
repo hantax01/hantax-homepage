@@ -38,4 +38,5 @@
 - 원본(미처리) 캡처 파일을 저장소에 커밋 금지
 
 ## FAQ 추가 방법
-`faq/index.html`의 `<details>` 블록 추가 + 상단 FAQPage JSON-LD의 mainEntity에 동일 문구로 1건 추가 (본문과 JSON-LD 불일치 금지)
+`faq/index.html`의 `<details data-cat="주제">` 블록을 **맨 위에** 추가(최신순) + 상단 FAQPage JSON-LD의 mainEntity **맨 앞에** 동일 문구로 1건 추가 (본문과 JSON-LD 불일치 금지). 주제가 여럿이면 `data-cat="법인세|부가가치세"`, 새 주제면 상단 `.col-cats`에 버튼 추가.
+주제 버튼·쪽 나누기는 `assets/list.js` 공용(칼럼 목록 9개·FAQ 10개씩, 목록의 `data-per`) — 넘치면 쪽 번호가 자동으로 생김
