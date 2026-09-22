@@ -21,6 +21,7 @@
 - 본문 → 근거 법령·예규 명시 → FAQ 2~3개 (본문과 동일 내용을 FAQPage JSON-LD에도)
 - `column/_template.html` 복사 → 영문 파일명 → `column/index.html` 목록에 카드 추가(.empty 블록은 첫 글에서 제거)
 - 법이 바뀌면 본문과 dateModified 수정
+- **공유 미리보기(썸네일)**: `node assets/og/make.js column <파일명> "<제목 첫 줄<br>둘째 줄>" "<한 줄 설명>"` → `assets/og/column-<파일명>.png` 생성, 템플릿의 og:image와 Article JSON-LD `image`의 `[파일명]`을 바꿔 연결 (계산기는 `tool`)
 
 ## 문구 원칙 (확정 사항 — 임의 변경 금지)
 - 슬로건: **"사장님의 스토리를 기억하는 세무사"**
