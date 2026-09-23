@@ -173,11 +173,11 @@
           </select>
         </div>
         <div>
-          <label for="i-salary">지금 연봉 <em>필수</em> <small>올해 받기로 한 금액, 없으면 0</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="대표님이 급여로 받기로 정하신 1년치 금액입니다. 4대보험과 세금을 떼기 전의 세전 금액으로 넣어 주세요. 월급이 정해져 있다면 12를 곱하시면 됩니다.">?</button></label>
+          <label for="i-salary">현재 연봉 <em>필수</em> <small>올해 받기로 한 금액, 없으면 0</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="대표님이 급여로 받기로 정하신 1년치 금액입니다. 4대보험과 세금을 떼기 전의 세전 금액으로 넣어 주세요. 월급이 정해져 있다면 12를 곱하시면 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-div">지금 배당 <small>받지 않으셨으면 비워 두세요</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사에 쌓인 이익을 주주에게 나눠 주는 돈입니다. 주주총회에서 정하며, 법인세를 낸 뒤의 이익에서 나갑니다. 연봉과 달리 회사의 비용이 아니라 법인세를 줄이지 못합니다.">?</button></label>
+          <label for="i-div">현재 배당 <small>받지 않으셨으면 비워 두세요</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사에 쌓인 이익을 주주에게 나눠 주는 돈입니다. 주주총회에서 정하며, 법인세를 낸 뒤의 이익에서 나갑니다. 연봉과 달리 회사의 비용이 아니라 법인세를 줄이지 못합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-div" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -213,7 +213,7 @@
         <div style="overflow-x:auto">
           <table class="rtable">
             <thead>
-              <tr><th>구분</th><th id="h-now">지금</th><th id="h-mix">바꾼다면</th><th id="h-diff">차이</th></tr>
+              <tr><th>구분</th><th id="h-now">현재</th><th id="h-mix">바꾼다면</th><th id="h-diff">차이</th></tr>
             </thead>
             <tbody id="res-body"></tbody>
           </table>
@@ -226,7 +226,7 @@
           <div class="clegend">
             <span><i style="background:#1B4A9B"></i>전액 연봉으로 받을 때</span>
             <span><i style="background:#C8423A"></i>전액 배당으로 받을 때</span>
-            <span><i style="background:#0B1E3F"></i>지금</span>
+            <span><i style="background:#0B1E3F"></i>현재</span>
           </div>
           <p class="cband" id="cband"></p>
         </div>
@@ -242,7 +242,7 @@
       <p class="disc">
         이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 다른 소득, 4대보험, 이익잉여금 규모, 주주 구성 등 여러 사정에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
         · 주주는 대표님 한 분이라고 가정합니다. 다른 소득은 입력하신 금액만 반영합니다.<br>
-        · 지금과 바꾼 경우는 가져가는 금액이 다를 수 있어, <b>100만 원을 더 가져갈 때 붙는 세금</b>을 가져가는 돈 대비 비율로 함께 표시했습니다.<br>
+        · 현재와 바꾼 경우는 가져가는 금액이 다를 수 있어, <b>100만 원을 더 가져갈 때 붙는 세금</b>을 가져가는 돈 대비 비율로 함께 표시했습니다.<br>
         · 급여는 법인의 비용이 되어 법인세가 줄지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다.<br>
         · 배당할 수 있는 돈은 올해 법인세를 낸 뒤 남은 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
         · 배당소득이 연 2,000만 원 이하면 15.4% 분리과세, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.<br>
@@ -395,23 +395,23 @@ function marginal(profit,sal,div,mode){   // 여기서 100만 원을 더 가져�
   if(next.short>0) return null;            // 배당 재원이 모자라면 비교할 수 없습니다
   return next.gross-base.gross;
 }
-let CUR_SAL=0, CUR_DIV=0, DEDUCT=0, CREDIT=0, OTHER=0;   // 지금 받고 있는 방식 / 소득공제 / 세액공제
+let CUR_SAL=0, CUR_DIV=0, DEDUCT=0, CREDIT=0, OTHER=0;   // 현재 받고 있는 방식 / 소득공제 / 세액공제
 let FORCE_FULL=false;   // 이미지로 만들 때만 금액을 온전히 적습니다
 let NP=0;             // 입력한 당기순이익(대표님 연봉을 뺀 재무제표 숫자)
 let ALT_SAL=0, ALT_DIV=0;   // 슬라이더로 바꿔 보는 조합
-// 연봉을 바꿔 보려면 지금 연봉을 빼기 전 이익에서 출발해야 합니다.
+// 연봉을 바꿔 보려면 현재 연봉을 빼기 전 이익에서 출발해야 합니다.
 // 4대보험을 함께 볼 때는 회사부담 보험료도 법인 비용이라 함께 빼기 전으로 돌립니다.
 function GP(){ return NP>0 ? NP + CUR_SAL + (INS_MODE ? salaryInsurance(CUR_SAL).company : 0) : 0; }
 function compute(profit,total,salary){
   const sal=Math.min(salary,profit);
-  return [ scenario(profit,CUR_SAL,CUR_DIV),   // 지금
+  return [ scenario(profit,CUR_SAL,CUR_DIV),   // 현재
            scenario(profit,sal,total-sal) ];   // 바꾼다면
 }
 
 function render(profit,total,salary){
   const rows=compute(profit,total,salary);
   const sal=rows[1].salary, div=rows[1].dividend;
-  document.getElementById('h-now').innerHTML='지금<br><small style="font-weight:400">연봉 '+shortWon(CUR_SAL)+' · 배당 '+shortWon(CUR_DIV)+'</small>';
+  document.getElementById('h-now').innerHTML='현재<br><small style="font-weight:400">연봉 '+shortWon(CUR_SAL)+' · 배당 '+shortWon(CUR_DIV)+'</small>';
   document.getElementById('h-mix').innerHTML='바꾼다면<br><small style="font-weight:400">연봉 '+shortWon(sal)+' · 배당 '+shortWon(div)+'</small>';
   const cells=fn=>rows.map(r=>'<td>'+fn(r)+'</td>').join('');
   const narrow=!FORCE_FULL && window.innerWidth<=660;
@@ -425,7 +425,7 @@ function render(profit,total,salary){
     const nx=scenario(profit,Math.round(r.salary*k),Math.round(r.dividend*k));
     return nx.short>0 ? null : nx.gross-r.gross;
   };
-  // 바꾼다면 − 지금. 부호 대신 말로 적습니다 (세금은 더 납부/덜 납부, 돈은 더/덜 가져감 등)
+  // 바꾼다면 − 현재. 부호 대신 말로 적습니다 (세금은 더 납부/덜 납부, 돈은 더/덜 가져감 등)
   const dcell=(a,b,goodUp,words)=>{
     const d=b-a, w=words||['더 납부','덜 납부'];
     if(Math.abs(d)<1000) return '<td class="dc">같음</td>';
@@ -456,7 +456,7 @@ function render(profit,total,salary){
    +'<tr><td>법인에 남는 돈</td>'+cells(r=>amt(r.left))+dcell(rows[0].left,rows[1].left,true,['더 남음','덜 남음'])+'</tr>';
 
   document.getElementById('res-sub').textContent=
-    '당기순이익 '+won(NP)+'원 · 지금 연봉 '+won(CUR_SAL)+'원 · 소득공제 '+won(DEDUCT)+'원'
+    '당기순이익 '+won(NP)+'원 · 현재 연봉 '+won(CUR_SAL)+'원 · 소득공제 '+won(DEDUCT)+'원'
     +(OTHER>0?' · 다른 소득 '+won(OTHER)+'원':'')+(CREDIT>0?' · 세액공제 '+won(CREDIT)+'원':'')
     +({'1':' · 최저한세 7%','2':' · 이월결손금','3':' · 연구비 세액공제'}[CIT_MODE]||'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
 
@@ -473,12 +473,12 @@ function render(profit,total,salary){
   const hl=document.getElementById('headline');
   if(curTotal<=0){
     hl.className='headline same';
-    hl.innerHTML='지금 받고 계신 연봉과 배당을 입력하시면, 그 돈을 가져가는 데 세금이 얼마나 붙는지 계산해 드립니다.';
+    hl.innerHTML='현재 받고 계신 연봉과 배당을 입력하시면, 그 돈을 가져가는 데 세금이 얼마나 붙는지 계산해 드립니다.';
   } else {
     const mSal=marginal(profit,CUR_SAL,CUR_DIV,'sal'), mDiv=marginal(profit,CUR_SAL,CUR_DIV,'div');
     hl.className='headline';
     const n=nowRow.net;
-    hl.innerHTML='지금처럼 <b>'+won(curTotal)+'원</b>을 가져가시면, 한 푼도 가져가지 않으실 때보다 '
+    hl.innerHTML='현재처럼 <b>'+won(curTotal)+'원</b>을 가져가시면, 한 푼도 가져가지 않으실 때보다 '
       +(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(Math.abs(n))+'원</b> '+(n>=0?'더':'덜')+' 내십니다.<br>'
       +'여기서 100만 원을 더 가져가신다면 연봉으로는 <b>'+won(mSal)+'원</b>, '
       +(mDiv===null ? '배당은 더 나눠 줄 이익이 남지 않아 더 받으실 수 없습니다.'
@@ -489,14 +489,14 @@ function render(profit,total,salary){
     +'연봉은 법인의 비용이라 그만큼 법인세가 줄지만, 배당은 배당을 하든 안 하든 법인세가 달라지지 않습니다.';
   const diff=nowRow.gross-newRow.gross;
   if(Math.abs(diff)>10000){
-    msg+='<br><br>연봉과 배당을 바꾸면 지금보다 '+won(Math.abs(diff))+'원 '+(diff>0?'덜':'더')+' 냅니다. '
+    msg+='<br><br>연봉과 배당을 바꾸면 현재보다 '+won(Math.abs(diff))+'원 '+(diff>0?'덜':'더')+' 냅니다. '
       +'배당은 <b>연 2,000만 원까지 15.4%로 분리과세</b>되어 그 구간이 유리하지만, 그 이상은 근로소득과 합산되어 차이가 크지 않습니다.';
   } else {
     msg+='<br><br>연봉과 배당을 어떻게 나누든 '+(INS_MODE?'부담':'세금')+' 차이는 크지 않습니다. 배당 2,000만 원까지는 15.4% 분리과세라 그 구간만 유리하고, 그 위로는 결국 비슷해집니다. '
       +'<b>어떻게 나누느냐보다 얼마를 가져가느냐에 따라 세금이 훨씬 크게 달라집니다.</b>';
   }
   if(CIT_MODE==='2') msg+='<br><br>이월결손금이 남아 있는 동안은 연봉을 올려도 올해 법인세가 줄지 않습니다. 대신 결손금을 덜 쓰게 되어, 남은 결손금으로 다음 해 이후 법인세를 줄일 수 있습니다.';
-  if(nowRow.cSaved>10000) msg+='<br><br>지금 연봉 '+won(CUR_SAL)+'원 덕분에 '+(CIT_MODE==='3'?'법인지방소득세를 ':'법인세를 ')+won(nowRow.cSaved)+'원 줄이고 계십니다. '
+  if(nowRow.cSaved>10000) msg+='<br><br>현재 연봉 '+won(CUR_SAL)+'원 덕분에 '+(CIT_MODE==='3'?'법인지방소득세를 ':'법인세를 ')+won(nowRow.cSaved)+'원 줄이고 계십니다. '
     +'연봉을 올리면 이 절감액이 커지지만 근로소득세와 4대보험이 더 빠르게 늘고, <b>배당은 아무리 늘려도 법인세가 줄지 않습니다.</b>';
   if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세금이 적은 방법이 있으니 미리 준비해 두시면 세금을 크게 줄일 수 있습니다.';
   msg+= INS_MODE
@@ -510,8 +510,8 @@ function render(profit,total,salary){
   if(st){
     const d=rows[1].net-rows[0].net;
     st.innerHTML='가져가는 돈 <b>'+won(total)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+(rows[1].net<0?'−':'')+won(Math.abs(rows[1].net))+'원</b>'
-      +(Math.abs(d)<1000 ? ' · 지금과 같음'
-        : ' · 지금보다 <b class="'+(d>0?'dn':'up')+'">'+won(Math.abs(d))+'원 '+(d>0?'더 납부':'덜 납부')+'</b>');
+      +(Math.abs(d)<1000 ? ' · 현재와 같음'
+        : ' · 현재보다 <b class="'+(d>0?'dn':'up')+'">'+won(Math.abs(d))+'원 '+(d>0?'더 납부':'덜 납부')+'</b>');
   }
   document.getElementById('res').style.display='block';
 }
@@ -567,7 +567,7 @@ function drawChart(profit){
     +'<circle cx="'+X(divPts[N].take).toFixed(1)+'" cy="'+Y(divPts[N].dy).toFixed(1)+'" r="3.5" fill="#C8423A"/>'
     +'<text x="'+Math.min(W-R,X(divPts[N].take)+4).toFixed(1)+'" y="'+(Y(divPts[N].dy)-9).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#C8423A">배당은 여기까지</text>'
     +'<circle cx="'+X(nowTake).toFixed(1)+'" cy="'+Y(scenario(profit,CUR_SAL,CUR_DIV).net).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
-    +'<text x="'+X(nowTake).toFixed(1)+'" y="'+(T-8)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금</text>'
+    +'<text x="'+X(nowTake).toFixed(1)+'" y="'+(T-8)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">현재</text>'
     +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+38)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님이 가져가는 돈</text>'
     +'<text transform="rotate(-90)" x="'+(-(T+(H-T-B)/2)).toFixed(1)+'" y="13" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5C6572">'+(INS_MODE?'더 내는 세금·4대보험':'더 내는 세금')+'</text>';
 
@@ -576,18 +576,18 @@ function drawChart(profit){
   const txt=[];
   if(best.dy < -10000)
     txt.push('연봉 '+shortWon(best.take)+'원 부근에서 '+(INS_MODE?'부담이':'세금이')+' 가장 적습니다');
-  txt.push((near(salPts,nowTake)<near(divPts,nowTake)?'연봉':'배당')+'으로 받는 쪽이 지금 금액대에서는 유리합니다');
+  txt.push((near(salPts,nowTake)<near(divPts,nowTake)?'연봉':'배당')+'으로 받는 쪽이 현재 금액대에서는 유리합니다');
   document.getElementById('cband').textContent=txt.join(' · ');
 
   const cs=document.querySelector('.chartbox .csub');
   if(cs) cs.textContent='같은 금액을 전액 연봉으로만, 전액 배당으로만 받아 본 비교입니다. 세로축은 한 푼도 가져가지 않으실 때와 비교한 '
-    +(INS_MODE?'세금과 4대보험':'세금')+'이라 0 아래는 그때보다 덜 내는 구간이고, 검은 점이 지금 쓰고 계신 조합입니다.';
+    +(INS_MODE?'세금과 4대보험':'세금')+'이라 0 아래는 그때보다 덜 내는 구간이고, 검은 점이 현재 쓰고 계신 조합입니다.';
 }
 
 /* ── 계산 과정 ─────────────────────────────── */
 function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
 function renderSteps(profit,total,rows){
-  const titles=['지금 받고 계신 방식','바꾼다면'];
+  const titles=['현재 받고 계신 방식','바꾼다면'];
   const sec=t=>'<tr><td colspan="3" style="padding-top:14px;padding-bottom:4px;color:var(--blue);font-weight:800;font-size:12.5px;letter-spacing:.04em;border-bottom:0">'+t+'</td></tr>';
   let html='';
   rows.forEach((r,i)=>{
@@ -601,8 +601,8 @@ function renderSteps(profit,total,rows){
 
     html+=sec('법인')
       +row('연봉을 빼기 전 이익', INS_MODE
-            ? '당기순이익 '+won(NP)+' + 지금 연봉 '+won(CUR_SAL)+' + 지금 연봉의 회사부담 보험료 '+won(salaryInsurance(CUR_SAL).company)
-            : '당기순이익 '+won(NP)+' + 지금 연봉 '+won(CUR_SAL), won(profit)+'원')
+            ? '당기순이익 '+won(NP)+' + 현재 연봉 '+won(CUR_SAL)+' + 현재 연봉의 회사부담 보험료 '+won(salaryInsurance(CUR_SAL).company)
+            : '당기순이익 '+won(NP)+' + 현재 연봉 '+won(CUR_SAL), won(profit)+'원')
       +row('법인 과세표준', INS_MODE
             ? '연봉을 빼기 전 이익 '+won(profit)+' − 급여 '+won(r.salary)+' − 회사부담 보험료 '+won(r.ins.company)
             : '연봉을 빼기 전 이익 '+won(profit)+' − 급여 '+won(r.salary), won(r.cBase)+'원')
@@ -728,13 +728,13 @@ $('calc').addEventListener('click',()=>{
   const profit=num($('i-profit').value);
   const salary=num($('i-salary').value);
   const dividend=num($('i-div').value);
-  CUR_SAL=salary; CUR_DIV=dividend;   // 지금 받고 있는 방식으로 기억
+  CUR_SAL=salary; CUR_DIV=dividend;   // 현재 받고 있는 방식으로 기억
   DEDUCT=num($('i-deduct').value); CREDIT=num($('i-credit').value); OTHER=num($('i-other').value);
   const total=salary+dividend;
   if(profit<=0){alert('당기순이익을 입력해 주세요.');return;}
   if(total<=0){alert('연봉이나 배당 중 하나는 입력해 주세요.');return;}
   NP=profit; ALT_SAL=salary; ALT_DIV=dividend;
-  if(total>GP()){alert('연봉과 배당을 더한 금액이 '+won(GP())+'원을 넘을 수 없습니다. 당기순이익에 지금 연봉을 더한 금액입니다.');return;}
+  if(total>GP()){alert('연봉과 배당을 더한 금액이 '+won(GP())+'원을 넘을 수 없습니다. 당기순이익에 현재 연봉을 더한 금액입니다.');return;}
   render(GP(),total,salary);
   initSlider(GP(),total,salary);
 });

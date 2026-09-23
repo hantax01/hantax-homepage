@@ -406,7 +406,7 @@ function render(){
   let v;
   if(r.pay<=0){
     v='공제 범위 안이라 <b>낼 세금이 없습니다.</b> 세금이 없어도 신고는 해 두시는 편이 좋습니다. 나중에 이 돈의 출처를 설명해야 할 때 근거가 됩니다.';
-    if(r.free>r.amount) v+='<br><br>지금 조건이라면 <b>'+won(r.free)+'원</b>까지는 세금 없이 받으실 수 있습니다.';
+    if(r.free>r.amount) v+='<br><br>현재 조건이라면 <b>'+won(r.free)+'원</b>까지는 세금 없이 받으실 수 있습니다.';
   }else{
     v='내야 할 증여세는 <b>'+won(r.pay)+'원</b>입니다. 받으시는 '+won(r.amount)+'원의 '+(r.pay/r.amount*100).toFixed(1)+'%에 해당합니다.';
     v+=r.free>0?'<br><br>세금 없이 받을 수 있는 금액은 '+won(r.free)+'원까지입니다.'
@@ -499,15 +499,15 @@ function drawChart(g,r){
     +svg+curves+marks
     +'<line x1="'+X(cur.a).toFixed(1)+'" y1="'+T+'" x2="'+X(cur.a).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
     +'<circle cx="'+X(cur.a).toFixed(1)+'" cy="'+Y(cur.tax).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
-    +'<text x="'+Math.min(W-R-50,Math.max(L+50,X(cur.a))).toFixed(1)+'" y="'+Math.max(T+14,Y(cur.tax)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금 선택 '+shortWon(cur.tax)+'</text>'
+    +'<text x="'+Math.min(W-R-50,Math.max(L+50,X(cur.a))).toFixed(1)+'" y="'+Math.max(T+14,Y(cur.tax)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">현재 선택 '+shortWon(cur.tax)+'</text>'
     +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+36)+'" text-anchor="middle" font-size="11" fill="#8b98a8">이번에 받을 금액</text>';
 
-  // 지금 어느 구간인지, 얼마를 더 받으면 다음 구간인지
+  // 현재 어느 구간인지, 얼마를 더 받으면 다음 구간인지
   let band;
   if(r.base<=0){
-    band=r.free>0?'지금 조건에서는 '+won(r.free)+'원까지 세금이 없습니다':'10년 치 공제를 다 쓰셔서 첫 원부터 세금이 붙습니다';
+    band=r.free>0?'현재 조건에서는 '+won(r.free)+'원까지 세금이 없습니다':'10년 치 공제를 다 쓰셔서 첫 원부터 세금이 붙습니다';
   }else{
-    band='지금 금액은 '+Math.round(r.info.rate*100)+'% 구간입니다';
+    band='현재 금액은 '+Math.round(r.info.rate*100)+'% 구간입니다';
     band+=next?' · '+won(Math.round((next.from-r.amount)/10000)*10000)+'원을 더 받으면 '+Math.round(next.rate*100)+'% 구간으로 올라갑니다'
               :' · 가장 높은 구간입니다';
   }

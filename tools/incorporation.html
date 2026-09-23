@@ -138,7 +138,7 @@
   <div class="wrap">
     <span class="eyebrow">세무설계</span>
     <h1>법인전환, 세금이 얼마나 달라질까요?</h1>
-    <p class="lead">지금처럼 개인사업자로 두는 경우와, 법인으로 전환해 대표님 연봉을 정하는 경우를 나란히 비교해 봅니다.</p>
+    <p class="lead">현재처럼 개인사업자로 두는 경우와, 법인으로 전환해 대표님 연봉을 정하는 경우를 나란히 비교해 봅니다.</p>
   </div>
 </section>
 
@@ -200,8 +200,8 @@
           <p class="csub">가로축은 대표님 연봉, 세로축은 총 세금(법인세 + 근로소득세)입니다.</p>
           <svg id="chart" viewBox="0 0 720 310" preserveAspectRatio="xMidYMid meet" role="img" aria-label="대표님 연봉에 따른 총 세금과 실수령액 변화 그래프"></svg>
           <div class="clegend">
-            <span><i style="background:#1B4A9B"></i>지금보다 세금이 적은 구간</span>
-            <span><i style="background:#C8423A"></i>지금보다 세금이 많은 구간</span>
+            <span><i style="background:#1B4A9B"></i>현재보다 세금이 적은 구간</span>
+            <span><i style="background:#C8423A"></i>현재보다 세금이 많은 구간</span>
             <span><i style="background:#8b98a8"></i>개인사업자로 유지할 때</span>
           </div>
           <p class="cband" id="cband"></p>
@@ -341,7 +341,7 @@ function render(income,deduct,red,salary){
       const pct=income>0?(r.total/income*100):0;
       return '<td class="'+(r.total===min?'best':'')+'">'+pct.toFixed(1)+'%</td>';
    })+'</tr>'
-   +'<tr class="diff"><td>지금 대비</td>'+cells(r=>{
+   +'<tr class="diff"><td>현재 대비</td>'+cells(r=>{
       if(r.corp===null) return '<td class="'+(r.total===min?'best':'')+'">기준</td>';
       const d=base-r.total;
       if(Math.abs(d)<1000) return '<td class="'+(r.total===min?'best':'')+'">비슷</td>';
@@ -355,7 +355,7 @@ function render(income,deduct,red,salary){
   document.getElementById('res-title').textContent = INS_MODE ? '총 부담 비교 결과' : '세금 비교 결과';
   const best=rows.find(r=>r.total===min);
   const save=base-min;
-  const labels={0:'지금처럼 개인사업자로 두는 경우',1:'법인으로 전환해 대표님 연봉을 '+won(rows[1].sal)+'원으로 정하는 경우',2:'법인으로 전환해 이익 전액을 연봉으로 가져가는 경우'};
+  const labels={0:'현재처럼 개인사업자로 두는 경우',1:'법인으로 전환해 대표님 연봉을 '+won(rows[1].sal)+'원으로 정하는 경우',2:'법인으로 전환해 이익 전액을 연봉으로 가져가는 경우'};
   const bestIdx=rows.indexOf(best);
   document.getElementById('verdict').innerHTML=
     '<b>'+labels[bestIdx]+'</b>가 세금 면에서 가장 낮게 나옵니다. 세금 합계는 '+won(best.total)+'원, 대표님이 실제로 가져가는 돈은 '+won(best.cash)+'원입니다.'
@@ -410,7 +410,7 @@ function drawChart(income,deduct,red,salary){
   const cur=pts.reduce((a,b)=>Math.abs(b.sal-salary)<Math.abs(a.sal-salary)?b:a);
   // 개인사업자 기준선보다 낮은 구간(전환 유리 구간)
   const under=pts.filter(p=>p.tax<pTax);
-  const bandTxt=under.length? '연봉 '+shortWon(under[0].sal)+' ~ '+shortWon(under[under.length-1].sal)+' 구간이 지금보다 '+(INS_MODE?'부담이':'세금이')+' 적습니다' : '';
+  const bandTxt=under.length? '연봉 '+shortWon(under[0].sal)+' ~ '+shortWon(under[under.length-1].sal)+' 구간이 현재보다 '+(INS_MODE?'부담이':'세금이')+' 적습니다' : '';
 
   // 기준선을 넘는 첫 지점(교차점) 찾기
   let crossX=null;
@@ -441,7 +441,7 @@ function drawChart(income,deduct,red,salary){
     +(lineOver?'<path d="'+lineOver+'" fill="none" stroke="#C8423A" stroke-width="2.5"/>':'')
     +'<line x1="'+X(cur.sal).toFixed(1)+'" y1="'+T+'" x2="'+X(cur.sal).toFixed(1)+'" y2="'+(H-B)+'" stroke="#0B1E3F" stroke-width="1.5" stroke-dasharray="4 4"/>'
     +'<circle cx="'+X(cur.sal).toFixed(1)+'" cy="'+Y(cur.tax).toFixed(1)+'" r="5" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
-    +'<text x="'+Math.min(W-R-50,Math.max(L+50,X(cur.sal))).toFixed(1)+'" y="'+Math.max(T+12,Y(cur.tax)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">지금 선택 '+shortWon(cur.tax)+'</text>'
+    +'<text x="'+Math.min(W-R-50,Math.max(L+50,X(cur.sal))).toFixed(1)+'" y="'+Math.max(T+12,Y(cur.tax)-14).toFixed(1)+'" text-anchor="middle" font-size="11.5" fill="#0B1E3F" font-weight="700">현재 선택 '+shortWon(cur.tax)+'</text>'
     +'<circle cx="'+X(minP.sal).toFixed(1)+'" cy="'+Y(minP.tax).toFixed(1)+'" r="4" fill="#fff" stroke="#1B4A9B" stroke-width="2"/>'
     +'<text x="'+Math.min(W-R-40,Math.max(L+40,X(minP.sal))).toFixed(1)+'" y="'+(Y(minP.tax)+20).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#1B4A9B" font-weight="700">최저 '+shortWon(minP.tax)+'</text>'
     +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+36)+'" text-anchor="middle" font-size="11" fill="#8b98a8">대표님 연봉</text>';
@@ -453,7 +453,7 @@ function drawChart(income,deduct,red,salary){
     ? '가로축은 대표님 연봉, 세로축은 총 부담(법인세 + 개인 세금 + 4대보험)입니다.'
     : '가로축은 대표님 연봉, 세로축은 총 세금(법인세 + 근로소득세)입니다.';
   const lg=document.querySelector('.clegend span:first-child');
-  if(lg) lg.innerHTML='<i style="background:#1B4A9B"></i>'+(INS_MODE?'지금보다 부담이 적은 구간':'지금보다 세금이 적은 구간');
+  if(lg) lg.innerHTML='<i style="background:#1B4A9B"></i>'+(INS_MODE?'현재보다 부담이 적은 구간':'현재보다 세금이 적은 구간');
 }
 
 /* 계산 과정 설명 */
