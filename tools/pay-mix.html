@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연봉과 배당 계산기 2026, 어떻게 나눠야 세금이 가장 적을까요? | 한택스</title>
+<meta name="description" content="가져갈 금액을 정해 두고 연봉과 배당을 어떻게 나눌지 계산합니다. 법인세와 근로소득세, 배당소득세, 4대보험까지 더해 세금이 가장 적은 배분을 찾아 드립니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/pay-mix.html">
+<meta property="og:title" content="연봉과 배당, 어떻게 나눌까요?">
+<meta property="og:description" content="가져갈 금액을 정해 두고 세금이 가장 적은 연봉·배당 배분을 찾아 주는 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/pay-mix.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-pay-mix.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim-in .fw{grid-column:1/-1}
+.sim label{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim label em{display:inline-block;font-style:normal;font-size:11px;font-weight:700;color:var(--seal);background:var(--seal-soft);border-radius:4px;padding:2px 6px;margin-left:4px;vertical-align:1px}
+.sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--mute)}
+.unit input{padding-right:44px;text-align:right}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:36px}
+.res h2{font-size:20px;margin-bottom:6px}
+.modetab{display:inline-flex;background:var(--soft);border-radius:99px;padding:4px}
+.modetab button{border:0;background:none;padding:9px 18px;border-radius:99px;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer;font-family:inherit}
+.modetab button.on{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(11,30,63,.12)}
+.res .sub{font-size:14px;color:var(--mute);margin-bottom:18px}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px}
+.rtable th,.rtable td{padding:13px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable .best{background:var(--blue-soft)}
+.rtable .tot td{font-weight:800;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable .diff td{color:var(--blue);font-weight:700}
+.rtable .diff small{display:block;font-size:11.5px;font-weight:600;margin-top:2px;opacity:.85}
+.rtable .diff td.neg{color:var(--seal)}
+.rtable .gap td{padding:0;height:14px;border:0}
+.rtable .cash td{font-weight:700;color:var(--ink)}
+.headline{background:var(--blue-soft);border-radius:12px;padding:18px 22px;margin-bottom:20px;font-size:16px;line-height:1.7;color:var(--ink)}
+.headline b{color:var(--blue);font-size:20px}
+.headline.same{background:var(--soft)}
+.rtable .dc{font-weight:700;color:var(--mute);white-space:nowrap}
+.rtable .dc.up{color:var(--blue)}
+.rtable .dc.down{color:var(--seal)}
+.rtable .sub-row td{color:var(--mute);font-size:13.5px}
+.rtable .rate td{color:var(--char);font-weight:700}
+.rtable .rate small{display:block;font-size:11px;font-weight:400;color:var(--mute);margin-top:2px}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:24px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict a{color:var(--blue);font-weight:700}
+.slide{background:var(--soft);border-radius:14px;padding:22px 26px;margin-bottom:20px}
+.slide .modetab{margin:16px 0 0;background:#fff}
+.slnote{margin-top:14px;font-size:13.5px;color:var(--char)}
+.slnote b{color:var(--ink);font-weight:700}
+.slnote b.up{color:var(--blue)} .slnote b.dn{color:var(--seal)}
+#sltotal{color:var(--ink);font-weight:700;font-size:14px}
+.slnote a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.slide .sl{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.slide .sl:last-child{margin-bottom:0}
+.slide .sl label{width:110px;margin:0;font-size:14px}
+.slide .sl input{flex:1;accent-color:var(--blue)}
+.slide .sl b{width:150px;text-align:right;font-size:15px;color:var(--blue)}
+.saverow{display:flex;justify-content:flex-end;margin:0 0 10px}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+.chartbox{margin-top:30px;border:1px solid var(--line);border-radius:12px;padding:22px 22px 16px}
+.chartbox h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
+.chartbox .csub{font-size:13px;color:var(--mute);margin-bottom:14px}
+.chartbox .modetab{margin:0 0 14px}
+.chartbox svg{width:100%;height:auto;display:block}
+.clegend{display:flex;gap:18px;justify-content:center;margin-top:10px;font-size:13px;color:var(--char);flex-wrap:wrap}
+.clegend span{display:flex;align-items:center;gap:6px}
+.clegend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.cband{margin-top:10px;text-align:center;font-size:13.5px;color:var(--blue);font-weight:700}
+.steps{margin-top:22px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:20px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.steps .case{margin-bottom:26px}
+.steps .case:last-child{margin-bottom:0}
+.steps .case b.ttl{display:block;color:var(--ink);font-size:14.5px;margin-bottom:10px}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:9px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.stable tr.key td{background:var(--blue-soft)}
+.stable tr.key td:last-child{color:var(--blue);font-weight:800}
+.snote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:13.5px;line-height:1.8}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.warn{display:none;background:var(--seal-soft);color:var(--seal);border-radius:10px;padding:13px 16px;font-size:14px;margin-top:16px;line-height:1.6}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:22px}
+.rtable{font-size:11.5px;table-layout:fixed}.rtable th,.rtable td{padding:9px 3px}
+.rtable td:first-child,.rtable th:first-child{width:29%}
+.rtable .dc{font-size:11px}
+.slide .sl{display:block;margin-bottom:22px}
+.slide .sl label{width:auto;margin-bottom:8px}
+.slide .sl input{width:100%;margin:6px 0}
+.slide .sl b{display:block;width:auto;text-align:left;margin-top:4px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>연봉과 배당,<br>어떻게 나눌까요?</h1>
+    <p class="lead">가져갈 금액을 정해 두고 연봉과 배당을 어떻게 나누는지에 따라 세금이 달라집니다. 법인세와 개인 세금을 모두 더해 가장 적게 내는 배분을 찾아 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in" id="sim-box">
+        <div>
+          <label for="i-profit">당기순이익 <em>필수</em> <small>연봉을 빼고 난 재무제표 숫자</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 결산서 손익계산서 맨 아래 금액입니다. 대표님 연봉은 이미 비용으로 빠져 있으니 적힌 숫자를 그대로 넣으시면 됩니다. 아직 결산 전이면 올해 예상 이익을 넣어 보세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-profit" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-cursal">현재 연봉 <em>필수</em> <small>올해 받기로 한 금액, 없으면 0</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="당기순이익에서 이미 빠져 있는 대표님 연봉입니다. 이 금액을 이익에 도로 더해 연봉을 바꿔 볼 수 있게 합니다. 세금과 4대보험을 떼기 전 금액으로 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-cursal" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-take">올해 가져갈 금액 <em>필수</em> <small>연봉과 배당을 합해서</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="올해 회사에서 대표님 앞으로 가져가실 총액입니다. 이 금액은 그대로 두고, 연봉과 배당을 어떻게 나눌지만 비교합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-take" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-cit">법인세 부담 <small>공제·감면이 많은 회사인지</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="공제와 감면을 많이 받는 회사는 최저한세만큼은 내야 합니다. 이월결손금으로 올해 법인세가 없으면 세 번째를, 연구비 세액공제로 법인세가 없으면 네 번째를 골라 주세요. 잘 모르시면 첫 번째로 두셔도 됩니다.">?</button></label>
+          <select id="i-cit">
+            <option value="0">일반 (과세표준 2억 원 이하 10%, 초과 20%)</option>
+            <option value="1">공제·감면이 많은 회사 (최저한세 7%)</option>
+            <option value="2">이월결손금으로 낼 법인세가 없는 회사</option>
+            <option value="3">연구비 세액공제로 낼 법인세가 없는 회사 (지방소득세만 부담)</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-other">다른 소득 <small>임대·사업 등 회사 밖 소득</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="상가 임대료, 다른 사업장의 이익처럼 회사 밖에서 버시는 소득입니다. 근로소득과 합쳐 세율 구간이 정해지므로 넣어 주셔야 결과가 정확합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-other" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-deduct">소득공제 합계 <small>인적공제·연금 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부양가족 공제, 국민연금 보험료처럼 소득에서 먼저 빼 주는 금액입니다. 연말정산 원천징수영수증의 종합소득공제 합계를 보시면 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-deduct" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-credit">세액공제 합계 <small>연금계좌·기부금 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="연금저축, 보험료, 의료비, 기부금처럼 계산된 세금에서 바로 빼 주는 금액입니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-credit" inputmode="numeric"><span>원</span></div>
+        </div>
+      </div>
+      <button class="btn btn-primary simbtn" id="calc">배분 찾아보기</button>
+      <div class="warn" id="warn"></div>
+
+      <div class="res" id="res">
+        <h2 id="res-title">연봉과 배당 배분</h2>
+        <p class="sub" id="res-sub"></p>
+        <div class="headline" id="headline"></div>
+        <div class="slide" id="slide">
+          <div class="sl"><label for="s-div">배당으로 받을 금액</label><input type="range" id="s-div"><b id="s-div-v"></b></div>
+          <p class="slnote" id="sltotal"></p>
+          <div class="modetab" id="modetab">
+            <button type="button" class="on" data-ins="0">세금만 보기</button>
+            <button type="button" data-ins="1">4대보험까지 보기</button>
+          </div>
+        </div>
+        <div class="saverow"><button type="button" class="savebtn" id="save-img">이미지 저장</button></div>
+        <div style="overflow-x:auto">
+          <table class="rtable">
+            <thead><tr><th>구분</th><th id="h-sal">전액 연봉</th><th id="h-best">가장 적게 내는 배분</th><th id="h-div">전액 배당</th></tr></thead>
+            <tbody id="res-body"></tbody>
+          </table>
+        </div>
+
+        <div class="chartbox" id="chartbox">
+          <h3>배당을 늘리면 세금이 어떻게 달라지나요?</h3>
+          <p class="csub" id="csub"></p>
+          <svg id="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="배당 금액에 따른 세금 변화 그래프"></svg>
+          <div class="clegend">
+            <span><i style="background:#1B4A9B"></i>세금 합계</span>
+            <span><i style="background:#C8423A"></i>가장 적은 지점</span>
+            <span><i style="background:#0B1E3F"></i>고른 배분</span>
+          </div>
+          <p class="cband" id="cband"></p>
+        </div>
+
+        <div class="verdict" id="verdict"></div>
+
+        <details class="steps" id="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps-body"></div>
+        </details>
+      </div>
+
+      <p class="disc">
+        이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 주주 구성, 이익잉여금 규모, 다른 소득에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
+        · 주주는 대표님 한 분이라고 가정합니다. 배당은 올해 법인세를 낸 뒤 남은 이익까지만 할 수 있습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
+        · 연봉은 법인의 비용이라 법인세를 줄이지만, 배당은 법인세를 낸 뒤 이익에서 나가 법인세를 줄이지 못합니다.<br>
+        · 배당소득이 연 2,000만 원 이하면 15.4% 분리과세, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.<br>
+        · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 초과 20%이며 지방소득세를 포함했습니다.<br>
+        · <b>4대보험까지 보기</b>를 선택하면 2026년 요율로 함께 계산합니다. 대표이사는 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양(0.9448%)만 반영했습니다. 배당은 연 2,000만 원을 넘는 금액에만 건강보험료가 붙습니다.<br>
+        · 연봉을 얼마로 정할지부터 보시려면 <a href="income-transfer.html">대표 연봉 계산기</a>를 이용해 주세요.
+      </p>
+
+      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+
+      <div class="art-cta" style="margin-top:34px">
+        <p>우리 회사에 맞는 배분이 궁금하신가요?</p>
+        <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+
+<script src="../assets/tax-core.js?v=1"></script>
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 배분 찾기 ─────────────────────────────── */
+const $=id=>document.getElementById(id);
+let NP=0, CUR_SAL=0, TAKE=0, PICK=null, FORCE_FULL=false;
+function GP(){ return NP>0 ? NP+CUR_SAL+(INS_MODE?salaryInsurance(CUR_SAL).company:0) : 0; }
+const shortWon=v=>{
+  if(v>=100000000){ const e=v/100000000; return (e>=10?Math.round(e):Math.round(e*10)/10)+'억'; }
+  if(v>=10000) return Math.round(v/10000).toLocaleString('ko-KR')+'만';
+  return Math.round(v)+'';
+};
+// 배당을 0원부터 가져갈 금액까지 훑어 세금 합계가 가장 적은 지점을 찾습니다
+function sweep(profit,take){
+  const step=Math.max(100000,Math.round(take/200/100000)*100000), list=[];
+  for(let d=0; d<=take+1; d+=step){
+    const div=Math.min(d,take), r=scenario(profit,take-div,div);
+    if(r.short>0) break;            // 배당할 이익이 모자라면 거기까지
+    list.push({div, r});
+    if(div>=take) break;
+  }
+  const best=list.reduce((a,b)=>b.r.gross<a.r.gross-1?b:a, list[0]);
+  return {list, best, maxDiv:list[list.length-1].div, step};
+}
+const at=(profit,div)=>scenario(profit,TAKE-div,div);
+
+function render(){
+  const profit=GP(), sw=sweep(profit,TAKE);
+  const cases=[{k:'전액 연봉',div:0},{k:'가장 적게 내는 배분',div:sw.best.div},{k:'전액 배당',div:sw.maxDiv}];
+  const rows=cases.map(c=>at(profit,c.div));
+  const narrow=!FORCE_FULL && window.innerWidth<=660;
+  const amt=v=>(narrow?shortWon(v):won(v))+'원';
+  const cells=fn=>rows.map(r=>'<td>'+fn(r)+'</td>').join('');
+  const bestI=1;
+  $('h-sal').innerHTML='전액 연봉<br><small style="font-weight:400">연봉 '+shortWon(TAKE)+' · 배당 0</small>';
+  $('h-best').innerHTML='가장 적게 내는 배분<br><small style="font-weight:400">연봉 '+shortWon(TAKE-sw.best.div)+' · 배당 '+shortWon(sw.best.div)+'</small>';
+  $('h-div').innerHTML=(sw.maxDiv>=TAKE?'전액 배당':'배당 최대')+'<br><small style="font-weight:400">연봉 '+shortWon(TAKE-sw.maxDiv)+' · 배당 '+shortWon(sw.maxDiv)+'</small>';
+
+  $('res-body').innerHTML=
+      '<tr><td>법인세<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉이 비용이 되어 줄어듭니다</small></td>'+cells(r=>amt(r.cTax))+'</tr>'
+    +'<tr><td>대표님 개인 세금<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">근로소득세와 배당소득세</small></td>'
+      +rows.map(r=>'<td>'+amt(r.pTax)+(r.dividend>0?'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">'+r.mode+'</small>':'')+'</td>').join('')+'</tr>'
+    +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>amt(r.ins.company))+'</tr>'
+              +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>amt(r.ins.self))+'</tr>'
+              +'<tr><td>배당 건강보험료</td>'+cells(r=>amt(r.dIns.total))+'</tr>':'')
+    +'<tr class="tot"><td>'+(INS_MODE?'세금·보험료 합계':'세금 합계')+'</td>'
+      +rows.map((r,i)=>'<td class="'+(i===bestI?'best':'')+'">'+amt(r.gross)+'</td>').join('')+'</tr>'
+    +'<tr class="gap"><td colspan="4"></td></tr>'
+    +'<tr class="cash"><td>대표님이 손에 쥐는 돈</td>'+cells(r=>amt(r.cash))+'</tr>'
+    +'<tr><td>법인에 남는 돈</td>'+cells(r=>amt(r.left))+'</tr>';
+
+  $('res-sub').textContent='당기순이익 '+won(NP)+'원 · 가져갈 금액 '+won(TAKE)+'원'
+    +({'1':' · 최저한세 7%','2':' · 이월결손금','3':' · 연구비 세액공제'}[CIT_MODE]||'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
+
+  const bestR=rows[1], salR=rows[0], gap=salR.gross-bestR.gross;
+  $('headline').className='headline'+(gap<10000?' same':'');
+  $('headline').innerHTML= gap<10000
+    ? '이 금액대에서는 <b>전액 연봉으로 받으시는 것이 가장 적게 냅니다.</b> 배당을 섞어도 세금이 줄지 않습니다.'
+    : '연봉 <b>'+won(TAKE-sw.best.div)+'원</b>에 배당 <b>'+won(sw.best.div)+'원</b>으로 나누면 세금이 가장 적습니다.<br>'
+      +'전액 연봉으로 받을 때보다 '+(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(gap)+'원</b> 덜 냅니다.';
+
+  const w=$('warn');
+  if(sw.maxDiv<TAKE){
+    w.style.display='block';
+    w.innerHTML='배당은 법인세를 낸 뒤 남은 이익에서만 할 수 있습니다. 이 조건에서는 <b>'+won(sw.maxDiv)+'원</b>까지 배당할 수 있어 그만큼만 비교했습니다. 그전에 쌓인 이익잉여금이 있다면 더 배당할 수 있으니 상담에서 확인해 주세요.';
+  } else w.style.display='none';
+
+  const notes=[];
+  if(sw.best.div>0) notes.push('배당은 연 2,000만 원까지 15.4%로 따로 과세하고 근로소득과 합치지 않습니다. 그 구간이 가장 유리합니다.');
+  if(INS_MODE) notes.push('배당은 연 2,000만 원을 넘는 금액에만 건강보험료가 붙습니다. 연봉은 상한 없이 건강보험료가 계속 붙습니다.');
+  if(bestR.cash!==salR.cash) notes.push('손에 쥐는 돈도 달라집니다. 가장 적게 내는 배분은 전액 연봉보다 '+won(Math.abs(bestR.cash-salR.cash))+'원 '+(bestR.cash>salR.cash?'더':'덜')+' 가져가십니다.');
+  notes.push('배당은 주주총회 결의가 필요하고, 주주가 여러 명이면 지분대로 나눠 가야 합니다.');
+  $('verdict').innerHTML='연봉은 법인의 비용이라 법인세를 줄이지만 근로소득세와 4대보험이 붙습니다. 배당은 법인세를 줄이지 못하지만 2,000만 원까지는 낮은 세율로 끝납니다. 그래서 둘을 섞는 지점에서 세금이 가장 적어집니다.'
+    +notes.map(n=>'<span class="note">'+n+'</span>').join('');
+
+  drawChart(sw);
+  renderSteps(rows,cases,sw);
+  const sd=$('s-div');
+  sd.min=0; sd.max=sw.maxDiv; sd.step=sw.step;
+  if(PICK===null||PICK>sw.maxDiv) PICK=sw.best.div;   // 처음에는 가장 적게 내는 배분에 맞춰 둡니다
+  sd.value=PICK;
+  updPick(sw);
+  $('res').style.display='block';
+}
+function updPick(sw){
+  const r=at(GP(),PICK), best=sw.best.r;
+  $('s-div-v').textContent=won(PICK)+'원';
+  $('sltotal').innerHTML='연봉 <b>'+won(TAKE-PICK)+'원</b> · 배당 <b>'+won(PICK)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+won(r.gross)+'원</b>'
+    +(r.gross-best.gross<10000?' · 가장 적은 배분입니다':' · 가장 적은 배분보다 <b class="dn">'+won(r.gross-best.gross)+'원 더 납부</b>');
+}
+
+/* ── 그래프 ────────────────────────────────── */
+function drawChart(sw){
+  const el=$('chart'), W=720,H=320,L=78,R=26,T=26,B=58;
+  const pts=sw.list.map(q=>({x:q.div, y:q.r.gross}));
+  const xMax=Math.max(1,pts[pts.length-1].x);
+  let yLo=Math.min(...pts.map(q=>q.y)), yHi=Math.max(...pts.map(q=>q.y));
+  const pad=(yHi-yLo)*0.15||yHi*0.05||1; yLo=Math.max(0,yLo-pad); yHi=yHi+pad;
+  const rough=(yHi-yLo)/4||1, mag=Math.pow(10,Math.floor(Math.log10(rough))), nn=rough/mag;
+  const st=(nn<=1?1:nn<=2?2:nn<=2.5?2.5:nn<=5?5:10)*mag;
+  yLo=Math.floor(yLo/st)*st; yHi=Math.ceil(yHi/st)*st;
+  const X=v=>L+(v/xMax)*(W-L-R), Y=v=>H-B-(v-yLo)/((yHi-yLo)||1)*(H-T-B);
+  let g='';
+  for(let v=yLo; v<=yHi+1; v+=st){
+    const y=Y(v);
+    g+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="#E4E8EF" stroke-width="1"/>'
+      +'<text x="'+(L-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8b98a8">'+shortWon(v)+'</text>';
+  }
+  [0,xMax/2,xMax].forEach((v,i)=>{
+    g+='<text x="'+X(v).toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="'+(i===0?'start':i===2?'end':'middle')+'" font-size="11" fill="#8b98a8">'+shortWon(v)+'</text>';
+  });
+  const bx=X(sw.best.div), by=Y(sw.best.r.gross), px=X(PICK), py=Y(at(GP(),PICK).gross);
+  el.innerHTML=g
+    +'<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#C9D6F0" stroke-width="1"/>'
+    +'<path d="'+pts.map((q,i)=>(i?'L':'M')+X(q.x).toFixed(1)+' '+Y(q.y).toFixed(1)).join(' ')+'" fill="none" stroke="#1B4A9B" stroke-width="2.5"/>'
+    +'<circle cx="'+bx.toFixed(1)+'" cy="'+by.toFixed(1)+'" r="5" fill="#C8423A" stroke="#fff" stroke-width="2"/>'
+    +'<text x="'+Math.min(W-R-40,bx).toFixed(1)+'" y="'+Math.max(T+10,by-12).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#C8423A" font-weight="700">가장 적은 지점</text>'
+    +'<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="4" fill="#0B1E3F" stroke="#fff" stroke-width="2"/>'
+    +'<text x="'+((L+W-R)/2).toFixed(1)+'" y="'+(H-B+38)+'" text-anchor="middle" font-size="11" fill="#8b98a8">배당으로 받는 금액</text>'
+    +'<text transform="rotate(-90)" x="'+(-(T+(H-T-B)/2)).toFixed(1)+'" y="13" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5C6572">'+(INS_MODE?'세금·4대보험 합계':'세금 합계')+'</text>';
+  $('csub').textContent='가져갈 금액은 그대로 두고 배당만 늘려 본 결과입니다. 배당을 늘린 만큼 연봉은 줄어듭니다.';
+  $('cband').textContent=sw.best.div>0
+    ? '배당 '+shortWon(sw.best.div)+'원 부근에서 '+(INS_MODE?'부담이':'세금이')+' 가장 적습니다'
+    : '이 금액대에서는 배당을 섞지 않는 쪽이 가장 적습니다';
+}
+
+/* ── 계산 과정 ─────────────────────────────── */
+function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
+function renderSteps(rows,cases,sw){
+  let html='';
+  rows.forEach((r,i)=>{
+    html+='<div class="case"><b class="ttl">'+(i+1)+'. '+cases[i].k+' (연봉 '+won(r.salary)+'원 + 배당 '+won(r.dividend)+'원)</b><table class="stable">'
+      +row('법인 과세표준','연봉을 빼기 전 이익 '+won(GP())+' − 급여 '+won(r.salary)+(INS_MODE?' − 회사부담 보험료 '+won(r.ins.company):''),won(r.cBase)+'원')
+      +row('법인세','지방소득세 포함',won(r.cTax)+'원',true)
+      +row('배당할 수 있는 이익','법인 과세표준 − 법인세',won(r.after)+'원')
+      +row('대표님 개인 세금',(r.dividend>0?r.mode+' · ':'')+'근로소득세와 배당소득세',won(r.pTax)+'원',true)
+      +(INS_MODE?row('4대보험','회사 '+won(r.ins.company)+' + 본인 '+won(r.ins.self)+(r.dIns.total>0?' + 배당 건강보험료 '+won(r.dIns.total):''),won(r.ins.total+r.dIns.total)+'원'):'')
+      +row((INS_MODE?'세금·보험료 합계':'세금 합계'),'법인세 + 개인 세금'+(INS_MODE?' + 보험료':''),won(r.gross)+'원',true)
+      +row('손에 쥐는 돈','연봉 + 배당 − 개인 세금'+(INS_MODE?' − 본인부담 보험료':''),won(r.cash)+'원',true)
+      +row('법인에 남는 돈','배당할 수 있는 이익 − 배당',won(r.left)+'원')
+      +'</table></div>';
+  });
+  html+='<p class="snote">연봉은 법인의 비용이라 법인세 과세표준을 줄이고, 배당은 법인세를 낸 뒤 이익에서 나갑니다. 배당이 연 2,000만 원을 넘으면 근로소득과 합쳐 종합과세하되 배당가산액을 더했다가 같은 금액을 세액공제하고, 분리과세했을 때보다 적어지지 않도록 둘 중 큰 금액으로 결정합니다. 이전에 쌓인 이익잉여금은 반영하지 않았습니다.</p>';
+  $('steps-body').innerHTML=html;
+}
+
+/* ── 입력 연동 ─────────────────────────────── */
+['i-profit','i-cursal','i-take','i-other','i-deduct','i-credit'].forEach(id=>{
+  const el=$(id);
+  el.addEventListener('input',()=>{ const raw=el.value.replace(/[^0-9]/g,''); el.value = raw===''?'':Number(raw).toLocaleString('ko-KR'); });
+});
+$('i-cit').addEventListener('change',()=>{ CIT_MODE=$('i-cit').value; MIN_TAX=CIT_MODE==='1'; if(TAKE>0) render(); });
+document.querySelectorAll('#modetab button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#modetab button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); INS_MODE=b.dataset.ins==='1'; if(TAKE>0) render();
+}));
+$('s-div').addEventListener('input',()=>{ PICK=Number($('s-div').value); updPick(sweep(GP(),TAKE)); drawChart(sweep(GP(),TAKE)); });
+
+$('calc').addEventListener('click',()=>{
+  CIT_MODE=$('i-cit').value; MIN_TAX=CIT_MODE==='1';
+  NP=num($('i-profit').value); CUR_SAL=num($('i-cursal').value); TAKE=num($('i-take').value);
+  DEDUCT=num($('i-deduct').value); CREDIT=num($('i-credit').value); OTHER=num($('i-other').value);
+  if(NP<=0){ alert('당기순이익을 넣어 주세요.'); return; }
+  if(TAKE<=0){ alert('올해 가져갈 금액을 넣어 주세요.'); return; }
+  if(TAKE>GP()){ alert('가져갈 금액이 '+won(GP())+'원을 넘을 수 없습니다. 당기순이익에 현재 연봉을 더한 금액입니다.'); return; }
+  PICK=null; render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.querySelector('.rtable'),
+  ()=>({ title:'연봉과 배당 배분', sub:document.getElementById('res-sub').textContent,
+    note:'참고용 계산입니다. 실제 신고 전에 세무사와 확인해 주세요.', filename:'한택스_연봉배당배분' }),
+  { before:()=>{ FORCE_FULL=true; if(TAKE>0) render(); }, after:()=>{ FORCE_FULL=false; if(TAKE>0) render(); } }
+);
+</script>
+</body>
+</html>
