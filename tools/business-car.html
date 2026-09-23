@@ -64,6 +64,7 @@
 .rtable th,.rtable td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:right}
 .rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
 .rtable thead th{background:var(--soft);font-size:13px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable tr.na td{color:var(--mute);font-weight:400;text-align:center}
 .rtable td small{display:block;font-size:11.5px;color:var(--mute);font-weight:400;margin-top:3px;line-height:1.6}
 .rtable .best td{background:var(--blue-soft)}
 .rtable .best td:last-child{color:var(--blue);font-weight:800}
@@ -484,8 +485,10 @@ function scenario(method,owner,c){
   return {method,owner,cashOut,sale,cost,carry,vatCredit,save,net:cashOut-save,payback,deposit,detail,cap};
 }
 
+const LEASE_MAX_YEARS=5;   // 운용리스·장기렌트 계약은 보통 5년까지입니다
+const hireOk=c=>c.years<=LEASE_MAX_YEARS;
 function compute(c){
-  return ['cash','loan','lease','rent'].map(m=>scenario(m,c.form,c));
+  return (hireOk(c)?['cash','loan','lease','rent']:['cash','loan']).map(m=>scenario(m,c.form,c));
 }
 
 /* ── 화면 그리기 ───────────────────────────── */
@@ -504,6 +507,8 @@ function render(){
       +'<td>'+won(r.save)+'원'+(r.vatCredit>0?'<small>부가세 '+won(r.vatCredit)+'원 포함</small>':'')+'</td>'
       +'<td>'+won(r.net)+'원</td></tr>';
   });
+  if(!hireOk(c)) html+=['lease','rent'].map(m=>'<tr class="na"><td><span class="nm">'+METHOD[m]+'</span></td>'
+    +'<td colspan="4">계약이 보통 5년까지라 '+c.years+'년 보유는 계산하지 않았습니다</td></tr>').join('');
   document.getElementById('res-body').innerHTML=html;
   document.getElementById('res-sub').textContent=
     KIND[c.kind]+' '+won(c.price)+'원 · '+c.years+'년 보유 후 시세 '+c.resid+'%에 매각 · '+(c.vat==='normal'?'일반과세':c.vat==='free'?'면세':'간이과세')
@@ -525,7 +530,7 @@ function render(){
 function warnings(c,rows){
   const w=[];
   if(c.vat!=='normal'&&c.kind!=='sedan') w.push('<b>부가가치세를 돌려받지 못합니다.</b> 경차나 승합차는 원래 매입세액을 공제받을 수 있지만 '+(c.vat==='free'?'면세사업자':'간이과세자')+'는 대상이 아닙니다. 차값의 10%가 그대로 부담으로 남습니다.');
-  if(c.years>=7) w.push('<b>운용리스와 장기렌트는 보통 5년까지입니다.</b> '+c.years+'년으로 잡으셨으니 그 뒤는 재계약하거나 차를 인수하게 되고, 실제 조건은 이 계산과 달라집니다.');
+  if(!hireOk(c)) w.push('<b>운용리스와 장기렌트는 계산에서 뺐습니다.</b> 계약이 보통 5년까지라 '+c.years+'년을 그대로 빌려 쓰는 조건이 없습니다. 보유기간을 5년으로 바꿔 비교해 보시거나, 5년 뒤 인수해서 더 타시는 경우는 상담에서 확인해 주세요.');
   if(c.kind==='sedan'&&c.price>=100000000) w.push('<b>1억 원이 넘는 차량은 업무 사용 여부를 확인받을 가능성이 높습니다.</b> 운행기록부를 빠짐없이 작성하시고 업무에 사용한 근거를 남겨 두세요.');
   return w;
 }
@@ -543,14 +548,14 @@ function drawChart(c,owner){
   const svg=document.getElementById('chart');
   const W=Math.round(Math.max(340,Math.min(720,svg.getBoundingClientRect().width||720))),H=320,L=64,R=18,T=34,B=58;
   svg.setAttribute('viewBox','0 0 '+W+' '+H);
-  const ms=['cash','loan','lease','rent'], COL='#1F50AE';
+  const ms=hireOk(c)?['cash','loan','lease','rent']:['cash','loan'], COL='#1F50AE';
   const data=ms.map(m=>{ const r=scenario(m,owner,c); return {m,out:r.cashOut,net:Math.max(0,r.net),save:r.save}; });
   const rawMax=Math.max(...data.map(d=>d.net))*1.15||1;
   const step=(()=>{ const rough=rawMax/4,mag=Math.pow(10,Math.floor(Math.log10(rough))),n=rough/mag;
     return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag; })();
   const maxY=step*4;
   const Y=v=>H-B-(v/maxY)*(H-T-B);
-  const gw=(W-L-R)/4, bw=Math.min(56,gw*0.46);
+  const gw=(W-L-R)/ms.length, bw=Math.min(56,gw*0.46);
   // 위쪽 모서리만 둥글게, 바닥은 기준선에 붙입니다
   const bar=(x,v,tip)=>{
     const y=Y(v), h=H-B-y, r=Math.min(4,h/2,bw/2);
