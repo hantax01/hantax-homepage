@@ -42,7 +42,7 @@
 .divider b{font-size:14.5px;color:var(--ink)}
 .divider span{font-size:12.5px;color:var(--mute)}
 .wide{grid-column:1/-1}
-.chks{grid-column:1/-1;display:flex;flex-direction:column;gap:11px}
+.chks{grid-column:1/-1;display:grid;gap:11px}
 .ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
 .ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
 .ichk.off{opacity:.45}
@@ -240,15 +240,21 @@
 
         <div class="divider"><b>회사와 지분</b><span>세율을 가르는 조건입니다</span></div>
         <div class="chks">
-          <label class="ichk"><input type="checkbox" id="i-sme" checked><span>중소기업 주식입니다</span>
-            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="조세특례제한법에서 정한 중소기업이면 체크해 주세요. 대주주가 아닌 분이 중소기업 주식을 넘기면 세율이 10%로 가장 낮습니다. 중소기업이 아니면 20%입니다.">?</button>
-          </label>
-          <label class="ichk"><input type="checkbox" id="i-big"><span>대주주입니다</span>
-            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%입니다. 기준은 바뀔 수 있으니 양도 전에 확인해 주세요.">?</button>
-          </label>
-          <label class="ichk" id="short-row"><input type="checkbox" id="i-short"><span>산 지 1년이 안 된 주식입니다</span>
-            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업이 아닌 회사의 주식을 대주주가 1년도 갖고 있지 않고 넘기면 세율이 30%로 올라갑니다. 중소기업 주식이거나 대주주가 아니면 보유 기간은 세율에 영향을 주지 않습니다.">?</button>
-          </label>
+          <div>
+            <label class="ichk"><input type="checkbox" id="i-sme" checked><span>중소기업 주식입니다</span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="조세특례제한법에서 정한 중소기업이면 체크해 주세요. 대주주가 아닌 분이 중소기업 주식을 넘기면 세율이 10%로 가장 낮습니다. 중소기업이 아니면 20%입니다.">?</button>
+            </label>
+          </div>
+          <div>
+            <label class="ichk"><input type="checkbox" id="i-big"><span>대주주입니다</span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%입니다. 기준은 바뀔 수 있으니 양도 전에 확인해 주세요.">?</button>
+            </label>
+          </div>
+          <div>
+            <label class="ichk" id="short-row"><input type="checkbox" id="i-short"><span>산 지 1년이 안 된 주식입니다</span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업이 아닌 회사의 주식을 대주주가 1년도 갖고 있지 않고 넘기면 세율이 30%로 올라갑니다. 중소기업 주식이거나 대주주가 아니면 보유 기간은 세율에 영향을 주지 않습니다.">?</button>
+            </label>
+          </div>
         </div>
       </div>
 
