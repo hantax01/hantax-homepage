@@ -32,8 +32,8 @@
 .helpbox.on{display:block}
 .helpbox b{display:block;color:var(--ink);margin-bottom:3px}
 .helpbox+.helpbox{margin-top:8px}
-.sim input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
-.sim input:focus{outline:none;border-color:var(--blue)}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
 .unit{position:relative}
 .unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
 .sim .unit input{padding-right:40px;text-align:right}
@@ -64,6 +64,7 @@
 .rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
 .rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
 .rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable .minus td+td{color:var(--blue)}
 .rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
 .rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
 .rtable tr.tot.warn td{background:var(--seal-soft)}
@@ -147,22 +148,29 @@
           <div class="unit"><input type="text" id="i-price" inputmode="numeric"><span>원</span></div>
         </div>
 
-        <div class="divider"><b>내 돈</b><span>통장과 서류로 흐름을 보여 줄 수 있는 돈</span></div>
+        <div class="divider"><b>내 돈</b><span>소득금액증명원과 서류로 보여 줄 수 있는 돈</span></div>
         <div>
-          <label for="i-cash">예금, 주식 등 모아 둔 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예금과 적금, 주식과 채권, 가상자산처럼 지금 가지고 있는 금융자산 가운데 집값에 쓸 금액입니다. 그동안 신고한 소득에서 모은 돈이어야 설명이 됩니다. 소득보다 모은 돈이 훨씬 많으면 그 차액을 다시 묻게 됩니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-cash" inputmode="numeric"><span>원</span></div>
+          <label for="i-years">소득을 모은 기간 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="소득금액증명원을 몇 년 치 모으셨는지 고르시면 됩니다. 국세청은 보통 집을 사기 전 10년 정도의 소득을 살펴봅니다. 사회생활 기간이 짧으시면 5년으로 보셔도 됩니다.">?</button></label>
+          <select id="i-years">
+            <option value="10">최근 10년</option>
+            <option value="5">최근 5년</option>
+          </select>
         </div>
         <div>
-          <label for="i-sell">전에 살던 집, 주식 판 돈 <small>세금 떼고</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부동산이나 주식을 팔아 받은 돈에서 양도소득세와 중개수수료, 갚은 대출을 뺀 실제로 손에 남는 금액을 넣어 주세요. 전세로 살고 계셨다면 돌려받을 보증금도 여기에 더하시면 됩니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-sell" inputmode="numeric"><span>원</span></div>
+          <label for="i-income">소득금액증명원 합계 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="홈택스나 세무서에서 떼는 소득금액증명원의 소득금액을 고르신 기간만큼 더한 금액입니다. 매출이 아니라 비용을 뺀 소득금액이고, 근로소득이면 총급여에서 근로소득공제를 뺀 금액입니다. 신고한 소득만 자금출처로 인정됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-income" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
+          <label for="i-living">연간 생활비 <small>한 해 쓰신 돈</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="가족 생활비와 교육비, 보험료, 카드 사용액처럼 한 해 동안 쓰시는 돈입니다. 번 돈을 전부 모을 수는 없으므로, 소득금액에서 이 금액에 기간을 곱해 뺀 나머지만 모을 수 있었던 돈으로 봅니다. 넣지 않으시면 차감 없이 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-living" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-invest">투자로 번 돈 <small>부동산, 주식, 코인</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부동산이나 주식, 가상자산을 팔아 번 돈에서 양도소득세와 수수료, 갚은 대출을 뺀 실제로 손에 남는 금액입니다. 거래 내역과 세금 신고 자료로 흐름을 보여 줄 수 있어야 합니다. 전세로 살고 계셨다면 돌려받을 보증금도 여기에 더하시면 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-invest" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="wide">
           <label for="i-past">전에 증여, 상속받은 재산 <small>신고한 것만</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예전에 증여세나 상속세를 신고하고 받은 재산 가운데 집값에 쓸 금액입니다. 신고하지 않고 받은 돈은 자금출처로 인정되지 않고, 오히려 그때의 증여세와 가산세를 함께 내게 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-past" inputmode="numeric"><span>원</span></div>
-        </div>
-        <div>
-          <label for="i-etc">그 밖의 내 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴직금, 보험금, 사업을 정리하고 받은 돈처럼 위 칸에 넣기 어려운 금액입니다. 어디서 온 돈인지 서류로 보여 줄 수 있어야 합니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-etc" inputmode="numeric"><span>원</span></div>
         </div>
 
         <div class="divider"><b>빌리는 돈</b><span>갚을 의무가 있는 돈</span></div>
@@ -225,7 +233,8 @@
         · 가족에게 빌린 돈은 차용증과 이자 지급, 상환 기록이 있어야 빌린 것으로 인정됩니다. 이자를 주지 않으면 연 4.6%로 계산한 금액을 증여로 보되, 한 해 1,000만 원 미만이면 세금을 매기지 않습니다. 원금 약 2억 1,700만 원까지는 무이자로 빌려도 이 선에 걸리지 않습니다.<br>
         · 주택을 살 때 자금조달계획서를 내야 하는지는 집이 있는 지역과 금액에 따라 다르고 기준도 자주 바뀝니다. 계약 전에 확인하시는 것이 좋습니다.<br>
         · 취득세와 중개수수료, 이사비는 집값에 넣지 않았습니다. 실제로는 이 돈도 필요하니 여유 자금을 함께 보셔야 합니다.<br>
-        · 모아 둔 돈은 그동안 신고한 소득 범위에서 인정됩니다. 소득보다 모은 돈이 훨씬 많으면 그 차액을 다시 묻게 됩니다.<br>
+        · 소득으로 모은 돈은 <b>신고한 소득금액에서 생활비를 뺀 금액</b>까지만 인정됩니다. 소득금액증명원은 홈택스나 세무서에서 연도별로 떼시면 되고, 소득세와 4대보험료를 많이 내셨다면 실제로 모을 수 있었던 돈은 더 적습니다.<br>
+        · 생활비는 쓰신 금액을 그대로 넣어 주세요. 국세청은 카드 사용액과 현금영수증, 보험료와 교육비 납부 내역으로 생활비 규모를 봅니다.<br>
         · 부족한 금액을 증여로 받으실 때의 세금은 <a href="gift-tax.html">증여세 계산기</a>에서 계산해 보세요. 지난 10년 동안 받은 금액까지 합쳐 계산합니다.
       </p>
 
@@ -263,7 +272,9 @@ const FREE_LIMIT=10000000;   // 이자 상당액이 한 해 이 금액 미만이
 const EXCLUDE_CAP=200000000; // 증여추정 제외선의 상한 2억 원
 
 function calc(c){
-  const own=c.cash+c.sell+c.past+c.etc;        // 내 돈
+  const living=c.living*c.years;               // 기간 동안 쓰신 생활비
+  const saved=Math.max(0,c.income-living);     // 소득금액에서 생활비를 뺀, 모을 수 있었던 돈
+  const own=saved+c.invest+c.past;             // 내 돈
   const borrow=c.loan+c.deposit+c.family;      // 빌리는 돈
   const proven=own+borrow+c.gift;              // 설명되는 돈
   const short=Math.max(0,c.price-proven);      // 설명 못 한 금액
@@ -272,7 +283,7 @@ function calc(c){
   const presume=short>0&&short>=line;          // 증여로 추정되는지
   // 가족에게 무이자로 빌릴 때 증여로 보는 이자 상당액 (한 해 1,000만 원 미만이면 과세 제외)
   const famInterest=(!c.interest&&c.family>0)?c.family*RATE:0;
-  return {own,borrow,proven,short,over,line,presume,famInterest,
+  return {living,saved,own,borrow,proven,short,over,line,presume,famInterest,
           // 무이자로 빌려도 되는 원금은 백만 원 단위로 버려 안전한 선으로 안내합니다
           famTaxable:famInterest>=FREE_LIMIT, freeCap:Math.floor(FREE_LIMIT/RATE/1000000)*1000000};
 }
@@ -281,24 +292,23 @@ function calc(c){
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
-const IDS=['i-price','i-cash','i-sell','i-past','i-etc','i-loan','i-deposit','i-family','i-gift'];
+const IDS=['i-price','i-income','i-living','i-invest','i-past','i-loan','i-deposit','i-family','i-gift'];
 IDS.forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 function read(){
-  return {price:num($('i-price').value),cash:num($('i-cash').value),sell:num($('i-sell').value),
-    past:num($('i-past').value),etc:num($('i-etc').value),loan:num($('i-loan').value),
-    deposit:num($('i-deposit').value),family:num($('i-family').value),gift:num($('i-gift').value),
-    interest:$('i-interest').checked};
+  return {price:num($('i-price').value),income:num($('i-income').value),living:num($('i-living').value),
+    years:Number($('i-years').value),invest:num($('i-invest').value),past:num($('i-past').value),
+    loan:num($('i-loan').value),deposit:num($('i-deposit').value),family:num($('i-family').value),
+    gift:num($('i-gift').value),interest:$('i-interest').checked};
 }
 const shown=()=>$('res').style.display==='block';
 
 /* ── 자료 목록 (넣어 주신 항목만) ──────────── */
 const DOCS=[
-  ['cash','예금, 주식 등 모아 둔 돈','잔액증명서와 통장 거래내역. 집값을 치르기 전 몇 달 사이에 들어온 큰 돈이 있으면 그 돈의 출처까지 함께 준비하셔야 합니다.'],
-  ['sell','전에 살던 집, 주식 판 돈','매매계약서, 양도소득세 신고서, 받은 돈이 들어온 통장 내역. 전세를 빼셨다면 임대차계약서와 보증금 반환 내역.'],
+  ['income','소득으로 모은 돈','소득금액증명원(고르신 기간만큼 연도별로), 원천징수영수증, 예금 잔액증명서와 통장 거래내역. 집값을 치르기 전 몇 달 사이에 들어온 큰 돈이 있으면 그 돈의 출처까지 함께 준비하셔야 합니다.'],
+  ['invest','투자로 번 돈','매매계약서와 양도소득세 신고서, 증권사·거래소 거래내역, 돈이 들어온 통장 내역. 전세를 빼셨다면 임대차계약서와 보증금 반환 내역.'],
   ['past','전에 증여, 상속받은 재산','그때 낸 증여세나 상속세 신고서와 납부확인서.'],
-  ['etc','그 밖의 내 돈','퇴직금 명세서, 보험금 지급 내역처럼 돈이 생긴 이유를 보여 주는 서류.'],
   ['loan','은행 대출','대출계약서(또는 대출신청서)와 통장 입금 내역.'],
   ['deposit','세입자 보증금','임대차계약서. 매매계약서에 보증금을 넘겨받는 내용이 적혀 있으면 함께 보관하세요.'],
   ['family','가족에게 빌리는 돈','차용증(금액, 이자, 갚는 날짜 기재), 이자를 보낸 송금 기록, 원금을 갚은 기록. 차용증은 돈을 받는 날 전에 쓰고 날짜가 남게 보관하셔야 합니다.'],
@@ -312,10 +322,11 @@ function render(){
   const amt=(k,l,sm)=>c[k]?row(l,sm,won(c[k])+'원'):'';
   $('rt-body').innerHTML=
       row('집값','매매계약서 금액',won(c.price)+'원','sum')
-    +amt('cash','예금, 주식 등 모아 둔 돈')
-    +amt('sell','전에 살던 집, 주식 판 돈','세금 떼고 남는 금액')
+    +amt('income','소득금액증명원 합계','최근 '+c.years+'년')
+    +(c.living?row('생활비','연 '+won(c.living)+'원 × '+c.years+'년','− '+won(r.living)+'원','minus'):'')
+    +(c.income?row('소득으로 모은 돈','소득금액에서 생활비를 뺀 금액',won(r.saved)+'원'):'')
+    +amt('invest','투자로 번 돈','부동산, 주식, 코인 · 세금 떼고')
     +amt('past','전에 증여, 상속받은 재산','신고한 재산')
-    +amt('etc','그 밖의 내 돈')
     +amt('loan','은행 대출','주택담보, 신용')
     +amt('deposit','세입자 보증금','나중에 돌려줄 돈')
     +amt('family','가족에게 빌리는 돈',c.interest?'이자를 주기로 한 차입':'무이자 차입')
@@ -363,7 +374,8 @@ function render(){
       :{t:'가족에게 무이자로 빌리는 '+won(c.family)+'원은 이자 상당액이 '+won(r.famInterest)+'원으로 한 해 1,000만 원 미만이라 이자에는 세금이 붙지 않습니다. 다만 원금을 실제로 갚은 기록은 남아야 합니다.'});
   if(c.gift) notes.push({t:'받으시는 '+won(c.gift)+'원은 증여세를 신고하고 내야 자금출처로 인정됩니다. 신고 기한은 받은 달의 말일부터 3개월입니다.'});
   if(c.deposit) notes.push({t:'세입자 보증금 '+won(c.deposit)+'원은 당장 낼 돈을 줄여 주지만 나중에 돌려줄 빚입니다. 전세를 빼실 때 그만큼 자금이 필요합니다.'});
-  if(c.cash) notes.push({t:'모아 둔 돈은 그동안 신고한 소득 범위에서 인정됩니다. 소득보다 모은 돈이 많으면 그 차액을 다시 묻게 되니, 소득 신고 내역과 함께 맞춰 보시는 것이 좋습니다.'});
+  if(c.income&&!c.living) notes.push({t:'연간 생활비를 넣지 않으셔서 소득금액을 전부 모은 것으로 계산했습니다. 실제로는 쓰신 생활비만큼 빼고 보기 때문에 모을 수 있었던 돈은 더 적습니다. 한 해 생활비를 넣어 다시 보시는 것이 좋습니다.'});
+  if(c.income&&c.living) notes.push({t:'소득금액 '+won(c.income)+'원에서 '+c.years+'년치 생활비 '+won(r.living)+'원을 빼고 '+won(r.saved)+'원을 모을 수 있었던 돈으로 보았습니다. 소득세와 4대보험료를 많이 내셨다면 그만큼 더 줄어듭니다.'});
   $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
 
   const list=DOCS.filter(d=>c[d[0]]>0);
@@ -374,11 +386,13 @@ function render(){
   // 넣어 주신 항목만 식에 적습니다
   const sum=list=>list.filter(x=>c[x[0]]>0).map(x=>x[1]+' '+won(c[x[0]])).join(' + ')||'넣으신 금액이 없습니다';
   $('steps').innerHTML='<table class="stable">'
-    +srow('내 돈',sum([['cash','예금'],['sell','처분대금'],['past','증여·상속'],['etc','그 밖']]),won(r.own)+'원')
+    +(c.income?srow('소득으로 모은 돈','소득금액 '+won(c.income)+(c.living?' 빼기 생활비 '+won(c.living)+' × '+c.years+'년':''),won(r.saved)+'원'):'')
+    +srow('내 돈',[c.income?'소득으로 모은 돈 '+won(r.saved):'',c.invest?'투자 '+won(c.invest):'',c.past?'증여·상속 '+won(c.past):'']
+      .filter(Boolean).join(' + ')||'넣으신 금액이 없습니다',won(r.own)+'원')
     +srow('빌리는 돈',sum([['loan','은행'],['deposit','보증금'],['family','가족 차입']]),won(r.borrow)+'원')
     +(c.gift?srow('받는 돈','증여',won(c.gift)+'원'):'')
     +srow('설명되는 돈','내 돈 + 빌리는 돈'+(c.gift?' + 받는 돈':''),won(r.proven)+'원')
-    +srow('설명 못 한 금액','집값 '+won(c.price)+' 빼기 설명되는 돈 '+won(r.proven),won(r.short)+'원')
+    +srow('설명 못 한 금액',r.over?'설명되는 돈이 집값보다 '+won(r.over)+'원 많습니다':'집값 '+won(c.price)+' 빼기 설명되는 돈 '+won(r.proven),won(r.short)+'원')
     +srow('증여추정 제외선','집값의 20% '+won(c.price*0.2)+'원과 2억 원 중 적은 금액',won(r.line)+'원')
     +srow('판정',r.short?(r.presume?'제외선 이상이라 증여로 추정합니다':'제외선 미달이라 추정하지 않습니다'):'설명 못 한 금액이 없습니다',r.short?(r.presume?'증여 추정':'추정 제외'):'해당 없음')
     +(c.family?srow('가족 차입 이자',c.interest?'이자를 주기로 하셨습니다':'무이자 '+won(c.family)+' × 4.6%',c.interest?'약정대로':won(r.famInterest)+'원'):'')
