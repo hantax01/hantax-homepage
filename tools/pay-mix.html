@@ -130,8 +130,74 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "무엇을 찾아 주는 계산기인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "가져갈 총액을 정해 두고 연봉과 배당을 어떻게 나누면 세금이 가장 적은지 찾아 드립니다. 연봉을 얼마로 정할지부터 보시려면 대표 연봉 계산기를 이용해 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "연봉과 배당은 무엇이 다른가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "연봉은 법인의 비용이라 법인세를 줄이지만, 배당은 법인세를 낸 뒤 이익에서 나가 법인세를 줄이지 못합니다. 대신 연봉에는 4대보험이 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "배당은 얼마까지 할 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "올해 법인세를 낸 뒤 남은 이익까지만 할 수 있습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "배당소득세는 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "연 2,000만 원 이하면 15.4%로 떼는 세금으로 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "4대보험은 어떻게 반영되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "대표이사는 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양보험(0.9448%)만 반영했습니다. 배당은 연 2,000만 원을 넘는 금액에만 건강보험료가 붙습니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -239,17 +305,41 @@
         </details>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>무엇을 찾아 주는 계산기인가요?</summary>
+          <div class="a">가져갈 총액을 정해 두고 연봉과 배당을 어떻게 나누면 세금이 가장 적은지 찾아 드립니다. 연봉을 얼마로 정할지부터 보시려면 대표 연봉 계산기를 이용해 주세요.</div>
+        </details>
+        <details>
+          <summary>연봉과 배당은 무엇이 다른가요?</summary>
+          <div class="a">연봉은 법인의 비용이라 법인세를 줄이지만, 배당은 법인세를 낸 뒤 이익에서 나가 법인세를 줄이지 못합니다. 대신 연봉에는 4대보험이 붙습니다.</div>
+        </details>
+        <details>
+          <summary>배당은 얼마까지 할 수 있나요?</summary>
+          <div class="a">올해 법인세를 낸 뒤 남은 이익까지만 할 수 있습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.</div>
+        </details>
+        <details>
+          <summary>배당소득세는 어떻게 되나요?</summary>
+          <div class="a">연 2,000만 원 이하면 15.4%로 떼는 세금으로 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.</div>
+        </details>
+        <details>
+          <summary>4대보험은 어떻게 반영되나요?</summary>
+          <div class="a">대표이사는 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양보험(0.9448%)만 반영했습니다. 배당은 연 2,000만 원을 넘는 금액에만 건강보험료가 붙습니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 주주 구성, 이익잉여금 규모, 다른 소득에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
-        · 주주는 대표님 한 분이라고 가정합니다. 배당은 올해 법인세를 낸 뒤 남은 이익까지만 할 수 있습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
-        · 연봉은 법인의 비용이라 법인세를 줄이지만, 배당은 법인세를 낸 뒤 이익에서 나가 법인세를 줄이지 못합니다.<br>
-        · 배당소득이 연 2,000만 원 이하면 15.4% 분리과세, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.<br>
-        · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 초과 20%이며 지방소득세를 포함했습니다.<br>
-        · <b>4대보험까지 보기</b>를 선택하면 2026년 요율로 함께 계산합니다. 대표이사는 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양(0.9448%)만 반영했습니다. 배당은 연 2,000만 원을 넘는 금액에만 건강보험료가 붙습니다.<br>
-        · 연봉을 얼마로 정할지부터 보시려면 <a href="income-transfer.html">대표 연봉 계산기</a>를 이용해 주세요.
+        · 계산 결과는 참고용입니다. 주주는 대표님 한 분으로 보았고, 실제 금액은 주주 구성과 쌓인 이익잉여금에 따라 달라집니다.<br>
+        · 세율과 보험료율은 2026년 기준입니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="income-transfer.html">대표 연봉 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
 
       <div class="art-cta" style="margin-top:34px">
         <p>우리 회사에 맞는 배분이 궁금하신가요?</p>

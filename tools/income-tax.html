@@ -87,8 +87,82 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "종합소득세는 언제까지 신고하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "올해 1~12월 소득을 다음 해 5월에 신고합니다. 성실신고확인 대상이면 6월까지 신고합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세율은 얼마인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "종합소득세 기본세율 6~45%이고, 지방소득세는 종합소득세의 10%가 따로 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "근로소득이 함께 있으면 어떻게 계산되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "총급여에서 근로소득공제를 빼 사업소득과 합산하고, 근로소득세액공제와 표준세액공제(근로소득이 있으면 13만 원, 없으면 7만 원)를 반영했습니다. 보험료와 의료비, 교육비 같은 특별공제는 넣지 않았으니 실제 세금은 더 줄어들 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세액감면은 어떻게 반영되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "산출세액 가운데 사업소득이 차지하는 몫에 감면율을 곱합니다. 중소기업특별세액감면은 한 해 1억 원 한도로 계산했고, 최저한세는 반영하지 않았습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "이자와 배당도 합산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "한 해 2,000만 원 이하면 받을 때 떼는 세금으로 끝나 합산하지 않습니다. 2,000만 원을 넘는 경우와 기장세액공제, 가산세는 반영하지 않았으니 상담으로 확인해 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "사업에서 적자가 나면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "근로소득 같은 다른 소득에서 빼고 계산했습니다. 다만 부동산임대업에서 난 적자는 다른 소득에서 뺄 수 없습니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -198,16 +272,45 @@
         </div>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>종합소득세는 언제까지 신고하나요?</summary>
+          <div class="a">올해 1~12월 소득을 다음 해 5월에 신고합니다. 성실신고확인 대상이면 6월까지 신고합니다.</div>
+        </details>
+        <details>
+          <summary>세율은 얼마인가요?</summary>
+          <div class="a">종합소득세 기본세율 6~45%이고, 지방소득세는 종합소득세의 10%가 따로 붙습니다.</div>
+        </details>
+        <details>
+          <summary>근로소득이 함께 있으면 어떻게 계산되나요?</summary>
+          <div class="a">총급여에서 근로소득공제를 빼 사업소득과 합산하고, 근로소득세액공제와 표준세액공제(근로소득이 있으면 13만 원, 없으면 7만 원)를 반영했습니다. 보험료와 의료비, 교육비 같은 특별공제는 넣지 않았으니 실제 세금은 더 줄어들 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>세액감면은 어떻게 반영되나요?</summary>
+          <div class="a">산출세액 가운데 사업소득이 차지하는 몫에 감면율을 곱합니다. 중소기업특별세액감면은 한 해 1억 원 한도로 계산했고, 최저한세는 반영하지 않았습니다.</div>
+        </details>
+        <details>
+          <summary>이자와 배당도 합산하나요?</summary>
+          <div class="a">한 해 2,000만 원 이하면 받을 때 떼는 세금으로 끝나 합산하지 않습니다. 2,000만 원을 넘는 경우와 기장세액공제, 가산세는 반영하지 않았으니 상담으로 확인해 주세요.</div>
+        </details>
+        <details>
+          <summary>사업에서 적자가 나면 어떻게 되나요?</summary>
+          <div class="a">근로소득 같은 다른 소득에서 빼고 계산했습니다. 다만 부동산임대업에서 난 적자는 다른 소득에서 뺄 수 없습니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        · 올해 1~12월 소득으로 다음 해 5월에 신고하는 종합소득세를 계산합니다. 성실신고확인 대상이면 6월까지 신고합니다.<br>
-        · 세율은 종합소득세 기본세율 6~45%이고, 지방소득세는 종합소득세의 10%입니다.<br>
-        · 근로소득은 총급여에서 근로소득공제를 빼 합산하고, 근로소득세액공제와 표준세액공제(근로소득이 있으면 13만 원, 없으면 7만 원)를 반영했습니다. 보험료·의료비·교육비 같은 특별공제는 넣지 않았습니다.<br>
-        · 세액감면은 산출세액 가운데 사업소득이 차지하는 몫에 감면율을 곱합니다. 중소기업특별세액감면은 한 해 1억 원 한도로 계산했고, 최저한세는 반영하지 않았습니다.<br>
-        · 이자·배당 소득은 한 해 2,000만 원 이하면 떼는 세금으로 끝나 합산하지 않습니다. 넘는 경우와 기장세액공제·가산세는 반영하지 않았으니 상담으로 확인해 주세요.<br>
-        · 사업에서 적자가 나면 근로소득 같은 다른 소득에서 빼고 계산했습니다. 부동산임대업 적자는 다른 소득에서 뺄 수 없습니다.
+        · 계산 결과는 참고용입니다. 실제 세금은 공제와 감면, 장부 내용에 따라 달라집니다.<br>
+        · 세율과 공제 금액은 2026년 기준입니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="vat.html">부가가치세 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="startup-tax-credit.html">창업 세액감면 진단</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
     </div>
   </div>
 </section>

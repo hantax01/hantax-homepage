@@ -134,8 +134,90 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "증여세율은 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "과세표준 1억 원 이하 10%, 5억 원 이하 20%, 10억 원 이하 30%, 30억 원 이하 40%, 30억 원 초과 50%입니다. 증여세에는 지방소득세가 붙지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "증여재산공제는 얼마인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "10년 동안의 한도입니다. 배우자에게 받으면 6억 원, 부모와 조부모에게 받으면 5천만 원(미성년자는 2천만 원), 자녀에게 받으면 5천만 원, 그 밖의 친척은 1천만 원입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "혼인·출산 공제 1억 원은 누가 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "부모나 조부모에게 받을 때, 혼인신고일 앞뒤 2년 또는 자녀의 출생일이나 입양일부터 2년 안에 받는 경우에만 적용됩니다. 혼인과 출산을 합쳐 평생 1억 원까지입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "할아버지가 손주에게 바로 주면 세금이 더 붙나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "30% 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "신고는 언제까지 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 깎아 주며, 계산기는 이 공제를 받는 것으로 계산했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "부동산이나 주식을 받을 때도 같나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "이 계산기는 현금을 받는 경우입니다. 부동산과 주식은 따로 평가해야 하고, 빚을 함께 넘겨받으면 넘기는 분에게 양도소득세가 별도로 나옵니다. 비상장주식은 비상장주식 계산기에서 가치를 먼저 가늠해 보세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "지난 증여는 왜 합산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "같은 분에게 10년 안에 받은 증여는 합쳐서 세율을 매깁니다. 나눠 받아도 10년이 지나지 않으면 합산되니, 전에 받으신 것을 먼저 적고 이번 금액을 넣어 보세요."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -241,19 +323,49 @@
         </details>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>증여세율은 어떻게 되나요?</summary>
+          <div class="a">과세표준 1억 원 이하 10%, 5억 원 이하 20%, 10억 원 이하 30%, 30억 원 이하 40%, 30억 원 초과 50%입니다. 증여세에는 지방소득세가 붙지 않습니다.</div>
+        </details>
+        <details>
+          <summary>증여재산공제는 얼마인가요?</summary>
+          <div class="a">10년 동안의 한도입니다. 배우자에게 받으면 6억 원, 부모와 조부모에게 받으면 5천만 원(미성년자는 2천만 원), 자녀에게 받으면 5천만 원, 그 밖의 친척은 1천만 원입니다.</div>
+        </details>
+        <details>
+          <summary>혼인·출산 공제 1억 원은 누가 받나요?</summary>
+          <div class="a">부모나 조부모에게 받을 때, 혼인신고일 앞뒤 2년 또는 자녀의 출생일이나 입양일부터 2년 안에 받는 경우에만 적용됩니다. 혼인과 출산을 합쳐 평생 1억 원까지입니다.</div>
+        </details>
+        <details>
+          <summary>할아버지가 손주에게 바로 주면 세금이 더 붙나요?</summary>
+          <div class="a">30% 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다.</div>
+        </details>
+        <details>
+          <summary>신고는 언제까지 하나요?</summary>
+          <div class="a">받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 깎아 주며, 계산기는 이 공제를 받는 것으로 계산했습니다.</div>
+        </details>
+        <details>
+          <summary>부동산이나 주식을 받을 때도 같나요?</summary>
+          <div class="a">이 계산기는 현금을 받는 경우입니다. 부동산과 주식은 따로 평가해야 하고, 빚을 함께 넘겨받으면 넘기는 분에게 양도소득세가 별도로 나옵니다. 비상장주식은 비상장주식 계산기에서 가치를 먼저 가늠해 보세요.</div>
+        </details>
+        <details>
+          <summary>지난 증여는 왜 합산하나요?</summary>
+          <div class="a">같은 분에게 10년 안에 받은 증여는 합쳐서 세율을 매깁니다. 나눠 받아도 10년이 지나지 않으면 합산되니, 전에 받으신 것을 먼저 적고 이번 금액을 넣어 보세요.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        이 계산기는 <b>대략의 금액을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 재산의 종류와 평가 방법, 가족 관계, 과거 신고 내용에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
-        · 현금을 받는 경우로 보고 계산합니다. 부동산과 주식은 따로 평가해야 하고, 빚을 함께 넘겨받는 경우에는 양도소득세가 별도로 나옵니다.<br>
-        · 세율은 과세표준 1억 원 이하 10%, 5억 원 이하 20%, 10억 원 이하 30%, 30억 원 이하 40%, 30억 원 초과 50%입니다. 증여세에는 지방소득세가 붙지 않습니다.<br>
-        · 증여재산공제는 10년 동안의 한도입니다. 배우자 6억 원, 부모·조부모에게 받으면 5천만 원(미성년자 2천만 원), 자녀에게 받으면 5천만 원, 그 밖의 친척은 1천만 원입니다.<br>
-        · 혼인·출산 공제 1억 원은 부모·조부모에게 받을 때, 혼인신고일 앞뒤 2년 또는 자녀의 출생·입양일부터 2년 안에 받는 경우에만 적용됩니다. 혼인과 출산을 합쳐 평생 1억 원까지이며, 지난 증여에서 쓰신 금액은 표시하신 대로 빼고 계산합니다.<br>
-        · 할아버지·할머니에게 바로 받으면 세금이 30% 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다.<br>
-        · 신고기한은 받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 깎아 주며, 이 공제를 받는 것으로 계산했습니다.<br>
+        · 계산 결과는 참고용입니다. 실제 세금은 재산의 종류와 평가 방법, 가족 관계, 과거 신고 내용에 따라 달라집니다.<br>
         · 그 밖의 친척이나 친족이 아닌 분이 여러 명인 경우에는 한 분에게 받은 것으로 묶어 계산하므로 실제보다 세금이 크게 나올 수 있습니다.<br>
         · 창업자금이나 가업승계 특례, 영농자녀 감면 같은 제도는 반영하지 않았습니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="fund-source.html">주택 자금출처 점검</a>
+        <a href="stock-value.html">비상장주식 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
 
       <div class="art-cta" style="margin-top:34px">
         <p>우리 집은 어떻게 나눠 주는 게 좋을까요?</p>

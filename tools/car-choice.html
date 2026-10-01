@@ -69,8 +69,82 @@
 .verdict{padding:22px 16px}.verdict .val{font-size:27px}
 .box{padding:16px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "이 결과만 보고 정해도 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "세금 계산이 아니라 상황에 맞는 구입 방법을 골라 드리는 안내입니다. 실제로 드는 돈과 세금 효과는 업무용 차량 계산기에서 확인해 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "대출 한도에 영향이 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "운용리스와 할부취득은 금융기관 부채로 잡혀 대출 한도에 영향을 줄 수 있고, 장기렌트는 렌트료를 비용으로 처리해 부채로 잡히지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "장기렌트 번호판은 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "허, 하, 호 번호판을 씁니다. 만기에 인수한 뒤에는 일반 번호판으로 바꿀 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "어떤 방법으로 사도 비용 한도는 같나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "같습니다. 업무용 승용차 비용은 운행기록부가 없으면 한 해 1,500만 원까지만 인정되고 감가상각비는 한 해 800만 원이 한도입니다. 법인은 업무전용 자동차보험을 들어야 합니다. 경차와 9인승 이상 승합차, 화물차는 이 한도를 받지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "경차나 승합차는 왜 리스가 빠지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "경차와 9인승 이상 승합차, 화물차는 일반과세자가 사거나 렌트하면 부가가치세를 돌려받습니다. 그런데 운용리스는 리스료에 부가가치세가 없어 차값의 10%를 돌려받지 못하기 때문입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "중간에 해지하면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "운용리스와 장기렌트는 위약금이 붙습니다. 계약 전에 위약금 조건을 꼭 확인해 주세요."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -133,16 +207,44 @@
         </div>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>이 결과만 보고 정해도 되나요?</summary>
+          <div class="a">세금 계산이 아니라 상황에 맞는 구입 방법을 골라 드리는 안내입니다. 실제로 드는 돈과 세금 효과는 업무용 차량 계산기에서 확인해 주세요.</div>
+        </details>
+        <details>
+          <summary>대출 한도에 영향이 있나요?</summary>
+          <div class="a">운용리스와 할부취득은 금융기관 부채로 잡혀 대출 한도에 영향을 줄 수 있고, 장기렌트는 렌트료를 비용으로 처리해 부채로 잡히지 않습니다.</div>
+        </details>
+        <details>
+          <summary>장기렌트 번호판은 어떻게 되나요?</summary>
+          <div class="a">허, 하, 호 번호판을 씁니다. 만기에 인수한 뒤에는 일반 번호판으로 바꿀 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>어떤 방법으로 사도 비용 한도는 같나요?</summary>
+          <div class="a">같습니다. 업무용 승용차 비용은 운행기록부가 없으면 한 해 1,500만 원까지만 인정되고 감가상각비는 한 해 800만 원이 한도입니다. 법인은 업무전용 자동차보험을 들어야 합니다. 경차와 9인승 이상 승합차, 화물차는 이 한도를 받지 않습니다.</div>
+        </details>
+        <details>
+          <summary>경차나 승합차는 왜 리스가 빠지나요?</summary>
+          <div class="a">경차와 9인승 이상 승합차, 화물차는 일반과세자가 사거나 렌트하면 부가가치세를 돌려받습니다. 그런데 운용리스는 리스료에 부가가치세가 없어 차값의 10%를 돌려받지 못하기 때문입니다.</div>
+        </details>
+        <details>
+          <summary>중간에 해지하면 어떻게 되나요?</summary>
+          <div class="a">운용리스와 장기렌트는 위약금이 붙습니다. 계약 전에 위약금 조건을 꼭 확인해 주세요.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        · 세금 계산이 아니라 상황에 맞는 구입 방법을 골라 드리는 안내입니다. 실제 지출과 세금 효과는 <a href="business-car.html">차량 비용 계산기</a>에서 확인해 주세요.<br>
-        · 운용리스와 할부취득은 금융기관 부채로 잡혀 대출 한도에 영향을 줄 수 있고, 장기렌트는 렌트료를 비용으로 처리해 부채로 잡히지 않습니다.<br>
-        · 장기렌트 차량은 허·하·호 번호판을 씁니다. 인수한 뒤에는 일반 번호판으로 바꿀 수 있습니다.<br>
-        · 어떤 방법으로 사더라도 업무용 승용차 비용은 연 1,500만 원까지만 운행기록부 없이 인정되고, 감가상각비는 연 800만 원이 한도입니다. 법인은 업무전용 자동차보험을 들어야 합니다. 경차, 9인승 이상 승합차, 화물차는 이 한도를 받지 않습니다.<br>
-        · 경차, 9인승 이상 승합차, 화물차는 일반과세자가 사거나 렌트하면 부가세를 돌려받지만, 운용리스는 리스료에 부가세가 없어 차값의 부가세 10%를 돌려받지 못합니다.<br>
-        · 중도에 해지하면 운용리스와 장기렌트는 위약금이 붙습니다. 계약 전에 위약금 조건을 꼭 확인해 주세요.
+        · 상황에 맞는 방법을 고르기 위한 안내입니다. 실제로 드는 돈과 세금 효과는 업무용 차량 계산기에서 확인해 주세요.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="business-car.html">업무용 차량 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="incorporation.html">법인전환 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
     </div>
   </div>
 </section>

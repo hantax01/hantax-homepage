@@ -114,8 +114,74 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "무엇과 무엇을 비교하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "지금처럼 개인사업자로 둘 때와 법인으로 바꿔 대표님이 연봉을 받을 때의 세금을 비교합니다. 다른 소득은 없는 것으로 보았습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세율은 어떻게 적용되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "법인세는 2026년 기준 과세표준 2억 원 이하 10%, 초과 20%에 지방소득세를 포함했고, 개인 종합소득세는 6~45% 누진세율에 지방소득세(세액의 10%)를 포함했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "건강보험료는 어떻게 달라지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "개인사업자는 지역가입자로 보아 소득분 보험료만 전액 본인부담으로 계산했습니다. 실제로는 재산과 자동차에 따라 더 나올 수 있습니다. 법인 대표님은 직장가입자로 보아 연봉 기준으로 계산했고, 회사부담분은 법인 비용으로 반영했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "대표 연봉은 어떻게 반영되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "근로소득공제를 적용한 근로소득세를 함께 더해 비교합니다. 연봉을 얼마로 잡느냐에 따라 결과가 크게 달라지니 몇 가지 금액으로 넣어 보시는 것이 좋습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "법인으로 바꾸면 무조건 유리한가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "아닙니다. 업종과 성실신고확인 대상 여부, 4대보험, 배당, 퇴직금, 가지급금에 따라 달라집니다. 전환할 때 드는 비용과 이후 운영 부담, 번 돈을 개인 통장으로 바로 쓸 수 없다는 점까지 함께 보셔야 합니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -216,19 +282,41 @@
 
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>무엇과 무엇을 비교하나요?</summary>
+          <div class="a">지금처럼 개인사업자로 둘 때와 법인으로 바꿔 대표님이 연봉을 받을 때의 세금을 비교합니다. 다른 소득은 없는 것으로 보았습니다.</div>
+        </details>
+        <details>
+          <summary>세율은 어떻게 적용되나요?</summary>
+          <div class="a">법인세는 2026년 기준 과세표준 2억 원 이하 10%, 초과 20%에 지방소득세를 포함했고, 개인 종합소득세는 6~45% 누진세율에 지방소득세(세액의 10%)를 포함했습니다.</div>
+        </details>
+        <details>
+          <summary>건강보험료는 어떻게 달라지나요?</summary>
+          <div class="a">개인사업자는 지역가입자로 보아 소득분 보험료만 전액 본인부담으로 계산했습니다. 실제로는 재산과 자동차에 따라 더 나올 수 있습니다. 법인 대표님은 직장가입자로 보아 연봉 기준으로 계산했고, 회사부담분은 법인 비용으로 반영했습니다.</div>
+        </details>
+        <details>
+          <summary>대표 연봉은 어떻게 반영되나요?</summary>
+          <div class="a">근로소득공제를 적용한 근로소득세를 함께 더해 비교합니다. 연봉을 얼마로 잡느냐에 따라 결과가 크게 달라지니 몇 가지 금액으로 넣어 보시는 것이 좋습니다.</div>
+        </details>
+        <details>
+          <summary>법인으로 바꾸면 무조건 유리한가요?</summary>
+          <div class="a">아닙니다. 업종과 성실신고확인 대상 여부, 4대보험, 배당, 퇴직금, 가지급금에 따라 달라집니다. 전환할 때 드는 비용과 이후 운영 부담, 번 돈을 개인 통장으로 바로 쓸 수 없다는 점까지 함께 보셔야 합니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 업종, 성실신고 대상 여부, 4대보험, 배당, 퇴직금, 가지급금 등 여러 사정에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
-        · 다른 소득은 없다고 가정합니다.<br>
-        · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 2억 원 초과 20%이며 지방소득세를 포함했습니다.<br>
-        · 개인 종합소득세는 6~45% 누진세율로 계산하며, 지방소득세(세액의 10%)를 포함했습니다.<br>
-        · <b>4대보험까지 보기</b>를 선택하면 2026년 요율로 함께 계산합니다. 국민연금 9.5%(기준소득월액 상한 월 637만 원), 건강보험 7.19%, 장기요양 0.9448%를 반영하고 고용·산재보험은 제외했습니다.<br>
-        · 개인사업자는 지역가입자로 보아 <b>소득분 보험료만</b> 전액 본인부담으로 계산했습니다. 실제로는 재산과 자동차에 따라 건강보험료가 더 나올 수 있습니다.<br>
-        · 법인 대표님은 직장가입자로 보아 연봉 기준으로 계산했고, 회사부담분은 법인 비용으로 법인세를 줄이도록 반영했습니다. 본인부담분은 소득공제로 처리했습니다.<br>
-        · 대표님 연봉에 대해서는 근로소득공제를 적용한 근로소득세를 함께 더해 비교합니다.<br>
-        · 법인 쪽 소득공제는 대표님 개인 근로소득에 적용했습니다.
+        · 계산 결과는 참고용입니다. 실제 세금은 업종과 공제, 배당과 퇴직금 계획에 따라 달라집니다.<br>
+        · 세율과 보험료율은 2026년 기준입니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="income-tax.html">종합소득세 계산기</a>
+        <a href="income-transfer.html">대표 연봉 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
 
       <div class="art-cta" style="margin-top:34px">
         <p>우리 회사는 전환하는 게 유리할까요?</p>

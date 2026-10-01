@@ -93,8 +93,82 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "부가가치세는 언제 신고하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "개인사업자는 6개월마다(1~6월분은 7월, 7~12월분은 다음 해 1월), 법인은 3개월마다 신고합니다. 개인사업자는 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "금액은 부가세를 포함해 넣나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "네. 매출과 매입 모두 부가세가 포함된 금액으로 넣어 주세요. 세금계산서는 공급가액과 세액을 더한 합계금액입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "신용카드 발행세액공제는 누가 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "직전 연도 매출 10억 원 이하 개인사업자 가운데 소매업, 음식점업, 숙박업처럼 주로 개인 손님에게 파는 업종이 받습니다. 카드와 현금영수증 매출의 1.3%를 한 해 1,000만 원까지 빼 주며, 법인은 받을 수 없어 법인을 고르면 빼고 계산합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "의제매입세액공제는 얼마나 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "음식점 기준으로 개인은 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용합니다. 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하), 70%(2억 원 이하), 60%(초과)까지입니다. 법인은 6/106에 과세표준의 50%까지이며, 이 한도는 2027년 말까지 적용되는 우대 한도입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "간이과세자도 쓸 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "간이과세자는 1년에 한 번, 업종별 부가가치율로 계산하는 방식이라 이 계산기와 맞지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세금계산서를 못 받은 매입도 공제되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "세금계산서나 사업용 신용카드, 현금영수증처럼 적격증빙이 있어야 공제됩니다. 간이영수증만 있는 매입은 부가가치세를 돌려받지 못하니 매입 칸에 넣지 마세요."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -190,15 +264,45 @@
         </div>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>부가가치세는 언제 신고하나요?</summary>
+          <div class="a">개인사업자는 6개월마다(1~6월분은 7월, 7~12월분은 다음 해 1월), 법인은 3개월마다 신고합니다. 개인사업자는 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.</div>
+        </details>
+        <details>
+          <summary>금액은 부가세를 포함해 넣나요?</summary>
+          <div class="a">네. 매출과 매입 모두 부가세가 포함된 금액으로 넣어 주세요. 세금계산서는 공급가액과 세액을 더한 합계금액입니다.</div>
+        </details>
+        <details>
+          <summary>신용카드 발행세액공제는 누가 받나요?</summary>
+          <div class="a">직전 연도 매출 10억 원 이하 개인사업자 가운데 소매업, 음식점업, 숙박업처럼 주로 개인 손님에게 파는 업종이 받습니다. 카드와 현금영수증 매출의 1.3%를 한 해 1,000만 원까지 빼 주며, 법인은 받을 수 없어 법인을 고르면 빼고 계산합니다.</div>
+        </details>
+        <details>
+          <summary>의제매입세액공제는 얼마나 받나요?</summary>
+          <div class="a">음식점 기준으로 개인은 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용합니다. 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하), 70%(2억 원 이하), 60%(초과)까지입니다. 법인은 6/106에 과세표준의 50%까지이며, 이 한도는 2027년 말까지 적용되는 우대 한도입니다.</div>
+        </details>
+        <details>
+          <summary>간이과세자도 쓸 수 있나요?</summary>
+          <div class="a">간이과세자는 1년에 한 번, 업종별 부가가치율로 계산하는 방식이라 이 계산기와 맞지 않습니다.</div>
+        </details>
+        <details>
+          <summary>세금계산서를 못 받은 매입도 공제되나요?</summary>
+          <div class="a">세금계산서나 사업용 신용카드, 현금영수증처럼 적격증빙이 있어야 공제됩니다. 간이영수증만 있는 매입은 부가가치세를 돌려받지 못하니 매입 칸에 넣지 마세요.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        · 일반과세자가 한 번 신고할 때의 부가가치세를 계산합니다. 개인사업자는 6개월마다(1~6월분은 7월, 7~12월분은 다음 해 1월), 법인은 3개월마다 신고합니다. 개인사업자는 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.<br>
-        · 금액은 모두 부가세가 포함된 금액으로 넣습니다. 세금계산서는 공급가액과 세액을 더한 합계금액입니다.<br>
-        · 신용카드매출전표 등 발행세액공제는 카드·현금영수증 매출의 1.3%, 한 해 1,000만 원 한도로 반영했습니다. 직전 연도 매출 10억 원 이하 개인사업자 가운데 소매·음식·숙박업처럼 주로 개인 손님에게 파는 업종이 받을 수 있고, 법인은 받을 수 없어 법인을 고르면 빼고 계산합니다.<br>
-        · 의제매입세액공제는 음식점 기준입니다. 개인은 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용하고, 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하)·70%(2억 원 이하)·60%(초과)까지입니다. 법인은 6/106, 과세표준의 50%까지입니다. 한도는 모두 2027년 말까지 적용되는 우대 한도입니다.<br>
-        · 간이과세자는 1년에 한 번, 업종별 부가가치율로 계산하는 방식이라 이 계산기와 맞지 않습니다.
+        · 일반과세자가 한 번 신고할 때의 부가가치세를 계산합니다. 계산 결과는 참고용입니다.<br>
+        · 세율과 공제 한도는 2026년 기준입니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="income-tax.html">종합소득세 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
     </div>
   </div>
 </section>

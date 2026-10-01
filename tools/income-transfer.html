@@ -128,8 +128,90 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "급여와 배당은 무엇이 다른가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "급여는 법인의 비용이 되어 법인세를 줄이지만, 배당은 법인세를 낸 뒤의 이익에서 나가 법인세를 줄이지 못합니다. 대신 급여에는 4대보험이 붙고 배당에는 붙지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "100만 원을 더 가져갈 때 세금은 어떻게 계산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "현재와 바꾼 경우는 가져가는 금액이 서로 달라 단순 비교가 어렵습니다. 그래서 100만 원을 더 가져갈 때 붙는 세금을 가져가는 돈 대비 비율로 함께 표시했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "배당은 얼마까지 할 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "올해 법인세를 낸 뒤 남은 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았으니, 쌓인 이익이 있으면 실제로는 더 많이 배당할 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "배당소득세는 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "연 2,000만 원 이하면 15.4%로 떼는 세금으로 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "4대보험은 어떻게 반영되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "대표이사는 고용보험과 산재보험 가입 대상이 아니므로 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양보험(0.9448%)만 반영했습니다. 회사부담 보험료는 법인 비용으로 보아 법인세를 줄이고, 본인부담 보험료는 대표님 소득공제로 넣었습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "배당에도 건강보험료가 붙나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "연 2,000만 원을 넘는 금액에만 소득월액 보험료가 본인부담으로 붙습니다. 2,000만 원 이하라면 배당에 건강보험료가 붙지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "공제와 감면이 많은 회사를 고르면 무엇이 달라지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "법인세를 최저한세율 7%로 계산합니다. 지방소득세는 공제와 감면을 적용하지 않으므로 감면 전 세액을 기준으로 10%를 더했습니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -242,23 +324,49 @@
         </details>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>급여와 배당은 무엇이 다른가요?</summary>
+          <div class="a">급여는 법인의 비용이 되어 법인세를 줄이지만, 배당은 법인세를 낸 뒤의 이익에서 나가 법인세를 줄이지 못합니다. 대신 급여에는 4대보험이 붙고 배당에는 붙지 않습니다.</div>
+        </details>
+        <details>
+          <summary>100만 원을 더 가져갈 때 세금은 어떻게 계산하나요?</summary>
+          <div class="a">현재와 바꾼 경우는 가져가는 금액이 서로 달라 단순 비교가 어렵습니다. 그래서 100만 원을 더 가져갈 때 붙는 세금을 가져가는 돈 대비 비율로 함께 표시했습니다.</div>
+        </details>
+        <details>
+          <summary>배당은 얼마까지 할 수 있나요?</summary>
+          <div class="a">올해 법인세를 낸 뒤 남은 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았으니, 쌓인 이익이 있으면 실제로는 더 많이 배당할 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>배당소득세는 어떻게 되나요?</summary>
+          <div class="a">연 2,000만 원 이하면 15.4%로 떼는 세금으로 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.</div>
+        </details>
+        <details>
+          <summary>4대보험은 어떻게 반영되나요?</summary>
+          <div class="a">대표이사는 고용보험과 산재보험 가입 대상이 아니므로 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양보험(0.9448%)만 반영했습니다. 회사부담 보험료는 법인 비용으로 보아 법인세를 줄이고, 본인부담 보험료는 대표님 소득공제로 넣었습니다.</div>
+        </details>
+        <details>
+          <summary>배당에도 건강보험료가 붙나요?</summary>
+          <div class="a">연 2,000만 원을 넘는 금액에만 소득월액 보험료가 본인부담으로 붙습니다. 2,000만 원 이하라면 배당에 건강보험료가 붙지 않습니다.</div>
+        </details>
+        <details>
+          <summary>공제와 감면이 많은 회사를 고르면 무엇이 달라지나요?</summary>
+          <div class="a">법인세를 최저한세율 7%로 계산합니다. 지방소득세는 공제와 감면을 적용하지 않으므로 감면 전 세액을 기준으로 10%를 더했습니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 세금은 다른 소득, 4대보험, 이익잉여금 규모, 주주 구성 등 여러 사정에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
-        · 주주는 대표님 한 분이라고 가정합니다. 다른 소득은 입력하신 금액만 반영합니다.<br>
-        · 현재와 바꾼 경우는 가져가는 금액이 다를 수 있어, <b>100만 원을 더 가져갈 때 붙는 세금</b>을 가져가는 돈 대비 비율로 함께 표시했습니다.<br>
-        · 급여는 법인의 비용이 되어 법인세가 줄지만, 배당은 법인세를 낸 뒤의 이익에서 나갑니다.<br>
-        · 배당할 수 있는 돈은 올해 법인세를 낸 뒤 남은 이익까지만 잡았습니다. 그전에 쌓인 이익잉여금은 반영하지 않았습니다.<br>
-        · 배당소득이 연 2,000만 원 이하면 15.4% 분리과세, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.<br>
-        · 법인세율은 2026년 기준 과세표준 2억 원 이하 10%, 2억 원 초과 20%이며 지방소득세를 포함했습니다.<br>
-        · <b>공제·감면이 많은 회사</b>를 선택하면 법인세를 최저한세율 7%로 계산합니다. 지방소득세는 공제·감면을 적용하지 않으므로 감면 전 세액을 기준으로 10%를 더했습니다.<br>
-        · 개인 세금은 6~45% 누진세율에 지방소득세(세액의 10%)를 포함했습니다.<br>
-        · <b>4대보험까지 보기</b>를 선택하면 2026년 요율로 함께 계산합니다. 대표이사는 고용·산재보험 가입 대상이 아니므로 국민연금(9.5%, 기준소득월액 상한 월 637만 원), 건강보험(7.19%), 장기요양(0.9448%)만 반영했습니다.<br>
-        · 회사부담 보험료는 법인의 비용으로 보아 법인세를 줄이고, 본인부담 보험료는 대표님 소득공제로 반영했습니다.<br>
-        · 배당은 연 2,000만 원을 넘는 금액에만 건강보험료(소득월액 보험료)가 본인부담으로 붙습니다.<br>
-        · 보험료율과 상한액은 해마다 바뀌므로 신고 시점에 다시 확인해야 합니다.
+        · 계산 결과는 참고용입니다. 주주는 대표님 한 분으로 보았고 다른 소득은 넣으신 금액만 반영합니다.<br>
+        · 세율과 보험료율은 2026년 기준이며 해마다 바뀌므로 신고 시점에 다시 확인하셔야 합니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="pay-mix.html">연봉과 배당 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="incorporation.html">법인전환 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
 
       <div class="art-cta" style="margin-top:34px">
         <p>세금을 줄이면서 가져가는 방법이 있을까요?</p>

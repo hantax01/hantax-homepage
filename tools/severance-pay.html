@@ -147,8 +147,98 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "퇴직금은 어떻게 계산되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "1일 평균임금 × 30일 × 재직일수 ÷ 365로 계산합니다. 1일 평균임금은 퇴직일 전 3개월 동안 받은 임금을 그 기간의 날수로 나눈 값입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "날짜는 어떻게 넣나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "근무 시작일과 마지막 근무일을 넣습니다. 법에서 말하는 퇴직일은 마지막 근무일의 다음 날이라, 계산기가 하루를 더해 퇴직일로 봅니다. 재직일수는 근무 시작일부터 마지막 근무일까지의 날수입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "상여금과 연차수당은 얼마나 들어가나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "상여금은 최근 1년간 받은 금액, 연차수당은 작년에 받은 금액을 넣습니다. 두 금액은 1년 치 가운데 평균임금 산정기간 일수만큼(일수 ÷ 365) 넣되, 고용노동부 기준인 3개월분(12분의 3)보다 적으면 12분의 3을 씁니다. 퇴사하면서 남은 연차를 정산해 주는 연차수당은 평균임금에 들어가지 않으니 넣지 마세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "평균임금이 통상임금보다 적으면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "통상임금으로 계산합니다. 달별 급여가 평소보다 적으면 계산기가 알려 드리고, 넣으신 월 통상임금을 209로 나눈 뒤 8을 곱해 환산한 금액과 평균임금 가운데 큰 금액으로 퇴직금을 계산합니다. 통상임금에 어떤 수당이 들어가는지는 사안에 따라 달라질 수 있어 확인이 필요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "누구나 퇴직금을 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "1년 이상 근무하고 4주를 평균해 1주 15시간 이상 일한 분에게 지급 의무가 있습니다. 확정기여형(DC형) 퇴직연금에 가입했다면 적립된 금액이 퇴직급여가 되어 이 계산과 다르고, 확정급여형(DB형)은 이 계산과 같습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "퇴직소득세는 어떻게 계산되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "2023년 이후 기준의 근속연수공제와 환산급여공제를 적용한 뒤 종합소득세 기본세율로 계산하고 지방소득세 10%를 더했습니다. 근속연수는 1년이 안 되는 끝수를 1년으로 봅니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "IRP로 받으면 세금이 줄어드나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "개인형 퇴직연금(IRP) 계좌로 받으면 받을 때는 세금을 떼지 않고, 나중에 연금으로 나눠 받을 때 퇴직소득세가 30~40% 줄어듭니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "언제까지 주고 신고해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "퇴직일부터 14일 안에 지급해야 하고, 떼어 둔 세금은 지급한 달의 다음 달 10일까지 신고하고 납부합니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -211,24 +301,55 @@
         </details>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>퇴직금은 어떻게 계산되나요?</summary>
+          <div class="a">1일 평균임금 × 30일 × 재직일수 ÷ 365로 계산합니다. 1일 평균임금은 퇴직일 전 3개월 동안 받은 임금을 그 기간의 날수로 나눈 값입니다.</div>
+        </details>
+        <details>
+          <summary>날짜는 어떻게 넣나요?</summary>
+          <div class="a">근무 시작일과 마지막 근무일을 넣습니다. 법에서 말하는 퇴직일은 마지막 근무일의 다음 날이라, 계산기가 하루를 더해 퇴직일로 봅니다. 재직일수는 근무 시작일부터 마지막 근무일까지의 날수입니다.</div>
+        </details>
+        <details>
+          <summary>상여금과 연차수당은 얼마나 들어가나요?</summary>
+          <div class="a">상여금은 최근 1년간 받은 금액, 연차수당은 작년에 받은 금액을 넣습니다. 두 금액은 1년 치 가운데 평균임금 산정기간 일수만큼(일수 ÷ 365) 넣되, 고용노동부 기준인 3개월분(12분의 3)보다 적으면 12분의 3을 씁니다. 퇴사하면서 남은 연차를 정산해 주는 연차수당은 평균임금에 들어가지 않으니 넣지 마세요.</div>
+        </details>
+        <details>
+          <summary>평균임금이 통상임금보다 적으면 어떻게 되나요?</summary>
+          <div class="a">통상임금으로 계산합니다. 달별 급여가 평소보다 적으면 계산기가 알려 드리고, 넣으신 월 통상임금을 209로 나눈 뒤 8을 곱해 환산한 금액과 평균임금 가운데 큰 금액으로 퇴직금을 계산합니다. 통상임금에 어떤 수당이 들어가는지는 사안에 따라 달라질 수 있어 확인이 필요합니다.</div>
+        </details>
+        <details>
+          <summary>누구나 퇴직금을 받나요?</summary>
+          <div class="a">1년 이상 근무하고 4주를 평균해 1주 15시간 이상 일한 분에게 지급 의무가 있습니다. 확정기여형(DC형) 퇴직연금에 가입했다면 적립된 금액이 퇴직급여가 되어 이 계산과 다르고, 확정급여형(DB형)은 이 계산과 같습니다.</div>
+        </details>
+        <details>
+          <summary>퇴직소득세는 어떻게 계산되나요?</summary>
+          <div class="a">2023년 이후 기준의 근속연수공제와 환산급여공제를 적용한 뒤 종합소득세 기본세율로 계산하고 지방소득세 10%를 더했습니다. 근속연수는 1년이 안 되는 끝수를 1년으로 봅니다.</div>
+        </details>
+        <details>
+          <summary>IRP로 받으면 세금이 줄어드나요?</summary>
+          <div class="a">개인형 퇴직연금(IRP) 계좌로 받으면 받을 때는 세금을 떼지 않고, 나중에 연금으로 나눠 받을 때 퇴직소득세가 30~40% 줄어듭니다.</div>
+        </details>
+        <details>
+          <summary>언제까지 주고 신고해야 하나요?</summary>
+          <div class="a">퇴직일부터 14일 안에 지급해야 하고, 떼어 둔 세금은 지급한 달의 다음 달 10일까지 신고하고 납부합니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        이 계산기는 <b>대략의 금액을 가늠하기 위한 단순 계산</b>입니다. 실제 퇴직금과 세금은 급여 항목, 퇴직연금 가입 형태, 근무 형태에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
-        · <b>퇴직금 = 1일 평균임금 × 30일 × 재직일수 ÷ 365</b>로 계산합니다. 1일 평균임금은 퇴직일 전 3개월 동안 받은 임금을 그 기간의 날수로 나눈 값입니다.<br>
-        · 날짜는 <b>근무 시작일</b>과 <b>마지막 근무일</b>을 넣습니다. 법에서 말하는 퇴직일은 마지막 근무일의 다음 날이라, 계산기가 하루를 더해 퇴직일로 봅니다. 재직일수는 근무 시작일부터 마지막 근무일까지의 날수입니다.<br>
-        · 상여금은 최근 1년간 받은 금액, 연차수당은 작년에 받은 금액을 넣습니다. 두 금액은 1년 치 가운데 평균임금 산정기간 일수만큼(일수 ÷ 365) 넣었습니다. 이 값이 고용노동부 기준인 3개월분(12분의 3)보다 적으면 12분의 3을 씁니다. 산정기간이 92일이면 92/365, 89~91일이면 12분의 3이 됩니다. 퇴사하면서 남은 연차를 정산해 주는 연차수당은 평균임금에 들어가지 않으므로 넣지 마세요.<br>
-        · 급여가 달마다 달랐다면 <b>최근 3개월 급여가 달랐어요</b>를 눌러 달마다 받은 세전 급여를 넣어 주세요. 산정기간이 달 중간부터 시작하면 첫 달은 한 달 치를 넣으시면 걸친 날만큼(걸친 날 ÷ 그 달 날수) 자동으로 나누고, 마지막 달은 일한 날까지 받은 금액을 그대로 넣습니다.<br>
-        · 산정기간 안에 수습기간이나 육아휴직, 산재 휴업처럼 빼야 하는 기간이 있으면 그 날수와 임금을 빼고 계산해야 하는데, 이 부분은 반영하지 않았습니다.<br>
-        · 표 오른쪽 위 <b>전체 이미지 저장</b>과 <b>PDF 저장</b>은 모든 분을, 이름 아래 버튼은 그분만 저장합니다. PDF 저장을 누르면 인쇄 창이 열리니 대상을 PDF로 저장으로 고르세요. 카카오톡 안에서 열었다면 PDF 저장이 되지 않으니 다른 브라우저로 열어 주세요.<br>
-        · 평균임금이 통상임금보다 적으면 통상임금으로 계산합니다. 달별 급여가 평소보다 적으면 계산기가 알려 드리고, 그때 넣으신 월 통상임금을 ÷ 209 × 8로 환산해 둘 중 큰 금액으로 퇴직금을 계산합니다. 통상임금에 어떤 수당이 들어가는지는 사안에 따라 달라질 수 있어 확인이 필요합니다.<br>
-        · 1년 이상 근무하고 4주 평균 1주 15시간 이상 일한 분에게만 퇴직금 지급 의무가 있습니다.<br>
-        · 확정기여형(DC형) 퇴직연금에 가입했다면 적립된 금액이 퇴직급여가 되므로 이 계산과 다릅니다. 확정급여형(DB형)은 이 계산과 같습니다.<br>
-        · <b>퇴직소득세</b>는 2023년 이후 기준의 근속연수공제와 환산급여공제, 종합소득세 기본세율로 계산하고 지방소득세 10%를 더했습니다. 근속연수는 1년이 안 되는 끝수를 1년으로 봅니다.<br>
-        · 개인형 퇴직연금(IRP) 계좌로 받으면 지금은 세금을 떼지 않고, 나중에 연금으로 나눠 받을 때 세금이 30~40% 줄어듭니다.<br>
-        · 임원은 퇴직금 한도를 넘는 금액이 근로소득으로 과세되는데, 이 부분은 반영하지 않았습니다.<br>
-        · 퇴직금은 퇴직일부터 14일 안에 지급해야 하고, 떼어 둔 세금은 지급한 달의 다음 달 10일까지 신고하고 납부합니다.
+        · 계산 결과는 참고용입니다. 실제 퇴직금은 급여 항목과 퇴직연금 가입 형태에 따라 달라집니다.<br>
+        · 급여가 달마다 달랐다면 최근 3개월 급여가 달랐어요를 눌러 달마다 받은 세전 급여를 넣어 주세요. 산정기간이 달 중간부터 시작하면 첫 달은 한 달 치를 넣으시면 걸친 날만큼 자동으로 나눕니다.<br>
+        · 산정기간 안에 수습기간이나 육아휴직, 산재 휴업처럼 빼야 하는 기간이 있으면 그 날수와 임금을 빼고 계산해야 하는데, 이 부분과 임원 퇴직금 한도는 반영하지 않았습니다.<br>
+        · PDF 저장을 누르면 인쇄 창이 열리니 대상을 PDF로 저장으로 고르세요. 카카오톡 안에서 열었다면 다른 브라우저로 열어 주세요.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="income-tax.html">종합소득세 계산기</a>
+        <a href="fund-source.html">주택 자금출처 점검</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
 
       <div class="art-cta" style="margin-top:34px">
         <p>퇴직금 지급과 원천징수 신고, 함께 챙겨 드릴까요?</p>

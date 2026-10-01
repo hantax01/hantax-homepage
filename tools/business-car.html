@@ -131,8 +131,98 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "운행기록부를 꼭 써야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "쓰지 않으면 차량 관련 비용이 한 해 1,500만 원까지만 인정됩니다. 이 계산기는 운행기록부를 써서 업무사용비율 100%인 경우로 계산했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "감가상각비는 왜 연 800만 원까지만 인정되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "업무용승용차는 세법에서 감가상각비를 한 해 800만 원까지만 비용으로 봅니다. 5년 정액법으로 계산하고 한도를 넘은 금액은 다음 해로 넘어가 해마다 800만 원 한도 안에서 인정됩니다. 표의 금액은 이월분까지 모두 인정받는 것으로 계산했으며, 처리 기간이 길수록 절세 효과는 늦게 나타납니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "경차나 승합차는 무엇이 다른가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "경차와 9인승 이상 승합차, 화물차는 업무용승용차가 아니라서 1,500만 원과 800만 원 한도를 받지 않고 부가가치세 매입세액도 돌려받습니다. 일반 승용차는 부가가치세를 돌려받지 못합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "임직원 전용 자동차보험은 꼭 들어야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "법인은 들지 않거나 직원이 아닌 가족이 운전하면 차량 비용이 인정되지 않습니다. 개인사업자는 두 번째 업무용승용차부터 들어야 하고, 들지 않은 차량은 비용이 인정되지 않습니다. 계산기는 모두 가입한 것으로 보고 비교했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "리스료와 렌트료는 어떻게 계산되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "이자율에서 거꾸로 계산합니다. 리스사가 차를 사서 보증금을 받고 매달 요율을 걷다가 만기에 인수금을 받는 현금흐름으로 역산한 값입니다. 보증금이나 인수가, 보유 기간을 바꾸면 요율이 따라 움직이고, 실제 견적을 넣으시면 그 숫자를 그대로 씁니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "보증금과 만기 인수는 어떻게 보나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "운용리스와 장기렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건으로 계산합니다. 보증금은 만기에 돌려받으므로 비용은 아니지만 계약 기간 동안 자금이 묶입니다. 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "리스와 렌트는 왜 이자율이 더 높나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "할부보다 높게 잡는 것이 보통이라 기본값을 할부 5%, 리스 6.5%, 렌트 7%로 두었습니다. 렌터카는 영업용으로 등록되어 취득세가 4%이고 자동차세도 영업용 요율이라 지방교육세가 붙지 않습니다. 운용리스는 부가가치세가 없는 금융용역이고 장기렌트는 부가가치세가 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "간편장부 대상자도 같은가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "개인사업자는 복식부기의무자로 보고 계산했습니다. 간편장부대상자는 업무용승용차 비용 한도를 받지 않아 결과가 달라집니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -307,22 +397,55 @@
         <a href="car-choice.html" class="btn btn-primary">어떤 방법이 맞는지 골라 보기</a>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>운행기록부를 꼭 써야 하나요?</summary>
+          <div class="a">쓰지 않으면 차량 관련 비용이 한 해 1,500만 원까지만 인정됩니다. 이 계산기는 운행기록부를 써서 업무사용비율 100%인 경우로 계산했습니다.</div>
+        </details>
+        <details>
+          <summary>감가상각비는 왜 연 800만 원까지만 인정되나요?</summary>
+          <div class="a">업무용승용차는 세법에서 감가상각비를 한 해 800만 원까지만 비용으로 봅니다. 5년 정액법으로 계산하고 한도를 넘은 금액은 다음 해로 넘어가 해마다 800만 원 한도 안에서 인정됩니다. 표의 금액은 이월분까지 모두 인정받는 것으로 계산했으며, 처리 기간이 길수록 절세 효과는 늦게 나타납니다.</div>
+        </details>
+        <details>
+          <summary>경차나 승합차는 무엇이 다른가요?</summary>
+          <div class="a">경차와 9인승 이상 승합차, 화물차는 업무용승용차가 아니라서 1,500만 원과 800만 원 한도를 받지 않고 부가가치세 매입세액도 돌려받습니다. 일반 승용차는 부가가치세를 돌려받지 못합니다.</div>
+        </details>
+        <details>
+          <summary>임직원 전용 자동차보험은 꼭 들어야 하나요?</summary>
+          <div class="a">법인은 들지 않거나 직원이 아닌 가족이 운전하면 차량 비용이 인정되지 않습니다. 개인사업자는 두 번째 업무용승용차부터 들어야 하고, 들지 않은 차량은 비용이 인정되지 않습니다. 계산기는 모두 가입한 것으로 보고 비교했습니다.</div>
+        </details>
+        <details>
+          <summary>리스료와 렌트료는 어떻게 계산되나요?</summary>
+          <div class="a">이자율에서 거꾸로 계산합니다. 리스사가 차를 사서 보증금을 받고 매달 요율을 걷다가 만기에 인수금을 받는 현금흐름으로 역산한 값입니다. 보증금이나 인수가, 보유 기간을 바꾸면 요율이 따라 움직이고, 실제 견적을 넣으시면 그 숫자를 그대로 씁니다.</div>
+        </details>
+        <details>
+          <summary>보증금과 만기 인수는 어떻게 보나요?</summary>
+          <div class="a">운용리스와 장기렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건으로 계산합니다. 보증금은 만기에 돌려받으므로 비용은 아니지만 계약 기간 동안 자금이 묶입니다. 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다.</div>
+        </details>
+        <details>
+          <summary>리스와 렌트는 왜 이자율이 더 높나요?</summary>
+          <div class="a">할부보다 높게 잡는 것이 보통이라 기본값을 할부 5%, 리스 6.5%, 렌트 7%로 두었습니다. 렌터카는 영업용으로 등록되어 취득세가 4%이고 자동차세도 영업용 요율이라 지방교육세가 붙지 않습니다. 운용리스는 부가가치세가 없는 금융용역이고 장기렌트는 부가가치세가 붙습니다.</div>
+        </details>
+        <details>
+          <summary>간편장부 대상자도 같은가요?</summary>
+          <div class="a">개인사업자는 복식부기의무자로 보고 계산했습니다. 간편장부대상자는 업무용승용차 비용 한도를 받지 않아 결과가 달라집니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        이 계산기는 <b>대략의 방향을 가늠하기 위한 단순 계산</b>입니다. 실제 견적과 세금은 차종, 계약 조건, 사업 내용에 따라 달라지므로 결과를 그대로 적용하실 수 없습니다.<br><br>
-        · <b>운행기록부를 써서 업무사용비율 100%</b>인 경우로 계산합니다. 쓰지 않으면 차량 관련 비용 전체가 연 1,500만 원까지만 인정됩니다.<br>
-        · 업무용승용차는 감가상각비를 <b>연 800만 원까지만</b> 비용으로 봅니다. 5년 정액법으로 계산하고, 한도초과액은 다음 연도로 이월되어 매년 800만 원 한도 안에서 인정됩니다. 표의 금액은 이월분까지 모두 인정받는 것으로 계산했으며, 처리 기간이 길수록 절세 효과는 늦게 나타납니다. 처리 기간은 계산 과정에서 확인하실 수 있습니다.<br>
-        · 경차와 9인승 이상 승합차, 화물차는 업무용승용차가 아니라서 이 한도를 받지 않고 부가가치세 매입세액도 공제됩니다. 일반 승용차는 부가가치세를 돌려받지 못합니다.<br>
-        · 개인사업자는 <b>복식부기의무자</b>로 보고 계산했습니다. 간편장부대상자는 업무용승용차 비용 한도를 받지 않아 결과가 달라집니다.<br>
-        · 모든 차량이 <b>임직원 전용 자동차보험</b>에 가입한 것으로 보고 비교했습니다. 일반 자동차보험과 보험료 차이가 크지 않아 따로 비교하지 않았습니다. 법인은 가입하지 않거나 직원이 아닌 가족이 운전하면 차량 비용이 인정되지 않습니다. 개인사업자는 두 번째 업무용승용차부터 가입해야 하고, 가입하지 않은 차량은 비용이 인정되지 않습니다.<br>
+        · 계산 결과는 참고용입니다. 실제 견적과 세금은 차종과 계약 조건, 사업 내용에 따라 달라집니다.<br>
         · 취득세는 승용차 7%, 승합차와 화물차 5%, 경차 4%로 계산하고 경차는 50만 원을 감면했습니다. 공채 매입 비용은 넣지 않았습니다.<br>
-        · <b>보험료와 자동차세</b>는 일시취득·할부취득과 운용리스에 더했고, 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 두 금액 모두 감가상각 한도 밖이라 전액 비용으로 인정됩니다. 세부 조건에서 고치실 수 있습니다.<br>
-        · <b>운용리스와 장기렌트는 보증금 30%를 걸고 만기에 인수해 되파는 조건</b>으로 계산합니다. 보증금은 만기에 돌려받으므로 비용은 아니지만 계약 기간 동안 자금이 묶입니다. 만기 인수가는 계약서에 적힌 잔가이고, 그 값으로 인수해 시세대로 팔면 차액이 남습니다. 인수할 때 취득세가 다시 붙는 것도 넣었습니다.<br>· 월 리스료와 렌트료는 <b>이자율에서 거꾸로 계산합니다.</b> 리스사가 차를 사서 보증금을 받고 매달 요율을 걷다가 만기에 인수금을 받는 현금흐름으로 역산한 값입니다. 그래서 보증금이나 인수가, 보유기간을 바꾸면 요율이 따라 움직입니다. 실제 견적을 넣으시면 그 숫자를 그대로 씁니다.<br>· <b>운용리스와 장기렌트는 할부취득보다 이자율이 높습니다.</b> 기본값은 할부 5%, 리스 6.5%, 렌트 7%로 두었습니다. <b>렌터카는 영업용으로 등록</b>되어 취득세가 4%(그 밖의 차량은 7%나 5%)이고 자동차세도 영업용 요율이라 지방교육세가 붙지 않습니다. 두 가지는 렌트료에 반영했고, 렌터카의 단체 보험요율은 넣지 않았습니다.<br>
-        · 유류비와 통행료처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다.<br>
-        · 운용리스는 부가가치세가 없는 금융용역이고, 장기렌트는 부가가치세가 붙습니다.<br>
-        · 세금은 지방소득세를 포함해 계산했습니다. 법인세율과 종합소득세율은 2026년 기준입니다.
+        · 보험료와 자동차세는 일시취득과 할부취득, 운용리스에 더했고 장기렌트는 렌트료에 이미 들어 있는 것으로 보았습니다. 유류비와 통행료처럼 어느 방법이든 비슷하게 드는 돈은 비교에서 뺐습니다.<br>
+        · 세금은 지방소득세를 포함해 계산했고 법인세율과 종합소득세율은 2026년 기준입니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="car-choice.html">차량 선택 가이드</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="income-tax.html">종합소득세 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
 
       <div class="art-cta" style="margin-top:34px">
         <p>우리 회사는 어떻게 사는 게 좋을까요?</p>

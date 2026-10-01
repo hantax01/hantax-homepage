@@ -88,8 +88,82 @@
 .stable td:first-child{width:auto}
 .stable td.mid{font-size:12.5px}
 }
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "법인세는 언제까지 신고하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "12월에 결산하는 법인은 다음 해 3월에 신고합니다. 결산월이 다르면 결산일부터 3개월 안에 신고합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "법인세율은 얼마인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "과세표준 2억 원 이하 10%, 2억 원 초과 20%(2026년 기준)이고 지방소득세는 법인세의 10%입니다. 과세표준이 200억 원을 넘는 회사는 세율이 더 높습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "대표 급여를 올리면 세금이 줄어드나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "급여는 회사 비용이 되어 법인세를 줄이지만, 대표님 개인의 근로소득세와 4대보험이 함께 늘어납니다. 줄어드는 법인세보다 늘어나는 개인 부담이 클 수 있어, 얼마가 적당한지는 대표 연봉 계산기에서 함께 보셔야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "지난해 적자는 얼마나 뺄 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "이월결손금은 중소기업 기준으로 이익에서 전액 뺐습니다. 중소기업이 아닌 법인은 그해 소득의 80%까지만 뺄 수 있고, 적자는 발생한 해부터 15년 안에 공제합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세액감면은 어떻게 반영되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "산출세액에서 빼며 중소기업특별세액감면은 한 해 1억 원 한도로 계산했습니다. 최저한세와 농어촌특별세는 반영하지 않았습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "실제 신고 금액과 왜 다른가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "접대비 한도, 감가상각 한도, 업무용 승용차, 가지급금 인정이자 같은 세무조정은 반영하지 않았습니다. 결산 전에 규모를 가늠해 보는 용도로 보시면 됩니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -189,16 +263,45 @@
         </div>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>법인세는 언제까지 신고하나요?</summary>
+          <div class="a">12월에 결산하는 법인은 다음 해 3월에 신고합니다. 결산월이 다르면 결산일부터 3개월 안에 신고합니다.</div>
+        </details>
+        <details>
+          <summary>법인세율은 얼마인가요?</summary>
+          <div class="a">과세표준 2억 원 이하 10%, 2억 원 초과 20%(2026년 기준)이고 지방소득세는 법인세의 10%입니다. 과세표준이 200억 원을 넘는 회사는 세율이 더 높습니다.</div>
+        </details>
+        <details>
+          <summary>대표 급여를 올리면 세금이 줄어드나요?</summary>
+          <div class="a">급여는 회사 비용이 되어 법인세를 줄이지만, 대표님 개인의 근로소득세와 4대보험이 함께 늘어납니다. 줄어드는 법인세보다 늘어나는 개인 부담이 클 수 있어, 얼마가 적당한지는 대표 연봉 계산기에서 함께 보셔야 합니다.</div>
+        </details>
+        <details>
+          <summary>지난해 적자는 얼마나 뺄 수 있나요?</summary>
+          <div class="a">이월결손금은 중소기업 기준으로 이익에서 전액 뺐습니다. 중소기업이 아닌 법인은 그해 소득의 80%까지만 뺄 수 있고, 적자는 발생한 해부터 15년 안에 공제합니다.</div>
+        </details>
+        <details>
+          <summary>세액감면은 어떻게 반영되나요?</summary>
+          <div class="a">산출세액에서 빼며 중소기업특별세액감면은 한 해 1억 원 한도로 계산했습니다. 최저한세와 농어촌특별세는 반영하지 않았습니다.</div>
+        </details>
+        <details>
+          <summary>실제 신고 금액과 왜 다른가요?</summary>
+          <div class="a">접대비 한도, 감가상각 한도, 업무용 승용차, 가지급금 인정이자 같은 세무조정은 반영하지 않았습니다. 결산 전에 규모를 가늠해 보는 용도로 보시면 됩니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        · 12월에 결산하는 법인이 다음 해 3월에 신고하는 법인세를 계산합니다. 결산월이 다르면 결산일부터 3개월 안에 신고합니다.<br>
-        · 세율은 과세표준 2억 원 이하 10%, 2억 원 초과 20%(2026년 기준)이고, 지방소득세는 법인세의 10%입니다. 과세표준이 200억 원을 넘는 회사는 세율이 더 높습니다.<br>
-        · 대표님 급여는 회사 비용이 되어 법인세를 줄이지만, 대표님 개인의 근로소득세와 4대보험이 함께 늘어납니다. 얼마가 적당한지는 <a href="income-transfer.html">연봉과 배당 계산기</a>에서 비교해 보세요.<br>
-        · 이월결손금은 중소기업 기준으로 이익에서 전액 뺐습니다. 중소기업이 아닌 법인은 그해 소득의 80%까지만 뺄 수 있습니다.<br>
-        · 세액감면은 산출세액에서 빼며 중소기업특별세액감면은 한 해 1억 원 한도로 계산했습니다. 최저한세와 농어촌특별세는 반영하지 않았습니다.<br>
-        · 접대비 한도, 감가상각 한도, 업무용 승용차, 가지급금 인정이자 같은 세무조정은 반영하지 않았습니다. 실제 신고 금액은 달라질 수 있습니다.
+        · 계산 결과는 참고용입니다. 실제 신고 금액은 세무조정에 따라 달라집니다.<br>
+        · 세율은 2026년 기준이며 지방소득세를 함께 계산했습니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="income-transfer.html">대표 연봉 계산기</a>
+        <a href="pay-mix.html">연봉과 배당 계산기</a>
+        <a href="business-car.html">업무용 차량 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
     </div>
   </div>
 </section>
