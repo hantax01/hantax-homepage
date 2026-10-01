@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주식 양도세 계산기 2026, 비상장주식 양도소득세 | 한택스</title>
+<meta name="description" content="주식을 팔 때 내는 양도소득세를 계산합니다. 중소기업과 대주주 여부에 따른 세율 10·20·25·30%와 양도소득 기본공제 250만 원, 증권거래세 0.35%를 함께 반영합니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/stock-transfer.html">
+<meta property="og:title" content="주식을 팔면 세금이 얼마나 나올까요?">
+<meta property="og:description" content="중소기업과 대주주 여부로 세율을 가려 계산하는 주식 양도소득세 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/stock-transfer.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-stock-transfer.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.chks{grid-column:1/-1;display:flex;flex-direction:column;gap:11px}
+.ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.ichk.off{opacity:.45}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable .minus td+td{color:var(--blue)}
+.rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td+td{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict .note.warn b{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:18px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "주식 양도세율은 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년도 갖고 있지 않고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "대주주는 어떻게 판단하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 넘기기 직전 사업연도 말을 기준으로 판단하므로, 연말 지분율에 따라 다음 해 세율이 달라집니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "상장주식도 세금을 내나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "소액주주가 증권시장에서 파는 상장주식은 양도소득세를 내지 않습니다. 다만 대주주가 팔거나, 상장주식이라도 시장 밖에서 당사자끼리 거래하면 세금을 냅니다. 이 계산기는 비상장주식을 기준으로 만들었습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "언제까지 신고하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "양도일이 속하는 반기의 마지막 날부터 2개월 안에 예정신고를 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다. 한 해에 여러 번 넘기셨다면 다음 해 5월에 확정신고로 합산합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "증권거래세는 따로 내나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "네. 이익이 났는지와 상관없이 양도가액의 0.35%를 냅니다. 손해를 보고 넘기셔도 내야 하고, 양도소득세와 같은 기한에 신고합니다. 계산기는 증권거래세를 양도비용으로 빼서 양도차익을 구했습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "기본공제 250만 원은 어떻게 적용되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "한 해에 주식을 넘겨 생긴 소득에서 250만 원을 빼 줍니다. 사람마다 한 해에 한 번이므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "손해를 보고 팔면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "같은 해에 넘긴 다른 주식에서 난 이익과 합쳐 계산하므로 그만큼 세금이 줄어듭니다. 다만 주식에서 난 손실은 부동산 양도소득과는 합치지 못하고, 다음 해로 넘겨 쓸 수도 없습니다. 이익이 난 해에 손실 난 주식을 함께 정리하면 세금을 줄일 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "가족에게 싸게 넘기면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "시가보다 낮은 금액으로 넘기면 세금은 시가로 다시 계산되고, 시가와 실제 금액의 차액은 받는 분이 증여받은 것으로 보아 증여세가 나올 수 있습니다. 비상장주식의 시가는 상속세 및 증여세법의 평가 방법으로 계산하니, 넘기기 전에 비상장주식 계산기에서 금액을 먼저 가늠해 보세요."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">주식 양도</span>
+    <h1>주식을 팔면,<br>세금이 얼마나 나올까요?</h1>
+    <p class="lead">비상장주식을 넘기실 때 내는 양도소득세를 계산합니다. 중소기업인지, 대주주인지에 따라 세율이 달라지고 증권거래세도 따로 붙습니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>넘기는 주식</b><span>1주당 금액과 주식 수로 넣어 주세요</span></div>
+        <div>
+          <label for="i-price">1주당 양도가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="실제로 받기로 한 1주당 금액입니다. 비상장주식은 시가보다 싸게 넘기면 시가로 다시 계산되고, 가족이나 회사 관계자에게 넘기면 차액이 증여로 잡힐 수 있습니다. 적정한 금액은 비상장주식 계산기에서 먼저 가늠해 보세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-price" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-shares">넘기는 주식 수 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="이번에 넘기는 주식 수입니다. 여러 번에 나눠 넘기시면 한 해 동안 넘긴 전체를 합쳐 신고합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-shares" inputmode="numeric"><span>주</span></div>
+        </div>
+        <div>
+          <label for="i-cost">1주당 취득가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주식을 처음 살 때나 증자할 때 낸 1주당 금액입니다. 설립 때 받은 주식이면 액면가인 경우가 많습니다. 증여나 상속으로 받으셨다면 그때 신고한 평가액이 취득가액이 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-cost" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-fee">그 밖의 비용 <small>수수료, 컨설팅비</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주식을 넘기면서 실제로 쓰신 중개수수료나 평가수수료, 계약서 작성 비용입니다. 영수증으로 보여 줄 수 있는 금액만 넣어 주세요. 증권거래세는 아래에서 자동으로 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-fee" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <div class="divider"><b>회사와 지분</b><span>세율을 가르는 조건입니다</span></div>
+        <div class="chks">
+          <label class="ichk"><input type="checkbox" id="i-sme" checked><span>중소기업 주식입니다</span>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="조세특례제한법에서 정한 중소기업이면 체크해 주세요. 대주주가 아닌 분이 중소기업 주식을 넘기면 세율이 10%로 가장 낮습니다. 중소기업이 아니면 20%입니다.">?</button>
+          </label>
+          <label class="ichk"><input type="checkbox" id="i-big"><span>대주주입니다</span>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%입니다. 기준은 바뀔 수 있으니 양도 전에 확인해 주세요.">?</button>
+          </label>
+          <label class="ichk" id="short-row"><input type="checkbox" id="i-short"><span>산 지 1년이 안 된 주식입니다</span>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업이 아닌 회사의 주식을 대주주가 1년도 갖고 있지 않고 넘기면 세율이 30%로 올라갑니다. 중소기업 주식이거나 대주주가 아니면 보유 기간은 세율에 영향을 주지 않습니다.">?</button>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">양도세 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2>주식 양도소득세</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="call" id="call"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>구분</th><th>금액</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <details class="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps"></div>
+        </details>
+        <div class="ask">
+          <p><b>지분을 넘기기 전에 금액부터 맞춰 보셔야 합니다.</b><br>얼마에 넘기는 것이 적정한지, 증여와 양도 중 무엇이 유리한지, 나눠 넘기면 세금이 얼마나 줄어드는지 함께 짚어 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>주식 양도세율은 어떻게 되나요?</summary>
+          <div class="a">중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년도 갖고 있지 않고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다.</div>
+        </details>
+        <details>
+          <summary>대주주는 어떻게 판단하나요?</summary>
+          <div class="a">비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 넘기기 직전 사업연도 말을 기준으로 판단하므로, 연말 지분율에 따라 다음 해 세율이 달라집니다.</div>
+        </details>
+        <details>
+          <summary>상장주식도 세금을 내나요?</summary>
+          <div class="a">소액주주가 증권시장에서 파는 상장주식은 양도소득세를 내지 않습니다. 다만 대주주가 팔거나, 상장주식이라도 시장 밖에서 당사자끼리 거래하면 세금을 냅니다. 이 계산기는 비상장주식을 기준으로 만들었습니다.</div>
+        </details>
+        <details>
+          <summary>언제까지 신고하나요?</summary>
+          <div class="a">양도일이 속하는 반기의 마지막 날부터 2개월 안에 예정신고를 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다. 한 해에 여러 번 넘기셨다면 다음 해 5월에 확정신고로 합산합니다.</div>
+        </details>
+        <details>
+          <summary>증권거래세는 따로 내나요?</summary>
+          <div class="a">네. 이익이 났는지와 상관없이 양도가액의 0.35%를 냅니다. 손해를 보고 넘기셔도 내야 하고, 양도소득세와 같은 기한에 신고합니다. 계산기는 증권거래세를 양도비용으로 빼서 양도차익을 구했습니다.</div>
+        </details>
+        <details>
+          <summary>기본공제 250만 원은 어떻게 적용되나요?</summary>
+          <div class="a">한 해에 주식을 넘겨 생긴 소득에서 250만 원을 빼 줍니다. 사람마다 한 해에 한 번이므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다.</div>
+        </details>
+        <details>
+          <summary>손해를 보고 팔면 어떻게 되나요?</summary>
+          <div class="a">같은 해에 넘긴 다른 주식에서 난 이익과 합쳐 계산하므로 그만큼 세금이 줄어듭니다. 다만 주식에서 난 손실은 부동산 양도소득과는 합치지 못하고, 다음 해로 넘겨 쓸 수도 없습니다. 이익이 난 해에 손실 난 주식을 함께 정리하면 세금을 줄일 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>가족에게 싸게 넘기면 어떻게 되나요?</summary>
+          <div class="a">시가보다 낮은 금액으로 넘기면 세금은 시가로 다시 계산되고, 시가와 실제 금액의 차액은 받는 분이 증여받은 것으로 보아 증여세가 나올 수 있습니다. 비상장주식의 시가는 상속세 및 증여세법의 평가 방법으로 계산하니, 넘기기 전에 비상장주식 계산기에서 금액을 먼저 가늠해 보세요.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용입니다. 실제 세금은 주식의 종류와 취득 경위, 그해 다른 양도 내역에 따라 달라집니다.<br>
+        · 세율과 증권거래세율은 2026년 기준이며 지방소득세는 양도소득세의 10%로 계산했습니다.<br>
+        · 양도소득 기본공제 250만 원을 모두 쓸 수 있는 것으로 보고 계산했습니다. 올해 이미 다른 주식을 넘기셨다면 공제가 줄어듭니다.<br>
+        · 창업자 지분 특례나 벤처기업 주식 특례, 이월과세 같은 제도는 반영하지 않았습니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="stock-value.html">비상장주식 계산기</a>
+        <a href="gift-tax.html">증여세 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 주식 양도소득세 ───────────────────────── */
+const STT_RATE=0.0035;        // 증권거래세 (비상장주식)
+const BASIC_DEDUCT=2500000;   // 양도소득 기본공제 (한 해 한 번)
+const BIG_STEP=300000000;     // 대주주 세율이 올라가는 과세표준
+
+// 과세표준에 매길 세금과 세율 설명
+function stockTax(base,c){
+  if(base<=0) return {tax:0,words:'과세표준이 없습니다'};
+  if(c.big){
+    if(!c.sme&&c.short) return {tax:base*0.3,words:'중소기업이 아닌 주식을 1년 안에 넘겨 30%'};
+    if(base<=BIG_STEP) return {tax:base*0.2,words:'대주주 3억 원 이하 20%'};
+    return {tax:BIG_STEP*0.2+(base-BIG_STEP)*0.25,words:'대주주 3억 원 이하 20% + 초과 25%'};
+  }
+  return c.sme?{tax:base*0.1,words:'중소기업 주식 10%'}:{tax:base*0.2,words:'중소기업이 아닌 주식 20%'};
+}
+
+function calcStock(c){
+  const gross=c.price*c.shares;                 // 양도가액
+  const cost=c.cost*c.shares;                   // 취득가액
+  const stt=Math.floor(gross*STT_RATE/10)*10;   // 증권거래세 (10원 미만 버림)
+  const expense=stt+c.fee;                      // 양도비용
+  const gain=gross-cost-expense;                // 양도차익
+  const deduct=Math.min(Math.max(0,gain),BASIC_DEDUCT);
+  const base=Math.max(0,gain-deduct);           // 과세표준
+  const t=stockTax(base,c);
+  const tax=Math.floor(t.tax/10)*10;
+  const local=Math.floor(tax*0.1/10)*10;
+  const total=tax+local+stt;                    // 증권거래세까지 더한 세금
+  return {gross,cost,stt,expense,gain,deduct,base,tax,local,total,words:t.words,
+          net:gross-expense-tax-local,          // 손에 들어오는 돈
+          profit:gain-tax-local,                // 세금까지 뺀 차익
+          rate:gain>0?(tax+local)/gain:0};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+['i-price','i-shares','i-cost','i-fee'].forEach(id=>{
+  const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+// 보유 기간은 중소기업이 아닌 회사의 대주주일 때만 세율에 영향을 줍니다
+function syncShort(){
+  const on=!$('i-sme').checked&&$('i-big').checked;
+  $('short-row').classList.toggle('off',!on);
+  $('i-short').disabled=!on;
+}
+$('i-sme').addEventListener('change',syncShort);
+$('i-big').addEventListener('change',syncShort);
+syncShort();
+
+function read(){
+  return {price:num($('i-price').value),shares:num($('i-shares').value),cost:num($('i-cost').value),
+    fee:num($('i-fee').value),sme:$('i-sme').checked,big:$('i-big').checked,
+    short:$('i-short').checked&&!$('i-short').disabled};
+}
+const shown=()=>$('res').style.display==='block';
+const ready=()=>{ const c=read(); return !!(c.price&&c.shares); };
+
+/* ── 화면 ─────────────────────────────────── */
+function render(){
+  const c=read(), r=calcStock(c);
+  const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
+  $('rt-body').innerHTML=
+      row('양도가액',won(c.price)+'원 × '+c.shares.toLocaleString('ko-KR')+'주',won(r.gross)+'원','sum')
+    +(c.cost?row('취득가액',won(c.cost)+'원 × '+c.shares.toLocaleString('ko-KR')+'주','− '+won(r.cost)+'원','minus'):'')
+    +row('증권거래세','양도가액의 0.35%','− '+won(r.stt)+'원','minus')
+    +(c.fee?row('그 밖의 비용','수수료 등','− '+won(c.fee)+'원','minus'):'')
+    +row('양도차익','',won(r.gain)+'원','sum')
+    +(r.deduct?row('기본공제','한 해 250만 원','− '+won(r.deduct)+'원','minus'):'')
+    +row('과세표준','',won(r.base)+'원')
+    +row('양도소득세',r.words,won(r.tax)+'원')
+    +row('지방소득세','양도소득세의 10%',won(r.local)+'원')
+    +'<tr class="tot"><td>세금 합계<small>증권거래세 포함</small></td><td>'+won(r.total)+'원</td></tr>'
+    +row('손에 들어오는 돈','양도가액에서 비용과 세금을 뺀 금액',won(r.net)+'원','sum');
+
+  $('res-sub').textContent=c.shares.toLocaleString('ko-KR')+'주 · 양도가액 '+won(r.gross)+'원 · '+(c.sme?'중소기업':'중소기업 아님')+(c.big?' · 대주주':'');
+
+  $('call').innerHTML=r.gain>0
+    ?'<div class="lbl">내야 할 세금</div><div class="val">'+won(r.total)+'<small>원</small></div>'
+      +'<div class="sub">양도차익 '+won(r.gain)+'원에 '+r.words+'를 적용했습니다. 증권거래세 '+won(r.stt)+'원까지 더한 금액이고, 세금을 빼고 '+won(r.net)+'원이 손에 들어옵니다.</div>'
+    :'<div class="lbl">양도차익이 없어</div><div class="val">양도소득세는<br>내지 않습니다</div>'
+      +'<div class="sub">다만 증권거래세 '+won(r.stt)+'원은 이익과 상관없이 내야 합니다. 손실이 났다면 같은 해에 이익이 난 다른 주식과 합쳐 신고하시면 세금이 줄어듭니다.</div>';
+
+  const head=r.gain>0
+    ?'양도차익 <b>'+won(r.gain)+'원</b>에 세금이 '+won(r.total)+'원 붙습니다.'
+    :'이번 양도로는 양도차익이 나지 않았습니다.';
+  const notes=[];
+  if(r.gain>0) notes.push({t:'세금은 양도차익의 약 '+(r.rate*100).toFixed(1)+'%입니다(증권거래세 제외). 세율은 중소기업인지, 대주주인지로 갈리니 지분과 회사 요건을 먼저 확인하셔야 합니다.'});
+  if(c.big&&r.base>BIG_STEP) notes.push({t:'과세표준이 3억 원을 넘어 넘는 금액에는 25%가 붙었습니다. 여러 해에 나눠 넘기시면 3억 원 구간을 해마다 다시 쓸 수 있어 세금이 줄어듭니다.'});
+  if(!c.big&&c.sme) notes.push({t:'대주주가 아니어서 10%로 계산했습니다. 본인과 가족 지분을 합해 4% 이상이거나 보유액이 50억 원 이상이면 대주주가 되어 20~25%로 올라가니, 넘기기 전 사업연도 말 지분율을 확인해 주세요.'});
+  if(c.big&&!c.sme&&c.short) notes.push({warn:1,t:'중소기업이 아닌 주식을 1년도 갖고 있지 않고 넘겨 <b>30%</b>가 적용됐습니다. 1년을 채우고 넘기시면 20~25%로 내려갑니다.'});
+  notes.push({t:'비상장주식을 시가보다 싸게 넘기면 세금은 시가로 다시 계산되고, 차액은 받는 분의 증여로 잡힐 수 있습니다. 적정한 금액은 <a href="stock-value.html">비상장주식 계산기</a>에서 먼저 가늠해 보세요.'});
+  notes.push({t:'신고는 양도일이 속하는 반기의 마지막 날부터 2개월 안에 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다.'});
+  $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+
+  const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
+  $('steps').innerHTML='<table class="stable">'
+    +srow('양도가액',won(c.price)+' × '+c.shares.toLocaleString('ko-KR')+'주',won(r.gross)+'원')
+    +srow('취득가액',won(c.cost)+' × '+c.shares.toLocaleString('ko-KR')+'주','− '+won(r.cost)+'원')
+    +srow('증권거래세','양도가액 × 0.35%','− '+won(r.stt)+'원')
+    +(c.fee?srow('그 밖의 비용','수수료 등','− '+won(c.fee)+'원'):'')
+    +srow('양도차익','양도가액 − 취득가액 − 비용',won(r.gain)+'원')
+    +srow('기본공제','한 해 250만 원 한도','− '+won(r.deduct)+'원')
+    +srow('과세표준','양도차익 − 기본공제',won(r.base)+'원')
+    +srow('양도소득세',r.words,won(r.tax)+'원')
+    +srow('지방소득세','양도소득세의 10%',won(r.local)+'원')
+    +srow('세금 합계','양도소득세 + 지방소득세 + 증권거래세',won(r.total)+'원')
+    +'</table>';
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  const c=read();
+  if(!c.price){ alert('1주당 양도가액을 넣어 주세요.'); return; }
+  if(!c.shares){ alert('넘기는 주식 수를 넣어 주세요.'); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&ready()) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&ready()) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'주식 양도소득세', sub:document.getElementById('res-sub').textContent, filename:'한택스_주식양도세' })
+);
+</script>
+</body>
+</html>
