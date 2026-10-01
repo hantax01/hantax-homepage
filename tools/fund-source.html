@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주택 자금출처 점검, 증여로 추정되는 금액은 얼마일까요 | 한택스</title>
+<meta name="description" content="집을 살 때 쓴 돈을 항목별로 넣으면 설명되지 않는 금액이 얼마인지, 그 금액이 증여추정 제외선(취득가액의 20%와 2억 원 중 적은 금액)을 넘는지 확인합니다. 가족에게 빌린 돈의 이자 문제도 함께 짚어 드립니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/fund-source.html">
+<meta property="og:title" content="집 살 돈, 설명할 수 있나요?">
+<meta property="og:description" content="자금출처를 항목별로 넣어 증여로 추정되는 금액을 확인하는 점검표">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/fund-source.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-fund-source.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.ichk{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-size:13.5px;font-weight:600;color:var(--char);cursor:pointer}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call.warn{background:#8E2B24}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot.warn td{background:var(--seal-soft)}
+.rtable tr.tot.warn td+td{color:var(--seal)}
+.rtable tr.line td+td{color:var(--mute);font-weight:600}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict .note.warn b{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.docs{margin-top:22px;border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.docs h3{font-family:var(--sans);font-size:15.5px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.docs .lead2{font-size:13.5px;color:var(--mute);line-height:1.7;margin-bottom:14px}
+.docs ul{list-style:none;display:grid;gap:9px}
+.docs li{font-size:14px;line-height:1.7;color:var(--char);padding-left:22px;position:relative}
+.docs li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--blue-line)}
+.docs li b{color:var(--ink)}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:18px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+.docs{padding:18px 16px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">자금출처</span>
+    <h1>집 살 돈,<br>설명할 수 있나요?</h1>
+    <p class="lead">집값을 어떻게 마련하시는지 항목별로 넣어 보세요. 설명되지 않는 금액이 얼마인지, 그 금액이 증여로 추정되는 선을 넘는지 알려 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>살 집</b><span>취득세와 중개수수료는 빼고 넣어 주세요</span></div>
+        <div class="wide">
+          <label for="i-price">집값 <small>매매계약서 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="매매계약서에 적은 금액입니다. 분양받으시는 경우에는 분양가(발코니 확장 등 옵션 포함)를 넣어 주세요. 취득세와 중개수수료, 이사비는 이 금액에 넣지 않습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-price" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <div class="divider"><b>내 돈</b><span>통장과 서류로 흐름을 보여 줄 수 있는 돈</span></div>
+        <div>
+          <label for="i-cash">예금, 주식 등 모아 둔 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예금과 적금, 주식과 채권, 가상자산처럼 지금 가지고 있는 금융자산 가운데 집값에 쓸 금액입니다. 그동안 신고한 소득에서 모은 돈이어야 설명이 됩니다. 소득보다 모은 돈이 훨씬 많으면 그 차액을 다시 묻게 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-cash" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-sell">전에 살던 집, 주식 판 돈 <small>세금 떼고</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부동산이나 주식을 팔아 받은 돈에서 양도소득세와 중개수수료, 갚은 대출을 뺀 실제로 손에 남는 금액을 넣어 주세요. 전세로 살고 계셨다면 돌려받을 보증금도 여기에 더하시면 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-sell" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-past">전에 증여, 상속받은 재산 <small>신고한 것만</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예전에 증여세나 상속세를 신고하고 받은 재산 가운데 집값에 쓸 금액입니다. 신고하지 않고 받은 돈은 자금출처로 인정되지 않고, 오히려 그때의 증여세와 가산세를 함께 내게 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-past" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-etc">그 밖의 내 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴직금, 보험금, 사업을 정리하고 받은 돈처럼 위 칸에 넣기 어려운 금액입니다. 어디서 온 돈인지 서류로 보여 줄 수 있어야 합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-etc" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <div class="divider"><b>빌리는 돈</b><span>갚을 의무가 있는 돈</span></div>
+        <div>
+          <label for="i-loan">은행 대출 <small>주택담보, 신용</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주택담보대출과 신용대출처럼 금융기관에서 빌리는 금액입니다. 대출계약서와 통장 입금 내역이 그대로 증빙이 되니 가장 설명하기 쉬운 자금입니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-loan" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-deposit">세입자 보증금 <small>전세, 월세를 끼고 살 때</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="세입자가 있는 집을 사면서 보증금 반환 의무를 그대로 넘겨받는 경우 그 보증금입니다. 당장 낼 돈은 줄지만 나중에 돌려줄 빚이므로, 전세를 빼실 때 그만큼 돈이 필요합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-deposit" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="wide">
+          <label for="i-family">가족에게 빌리는 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부모님이나 형제에게 빌리는 금액입니다. 빌린 것으로 인정받으려면 차용증, 이자를 보낸 기록, 실제로 갚은 기록이 모두 있어야 합니다. 빌렸다고만 하고 갚은 흔적이 없으면 처음부터 증여받은 것으로 봅니다. 이자를 주지 않거나 아주 낮게 주면 연 4.6%로 계산한 이자만큼을 증여로 보는데, 그 금액이 한 해 1,000만 원 미만이면 세금을 매기지 않습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-family" inputmode="numeric"><span>원</span></div>
+          <label class="ichk"><input type="checkbox" id="i-interest"><span>이자를 주기로 했습니다</span></label>
+        </div>
+
+        <div class="divider"><b>받는 돈</b><span>갚지 않아도 되는 돈</span></div>
+        <div class="wide">
+          <label for="i-gift">가족에게 받는 돈 <small>증여</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부모님이나 배우자에게 받아 돌려주지 않는 돈입니다. 증여세를 신고하고 내면 자금출처로 깨끗하게 인정됩니다. 지난 10년 동안 같은 분에게 받은 금액을 합쳐 계산하니, 금액은 증여세 계산기에서 확인해 보세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-gift" inputmode="numeric"><span>원</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">자금출처 점검하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2>자금출처 점검 결과</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="call" id="call"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>구분</th><th>금액</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <div class="docs" id="docs">
+          <h3>모아 두실 자료</h3>
+          <p class="lead2">넣어 주신 항목에 맞춰 정리했습니다. 자금조달계획서를 내거나 나중에 소명 요청을 받을 때 그대로 쓰입니다.</p>
+          <ul id="doc-list"></ul>
+        </div>
+        <details class="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps"></div>
+        </details>
+        <div class="ask">
+          <p><b>집을 사기 전에 정리해 두는 것이 훨씬 쉽습니다.</b><br>부족한 금액을 증여로 받을지 빌릴지, 차용증과 이자를 어떻게 맞출지, 증여세는 얼마나 되는지 함께 짚어 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="disc">
+        · 설명되지 않는 금액이 <b>집값의 20%와 2억 원 가운데 적은 금액</b>보다 적으면 증여로 추정하지 않습니다(상속세 및 증여세법 시행령 제34조). 이 선보다 적어도 증여받은 사실이 실제로 확인되면 증여세를 내게 되니, 금액이 작다고 안심할 수는 없습니다.<br>
+        · 가족에게 빌린 돈은 차용증과 이자 지급, 상환 기록이 있어야 빌린 것으로 인정됩니다. 이자를 주지 않으면 연 4.6%로 계산한 금액을 증여로 보되, 한 해 1,000만 원 미만이면 세금을 매기지 않습니다. 원금 약 2억 1,700만 원까지는 무이자로 빌려도 이 선에 걸리지 않습니다.<br>
+        · 주택을 살 때 자금조달계획서를 내야 하는지는 집이 있는 지역과 금액에 따라 다르고 기준도 자주 바뀝니다. 계약 전에 확인하시는 것이 좋습니다.<br>
+        · 취득세와 중개수수료, 이사비는 집값에 넣지 않았습니다. 실제로는 이 돈도 필요하니 여유 자금을 함께 보셔야 합니다.<br>
+        · 모아 둔 돈은 그동안 신고한 소득 범위에서 인정됩니다. 소득보다 모은 돈이 훨씬 많으면 그 차액을 다시 묻게 됩니다.<br>
+        · 부족한 금액을 증여로 받으실 때의 세금은 <a href="gift-tax.html">증여세 계산기</a>에서 계산해 보세요. 지난 10년 동안 받은 금액까지 합쳐 계산합니다.
+      </p>
+
+      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 자금출처 점검 ─────────────────────────── */
+const RATE=0.046;            // 금전 무상대출에 쓰는 적정이자율 (상증세법 시행령 제31조의4)
+const FREE_LIMIT=10000000;   // 이자 상당액이 한 해 이 금액 미만이면 증여세를 매기지 않습니다
+const EXCLUDE_CAP=200000000; // 증여추정 제외선의 상한 2억 원
+
+function calc(c){
+  const own=c.cash+c.sell+c.past+c.etc;        // 내 돈
+  const borrow=c.loan+c.deposit+c.family;      // 빌리는 돈
+  const proven=own+borrow+c.gift;              // 설명되는 돈
+  const short=Math.max(0,c.price-proven);      // 설명 못 한 금액
+  const over=Math.max(0,proven-c.price);       // 남는 돈
+  const line=Math.min(c.price*0.2,EXCLUDE_CAP);// 증여추정 제외선
+  const presume=short>0&&short>=line;          // 증여로 추정되는지
+  // 가족에게 무이자로 빌릴 때 증여로 보는 이자 상당액 (한 해 1,000만 원 미만이면 과세 제외)
+  const famInterest=(!c.interest&&c.family>0)?c.family*RATE:0;
+  return {own,borrow,proven,short,over,line,presume,famInterest,
+          // 무이자로 빌려도 되는 원금은 백만 원 단위로 버려 안전한 선으로 안내합니다
+          famTaxable:famInterest>=FREE_LIMIT, freeCap:Math.floor(FREE_LIMIT/RATE/1000000)*1000000};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const IDS=['i-price','i-cash','i-sell','i-past','i-etc','i-loan','i-deposit','i-family','i-gift'];
+IDS.forEach(id=>{
+  const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+function read(){
+  return {price:num($('i-price').value),cash:num($('i-cash').value),sell:num($('i-sell').value),
+    past:num($('i-past').value),etc:num($('i-etc').value),loan:num($('i-loan').value),
+    deposit:num($('i-deposit').value),family:num($('i-family').value),gift:num($('i-gift').value),
+    interest:$('i-interest').checked};
+}
+const shown=()=>$('res').style.display==='block';
+
+/* ── 자료 목록 (넣어 주신 항목만) ──────────── */
+const DOCS=[
+  ['cash','예금, 주식 등 모아 둔 돈','잔액증명서와 통장 거래내역. 집값을 치르기 전 몇 달 사이에 들어온 큰 돈이 있으면 그 돈의 출처까지 함께 준비하셔야 합니다.'],
+  ['sell','전에 살던 집, 주식 판 돈','매매계약서, 양도소득세 신고서, 받은 돈이 들어온 통장 내역. 전세를 빼셨다면 임대차계약서와 보증금 반환 내역.'],
+  ['past','전에 증여, 상속받은 재산','그때 낸 증여세나 상속세 신고서와 납부확인서.'],
+  ['etc','그 밖의 내 돈','퇴직금 명세서, 보험금 지급 내역처럼 돈이 생긴 이유를 보여 주는 서류.'],
+  ['loan','은행 대출','대출계약서(또는 대출신청서)와 통장 입금 내역.'],
+  ['deposit','세입자 보증금','임대차계약서. 매매계약서에 보증금을 넘겨받는 내용이 적혀 있으면 함께 보관하세요.'],
+  ['family','가족에게 빌리는 돈','차용증(금액, 이자, 갚는 날짜 기재), 이자를 보낸 송금 기록, 원금을 갚은 기록. 차용증은 돈을 받는 날 전에 쓰고 날짜가 남게 보관하셔야 합니다.'],
+  ['gift','가족에게 받는 돈','증여세 신고서와 납부확인서, 돈이 건너간 통장 내역.']
+];
+
+/* ── 화면 ─────────────────────────────────── */
+function render(){
+  const c=read(), r=calc(c);
+  const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
+  const amt=(k,l,sm)=>c[k]?row(l,sm,won(c[k])+'원'):'';
+  $('rt-body').innerHTML=
+      row('집값','매매계약서 금액',won(c.price)+'원','sum')
+    +amt('cash','예금, 주식 등 모아 둔 돈')
+    +amt('sell','전에 살던 집, 주식 판 돈','세금 떼고 남는 금액')
+    +amt('past','전에 증여, 상속받은 재산','신고한 재산')
+    +amt('etc','그 밖의 내 돈')
+    +amt('loan','은행 대출','주택담보, 신용')
+    +amt('deposit','세입자 보증금','나중에 돌려줄 돈')
+    +amt('family','가족에게 빌리는 돈',c.interest?'이자를 주기로 한 차입':'무이자 차입')
+    +amt('gift','가족에게 받는 돈','증여')
+    +row('설명되는 돈','내 돈 '+won(r.own)+'원 + 빌리는 돈 '+won(r.borrow)+'원'+(c.gift?' + 받는 돈 '+won(c.gift)+'원':''),won(r.proven)+'원','sum')
+    +(r.short
+      ?'<tr class="tot'+(r.presume?' warn':'')+'"><td>설명 못 한 금액</td><td>'+won(r.short)+'원</td></tr>'
+      +row('증여추정 제외선','집값의 20%와 2억 원 중 적은 금액',won(r.line)+'원','line')
+      :'<tr class="tot"><td>설명 못 한 금액</td><td>없습니다</td></tr>');
+
+  $('res-sub').textContent='집값 '+won(c.price)+'원 · 설명되는 돈 '+won(r.proven)+'원'
+    +(r.short?' · 설명 못 한 금액 '+won(r.short)+'원':' · 전액 설명');
+
+  const call=$('call');
+  if(!r.short){
+    call.className='call';
+    call.innerHTML='<div class="lbl">집값 '+won(c.price)+'원 가운데</div>'
+      +'<div class="val">모두 설명할 수<br>있습니다</div>'
+      +'<div class="sub">넣어 주신 금액만으로 집값이 채워집니다. 아래 자료를 미리 모아 두시면 소명 요청이 와도 그대로 내시면 됩니다.'
+      +(r.over?'<br>집값보다 '+won(r.over)+'원이 남으니 취득세와 중개수수료에 쓰실 수 있습니다.':'')+'</div>';
+  }else if(!r.presume){
+    call.className='call';
+    call.innerHTML='<div class="lbl">설명 못 한 금액</div>'
+      +'<div class="val">'+won(r.short)+'<small>원</small></div>'
+      +'<div class="sub">증여추정 제외선 '+won(r.line)+'원보다 적어, 이 금액만으로는 증여받은 것으로 추정하지 않습니다. 다만 실제로 받으신 돈이 확인되면 그때는 증여세를 내게 됩니다.</div>';
+  }else{
+    call.className='call warn';
+    call.innerHTML='<div class="lbl">증여받은 것으로 추정되는 금액</div>'
+      +'<div class="val">'+won(r.short)+'<small>원</small></div>'
+      +'<div class="sub">증여추정 제외선 '+won(r.line)+'원을 넘습니다. 이대로 집을 사면 이 금액을 증여받은 것으로 보고 증여세를 매길 수 있습니다. 빠진 자금이 있으면 더 넣어 보시고, 없으면 증여로 신고할지 빌리는 것으로 할지 정하셔야 합니다.</div>';
+  }
+
+  const head=r.short
+    ?(r.presume
+      ?'설명 못 한 <b>'+won(r.short)+'원</b>이 증여추정 제외선 '+won(r.line)+'원을 넘습니다.'
+      :'설명 못 한 금액이 <b>'+won(r.short)+'원</b>으로 제외선 '+won(r.line)+'원보다 적습니다.')
+    :'집값 <b>'+won(c.price)+'원</b>을 모두 설명할 수 있습니다.';
+  const notes=[];
+  if(r.short) notes.push({t:'이 금액을 부모님께 증여로 받으시면 증여세가 얼마인지 <a href="gift-tax.html">증여세 계산기</a>에서 확인해 보세요. 지난 10년 동안 받은 금액까지 합쳐 계산합니다.'});
+  if(r.short&&!c.family) notes.push({t:'빌리는 것으로 하실 수도 있습니다. 가족에게는 원금 약 '+won(r.freeCap)+'원까지 무이자로 빌려도 이자에 세금이 붙지 않지만, 차용증과 갚은 기록이 남아야 빌린 것으로 인정됩니다.'});
+  if(c.family) notes.push(r.famTaxable
+    ?{warn:1,t:'가족에게 무이자로 '+won(c.family)+'원을 빌리시면 연 4.6%로 계산한 <b>'+won(r.famInterest)+'원</b>이 증여로 잡힙니다. 한 해 1,000만 원을 넘기 때문입니다. 원금을 약 '+won(r.freeCap)+'원까지 낮추거나 이자를 실제로 주고받으셔야 합니다.'}
+    :c.interest
+      ?{t:'가족에게 빌리는 '+won(c.family)+'원은 차용증에 적은 이자를 실제로 송금하고 그 기록을 남기셔야 합니다. 약정만 해 두고 보내지 않으면 빌린 것으로 보지 않습니다.'}
+      :{t:'가족에게 무이자로 빌리는 '+won(c.family)+'원은 이자 상당액이 '+won(r.famInterest)+'원으로 한 해 1,000만 원 미만이라 이자에는 세금이 붙지 않습니다. 다만 원금을 실제로 갚은 기록은 남아야 합니다.'});
+  if(c.gift) notes.push({t:'받으시는 '+won(c.gift)+'원은 증여세를 신고하고 내야 자금출처로 인정됩니다. 신고 기한은 받은 달의 말일부터 3개월입니다.'});
+  if(c.deposit) notes.push({t:'세입자 보증금 '+won(c.deposit)+'원은 당장 낼 돈을 줄여 주지만 나중에 돌려줄 빚입니다. 전세를 빼실 때 그만큼 자금이 필요합니다.'});
+  if(c.cash) notes.push({t:'모아 둔 돈은 그동안 신고한 소득 범위에서 인정됩니다. 소득보다 모은 돈이 많으면 그 차액을 다시 묻게 되니, 소득 신고 내역과 함께 맞춰 보시는 것이 좋습니다.'});
+  $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+
+  const list=DOCS.filter(d=>c[d[0]]>0);
+  $('doc-list').innerHTML=list.map(d=>'<li><b>'+d[1]+'</b><br>'+d[2]+'</li>').join('');
+  $('docs').style.display=list.length?'':'none';
+
+  const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
+  // 넣어 주신 항목만 식에 적습니다
+  const sum=list=>list.filter(x=>c[x[0]]>0).map(x=>x[1]+' '+won(c[x[0]])).join(' + ')||'넣으신 금액이 없습니다';
+  $('steps').innerHTML='<table class="stable">'
+    +srow('내 돈',sum([['cash','예금'],['sell','처분대금'],['past','증여·상속'],['etc','그 밖']]),won(r.own)+'원')
+    +srow('빌리는 돈',sum([['loan','은행'],['deposit','보증금'],['family','가족 차입']]),won(r.borrow)+'원')
+    +(c.gift?srow('받는 돈','증여',won(c.gift)+'원'):'')
+    +srow('설명되는 돈','내 돈 + 빌리는 돈'+(c.gift?' + 받는 돈':''),won(r.proven)+'원')
+    +srow('설명 못 한 금액','집값 '+won(c.price)+' 빼기 설명되는 돈 '+won(r.proven),won(r.short)+'원')
+    +srow('증여추정 제외선','집값의 20% '+won(c.price*0.2)+'원과 2억 원 중 적은 금액',won(r.line)+'원')
+    +srow('판정',r.short?(r.presume?'제외선 이상이라 증여로 추정합니다':'제외선 미달이라 추정하지 않습니다'):'설명 못 한 금액이 없습니다',r.short?(r.presume?'증여 추정':'추정 제외'):'해당 없음')
+    +(c.family?srow('가족 차입 이자',c.interest?'이자를 주기로 하셨습니다':'무이자 '+won(c.family)+' × 4.6%',c.interest?'약정대로':won(r.famInterest)+'원'):'')
+    +'</table>';
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  if(!read().price){ alert('집값을 넣어 주세요.'); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&read().price) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&read().price) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'자금출처 점검 결과', sub:document.getElementById('res-sub').textContent, filename:'한택스_자금출처' })
+);
+</script>
+</body>
+</html>
