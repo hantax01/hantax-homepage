@@ -44,6 +44,11 @@
 .wide{grid-column:1/-1}
 .ichk{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-size:13.5px;font-weight:600;color:var(--char);cursor:pointer}
 .ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.modes{display:flex;gap:9px;margin-bottom:16px}
+.modes button{flex:1;padding:14px 10px;border:1px solid var(--line);background:#fff;border-radius:12px;
+  font-family:inherit;font-size:14.5px;font-weight:700;color:var(--mute);line-height:1.5;cursor:pointer}
+.modes button:hover{border-color:var(--blue-line)}
+.modes button.on{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:34px}
 .reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
@@ -212,6 +217,10 @@
 <section class="sec" style="padding-top:40px">
   <div class="wrap">
     <div class="sim">
+      <div class="modes" id="modes">
+        <button type="button" class="on" data-mode="limit">얼마까지<br>줄 수 있나요?</button>
+        <button type="button" data-mode="check">정한 금액이<br>한도 안인가요?</button>
+      </div>
       <div class="sim-in">
         <div class="divider"><b>재임 기간</b><span>등기임원이 된 날부터 그만두는 날까지</span></div>
         <div>
@@ -228,7 +237,7 @@
           <label for="i-pay3">퇴직 전 3년 총급여 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴임일부터 거슬러 3년 동안 받은 급여와 상여를 모두 더한 금액입니다. 재임 기간이 3년이 안 되면 그 기간에 받은 금액을 넣어 주세요. 계산기가 1년 평균으로 환산합니다. 비과세 급여와 퇴직금은 넣지 않습니다.">?</button></label>
           <div class="unit"><input type="text" id="i-pay3" inputmode="numeric"><span>원</span></div>
         </div>
-        <div>
+        <div id="amount-box">
           <label for="i-amount">지급할 퇴직금 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="정관이나 임원 퇴직금 지급규정에 따라 실제로 지급하려는 금액입니다. 직원처럼 평균임금으로 계산하는 것이 아니라 규정에서 정한 금액이 기준이 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-amount" inputmode="numeric"><span>원</span></div>
         </div>
@@ -243,7 +252,7 @@
           <label for="i-pay1">퇴직 전 1년 총급여 <small>손금 한도 계산용</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴임일부터 거슬러 1년 동안 받은 급여와 상여를 더한 금액입니다. 정관에 규정이 없으면 이 금액의 10%에 근속연수를 곱한 금액까지만 회사 비용으로 인정됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-pay1" inputmode="numeric"><span>원</span></div>
         </div>
-        <div>
+        <div id="rate-box">
           <label for="i-rate">한도를 넘는 금액에 붙는 세율 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="한도를 넘는 금액은 퇴직소득이 아니라 그해 근로소득이 되어 다른 소득과 합산됩니다. 합산한 뒤의 세율을 모르면 평소 연봉에 맞는 세율을 골라 보세요. 대략의 금액을 가늠하는 용도입니다.">?</button></label>
           <select id="i-rate">
             <option value="0.06">6% (과세표준 1,400만 원 이하)</option>
@@ -403,8 +412,11 @@ function calcExec(c){
   const limit2020=avg*0.1*(m2020/12)*MULT_2020;
   const limitTax=limit1219+limit2020;                             // 2012년 이후 근속분 한도
 
-  const old=months>0?c.amount*m2011/months:0;                     // 2011년 이전 근속분 (한도 없음)
-  const rest=Math.max(0,c.amount-old);
+  // 한도만 보는 경우에는 한도를 그대로 지급하는 것으로 봅니다 (2011년 이전분은 한도가 없어 금액으로 잡지 않습니다)
+  const limitMode=c.mode==='limit';
+  const amount=limitMode?limitTax:c.amount;
+  const old=limitMode?0:(months>0?c.amount*m2011/months:0);       // 2011년 이전 근속분 (한도 없음)
+  const rest=Math.max(0,amount-old);
   const retirePay=old+Math.min(rest,limitTax);                    // 퇴직소득이 되는 금액
   const over=Math.max(0,rest-limitTax);                           // 근로소득이 되는 금액
 
@@ -425,11 +437,11 @@ function calcExec(c){
 
   // 법인세법상 손금 한도 (정관 규정이 없으면 1배수)
   const lossLimit=c.rule?null:c.pay1*0.1*years;
-  const lossOver=lossLimit===null?0:Math.max(0,c.amount-lossLimit);
+  const lossOver=lossLimit===null?0:Math.max(0,amount-lossLimit);
 
-  return {start,end,months,m2011,m1219,m2020,years,taxYears,avg,limit1219,limit2020,limitTax,
+  return {limitMode,amount,start,end,months,m2011,m1219,m2020,years,taxYears,avg,limit1219,limit2020,limitTax,
           old,rest,retirePay,over,sd,conv,cd,base,info,retireTax,retireLocal,overTax,overLocal,totalTax,
-          net:c.amount-totalTax,lossLimit,lossOver};
+          net:amount-totalTax,lossLimit,lossOver};
 }
 
 /* ── 입력 ─────────────────────────────────── */
@@ -441,23 +453,46 @@ const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 });
 function syncRule(){ $('pay1-box').style.display=$('i-rule').checked?'none':''; }
 $('i-rule').addEventListener('change',syncRule); syncRule();
+
+// 한도만 볼 때는 지급액과 세율 칸을 숨깁니다
+let MODE='limit';
+function syncMode(){
+  const limit=MODE==='limit';
+  $('amount-box').style.display=limit?'none':'';
+  $('rate-box').style.display=limit?'none':'';
+  $('calc').textContent=limit?'한도 계산하기':'한도를 넘는지 보기';
+  $('modes').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.mode===MODE));
+}
+$('modes').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  MODE=b.dataset.mode; syncMode();
+  if(shown()&&ready()) render(); else $('res').style.display='none';
+});
+
 function read(){
-  return {start:$('i-start').value,end:$('i-end').value,pay3:num($('i-pay3').value),
+  return {mode:MODE,start:$('i-start').value,end:$('i-end').value,pay3:num($('i-pay3').value),
     amount:num($('i-amount').value),pay1:num($('i-pay1').value),
     rule:$('i-rule').checked,rate:Number($('i-rate').value)};
 }
+// 계산에 필요한 값이 다 들어왔는지
+function ready(){
+  const c=read();
+  return !!(c.start&&c.end&&c.pay3&&(c.mode==='limit'||c.amount)&&(c.rule||c.pay1));
+}
 const shown=()=>$('res').style.display==='block';
 const yearWords=m=>Math.floor(m/12)+'년 '+(m%12)+'개월';
+syncMode();
 
 /* ── 화면 ─────────────────────────────────── */
 function render(){
   const c=read(), r=calcExec(c);
   const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
+  const limitWords=(r.m1219?'2012~2019년 '+yearWords(r.m1219)+' × 3배':'')+(r.m1219&&r.m2020?' + ':'')+(r.m2020?'2020년 이후 '+yearWords(r.m2020)+' × 2배':'');
   $('rt-body').innerHTML=
-      row('지급할 퇴직금','재임 '+yearWords(r.months),won(c.amount)+'원','sum')
-    +row('1년 평균급여',r.months>=36?'퇴직 전 3년 총급여 ÷ 3':'재임 기간으로 환산',won(r.avg)+'원')
-    +(r.m2011?row('2011년 이전 근속분','한도 없이 퇴직소득 ('+yearWords(r.m2011)+')',won(r.old)+'원'):'')
-    +row('소득세법 한도',(r.m1219?'2012~2019년 '+yearWords(r.m1219)+' × 3배':'')+(r.m1219&&r.m2020?' + ':'')+(r.m2020?'2020년 이후 '+yearWords(r.m2020)+' × 2배':''),won(r.limitTax)+'원','line')
+      (r.limitMode?'':row('지급할 퇴직금','재임 '+yearWords(r.months),won(r.amount)+'원','sum'))
+    +row('1년 평균급여',r.months>=36?'퇴직 전 3년 총급여 ÷ 3':'재임 '+yearWords(r.months)+'로 환산',won(r.avg)+'원')
+    +(r.m2011&&!r.limitMode?row('2011년 이전 근속분','한도 없이 퇴직소득 ('+yearWords(r.m2011)+')',won(r.old)+'원'):'')
+    +row('소득세법 한도',limitWords,won(r.limitTax)+'원',r.limitMode?'tot':'line')
     +row('퇴직소득으로 인정','퇴직소득세로 과세',won(r.retirePay)+'원','sum')
     +row('퇴직소득세','지방소득세 포함','− '+won(r.retireTax+r.retireLocal)+'원','minus')
     +(r.over
@@ -465,29 +500,39 @@ function render(){
         +row('근로소득세',Math.round(c.rate*100)+'% 기준 · 지방소득세 포함','− '+won(r.overTax+r.overLocal)+'원','minus')
       :'')
     +'<tr class="tot"><td>세금 합계</td><td>'+won(r.totalTax)+'원</td></tr>'
-    +row('받으시는 금액','지급액에서 세금을 뺀 금액',won(r.net)+'원','sum');
+    +row('받으시는 금액',(r.limitMode?'한도를 다 받을 때':'지급액에서')+' 세금을 뺀 금액',won(r.net)+'원','sum');
 
-  $('res-sub').textContent='재임 '+yearWords(r.months)+' · 지급액 '+won(c.amount)+'원 · 한도 '+won(r.limitTax+r.old)+'원';
+  $('res-sub').textContent='재임 '+yearWords(r.months)+' · '+(r.limitMode?'평균급여 '+won(r.avg)+'원 기준':'지급액 '+won(r.amount)+'원')+' · 한도 '+won(r.limitTax+r.old)+'원';
 
   const call=$('call');
-  if(!r.over){
+  if(r.limitMode){
     call.className='call';
-    call.innerHTML='<div class="lbl">지급할 퇴직금 '+won(c.amount)+'원</div>'
+    call.innerHTML='<div class="lbl">퇴직소득으로 인정받을 수 있는 금액</div>'
+      +'<div class="val">'+won(r.limitTax)+'<small>원</small></div>'
+      +'<div class="sub">재임 '+yearWords(r.months)+' 기준입니다. 이 금액을 넘겨 지급하면 넘는 부분은 그해 근로소득이 되어 세금이 크게 늘어납니다.'
+      +(r.m2011?'<br>2011년 이전 재임분 '+yearWords(r.m2011)+'에는 한도가 없어, 규정에 정한 금액만큼 이 금액에 더해 지급하실 수 있습니다.':'')+'</div>';
+  }else if(!r.over){
+    call.className='call';
+    call.innerHTML='<div class="lbl">지급할 퇴직금 '+won(r.amount)+'원</div>'
       +'<div class="val">전액 퇴직소득으로<br>인정됩니다</div>'
       +'<div class="sub">한도는 '+won(r.limitTax+r.old)+'원이고 지급액이 그 안에 들어옵니다. 퇴직소득세와 지방소득세로 '+won(r.retireTax+r.retireLocal)+'원을 떼고 '+won(r.net)+'원을 받으십니다.</div>';
   }else{
     call.className='call warn';
     call.innerHTML='<div class="lbl">한도를 넘어 근로소득이 되는 금액</div>'
       +'<div class="val">'+won(r.over)+'<small>원</small></div>'
-      +'<div class="sub">한도는 '+won(r.limitTax+r.old)+'원인데 '+won(c.amount)+'원을 지급하려 하십니다. 넘는 금액은 그해 근로소득이 되어 다른 소득과 합산됩니다. 지급액을 한도에 맞추거나, 규정과 금액을 미리 손보셔야 합니다.</div>';
+      +'<div class="sub">한도는 '+won(r.limitTax+r.old)+'원인데 '+won(r.amount)+'원을 지급하려 하십니다. 넘는 금액은 그해 근로소득이 되어 다른 소득과 합산됩니다. 지급액을 한도에 맞추거나, 규정과 금액을 미리 손보셔야 합니다.</div>';
   }
 
-  const head=r.over
-    ?'지급액이 한도보다 <b>'+won(r.over)+'원</b> 많습니다.'
-    :'지급액이 한도 '+won(r.limitTax+r.old)+'원 안에 들어옵니다.';
+  const head=r.limitMode
+    ?'재임 '+yearWords(r.months)+' 기준으로 <b>'+won(r.limitTax)+'원</b>까지 퇴직소득으로 인정받습니다.'
+    :r.over
+      ?'지급액이 한도보다 <b>'+won(r.over)+'원</b> 많습니다.'
+      :'지급액이 한도 '+won(r.limitTax+r.old)+'원 안에 들어옵니다.';
   const notes=[];
+  if(r.limitMode) notes.push({t:'한도는 <b>1년 평균급여 '+won(r.avg)+'원 × 10% × 근속연수 × 배수</b>로 정해집니다. 급여를 올리면 한도도 함께 올라가지만, 퇴직 직전에 올린 급여는 이유가 설명되지 않으면 부인될 수 있습니다.'});
   if(r.over) notes.push({warn:1,t:'넘는 금액은 퇴직소득세가 아니라 <b>근로소득세</b>로 과세됩니다. 퇴직소득은 근속연수로 나눠 세금을 매겨 부담이 적지만, 근로소득은 그해 다른 소득과 합쳐져 세율이 그대로 붙습니다.'});
-  if(r.m2011) notes.push({t:'2011년 이전 재임분 '+yearWords(r.m2011)+'에 해당하는 '+won(r.old)+'원은 한도 없이 퇴직소득으로 보았습니다. 그 뒤 기간만 한도를 따집니다.'});
+  if(r.m2011&&!r.limitMode) notes.push({t:'2011년 이전 재임분 '+yearWords(r.m2011)+'에 해당하는 '+won(r.old)+'원은 한도 없이 퇴직소득으로 보았습니다. 그 뒤 기간만 한도를 따집니다.'});
+  if(r.m2011&&r.limitMode) notes.push({t:'2011년 이전 재임분 '+yearWords(r.m2011)+'에는 한도가 없습니다. 위 금액은 2012년 이후 재임분의 한도이고, 2011년 이전 기간에 대해서는 규정에 정한 금액을 더해 지급하실 수 있습니다.'});
   if(r.m1219) notes.push({t:'2012년부터 2019년까지의 재임분은 2배가 아니라 <b>3배</b>를 적용합니다. 오래 재임하신 임원일수록 이 구간 때문에 한도가 커집니다.'});
   if(!c.rule) notes.push({warn:1,t:'정관이나 정관이 위임한 규정에 지급 기준이 없으면 회사 비용으로 인정되는 금액은 <b>'+won(r.lossLimit)+'원</b>(퇴직 전 1년 총급여의 10% × 근속연수)까지입니다.'
     +(r.lossOver?' 넘는 '+won(r.lossOver)+'원은 회사 비용에서 빠지고 대표님 상여로 처분되어 근로소득세가 다시 붙습니다.':'')});
@@ -501,8 +546,8 @@ function render(){
     +srow('1년 평균급여',r.months>=36?'퇴직 전 3년 총급여 '+won(c.pay3)+' ÷ 3':'총급여 '+won(c.pay3)+' ÷ '+r.years.toFixed(2)+'년',won(r.avg)+'원')
     +(r.m1219?srow('2012~2019년분','평균급여 × 10% × '+(r.m1219/12).toFixed(2)+'년 × 3배',won(r.limit1219)+'원'):'')
     +(r.m2020?srow('2020년 이후분','평균급여 × 10% × '+(r.m2020/12).toFixed(2)+'년 × 2배',won(r.limit2020)+'원'):'')
-    +(r.m2011?srow('2011년 이전분','지급액 × '+r.m2011+'개월 ÷ '+r.months+'개월 (한도 없음)',won(r.old)+'원'):'')
-    +srow('퇴직소득 인정액',(r.m2011?'2011년 이전분 + ':'')+'한도 안 금액',won(r.retirePay)+'원')
+    +(r.m2011&&!r.limitMode?srow('2011년 이전분','지급액 × '+r.m2011+'개월 ÷ '+r.months+'개월 (한도 없음)',won(r.old)+'원'):'')
+    +srow('퇴직소득 인정액',r.limitMode?'한도만큼 지급한다고 보았습니다':(r.m2011?'2011년 이전분 + 한도 안 금액':'한도 안 금액'),won(r.retirePay)+'원')
     +srow('근속연수공제','근속연수 '+r.taxYears+'년 기준','− '+won(r.sd)+'원')
     +srow('환산급여','(퇴직소득 − 근속연수공제) × 12 ÷ '+r.taxYears+'년',won(r.conv)+'원')
     +srow('환산급여공제','환산급여 구간에 따라 공제','− '+won(r.cd)+'원')
@@ -519,13 +564,13 @@ $('calc').addEventListener('click',()=>{
   if(!c.start||!c.end){ alert('취임일과 퇴임일을 넣어 주세요.'); return; }
   if(calcExec(c).months<=0){ alert('퇴임일이 취임일보다 뒤여야 합니다.'); return; }
   if(!c.pay3){ alert('퇴직 전 3년 총급여를 넣어 주세요.'); return; }
-  if(!c.amount){ alert('지급할 퇴직금을 넣어 주세요.'); return; }
+  if(c.mode==='check'&&!c.amount){ alert('지급할 퇴직금을 넣어 주세요.'); return; }
   if(!c.rule&&!c.pay1){ alert('정관 규정이 없으면 퇴직 전 1년 총급여가 있어야 회사 비용 한도를 계산할 수 있습니다.'); return; }
   render();
   $('res').scrollIntoView({behavior:'smooth',block:'start'});
 });
-document.querySelector('.sim-in').addEventListener('input',()=>{ const c=read(); if(shown()&&c.start&&c.end&&c.pay3&&c.amount) render(); });
-document.querySelector('.sim-in').addEventListener('change',()=>{ const c=read(); if(shown()&&c.start&&c.end&&c.pay3&&c.amount) render(); });
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&ready()) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&ready()) render(); });
 </script>
 <script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
