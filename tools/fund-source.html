@@ -157,7 +157,7 @@
           </select>
         </div>
         <div>
-          <label for="i-income">소득금액증명원 합계 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="홈택스나 세무서에서 떼는 소득금액증명원의 소득금액을 고르신 기간만큼 더한 금액입니다. 매출이 아니라 비용을 뺀 소득금액이고, 근로소득이면 총급여에서 근로소득공제를 뺀 금액입니다. 한 해 2,000만 원까지의 이자·배당은 여기에 나오지 않으니 아래 이자, 배당으로 받은 돈 칸에 따로 넣어 주세요.">?</button></label>
+          <label for="i-income">소득금액증명원 합계 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="홈택스나 세무서에서 떼는 소득금액증명원의 소득금액을 선택한 기간만큼 더한 금액입니다. 매출이 아니라 비용을 뺀 소득금액이고, 근로소득이면 총급여에서 근로소득공제를 뺀 금액입니다. 한 해 2,000만 원까지의 이자·배당은 여기에 나오지 않으니 아래 이자, 배당으로 받은 돈 칸에 따로 넣어 주세요.">?</button></label>
           <div class="unit"><input type="text" id="i-income" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -165,7 +165,7 @@
           <div class="unit"><input type="text" id="i-invest" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-finance">이자, 배당으로 받은 돈 <small>기간 동안</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예금 이자와 주식 배당금입니다. 한 해 2,000만 원까지는 원천징수로 끝나 소득금액증명원에 나오지 않아 빠뜨리기 쉬운 돈입니다. 고르신 기간 동안 받으신 금액을 더해 넣어 주세요. 세금을 떼고 실제로 받은 금액이면 됩니다. 다만 한 해 2,000만 원을 넘겨 종합과세로 신고한 해의 금융소득은 이미 소득금액에 들어 있으니 빼고 넣어 주세요.">?</button></label>
+          <label for="i-finance">이자, 배당으로 받은 돈 <small>기간 동안</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예금 이자와 주식 배당금입니다. 한 해 2,000만 원까지는 원천징수로 끝나 소득금액증명원에 나오지 않아 빠뜨리기 쉬운 돈입니다. 선택한 기간 동안 받으신 금액을 더해 넣어 주세요. 세금을 떼고 실제로 받은 금액이면 됩니다. 다만 한 해 2,000만 원을 넘겨 종합과세로 신고한 해의 금융소득은 이미 소득금액에 들어 있으니 빼고 넣어 주세요.">?</button></label>
           <div class="unit"><input type="text" id="i-finance" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -173,33 +173,33 @@
           <div class="unit"><input type="text" id="i-retire" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-jeonse">돌려받을 전월세 보증금 <small>빼서 집값에 넣을 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="지금 사시는 전월세를 빼고 그 보증금을 집값에 넣으시는 경우 돌려받을 금액입니다. 집을 사신 뒤에도 계속 전월세로 사셔서 보증금이 그대로 묶인다면 여기가 아니라 아래 쓴 돈의 지금 사는 집 보증금 칸에 넣어 주세요.">?</button></label>
-          <div class="unit"><input type="text" id="i-jeonse" inputmode="numeric"><span>원</span></div>
-        </div>
-        <div class="wide">
           <label for="i-past">전에 증여, 상속받은 재산 <small>신고한 것만</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예전에 증여세나 상속세를 신고하고 받은 재산 가운데 집값에 쓸 금액입니다. 신고하지 않고 받은 돈은 자금출처로 인정되지 않고, 오히려 그때의 증여세와 가산세를 함께 내게 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-past" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="wide">
+          <label for="i-gift">새로 증여받는 돈 <small>이번에 가족에게 받는 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="이번에 집을 사면서 부모님이나 배우자에게 받아 돌려주지 않는 돈입니다. 증여세를 신고하고 내면 자금출처로 깨끗하게 인정됩니다. 지난 10년 동안 같은 분에게 받은 금액을 합쳐 계산하니, 세금은 증여세 계산기에서 확인해 보세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-gift" inputmode="numeric"><span>원</span></div>
         </div>
 
         <div class="divider"><b>쓴 돈</b><span>소득에서 나가 집값에 쓸 수 없는 돈</span></div>
         <div>
-          <label for="i-living">연간 생활비 <small>카드와 현금영수증 합계</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="연말정산 간소화 자료에 나오는 신용카드, 체크카드, 현금영수증 사용액을 더해 한 해 금액으로 넣어 주세요. 가장 손쉽고 국세청이 보는 자료와도 같습니다. 사업자시라면 사업용으로 쓴 금액은 빼고 넣으시면 됩니다. 다른 칸과 달리 한 해 금액이고, 고르신 기간을 곱해 뺍니다.">?</button></label>
+          <label for="i-living">생활비 합계 <small>카드와 현금영수증</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="연말정산 간소화 자료에 나오는 신용카드, 체크카드, 현금영수증 사용액을 선택한 기간만큼 더한 금액입니다. 해마다 조회해 합계를 내시면 되고, 국세청이 보는 자료와 같아 가장 손쉽습니다. 사업자시라면 사업용으로 쓴 금액은 빼고 넣으시면 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-living" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-invested">투자에 묶여 있는 돈 <small>부동산, 주식, 코인</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="고르신 기간 동안 부동산이나 주식, 코인에 넣어 지금도 그대로 묶여 있는 원금입니다. 집값에 쓰려고 팔 금액은 여기에 넣지 마시고 위 투자해서 번 돈 칸에 넣어 주세요. 소득으로 벌었어도 다른 데 들어가 있으면 집값에 쓸 수 없으므로 빼고 봅니다.">?</button></label>
+          <label for="i-invested">투자에 묶여 있는 돈 <small>부동산, 주식, 코인</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="선택한 기간 동안 부동산이나 주식, 코인에 넣어 지금도 그대로 묶여 있는 원금입니다. 집값에 쓰려고 팔 금액은 여기에 넣지 마시고 위 투자해서 번 돈 칸에 넣어 주세요. 소득으로 벌었어도 다른 데 들어가 있으면 집값에 쓸 수 없으므로 빼고 봅니다.">?</button></label>
           <div class="unit"><input type="text" id="i-invested" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-repay">대출 원리금 갚은 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="고르신 기간 동안 원금과 이자를 합해 갚으신 금액입니다. 전세자금대출이나 신용대출, 전에 살던 집의 주택담보대출을 갚으신 금액이 여기에 들어갑니다.">?</button></label>
+          <label for="i-repay">대출 원리금 갚은 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="선택한 기간 동안 원금과 이자를 합해 갚으신 금액입니다. 전세자금대출이나 신용대출, 전에 살던 집의 주택담보대출을 갚으신 금액이 여기에 들어갑니다.">?</button></label>
           <div class="unit"><input type="text" id="i-repay" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-rent">지금 사는 집 보증금 <small>계속 묶이는 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="집을 사신 뒤에도 전월세로 계속 사셔서 보증금이 그대로 묶이는 경우 그 금액입니다. 소득으로 번 돈이 보증금에 들어가 있으면 집값에 쓸 수 없으므로 빼고 봅니다. 전세를 빼서 집값에 넣으시는 경우에는 여기가 아니라 위 내 돈의 돌려받을 전월세 보증금 칸에 넣어 주세요.">?</button></label>
+          <label for="i-rent">지금 사는 집 보증금 <small>계속 묶이는 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="집을 사신 뒤에도 전월세로 계속 사셔서 보증금이 그대로 묶이는 경우 그 금액입니다. 소득으로 번 돈이 보증금에 들어가 있으면 집값에 쓸 수 없으므로 빼고 봅니다. 전세를 빼서 그 보증금을 집값에 넣으시는 경우에는 묶이는 돈이 아니므로 넣지 마세요.">?</button></label>
           <div class="unit"><input type="text" id="i-rent" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-luxury">차량, 회원권 등 산 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="고르신 기간 동안 사신 차량과 골프·콘도 회원권, 미술품, 귀금속처럼 값이 나가는 물건의 취득금액입니다. 국세청은 이런 자산을 사신 내역도 함께 보고, 집값에 쓸 수 없는 돈으로 봅니다.">?</button></label>
+          <label for="i-luxury">차량, 회원권 등 산 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="선택한 기간 동안 사신 차량과 골프·콘도 회원권, 미술품, 귀금속처럼 값이 나가는 물건의 취득금액입니다. 국세청은 이런 자산을 사신 내역도 함께 보고, 집값에 쓸 수 없는 돈으로 봅니다.">?</button></label>
           <div class="unit"><input type="text" id="i-luxury" inputmode="numeric"><span>원</span></div>
         </div>
 
@@ -212,20 +212,14 @@
           <label for="i-deposit">세입자 보증금 <small>전세, 월세를 끼고 살 때</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="세입자가 있는 집을 사면서 보증금 반환 의무를 그대로 넘겨받는 경우 그 보증금입니다. 당장 낼 돈은 줄지만 나중에 돌려줄 빚이므로, 전세를 빼실 때 그만큼 돈이 필요합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-deposit" inputmode="numeric"><span>원</span></div>
         </div>
-        <div class="wide">
+        <div>
           <label for="i-family">가족에게 빌리는 돈 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부모님이나 형제에게 빌리는 금액입니다. 빌린 것으로 인정받으려면 차용증, 이자를 보낸 기록, 실제로 갚은 기록이 모두 있어야 합니다. 빌렸다고만 하고 갚은 흔적이 없으면 처음부터 증여받은 것으로 봅니다. 이자를 주지 않거나 아주 낮게 주면 연 4.6%로 계산한 이자만큼을 증여로 보는데, 그 금액이 한 해 1,000만 원 미만이면 세금을 매기지 않습니다.">?</button></label>
           <div class="unit"><input type="text" id="i-family" inputmode="numeric"><span>원</span></div>
           <label class="ichk"><input type="checkbox" id="i-interest"><span>이자를 주기로 했습니다</span></label>
         </div>
-        <div class="wide">
+        <div>
           <label for="i-company">회사에서 빌리는 돈 <small>사내 대여금</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="다니시는 회사에서 빌리는 금액입니다. 임원이거나 주주처럼 회사와 특수관계에 있으시면 세무상 가지급금으로 보아 따져 보는 눈이 훨씬 엄격합니다. 금전소비대차계약서에 이자율과 갚는 일정을 적고, 연 소득으로 실제로 갚을 수 있는 기간인지까지 맞춰 두셔야 합니다. 회사는 연 4.6% 이상의 이자를 받아야 하고, 받지 않으면 그 차액만큼 회사의 이익으로 보아 세금이 늘고 대표님 상여로 처분될 수 있습니다.">?</button></label>
           <div class="unit"><input type="text" id="i-company" inputmode="numeric"><span>원</span></div>
-        </div>
-
-        <div class="divider"><b>받는 돈</b><span>갚지 않아도 되는 돈</span></div>
-        <div class="wide">
-          <label for="i-gift">가족에게 받는 돈 <small>증여</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="부모님이나 배우자에게 받아 돌려주지 않는 돈입니다. 증여세를 신고하고 내면 자금출처로 깨끗하게 인정됩니다. 지난 10년 동안 같은 분에게 받은 금액을 합쳐 계산하니, 금액은 증여세 계산기에서 확인해 보세요.">?</button></label>
-          <div class="unit"><input type="text" id="i-gift" inputmode="numeric"><span>원</span></div>
         </div>
       </div>
 
@@ -269,8 +263,8 @@
         · 주택을 살 때 자금조달계획서를 내야 하는지는 집이 있는 지역과 금액에 따라 다르고 기준도 자주 바뀝니다. 계약 전에 확인하시는 것이 좋습니다.<br>
         · 취득세와 중개수수료, 이사비는 집값에 넣지 않았습니다. 실제로는 이 돈도 필요하니 여유 자금을 함께 보셔야 합니다.<br>
         · 소득으로 모은 돈은 <b>신고한 소득금액에서 생활비를 뺀 금액</b>까지만 인정됩니다. 소득금액증명원은 홈택스나 세무서에서 연도별로 떼시면 되고, 소득세와 4대보험료를 많이 내셨다면 실제로 모을 수 있었던 돈은 더 적습니다.<br>
-        · 생활비는 연말정산 간소화 자료의 카드와 현금영수증 사용액을 넣으시면 됩니다. 국세청이 보는 자료와 같아서 가장 손쉽고 다툼이 적습니다.<br>
-        · 생활비와 투자에 묶여 있는 돈, 갚은 대출 원리금, 계속 묶이는 전월세 보증금, 차량과 회원권처럼 값나가는 물건을 사신 돈은 소득에서 빠져나가 집값에 쓸 수 없는 돈으로 보고 뺐습니다. 전세를 빼서 집값에 넣으시는 경우처럼 집값으로 들어오는 금액은 쓴 돈이 아니라 내 돈 쪽 칸에 넣어 주세요.<br>
+        · 생활비는 연말정산 간소화 자료의 카드와 현금영수증 사용액을 선택한 기간만큼 더해 넣으시면 됩니다. 국세청이 보는 자료와 같아서 가장 손쉽고 다툼이 적습니다.<br>
+        · 생활비와 투자에 묶여 있는 돈, 갚은 대출 원리금, 집을 산 뒤에도 묶이는 전월세 보증금, 차량과 회원권처럼 값나가는 물건을 사신 돈은 소득에서 빠져나가 집값에 쓸 수 없는 돈으로 보고 뺐습니다. 전세를 빼서 집값에 넣으시는 경우처럼 집값으로 들어오는 금액은 묶이는 돈이 아니므로 넣지 않으시면 됩니다.<br>
         · <b>이자와 배당은 한 해 2,000만 원까지는 원천징수로 끝나 소득금액증명원에 나오지 않습니다.</b> 빠뜨리기 쉬운 돈이라 칸을 따로 두었습니다. 자금출처로는 그대로 인정되니 원천징수영수증이나 홈택스의 이자·배당소득 자료를 보관하세요. 2,000만 원을 넘겨 종합과세로 신고한 해는 이미 소득금액에 들어 있으니 또 넣으시면 안 됩니다.<br>
         · 투자 수익은 몇 년치로 끊어 보지 않습니다. 오래전에 번 돈이라도 그 돈이 집값까지 이어지는 흐름을 보여 줄 수 있으면 인정되고, 흐름이 끊기면 최근에 번 돈도 설명이 어렵습니다. 소액주주의 상장주식 차익과 코인 차익은 지금은 세금을 매기지 않아 신고 자료가 없으니 거래내역으로 보여 주셔야 합니다.<br>
         · 부족한 금액을 증여로 받으실 때의 세금은 <a href="gift-tax.html">증여세 계산기</a>에서 계산해 보세요. 지난 10년 동안 받은 금액까지 합쳐 계산합니다.
@@ -310,19 +304,18 @@ const FREE_LIMIT=10000000;   // 이자 상당액이 한 해 이 금액 미만이
 const EXCLUDE_CAP=200000000; // 증여추정 제외선의 상한 2억 원
 
 function calc(c){
-  const living=c.living*c.years;                       // 기간 동안 쓰신 생활비
-  const spent=c.invested+c.repay+c.rent+c.luxury;      // 소득에서 나가 집값에 쓸 수 없는 돈
-  const saved=Math.max(0,c.income-living-spent);       // 소득금액에서 생활비와 쓴 돈을 뺀, 모을 수 있었던 돈
-  const own=saved+c.invest+c.finance+c.retire+c.jeonse+c.past;   // 내 돈
-  const borrow=c.loan+c.deposit+c.family+c.company;    // 빌리는 돈
-  const proven=own+borrow+c.gift;              // 설명되는 돈
+  const spent=c.living+c.invested+c.repay+c.rent+c.luxury;  // 소득에서 나가 집값에 쓸 수 없는 돈
+  const saved=Math.max(0,c.income-spent);                   // 소득금액에서 쓴 돈을 뺀, 모을 수 있었던 돈
+  const own=saved+c.invest+c.finance+c.retire+c.past+c.gift; // 내 돈
+  const borrow=c.loan+c.deposit+c.family+c.company;         // 빌리는 돈
+  const proven=own+borrow;                     // 설명되는 돈
   const short=Math.max(0,c.price-proven);      // 설명 못 한 금액
   const over=Math.max(0,proven-c.price);       // 남는 돈
   const line=Math.min(c.price*0.2,EXCLUDE_CAP);// 증여추정 제외선
   const presume=short>0&&short>=line;          // 증여로 추정되는지
   // 가족에게 무이자로 빌릴 때 증여로 보는 이자 상당액 (한 해 1,000만 원 미만이면 과세 제외)
   const famInterest=(!c.interest&&c.family>0)?c.family*RATE:0;
-  return {living,spent,saved,own,borrow,proven,short,over,line,presume,famInterest,
+  return {spent,saved,own,borrow,proven,short,over,line,presume,famInterest,
           // 무이자로 빌려도 되는 원금은 백만 원 단위로 버려 안전한 선으로 안내합니다
           famTaxable:famInterest>=FREE_LIMIT, freeCap:Math.floor(FREE_LIMIT/RATE/1000000)*1000000};
 }
@@ -331,15 +324,15 @@ function calc(c){
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
-const IDS=['i-price','i-income','i-invest','i-finance','i-retire','i-jeonse','i-past',
-  'i-living','i-invested','i-repay','i-rent','i-luxury','i-loan','i-deposit','i-family','i-company','i-gift'];
+const IDS=['i-price','i-income','i-invest','i-finance','i-retire','i-past','i-gift',
+  'i-living','i-invested','i-repay','i-rent','i-luxury','i-loan','i-deposit','i-family','i-company'];
 IDS.forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 function read(){
   const v=id=>num($(id).value);
   return {price:v('i-price'),income:v('i-income'),living:v('i-living'),years:Number($('i-years').value),
-    invest:v('i-invest'),finance:v('i-finance'),retire:v('i-retire'),jeonse:v('i-jeonse'),past:v('i-past'),
+    invest:v('i-invest'),finance:v('i-finance'),retire:v('i-retire'),past:v('i-past'),
     invested:v('i-invested'),repay:v('i-repay'),rent:v('i-rent'),luxury:v('i-luxury'),
     loan:v('i-loan'),deposit:v('i-deposit'),family:v('i-family'),company:v('i-company'),
     gift:v('i-gift'),interest:$('i-interest').checked};
@@ -348,17 +341,16 @@ const shown=()=>$('res').style.display==='block';
 
 /* ── 자료 목록 (넣어 주신 항목만) ──────────── */
 const DOCS=[
-  ['income','소득으로 모은 돈','소득금액증명원(고르신 기간만큼 연도별로), 원천징수영수증, 예금 잔액증명서와 통장 거래내역. 집값을 치르기 전 몇 달 사이에 들어온 큰 돈이 있으면 그 돈의 출처까지 함께 준비하셔야 합니다.'],
+  ['income','소득으로 모은 돈','소득금액증명원(선택한 기간만큼 연도별로), 원천징수영수증, 예금 잔액증명서와 통장 거래내역. 집값을 치르기 전 몇 달 사이에 들어온 큰 돈이 있으면 그 돈의 출처까지 함께 준비하셔야 합니다.'],
   ['invest','투자해서 번 돈','매매계약서와 양도소득세 신고서, 증권사·거래소 거래내역, 돈이 들어온 통장 내역.'],
   ['finance','이자, 배당으로 받은 돈','은행과 증권사에서 받은 이자·배당 원천징수영수증, 홈택스에서 조회한 이자·배당소득 자료, 통장 입금 내역.'],
   ['retire','퇴직금 중간정산','회사에 낸 중간정산 신청서와 지급명세서, 무주택을 보여 주는 서류(주민등록등본, 무주택 확인서).'],
-  ['jeonse','돌려받을 전월세 보증금','지금 사시는 집의 임대차계약서와 보증금을 돌려받은 통장 내역. 처음 보증금을 낼 때의 송금 기록도 함께 있으면 좋습니다.'],
   ['past','전에 증여, 상속받은 재산','그때 낸 증여세나 상속세 신고서와 납부확인서.'],
   ['loan','은행 대출','대출계약서(또는 대출신청서)와 통장 입금 내역.'],
   ['deposit','세입자 보증금','임대차계약서. 매매계약서에 보증금을 넘겨받는 내용이 적혀 있으면 함께 보관하세요.'],
   ['family','가족에게 빌리는 돈','차용증(금액, 이자, 갚는 날짜 기재), 이자를 보낸 송금 기록, 원금을 갚은 기록. 차용증은 돈을 받는 날 전에 쓰고 날짜가 남게 보관하셔야 합니다.'],
   ['company','회사에서 빌리는 돈','금전소비대차계약서(이자율과 갚는 일정 기재), 이자를 낸 기록이나 급여에서 공제한 내역, 이사회 의사록. 임원이거나 주주시라면 회사가 인정이자를 계산해 신고했는지도 함께 확인하세요.'],
-  ['gift','가족에게 받는 돈','증여세 신고서와 납부확인서, 돈이 건너간 통장 내역.']
+  ['gift','새로 증여받는 돈','증여세 신고서와 납부확인서, 돈이 건너간 통장 내역.']
 ];
 
 /* ── 화면 ─────────────────────────────────── */
@@ -369,23 +361,22 @@ function render(){
   $('rt-body').innerHTML=
       row('집값','매매계약서 금액',won(c.price)+'원','sum')
     +amt('income','소득금액증명원 합계','최근 '+c.years+'년')
-    +(c.living?row('생활비','카드와 현금영수증 연 '+won(c.living)+'원 × '+c.years+'년','− '+won(r.living)+'원','minus'):'')
+    +(c.living?row('생활비','카드와 현금영수증 '+c.years+'년 합계','− '+won(c.living)+'원','minus'):'')
     +(c.invested?row('투자에 묶여 있는 돈','부동산, 주식, 코인','− '+won(c.invested)+'원','minus'):'')
     +(c.repay?row('대출 원리금 갚은 돈','','− '+won(c.repay)+'원','minus'):'')
     +(c.rent?row('지금 사는 집 보증금','','− '+won(c.rent)+'원','minus'):'')
     +(c.luxury?row('차량, 회원권 등 산 돈','','− '+won(c.luxury)+'원','minus'):'')
-    +(c.income?row('소득으로 모은 돈','소득금액에서 생활비와 쓴 돈을 뺀 금액',won(r.saved)+'원'):'')
+    +(c.income?row('소득으로 모은 돈','소득금액에서 쓴 돈을 뺀 금액',won(r.saved)+'원'):'')
     +amt('invest','투자해서 번 돈','부동산, 주식, 코인 매매차익 · 세금 떼고')
     +amt('finance','이자, 배당으로 받은 돈','소득금액증명원에 나오지 않는 금융소득')
     +amt('retire','퇴직금 중간정산','퇴직소득세 떼고 받는 금액')
-    +amt('jeonse','돌려받을 전월세 보증금','빼서 집값에 넣을 금액')
     +amt('past','전에 증여, 상속받은 재산','신고한 재산')
+    +amt('gift','새로 증여받는 돈','이번에 가족에게 받는 금액')
     +amt('loan','은행 대출','주택담보, 신용')
     +amt('deposit','세입자 보증금','나중에 돌려줄 돈')
     +amt('family','가족에게 빌리는 돈',c.interest?'이자를 주기로 한 차입':'무이자 차입')
     +amt('company','회사에서 빌리는 돈','사내 대여금')
-    +amt('gift','가족에게 받는 돈','증여')
-    +row('설명되는 돈','내 돈 '+won(r.own)+'원 + 빌리는 돈 '+won(r.borrow)+'원'+(c.gift?' + 받는 돈 '+won(c.gift)+'원':''),won(r.proven)+'원','sum')
+    +row('설명되는 돈','내 돈 '+won(r.own)+'원 + 빌리는 돈 '+won(r.borrow)+'원',won(r.proven)+'원','sum')
     +(r.short
       ?'<tr class="tot'+(r.presume?' warn':'')+'"><td>설명 못 한 금액</td><td>'+won(r.short)+'원</td></tr>'
       +row('증여추정 제외선','집값의 20%와 2억 원 중 적은 금액',won(r.line)+'원','line')
@@ -428,9 +419,9 @@ function render(){
       :{t:'가족에게 무이자로 빌리는 '+won(c.family)+'원은 이자 상당액이 '+won(r.famInterest)+'원으로 한 해 1,000만 원 미만이라 이자에는 세금이 붙지 않습니다. 다만 원금을 실제로 갚은 기록은 남아야 합니다.'});
   if(c.gift) notes.push({t:'받으시는 '+won(c.gift)+'원은 증여세를 신고하고 내야 자금출처로 인정됩니다. 신고 기한은 받은 달의 말일부터 3개월입니다.'});
   if(c.deposit) notes.push({t:'세입자 보증금 '+won(c.deposit)+'원은 당장 낼 돈을 줄여 주지만 나중에 돌려줄 빚입니다. 전세를 빼실 때 그만큼 자금이 필요합니다.'});
-  if(c.income&&!c.living) notes.push({t:'연간 생활비를 넣지 않으셔서 소득금액을 전부 모은 것으로 계산했습니다. 실제로는 쓰신 생활비만큼 빼고 보기 때문에 모을 수 있었던 돈은 더 적습니다. 연말정산 간소화 자료의 카드와 현금영수증 사용액을 넣어 다시 보시는 것이 좋습니다.'});
-  if(c.income&&c.living) notes.push({t:'소득금액 '+won(c.income)+'원에서 '+c.years+'년치 생활비 '+won(r.living)+'원'+(r.spent?'과 쓴 돈 '+won(r.spent)+'원':'')+'을 빼고 '+won(r.saved)+'원을 모을 수 있었던 돈으로 보았습니다. 소득세와 4대보험료를 많이 내셨다면 그만큼 더 줄어듭니다.'});
-  if(c.income&&r.saved===0&&c.income<=r.living+r.spent) notes.push({warn:1,t:'생활비와 쓴 돈이 소득금액보다 많아 소득으로 모을 수 있었던 돈이 없는 것으로 나옵니다. 넣으신 금액이 기간과 맞는지, 쓴 돈 가운데 집값에 쓰실 금액이 섞여 있지 않은지 다시 보셔야 합니다.'});
+  if(c.income&&!c.living) notes.push({t:'생활비를 넣지 않으셔서 소득금액을 거의 그대로 모은 것으로 계산했습니다. 실제로는 쓰신 생활비만큼 빼고 보기 때문에 모을 수 있었던 돈은 더 적습니다. 연말정산 간소화 자료의 카드와 현금영수증 사용액을 선택한 기간만큼 더해 넣어 보세요.'});
+  if(c.income&&c.living) notes.push({t:'소득금액 '+won(c.income)+'원에서 쓴 돈 '+won(r.spent)+'원을 빼고 '+won(r.saved)+'원을 모을 수 있었던 돈으로 보았습니다. 소득세와 4대보험료를 많이 내셨다면 그만큼 더 줄어듭니다.'});
+  if(c.income&&r.saved===0&&c.income<=r.spent) notes.push({warn:1,t:'쓴 돈이 소득금액보다 많아 소득으로 모을 수 있었던 돈이 없는 것으로 나옵니다. 생활비와 소득금액이 같은 기간으로 맞춰졌는지, 쓴 돈 가운데 집값에 쓰실 금액이 섞여 있지 않은지 다시 보셔야 합니다.'});
   if(c.retire) notes.push({t:'퇴직금 중간정산은 무주택인 근로자가 본인 명의로 집을 살 때처럼 법에서 정한 사유에만 할 수 있고, 회사 규약에 따라 안 될 수도 있습니다. 미리 회사에 확인해 보세요.'});
   if(c.company) notes.push({warn:1,t:'회사에서 빌리는 '+won(c.company)+'원은 임원이거나 주주시라면 세무상 가지급금으로 보아 훨씬 엄격하게 봅니다. 금전소비대차계약서에 이자율과 갚는 일정을 적고, <b>연 소득으로 실제로 갚을 수 있는 기간인지</b>까지 맞추셔야 합니다. 회사가 연 4.6% 이상 이자를 받지 않으면 그 차액이 회사 이익으로 잡혀 법인세가 늘고 대표님 상여로 처분될 수 있습니다.'});
   $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
@@ -443,14 +434,13 @@ function render(){
   // 넣어 주신 항목만 식에 적습니다
   const sum=list=>list.filter(x=>c[x[0]]>0).map(x=>x[1]+' '+won(c[x[0]])).join(' + ')||'넣으신 금액이 없습니다';
   $('steps').innerHTML='<table class="stable">'
-    +(r.spent?srow('쓴 돈',sum([['invested','투자에 묶인 돈'],['repay','대출 상환'],['rent','사는 집 보증금'],['luxury','차량·회원권 등']]),won(r.spent)+'원'):'')
-    +(c.income?srow('소득으로 모은 돈','소득금액 '+won(c.income)+(c.living?' 빼기 생활비 '+won(c.living)+' × '+c.years+'년':'')+(r.spent?' 빼기 쓴 돈 '+won(r.spent):''),won(r.saved)+'원'):'')
+    +(r.spent?srow('쓴 돈',sum([['living','생활비'],['invested','투자에 묶인 돈'],['repay','대출 상환'],['rent','사는 집 보증금'],['luxury','차량·회원권 등']]),won(r.spent)+'원'):'')
+    +(c.income?srow('소득으로 모은 돈','소득금액 '+won(c.income)+(r.spent?' 빼기 쓴 돈 '+won(r.spent):''),won(r.saved)+'원'):'')
     +srow('내 돈',[c.income?'소득으로 모은 돈 '+won(r.saved):'',c.invest?'투자 '+won(c.invest):'',c.finance?'이자·배당 '+won(c.finance):'',
-      c.retire?'퇴직금 중간정산 '+won(c.retire):'',c.jeonse?'전월세 보증금 '+won(c.jeonse):'',c.past?'증여·상속 '+won(c.past):'']
+      c.retire?'퇴직금 중간정산 '+won(c.retire):'',c.past?'증여·상속 '+won(c.past):'',c.gift?'새로 받는 증여 '+won(c.gift):'']
       .filter(Boolean).join(' + ')||'넣으신 금액이 없습니다',won(r.own)+'원')
     +srow('빌리는 돈',sum([['loan','은행'],['deposit','보증금'],['family','가족 차입'],['company','회사 대여금']]),won(r.borrow)+'원')
-    +(c.gift?srow('받는 돈','증여',won(c.gift)+'원'):'')
-    +srow('설명되는 돈','내 돈 + 빌리는 돈'+(c.gift?' + 받는 돈':''),won(r.proven)+'원')
+    +srow('설명되는 돈','내 돈 + 빌리는 돈',won(r.proven)+'원')
     +srow('설명 못 한 금액',r.over?'설명되는 돈이 집값보다 '+won(r.over)+'원 많습니다':'집값 '+won(c.price)+' 빼기 설명되는 돈 '+won(r.proven),won(r.short)+'원')
     +srow('증여추정 제외선','집값의 20% '+won(c.price*0.2)+'원과 2억 원 중 적은 금액',won(r.line)+'원')
     +srow('판정',r.short?(r.presume?'제외선 이상이라 증여로 추정합니다':'제외선 미달이라 추정하지 않습니다'):'설명 못 한 금액이 없습니다',r.short?(r.presume?'증여 추정':'추정 제외'):'해당 없음')
