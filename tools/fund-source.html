@@ -97,9 +97,24 @@
 .ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
 .disc a{color:var(--blue)}
-.backlink{margin-top:30px;text-align:center;font-size:14px}
-.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
-.backlink a:hover{border-color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .call{padding:22px 16px}.call .val{font-size:24px}
@@ -110,6 +125,86 @@
 }
 </style>
 <script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "설명 못 한 돈이 얼마까지는 괜찮나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "집값의 20%와 2억 원 가운데 적은 금액보다 적으면 증여로 추정하지 않습니다(상속세 및 증여세법 시행령 제34조). 8억 원짜리 집이면 1억 6천만 원, 20억 원짜리 집이면 2억 원이 그 선입니다. 다만 이 선보다 적어도 증여받은 사실이 실제로 확인되면 증여세를 내게 되니, 금액이 작다고 안심할 수는 없습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "부모님께 얼마까지 무이자로 빌릴 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "2억 1,700만 원까지는 이자를 주지 않아도 세금이 더 나오지 않습니다. 이자를 주지 않으면 연 4.6%로 계산한 금액을 증여로 보는데, 그 금액이 한 해 1,000만 원에 못 미치기 때문입니다. 이 금액을 넘겨 빌리시면 이자를 실제로 주고받으셔야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "차용증만 써 두면 빌린 것으로 인정되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "아닙니다. 차용증에 금액과 이자, 갚는 날짜를 적고 돈을 받는 날 전에 써 두시되, 실제로 이자를 보내고 원금을 갚은 기록이 남아야 합니다. 빌렸다고만 하고 갚은 흔적이 없으면 처음부터 증여받은 것으로 봅니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "올해 번 소득은 어떻게 보여 주나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "소득금액증명원은 작년 치까지만 나옵니다. 올해 1월부터 지금까지 번 소득은 급여명세서나 회사에서 받은 원천징수부로, 사업자시라면 장부나 부가세 신고서로 가늠해 넣으시면 됩니다. 이때 생활비와 쓴 돈도 올해분까지 함께 넣으셔야 짝이 맞습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "생활비는 얼마로 잡아야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "연말정산 간소화 자료의 신용카드, 체크카드, 현금영수증 사용액을 선택한 기간만큼 더해 넣으시면 됩니다. 국세청이 보는 자료와 같아 가장 손쉽고 다툼이 적습니다. 사업자시라면 사업용으로 쓴 금액은 빼고 넣어 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "이자와 배당도 자금출처가 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "됩니다. 다만 한 해 2,000만 원까지는 소득금액증명원에 나오지 않아 빠뜨리기 쉽습니다. 홈택스 지급명세서에서 확인하시고, 비과세 금융상품은 금융기관에 자료를 요청하세요. 2,000만 원을 넘겨 종합과세로 신고한 해는 이미 소득금액에 들어 있으니 또 넣으시면 안 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "투자해서 번 돈은 몇 년치까지 인정되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "몇 년치로 끊어 보지 않습니다. 오래전에 번 돈이라도 그 돈이 집값까지 이어지는 흐름을 보여 줄 수 있으면 인정되고, 흐름이 끊기면 최근에 번 돈도 설명이 어렵습니다. 소액주주의 상장주식 차익과 코인 차익은 지금은 세금을 매기지 않아 신고 자료가 없으니 거래내역으로 보여 주셔야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "회사에서 빌려도 괜찮나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "임원이거나 주주처럼 회사와 특수관계에 있으시면 세무상 가지급금으로 보아 훨씬 엄격하게 따집니다. 계약서와 이자율, 연 소득으로 갚을 수 있는 상환 일정을 현실적으로 갖추셔야 합니다. 회사가 연 4.6% 이상 이자를 받지 않으면 그 차액이 회사 이익으로 잡혀 법인세가 늘고 대표님 상여로 처분될 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "자금조달계획서는 꼭 내야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "집이 있는 지역과 금액에 따라 다르고 기준도 자주 바뀌니 계약 전에 확인하시는 것이 좋습니다. 제출 대상이 아니어도 나중에 소명 요청을 받을 수 있으니 자료는 미리 모아 두시는 편이 안전합니다."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -259,22 +354,59 @@
         </div>
       </div>
 
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>설명 못 한 돈이 얼마까지는 괜찮나요?</summary>
+          <div class="a">집값의 20%와 2억 원 가운데 적은 금액보다 적으면 증여로 추정하지 않습니다(상속세 및 증여세법 시행령 제34조). 8억 원짜리 집이면 1억 6천만 원, 20억 원짜리 집이면 2억 원이 그 선입니다. 다만 이 선보다 적어도 증여받은 사실이 실제로 확인되면 증여세를 내게 되니, 금액이 작다고 안심할 수는 없습니다.</div>
+        </details>
+        <details>
+          <summary>부모님께 얼마까지 무이자로 빌릴 수 있나요?</summary>
+          <div class="a">2억 1,700만 원까지는 이자를 주지 않아도 세금이 더 나오지 않습니다. 이자를 주지 않으면 연 4.6%로 계산한 금액을 증여로 보는데, 그 금액이 한 해 1,000만 원에 못 미치기 때문입니다. 이 금액을 넘겨 빌리시면 이자를 실제로 주고받으셔야 합니다.</div>
+        </details>
+        <details>
+          <summary>차용증만 써 두면 빌린 것으로 인정되나요?</summary>
+          <div class="a">아닙니다. 차용증에 금액과 이자, 갚는 날짜를 적고 돈을 받는 날 전에 써 두시되, 실제로 이자를 보내고 원금을 갚은 기록이 남아야 합니다. 빌렸다고만 하고 갚은 흔적이 없으면 처음부터 증여받은 것으로 봅니다.</div>
+        </details>
+        <details>
+          <summary>올해 번 소득은 어떻게 보여 주나요?</summary>
+          <div class="a">소득금액증명원은 작년 치까지만 나옵니다. 올해 1월부터 지금까지 번 소득은 급여명세서나 회사에서 받은 원천징수부로, 사업자시라면 장부나 부가세 신고서로 가늠해 넣으시면 됩니다. 이때 생활비와 쓴 돈도 올해분까지 함께 넣으셔야 짝이 맞습니다.</div>
+        </details>
+        <details>
+          <summary>생활비는 얼마로 잡아야 하나요?</summary>
+          <div class="a">연말정산 간소화 자료의 신용카드, 체크카드, 현금영수증 사용액을 선택한 기간만큼 더해 넣으시면 됩니다. 국세청이 보는 자료와 같아 가장 손쉽고 다툼이 적습니다. 사업자시라면 사업용으로 쓴 금액은 빼고 넣어 주세요.</div>
+        </details>
+        <details>
+          <summary>이자와 배당도 자금출처가 되나요?</summary>
+          <div class="a">됩니다. 다만 한 해 2,000만 원까지는 소득금액증명원에 나오지 않아 빠뜨리기 쉽습니다. 홈택스 지급명세서에서 확인하시고, 비과세 금융상품은 금융기관에 자료를 요청하세요. 2,000만 원을 넘겨 종합과세로 신고한 해는 이미 소득금액에 들어 있으니 또 넣으시면 안 됩니다.</div>
+        </details>
+        <details>
+          <summary>투자해서 번 돈은 몇 년치까지 인정되나요?</summary>
+          <div class="a">몇 년치로 끊어 보지 않습니다. 오래전에 번 돈이라도 그 돈이 집값까지 이어지는 흐름을 보여 줄 수 있으면 인정되고, 흐름이 끊기면 최근에 번 돈도 설명이 어렵습니다. 소액주주의 상장주식 차익과 코인 차익은 지금은 세금을 매기지 않아 신고 자료가 없으니 거래내역으로 보여 주셔야 합니다.</div>
+        </details>
+        <details>
+          <summary>회사에서 빌려도 괜찮나요?</summary>
+          <div class="a">임원이거나 주주처럼 회사와 특수관계에 있으시면 세무상 가지급금으로 보아 훨씬 엄격하게 따집니다. 계약서와 이자율, 연 소득으로 갚을 수 있는 상환 일정을 현실적으로 갖추셔야 합니다. 회사가 연 4.6% 이상 이자를 받지 않으면 그 차액이 회사 이익으로 잡혀 법인세가 늘고 대표님 상여로 처분될 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>자금조달계획서는 꼭 내야 하나요?</summary>
+          <div class="a">집이 있는 지역과 금액에 따라 다르고 기준도 자주 바뀌니 계약 전에 확인하시는 것이 좋습니다. 제출 대상이 아니어도 나중에 소명 요청을 받을 수 있으니 자료는 미리 모아 두시는 편이 안전합니다.</div>
+        </details>
+      </div>
+
       <p class="disc">
-        · 설명되지 않는 금액이 <b>집값의 20%와 2억 원 가운데 적은 금액</b>보다 적으면 증여로 추정하지 않습니다(상속세 및 증여세법 시행령 제34조). 이 선보다 적어도 증여받은 사실이 실제로 확인되면 증여세를 내게 되니, 금액이 작다고 안심할 수는 없습니다.<br>
-        · 가족에게 빌린 돈은 차용증과 상환 기록이 있어야 빌린 것으로 인정됩니다. 이자를 주지 않으면 연 4.6%로 계산한 금액을 증여로 보는데, <b>빌리는 돈이 2억 1,700만 원까지는 그 이자가 한 해 1,000만 원에 못 미쳐 세금이 더 나오지 않습니다.</b> 이 금액을 넘겨 빌리시면 이자를 실제로 주고받으셔야 합니다.<br>
-        · 회사에서 빌리는 돈은 임원이거나 주주처럼 회사와 특수관계에 있으시면 세무상 가지급금으로 보아 훨씬 엄격하게 따집니다. 계약서와 이자율, 연 소득으로 갚을 수 있는 상환 일정을 현실적으로 갖추셔야 하고, 회사가 연 4.6% 이상 이자를 받지 않으면 그 차액이 회사 이익으로 잡혀 법인세가 늘고 대표님 상여로 처분될 수 있습니다.<br>
-        · 주택을 살 때 자금조달계획서를 내야 하는지는 집이 있는 지역과 금액에 따라 다르고 기준도 자주 바뀝니다. 계약 전에 확인하시는 것이 좋습니다.<br>
         · 집값에는 취득세와 중개수수료까지 더해 넣도록 했습니다. 자금조달계획서에는 매매가만 적지만, 여기서는 실제로 마련해야 하는 돈을 보기 위해 넉넉하게 잡습니다.<br>
-        · 소득으로 모은 돈은 <b>신고한 소득금액에서 생활비와 쓴 돈을 뺀 금액</b>까지만 인정됩니다. 소득세와 4대보험료를 많이 내셨다면 실제로 모을 수 있었던 돈은 더 적습니다.<br>
-        · 소득금액증명원은 홈택스나 세무서에서 연도별로 떼시면 되는데 <b>작년 치까지만 나옵니다.</b> 올해 1월부터 지금까지 번 소득은 급여명세서나 원천징수부, 장부로 가늠해 올해 번 소득 칸에 넣어 주세요. 이때 생활비와 쓴 돈도 올해분까지 함께 넣으셔야 짝이 맞습니다.<br>
-        · 생활비는 연말정산 간소화 자료의 카드와 현금영수증 사용액을 선택한 기간만큼 더해 넣으시면 됩니다. 국세청이 보는 자료와 같아서 가장 손쉽고 다툼이 적습니다.<br>
-        · 생활비와 투자에 묶여 있는 돈, 갚은 대출 원리금, 집을 산 뒤에도 묶이는 전월세 보증금, 차량과 회원권처럼 값나가는 물건을 사신 돈은 소득에서 빠져나가 집값에 쓸 수 없는 돈으로 보고 뺐습니다. 전세를 빼서 집값에 넣으시는 경우처럼 집값으로 들어오는 금액은 묶이는 돈이 아니므로 넣지 않으시면 됩니다.<br>
-        · <b>이자와 배당은 한 해 2,000만 원까지는 소득금액증명원에 나오지 않습니다.</b> 홈택스 지급명세서에서 확인하시고, 비과세 금융상품은 금융기관에 자료를 요청하세요. 2,000만 원을 넘겨 종합과세로 신고한 해는 이미 소득금액에 들어 있습니다.<br>
-        · 투자 수익은 몇 년치로 끊어 보지 않습니다. 오래전에 번 돈이라도 그 돈이 집값까지 이어지는 흐름을 보여 줄 수 있으면 인정되고, 흐름이 끊기면 최근에 번 돈도 설명이 어렵습니다. 소액주주의 상장주식 차익과 코인 차익은 지금은 세금을 매기지 않아 신고 자료가 없으니 거래내역으로 보여 주셔야 합니다.<br>
-        · 부족한 금액을 증여로 받으실 때의 세금은 <a href="gift-tax.html">증여세 계산기</a>에서 계산해 보세요. 지난 10년 동안 받은 금액까지 합쳐 계산합니다.
+        · 소득으로 모은 돈은 신고한 소득금액과 올해 소득을 더한 뒤 생활비와 쓴 돈을 뺀 금액입니다. 소득세와 4대보험료는 따로 빼지 않았으니 실제로 모을 수 있었던 돈은 더 적습니다.<br>
+        · 가족에게 빌리는 돈은 이자를 주지 않는 것으로 보고 연 4.6%로 이자 상당액을 계산했습니다.<br>
+        · 계산 결과는 참고용입니다. 실제 소명은 넣으신 금액이 아니라 자료와 자금 흐름으로 판단합니다.
       </p>
 
-      <p class="backlink"><a href="./">다른 계산기 보기</a></p>
+      <div class="morelinks">
+        <a href="gift-tax.html">증여세 계산기</a>
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="severance-pay.html">퇴직금 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
     </div>
   </div>
 </section>
