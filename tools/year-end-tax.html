@@ -41,6 +41,14 @@
 .divider{grid-column:1/-1;border-top:1px solid var(--line);padding-top:18px;margin-top:2px}
 .divider b{font-size:14px;color:var(--ink)}
 .divider span{font-size:12.5px;color:var(--mute);margin-left:6px}
+/* 원천징수영수증 올리기 */
+.upbox{display:flex;align-items:center;justify-content:space-between;gap:12px 18px;flex-wrap:wrap;border:1px dashed var(--blue-line);border-radius:12px;background:#fff;padding:14px 18px}
+.upbox b{display:block;font-size:14.5px;color:var(--ink)}
+.upbox span{display:block;font-size:12.5px;color:var(--mute);margin-top:3px;line-height:1.6}
+.upbtn{white-space:nowrap}
+.upmsg{font-size:13.5px;line-height:1.75;border-radius:10px;padding:12px 16px;background:var(--blue-soft);color:var(--char);margin:0}
+.upmsg.err{background:var(--seal-soft)}
+.upmsg b{color:var(--ink)}
 /* 가족 세부 항목 (접기) */
 .assum{grid-column:1/-1;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
 .assum summary{cursor:pointer;padding:13px 18px;font-weight:700;font-size:14px;color:var(--ink);list-style:none}
@@ -155,7 +163,7 @@
   {"@type":"Question","name":"연봉이 오르면 어떤 공제가 줄어드나요?","acceptedAnswer":{"@type":"Answer","text":"총급여 5,500만 원을 넘으면 월세와 연금저축·IRP 세액공제율이 낮아지고, 7,000만 원을 넘으면 카드 소득공제 한도가 줄며 주택청약 소득공제를 받지 못합니다. 8,000만 원을 넘으면 월세 세액공제를 받지 못합니다. 근로소득세액공제 한도도 3,300만 원부터 단계적으로 줄어듭니다. 여성 근로자가 받는 부녀자공제(50만 원)는 총급여 약 4,147만 원을 넘으면 받지 못합니다."}},
   {"@type":"Question","name":"4대보험은 어떻게 계산했나요?","acceptedAnswer":{"@type":"Answer","text":"총급여를 12로 나눈 월 보수에 2026년 근로자 부담 요율을 적용해 12개월을 더했습니다. 국민연금 4.75%(기준소득월액 41만~659만 원), 건강보험 3.595%, 장기요양보험은 건강보험료의 13.14%, 고용보험 0.9%입니다."}},
   {"@type":"Question","name":"표준세액공제는 언제 적용되나요?","acceptedAnswer":{"@type":"Answer","text":"보험료·의료비·교육비 세액공제와 월세 세액공제, 건강·고용보험료 소득공제를 받지 않으면 대신 13만 원을 공제받습니다. 계산기는 두 방법을 모두 계산해 세금이 적은 쪽을 고릅니다."}},
-  {"@type":"Question","name":"원천징수영수증으로 바로 채울 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"파일을 올려 자동으로 채우는 기능은 준비 중입니다. 지금은 원천징수영수증의 금액을 보고 게이지와 세부 항목에 직접 넣어 주세요. 이미 낸 세금(기납부세액)과 4대보험 납부액을 넣으면 환급·추가납부 금액이 영수증 기준으로 계산됩니다."}}
+  {"@type":"Question","name":"원천징수영수증으로 바로 채울 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 맨 위 '원천징수영수증으로 채우기'에 회사에서 받은 PDF를 올리면 연봉, 가족, 카드·의료비 사용액, 각종 공제와 이미 낸 세금까지 채웁니다. 파일은 이 화면 안에서만 읽고 어디에도 보내거나 저장하지 않습니다. 사진이나 스캔본은 읽을 수 없습니다."}}
  ]
 }
 </script>
@@ -189,6 +197,12 @@
   <div class="wrap">
     <div class="sim">
       <div class="sim-in">
+        <div class="upbox fw">
+          <div><b>원천징수영수증으로 채우기</b><span>회사에서 받은 근로소득 원천징수영수증 PDF를 올리면 아래 칸을 채웁니다. 파일은 이 화면 안에서만 읽고, 어디에도 보내거나 저장하지 않습니다.</span></div>
+          <label class="savebtn upbtn" for="up-file">PDF 올리기</label>
+          <input type="file" id="up-file" accept="application/pdf,.pdf" hidden>
+        </div>
+        <p class="upmsg fw" id="up-msg" hidden></p>
         <div class="gauge big fw">
           <div class="gtop">
             <label for="v-sal">연봉 <small>비과세 포함, 세전</small></label>
@@ -280,7 +294,7 @@
         <details><summary>연봉이 오르면 어떤 공제가 줄어드나요?</summary><div class="a">총급여 5,500만 원을 넘으면 월세와 연금저축·IRP 세액공제율이 낮아지고, 7,000만 원을 넘으면 카드 소득공제 한도가 줄며 주택청약 소득공제를 받지 못합니다. 8,000만 원을 넘으면 월세 세액공제를 받지 못합니다. 근로소득세액공제 한도도 3,300만 원부터 단계적으로 줄어듭니다. 여성 근로자가 받는 부녀자공제(50만 원)는 총급여 약 4,147만 원을 넘으면 받지 못합니다.</div></details>
         <details><summary>4대보험은 어떻게 계산했나요?</summary><div class="a">총급여를 12로 나눈 월 보수에 2026년 근로자 부담 요율을 적용해 12개월을 더했습니다. 국민연금 4.75%(기준소득월액 41만~659만 원), 건강보험 3.595%, 장기요양보험은 건강보험료의 13.14%, 고용보험 0.9%입니다.</div></details>
         <details><summary>표준세액공제는 언제 적용되나요?</summary><div class="a">보험료·의료비·교육비 세액공제와 월세 세액공제, 건강·고용보험료 소득공제를 받지 않으면 대신 13만 원을 공제받습니다. 계산기는 두 방법을 모두 계산해 세금이 적은 쪽을 고릅니다.</div></details>
-        <details><summary>원천징수영수증으로 바로 채울 수 있나요?</summary><div class="a">파일을 올려 자동으로 채우는 기능은 준비 중입니다. 지금은 원천징수영수증의 금액을 보고 게이지와 세부 항목에 직접 넣어 주세요. 이미 낸 세금(기납부세액)과 4대보험 납부액을 넣으면 환급·추가납부 금액이 영수증 기준으로 계산됩니다.</div></details>
+        <details><summary>원천징수영수증으로 바로 채울 수 있나요?</summary><div class="a">네. 맨 위 '원천징수영수증으로 채우기'에 회사에서 받은 PDF를 올리면 연봉, 가족, 카드·의료비 사용액, 각종 공제와 이미 낸 세금까지 채웁니다. 파일은 이 화면 안에서만 읽고 어디에도 보내거나 저장하지 않습니다. 사진이나 스캔본은 읽을 수 없습니다.</div></details>
       </div>
 
       <p class="disc">
@@ -291,7 +305,7 @@
         · 이미 낸 세금을 비워 두면 매달 간이세액표(100%)대로 뗀 것으로 추정합니다. 상여금이 있었거나 80%·120%를 고르셨다면 원천징수영수증의 기납부세액을 넣어 주세요.<br>
         · 연금저축·IRP는 합계 900만 원까지 계산했습니다. 연금저축만 넣으셨다면 600만 원이 한도입니다.<br>
         · 가족 세부 항목은 기본공제 요건(나이·소득)을 갖춘 것으로 보고 계산합니다. 이직하셨다면 전 근무지 급여를 연봉에 더하고, 4대보험과 이미 낸 세금도 합계로 넣어 주세요.<br>
-        · 입력한 금액은 이 화면에서만 계산하며 어디에도 저장하거나 보내지 않습니다.
+        · 입력한 금액과 올린 원천징수영수증은 이 화면에서만 읽고 계산하며, 어디에도 저장하거나 보내지 않습니다.
       </p>
 
       <div class="morelinks">
@@ -328,6 +342,7 @@
 </footer>
 
 <script src="ganise-2026.js?v=1"></script>
+<script src="receipt-reader.js?v=1"></script>
 <script>
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
 mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
@@ -404,7 +419,8 @@ function donCredit(earned,p){
 /* 한 사람의 1년 계산. g=총급여 */
 function calc(p,g){
   g=Math.max(0,g);
-  const ins=(p.insOv&&g===p.g0)?p.insOv:insurance(g);              // 원천징수영수증의 실제 납부액은 지금 연봉에만 씁니다
+  let ins=(p.insOv&&g===p.g0)?p.insOv:insurance(g);                // 원천징수영수증의 실제 납부액은 지금 연봉에만 씁니다
+  if(p.noNp||p.noEi){ ins={...ins}; if(p.noNp){ ins.total-=ins.np; ins.np=0; } if(p.noEi){ ins.total-=ins.ei; ins.ei=0; } }   // 영수증에서 0원이던 보험은 계속 0원
   const ded=wageDed(g), earned=Math.max(0,g-ded);
   // 추가공제: 경로우대 100만, 장애인 200만, 한부모 100만, 부녀자 50만(근로소득금액 3천만 원 이하, 한부모와 겹치면 한부모만)
   const woman= !p.single&&p.woman&&earned<=3e7 ? 5e5 : 0;
@@ -557,14 +573,66 @@ function read(){
     old:+$('i-old').value,dis:+$('i-dis').value,birth:+$('i-birth').value,woman:$('i-woman').checked,single:$('i-single').checked,marry:$('i-marry').checked};
   GAUGES.forEach(([k])=>p[k]=num($('v-'+k).value));
   DKEYS.forEach(([k,,,type])=>{ const el=$('d-'+k); p[k]= type&&type.startsWith('s:') ? Number(el.value) : num(el.value); });
-  p.salary=num($('v-sal').value); p.g0=Math.max(0,p.salary-p.nontax*12);
+  p.salary=num($('v-sal').value);
+  const gNow=Math.max(0,p.salary-p.nontax*12), atReceipt=receiptG==null||gNow===receiptG;
+  p.g0=gNow;
   // 원천징수영수증의 4대보험 실제 납부액 (하나라도 넣으면 나머지는 계산값)
   const auto=insurance(p.g0), np=$('d-insNp').value?p.insNp:auto.np, hi=$('d-insHi').value?p.insHi:auto.hi+auto.ltc, ei=$('d-insEi').value?p.insEi:auto.ei;
-  p.insOv=($('d-insNp').value||$('d-insHi').value||$('d-insEi').value)?{np,hi,ltc:0,ei,total:np+hi+ei}:null;
-  p.insFrom={np:!!$('d-insNp').value,hi:!!$('d-insHi').value,ei:!!$('d-insEi').value};
-  p.paidIn=!!$('d-paid').value;
+  p.insOv=atReceipt&&($('d-insNp').value||$('d-insHi').value||$('d-insEi').value)?{np,hi,ltc:0,ei,total:np+hi+ei}:null;
+  p.insFrom={np:!!p.insOv&&!!$('d-insNp').value,hi:!!p.insOv&&!!$('d-insHi').value,ei:!!p.insOv&&!!$('d-insEi').value};
+  p.paidIn=atReceipt&&!!$('d-paid').value; p.paidLocal=atReceipt&&receiptG!=null?receiptLocal:null;
+  p.noNp=receiptG!=null&&receiptNo.np; p.noEi=receiptG!=null&&receiptNo.ei;
   return p;
 }
+
+/* ── 원천징수영수증으로 채우기 ─────────────── */
+let receiptG=null, receiptLocal=null, receiptPaid=0, receiptSal=0, receiptNo={np:false,ei:false};
+function setG(k,v){ v=Math.max(0,Math.round(v||0)); $('v-'+k).value=fmt(v); $('r-'+k).value=v; }
+function setD(k,v){ const el=$('d-'+k); if(el.tagName==='SELECT') el.value=String(v); else el.value=v>0?fmt(Math.round(v)):''; }
+function fillReceipt(v){
+  const has3=v.c_credit!=null||v.m_gen!=null||v.m_spec!=null;
+  setG('sal',v.gross+v.nontaxYear); $('i-nontax').value=fmt(Math.round(v.nontaxYear/12));
+  $('i-fam').value=Math.min(7,1+v.spouse+v.dep); $('i-child').value=Math.min(5,v.kids);
+  $('i-old').value=Math.min(4,v.old); $('i-dis').value=Math.min(4,v.dis);
+  $('i-woman').checked=!!v.woman; $('i-single').checked=!!v.single; $('i-marry').checked=v.marry>0;
+  $('i-birth').value= v.birthCr>=7e5?3:v.birthCr>=5e5?2:v.birthCr>0?1:0;
+  $('i-home').checked= v.leaseDed>0||v.subDed>0||v.rent>0;
+  // 카드·의료비는 3쪽 실제 사용액으로 넣어, 연봉을 바꾸면 25%·3% 문턱이 다시 계산되게 합니다
+  setG('credit',v.c_credit); setG('debit',(v.c_debit||0)+(v.c_cash||0));
+  setD('culture',v.c_culture); setD('market',v.c_market); setD('transit',v.c_transit);
+  const self=v.m_selfGen||0;     // 본인 의료비는 한도 없는 쪽으로
+  if(has3){ setG('med',(v.m_spec||0)+self); setD('medFam',(v.m_gen||0)-self); setD('medPre',v.m_pre); setD('medInf',v.m_inf); setD('silson',v.m_silson); }
+  else setG('med',v.medDed?v.medDed+v.gross*.03:0);
+  // 교육비·기부금·보험료는 한도가 적용된 2쪽 공제대상금액을 씁니다
+  setG('edu',0); stuTouched=true; setD('stuKids',0); setD('univ',0); setD('univKids',0); setD('eduSelf',v.edu); setD('eduDis',0);
+  setG('ins',v.ins); setD('disIns',v.disIns);
+  setG('rent',(v.rent||0)/12); setG('pension',(v.penSav||0)+(v.penRet||0)+(v.penSci||0)); setD('isa',(v.isa||0)*10);
+  setG('sub',(v.subDed||0)/.4); setD('lease',(v.leaseDed||0)/.4); setD('mort',v.mortDed); setD('mortLimit',20000000);
+  setD('donPol',v.donPol); setD('donHome',v.donHome); setD('donSpec',(v.donSpec||0)+(v.donEsop||0)); setD('donGen',v.donGen); setD('donRel',v.donRel);
+  setD('noran',v.noran); setD('esop',v.esop); setD('venture',0); setD('fund',0); setD('ytfund',(v.ytFund||0)/.4);
+  setD('etcDed',(v.invest||0)+(v.persPen||0)+(v.keep||0)+(v.ltFund||0)+(has3?0:(v.cardDed||0)));
+  setD('smeRate',v.redSme>0?(v.redSme>=2e6||v.redSme/Math.max(1,v.taxCalc)>.8?'0.9':'0.7'):'0');
+  setD('etcCr',(v.unionCr||0)+(v.houseCr||0)+(v.foreignCr||0)+(v.redPit||0)+(v.redEtc||0)+(v.redTreaty||0));
+  $('d-paid').value=fmt(v.paid); $('d-insNp').value=fmt((v.np||0)+(v.pubPen||0)); $('d-insHi').value=fmt(v.hi||0); $('d-insEi').value=fmt(v.ei||0);   // 0도 넣어 자동 계산을 막습니다
+  receiptLocal=v.paidLocal; receiptPaid=v.paid; receiptNo={np:!((v.np||0)+(v.pubPen||0)),ei:!v.ei};
+  const sal=num($('v-sal').value); receiptSal=sal; receiptG=Math.max(0,sal-Math.min(num($('i-nontax').value),sal/12)*12);
+  // 값이 들어간 칸은 펼쳐 둡니다
+  document.querySelectorAll('#details details').forEach(d=>{ d.open=[...d.querySelectorAll('input')].some(i=>num(i.value)>0)||[...d.querySelectorAll('select')].some(x=>x.id!=='d-mortLimit'&&+x.value>0); });
+  $('fam-more').open=!!(v.old||v.dis||v.woman||v.single||v.marry||v.birthCr);
+  render();
+}
+$('up-file').addEventListener('change',async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  const m=$('up-msg'); m.hidden=false; m.className='upmsg fw'; m.textContent='영수증을 읽고 있습니다…';
+  const res=await HantaxReceipt.read(f);
+  if(!res.ok){ m.className='upmsg fw err'; m.textContent=res.msg; return; }
+  fillReceipt(res.v);
+  const p=read(), r=calc(p,p.g0), gap=r.fin-res.v.finTax;
+  m.innerHTML='영수증을 읽어 칸을 채웠습니다. 영수증의 결정세액(소득세)은 <b>'+won(res.v.finTax)+'원</b>, 이 계산기(2026년 귀속 기준)는 <b>'+won(r.fin)+'원</b>'
+    +(Math.abs(gap)<1000?'으로 같습니다.':'으로 '+won(Math.abs(gap))+'원 차이가 납니다. 2026년에 바뀐 규정이나, 이 계산기가 단순하게 본 항목(6세 이하 가족 의료비 구분 등) 때문일 수 있습니다.')
+    +(res.note.length?'<br>'+res.note.join('<br>'):'')
+    +'<br><span style="font-size:12.5px;color:var(--mute)">이제 연봉 게이지를 움직여 보세요. 영수증 내용 그대로 연봉만 바뀌면 세금이 어떻게 달라지는지 보여 드립니다.</span>';
+});
 
 /* ── 연봉이 올라 달라지는 지점 ─────────────────── */
 const CLIFFS=[
@@ -673,10 +741,15 @@ function render(){
   const up=calc(p,g+1e6);
   $('marg').innerHTML='연봉이 <b>100만 원</b> 오르면 세금과 4대보험으로 <b>'+won(1e6-(up.net-r.net))+'원</b>이 더 나가고, 손에 남는 돈은 <b>'+won(up.net-r.net)+'원</b> 늘어납니다.';
 
-  const paid=p.paidIn?p.paid:ganiseYear(p), paidLocal=Math.floor(paid*.1), diff=paid+paidLocal-r.tax;
-  $('refund').innerHTML=(p.paidIn?'이미 낸 소득세 ':'매달 뗀 소득세(간이세액표 추정) ')+'<b>'+won(paid)+'원</b>과 지방소득세 '+won(paidLocal)+'원을 기준으로, 연말정산에서 '
+  let paid, paidLocal, how;
+  if(p.paidIn){ paid=p.paid; paidLocal=p.paidLocal!=null?p.paidLocal:Math.floor(paid*.1); how='이미 낸 소득세 '; }
+  else if(receiptG!=null){ const d=ganiseYear(p)-ganiseYear({...p,salary:receiptSal});
+    paid=Math.max(0,receiptPaid+d); paidLocal=Math.max(0,receiptLocal+Math.floor(d/100)*10); how='이미 낸 소득세(영수증에 연봉 차이만큼 더한 추정) '; }
+  else { paid=ganiseYear(p); paidLocal=Math.floor(paid*.1); how='매달 뗀 소득세(간이세액표 추정) '; }
+  const t10=x=>Math.trunc(x/10)*10, diff=-(t10(r.fin-paid)+t10(r.local-paidLocal));   // 차감징수세액은 10원 미만을 버립니다
+  $('refund').innerHTML=how+'<b>'+won(paid)+'원</b>과 지방소득세 '+won(paidLocal)+'원을 기준으로, 연말정산에서 '
     +(diff>=0?'<b class="plus">'+won(diff)+'원을 돌려받습니다.</b>':'<b class="minus">'+won(-diff)+'원을 더 냅니다.</b>')
-    +(p.paidIn?'':' <span style="font-size:13px;color:var(--mute)">원천징수영수증의 기납부세액을 넣으면 더 정확합니다.</span>');
+    +(p.paidIn||receiptG!=null?'':' <span style="font-size:13px;color:var(--mute)">원천징수영수증의 기납부세액을 넣으면 더 정확합니다.</span>');
   const cl=cliffs(p,g);
   $('cliff-list').innerHTML= cl.length ? cl.map(c=>'<div class="cliff'+(c.past?' past':'')+'"><div class="at">총급여 '+man(c.T)+' 원<small>'+(c.past?'이미 넘었습니다':'앞으로 '+man(c.T-g)+' 원')+'</small></div><div>'
       +c.lost.map(x=>'<b>'+x.label+'</b> : '+won(x.from)+'원 → '+won(x.to)+'원').join('<br>')
