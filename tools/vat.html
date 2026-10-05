@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부가가치세 계산기 2026, 이번 부가세 얼마나 나올까요? | 한택스</title>
+<meta name="description" content="이번 신고 기간(개인 6개월, 법인 3개월)의 매출과 매입을 넣으면 낼 부가가치세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제를 반영합니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/vat.html">
+<meta property="og:title" content="부가가치세, 이번에 얼마나 나올까요?">
+<meta property="og:description" content="매출과 매입으로 낼 부가세를 미리 계산하는 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/vat.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-vat.png?v=4">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.wide{grid-column:1/-1}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.divider b small{font-weight:500;color:var(--mute);font-size:12.5px;margin-left:4px}
+.sim .chk{grid-column:1/-1;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:18px}
+.sim .chk label{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;margin:0;font-weight:600;font-size:14px;color:var(--char);cursor:pointer}
+.sim .chk input{width:17px;height:17px;padding:0;accent-color:var(--blue);flex:none}
+.sim .chk small{margin-left:0}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable .minus td+td{color:var(--blue)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td.best{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:18px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.steps .case{margin-bottom:22px}
+.steps .case:last-child{margin-bottom:0}
+.steps .case b.ttl{display:block;color:var(--ink);font-size:14.5px;margin-bottom:8px}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "부가가치세는 언제 신고하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "개인사업자는 6개월마다(1~6월분은 7월, 7~12월분은 다음 해 1월), 법인은 3개월마다 신고합니다. 개인사업자는 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "금액은 부가세를 포함해 넣나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "네. 매출과 매입 모두 부가세가 포함된 금액으로 넣어 주세요. 세금계산서는 공급가액과 세액을 더한 합계금액입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "신용카드 발행세액공제는 누가 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "직전 연도 매출 10억 원 이하 개인사업자 가운데 소매업, 음식점업, 숙박업처럼 주로 개인 손님에게 파는 업종이 받습니다. 카드와 현금영수증 매출의 1.3%를 한 해 1,000만 원까지 빼 주며, 법인은 받을 수 없어 법인을 고르면 빼고 계산합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "의제매입세액공제는 얼마나 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "음식점 기준으로 개인은 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용합니다. 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하), 70%(2억 원 이하), 60%(초과)까지입니다. 법인은 6/106에 과세표준의 50%까지이며, 이 한도는 2027년 말까지 적용되는 우대 한도입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "간이과세자도 쓸 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "됩니다. 사업자 구분에서 개인사업자를 고르고 과세 유형을 간이과세자로 바꾸시면 업종별 부가가치율로 계산합니다. 직전 연도 매출(공급대가)이 1억 400만 원 미만이면 간이과세자이고, 부동산임대업과 과세유흥장소는 4,800만 원 미만이어야 합니다. 간이과세자는 1년에 한 번, 다음 해 1월 25일까지 신고합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "간이과세자와 일반과세자 중 무엇이 유리한가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "매출이 적고 매입이 많지 않다면 간이과세자가 세금이 적습니다. 다만 간이과세자는 매입세액을 돌려받지 못해서, 인테리어나 설비처럼 큰 투자가 있는 해에는 일반과세자가 유리합니다. 거래처가 세금계산서를 요구하는 사업이라면 발급 범위도 함께 보셔야 합니다. 두 유형을 각각 계산해 비교해 보세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세금계산서를 못 받은 매입도 공제되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "세금계산서나 사업용 신용카드, 현금영수증처럼 적격증빙이 있어야 공제됩니다. 간이영수증만 있는 매입은 부가가치세를 돌려받지 못하니 매입 칸에 넣지 마세요."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>부가가치세,<br>이번에 얼마나 나올까요?</h1>
+    <p class="lead">이번 신고 기간(개인 6개월, 법인 3개월)의 매출과 매입을 넣으면 낼 부가가치세를 미리 계산합니다. 카드 매출 세액공제와 음식점 의제매입세액공제도 반영합니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div>
+          <label for="i-type">사업자 구분</label>
+          <select id="i-type"><option value="indiv">개인사업자</option><option value="corp">법인</option></select>
+        </div>
+        <div id="w-vtype">
+          <label for="i-vtype">과세 유형 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="직전 연도 매출(공급대가)이 1억 400만 원 미만이면 간이과세자입니다. 부동산임대업과 과세유흥장소는 4,800만 원 미만이어야 하고, 간이과세가 배제되는 업종과 지역도 있습니다. 사업자등록증이나 홈택스에서 확인하실 수 있습니다.">?</button></label>
+          <select id="i-vtype"><option value="general">일반과세자</option><option value="simple">간이과세자</option></select>
+        </div>
+        <div id="w-biz" class="wide" style="display:none">
+          <label for="i-biz">업종 <small>간이과세자는 업종별 부가가치율로 계산합니다</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="간이과세자는 매출에 업종별 부가가치율을 곱한 금액에만 10%를 매깁니다. 업종이 여러 개면 매출이 가장 큰 업종을 고르시고, 실제 신고는 업종별로 나눠 계산합니다.">?</button></label>
+          <select id="i-biz">
+            <option value="0.15">소매업, 음식점업, 재생용 재료수집·판매업 (15%)</option>
+            <option value="0.20">제조업, 농림어업, 소화물 전문 운송업 (20%)</option>
+            <option value="0.25">숙박업 (25%)</option>
+            <option value="0.30">건설업, 운수·창고업, 정보통신업, 그 밖의 서비스업 (30%)</option>
+            <option value="0.40">금융·보험, 전문·과학·기술, 사업시설관리·지원·임대, 부동산 관련 (40%)</option>
+          </select>
+        </div>
+        <div class="divider"><b>매출 <small>(부가가치세 포함)</small></b><span id="period">이번 신고 기간 합계 (1~6월 또는 7~12월)</span></div>
+        <div>
+          <label for="i-s-tax">세금계산서 매출 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사업자 거래처에 발행한 세금계산서의 합계금액(공급가액 + 세액)입니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-s-tax" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-s-card">카드·현금영수증 매출 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="카드 단말기, 배달앱, 간편결제, 현금영수증으로 받은 매출입니다. 손님이 낸 금액 그대로 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-s-card" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-s-cash">현금·기타 매출 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="현금영수증 없이 받은 현금이나 계좌이체처럼 증빙 없이 받은 매출입니다. 이 매출도 신고해야 합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-s-cash" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div></div>
+        <div class="divider"><b>매입 <small>(부가가치세 포함)</small></b><span>같은 기간 합계</span></div>
+        <div>
+          <label for="i-b-tax">세금계산서 매입 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사업자에게 받은 세금계산서의 합계금액입니다. 부가세가 없는 계산서(면세) 매입은 빼 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-b-tax" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-b-card">카드·현금영수증 매입 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사업용 카드와 지출증빙 현금영수증으로 산 매입입니다. 접대비, 개인 지출, 부가세가 없는 면세 물품은 공제되지 않으니 빼 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-b-card" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="chk">
+          <label id="w-consumer"><input type="checkbox" id="i-consumer">주로 개인 손님에게 직접 팝니다 <small>가게·식당·미용실 등, 직전 연도 매출 10억 원 이하 개인사업자</small></label>
+          <label><input type="checkbox" id="i-food">음식점을 합니다 <small>식당·카페·주점 등</small></label>
+        </div>
+        <div id="w-farm" style="display:none">
+          <label for="i-farm">면세 농수산물 매입 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="쌀, 채소, 고기, 생선처럼 부가세가 없는 식재료를 계산서나 카드로 산 금액입니다. 일반과세 음식점은 이 금액의 일부를 부가세에서 빼 주는 의제매입세액공제를 받습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-farm" inputmode="numeric"><span>원</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">부가가치세 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2>이번에 낼 부가가치세</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>구분</th><th>금액</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <details class="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps"></div>
+        </details>
+        <div class="ask">
+          <p><b>신고 전에 빠뜨린 공제가 없는지 확인해 보세요.</b><br>매입 증빙과 공제 요건을 함께 보고, 줄일 수 있는 세금을 짚어 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>부가가치세는 언제 신고하나요?</summary>
+          <div class="a">개인사업자는 6개월마다(1~6월분은 7월, 7~12월분은 다음 해 1월), 법인은 3개월마다 신고합니다. 개인사업자는 4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.</div>
+        </details>
+        <details>
+          <summary>금액은 부가세를 포함해 넣나요?</summary>
+          <div class="a">네. 매출과 매입 모두 부가세가 포함된 금액으로 넣어 주세요. 세금계산서는 공급가액과 세액을 더한 합계금액입니다.</div>
+        </details>
+        <details>
+          <summary>신용카드 발행세액공제는 누가 받나요?</summary>
+          <div class="a">직전 연도 매출 10억 원 이하 개인사업자 가운데 소매업, 음식점업, 숙박업처럼 주로 개인 손님에게 파는 업종이 받습니다. 카드와 현금영수증 매출의 1.3%를 한 해 1,000만 원까지 빼 주며, 법인은 받을 수 없어 법인을 고르면 빼고 계산합니다.</div>
+        </details>
+        <details>
+          <summary>의제매입세액공제는 얼마나 받나요?</summary>
+          <div class="a">음식점 기준으로 개인은 6개월 과세표준 2억 원 이하 9/109(2026년 말까지), 초과 8/108을 적용합니다. 공제받을 수 있는 매입은 과세표준의 75%(1억 원 이하), 70%(2억 원 이하), 60%(초과)까지입니다. 법인은 6/106에 과세표준의 50%까지이며, 이 한도는 2027년 말까지 적용되는 우대 한도입니다.</div>
+        </details>
+        <details>
+          <summary>간이과세자도 쓸 수 있나요?</summary>
+          <div class="a">됩니다. 사업자 구분에서 개인사업자를 고르고 과세 유형을 간이과세자로 바꾸시면 업종별 부가가치율로 계산합니다. 직전 연도 매출(공급대가)이 1억 400만 원 미만이면 간이과세자이고, 부동산임대업과 과세유흥장소는 4,800만 원 미만이어야 합니다. 간이과세자는 1년에 한 번, 다음 해 1월 25일까지 신고합니다.</div>
+        </details>
+        <details>
+          <summary>간이과세자와 일반과세자 중 무엇이 유리한가요?</summary>
+          <div class="a">매출이 적고 매입이 많지 않다면 간이과세자가 세금이 적습니다. 다만 간이과세자는 매입세액을 돌려받지 못해서, 인테리어나 설비처럼 큰 투자가 있는 해에는 일반과세자가 유리합니다. 거래처가 세금계산서를 요구하는 사업이라면 발급 범위도 함께 보셔야 합니다. 두 유형을 각각 계산해 비교해 보세요.</div>
+        </details>
+        <details>
+          <summary>세금계산서를 못 받은 매입도 공제되나요?</summary>
+          <div class="a">세금계산서나 사업용 신용카드, 현금영수증처럼 적격증빙이 있어야 공제됩니다. 간이영수증만 있는 매입은 부가가치세를 돌려받지 못하니 매입 칸에 넣지 마세요.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용입니다. 일반과세자는 한 번 신고할 때의 금액을, 간이과세자는 한 해 금액을 계산합니다.<br>
+        · 간이과세자는 매출(공급대가)에 업종별 부가가치율을 곱한 금액에 10%를 매기고, 매입은 0.5%만 공제하며 돌려받지 못합니다. 한 해 매출이 4,800만 원에 못 미치면 납부 의무가 면제되지만 신고는 해야 합니다.<br>
+        · 세율과 공제 한도는 2026년 기준입니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="income-tax.html">종합소득세 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 부가가치세 (일반과세자, 한 번 신고분) ─── */
+const CARD_RATE=0.013, CARD_MAX=10000000;   // 신용카드매출전표 등 발행세액공제: 1.3%, 한 해 1,000만 원 한도
+const f10=x=>(x<0?-1:1)*Math.floor(Math.abs(x)/10+1e-9)*10;   // 10원 미만 버림 (환급액도 같은 방식)
+
+// 금액은 모두 부가세 포함, 한 번 신고하는 기간(개인 6개월, 법인 3개월) 합계. 개인 의제매입 공제율·한도율의 1억·2억 기준은 6개월 과세표준입니다
+const SIMPLE_FREE=48000000;    // 한 해 공급대가가 이 금액 미만이면 납부 의무가 면제됩니다
+const BUY_CREDIT=0.005;        // 간이과세자의 세금계산서등 수취세액공제
+
+function calcVat(c){
+  const sales=c.salesTax+c.salesCard+c.salesCash, buy=c.buyTax+c.buyCard;
+  if(c.simple){
+    const outTax=sales*c.vRate*0.1;                 // 공급대가 × 부가가치율 × 10%
+    const inCredit=buy*BUY_CREDIT;                  // 매입액의 0.5%
+    const card=c.consumer?Math.min(c.salesCard*CARD_RATE,CARD_MAX):0;
+    const free=sales<SIMPLE_FREE;                   // 납부 의무 면제
+    const pre=Math.max(0,outTax-inCredit-card);     // 간이과세자는 돌려받지 못합니다
+    return {simple:true,free,sales,buy,supply:sales,outTax,inTax:inCredit,inCredit,card,
+            deemed:0,deemedCap:0,capRate:0,rateName:'',due:free?0:f10(pre)};
+  }
+  const supply=sales/1.1;                           // 과세표준 (공급가액)
+  const outTax=sales/11, inTax=buy/11;
+  let deemed=0, deemedRate=0, deemedCap=0, capRate=0, rateName='';
+  if(c.food&&c.farm>0){
+    if(c.corp){ deemedRate=6/106; rateName='6/106'; capRate=0.5; }   // 법인 음식점, 우대 한도 50% (2027년 말까지)
+    else{
+      const small=supply<=200000000;
+      deemedRate=small?9/109:8/108; rateName=small?'9/109':'8/108';
+      capRate=supply<=100000000?0.75:small?0.70:0.60;   // 개인 음식점 우대 한도 (2027년 말까지)
+    }
+    deemedCap=supply*capRate;
+    deemed=Math.min(c.farm,deemedCap)*deemedRate;
+  }
+  const pre=outTax-inTax-deemed;
+  const card=c.consumer&&!c.corp?Math.min(c.salesCard*CARD_RATE,CARD_MAX,Math.max(0,pre)):0;   // 납부할 세액을 넘지 않습니다
+  return {sales,buy,supply,outTax,inTax,deemed,deemedRate,deemedCap,capRate,rateName,card,due:f10(pre-card)};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+['i-s-tax','i-s-card','i-s-cash','i-b-tax','i-b-card','i-farm'].forEach(id=>{
+  const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+function read(){
+  const corp=$('i-type').value==='corp', simple=!corp&&$('i-vtype').value==='simple';
+  const food=$('i-food').checked&&!simple;
+  return {corp,salesTax:num($('i-s-tax').value),salesCard:num($('i-s-card').value),salesCash:num($('i-s-cash').value),
+    buyTax:num($('i-b-tax').value),buyCard:num($('i-b-card').value),
+    food,farm:food?num($('i-farm').value):0,consumer:!corp&&$('i-consumer').checked,
+    simple,vRate:Number($('i-biz').value)};
+}
+// 음식점을 고르면 면세 농수산물 칸을 보이고, 개인 손님 대상 업종 체크도 함께 켭니다
+// 개인사업자일 때만 과세 유형을 고르고, 간이과세자면 업종을 받습니다
+function syncType(){
+  const corp=$('i-type').value==='corp';
+  const simple=!corp&&$('i-vtype').value==='simple';
+  $('w-vtype').style.display=corp?'none':'';
+  $('w-consumer').style.display=corp?'none':'';
+  $('w-biz').style.display=simple?'':'none';
+  $('period').textContent=simple?'한 해 합계 (1~12월)':corp?'이번 신고 기간 합계 (3개월)':'이번 신고 기간 합계 (1~6월 또는 7~12월)';
+  $('i-food').closest('label').style.display=simple?'none':'';
+  if(simple){ $('i-food').checked=false; $('w-farm').style.display='none'; }
+}
+$('i-type').addEventListener('change',syncType);
+$('i-vtype').addEventListener('change',syncType);
+$('i-biz').addEventListener('change',()=>{ if(shown()) render(); });
+syncType();
+$('i-food').addEventListener('change',()=>{
+  const on=$('i-food').checked;
+  $('w-farm').style.display=on?'':'none';
+  if(on&&$('i-type').value!=='corp') $('i-consumer').checked=true;
+});
+const shown=()=>$('res').style.display==='block';
+const money=v=>v<0?'환급 '+won(-v)+'원':won(v)+'원';
+
+/* ── 화면 ─────────────────────────────────── */
+// 의제매입 한도가 표에서 바로 보이게: 한도 금액과 과세표준 대비 비율, 넘었으면 한도까지만 반영했다고 적습니다
+function deemedNote(c,r){
+  if(!c.farm) return '면세 농수산물 매입을 넣으면 반영합니다';
+  const rate=r.rateName, cap='한도 '+won(r.deemedCap)+'원 (과세표준의 '+Math.round(r.capRate*100)+'%)';
+  return c.farm>r.deemedCap
+    ?'매입 '+won(c.farm)+'원이 '+cap+'을 넘어 한도까지만 × '+rate
+    :'매입 '+won(c.farm)+'원 × '+rate+' · '+cap;
+}
+function render(){
+  const c=read(), r=calcVat(c);
+  const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
+  $('rt-body').innerHTML=r.simple
+    ?row('납부세액','매출 '+won(r.sales)+'원 × 부가가치율 '+Math.round(c.vRate*100)+'% × 10%',won(r.outTax)+'원')
+      +(c.buyTax+c.buyCard?row('세금계산서등 수취세액공제','매입 합계 '+won(r.buy)+'원 × 0.5%','− '+won(r.inCredit)+'원','minus'):'')
+      +(c.consumer?row('신용카드매출전표 등 발행세액공제','카드·현금영수증 매출의 1.3%','− '+won(r.card)+'원','minus'):'')
+      +'<tr class="tot"><td>이번에 낼 부가세</td><td class="best">'+(r.free?'0원':money(r.due))+'</td></tr>'
+    :row('매출세액','매출 합계 '+won(r.sales)+'원 × 10/110',won(r.outTax)+'원')
+    +row('매입세액','매입 합계 '+won(r.buy)+'원 × 10/110','− '+won(r.inTax)+'원','minus')
+    +(c.food?row('의제매입세액공제',deemedNote(c,r),'− '+won(r.deemed)+'원','minus'):'')
+    +(c.consumer?row('신용카드매출전표 등 발행세액공제','카드·현금영수증 매출의 1.3%','− '+won(r.card)+'원','minus'):'')
+    +'<tr class="tot"><td>이번에 낼 부가세</td><td class="best">'+money(r.due)+'</td></tr>';
+
+  $('res-sub').textContent=(c.corp?'법인':c.simple?'개인 간이과세자':'개인 일반과세자')+' · 매출 '+won(r.sales)+'원 · 매입 '+won(r.buy)+'원';
+
+  const v=r.simple&&r.free
+    ?'한 해 매출이 4,800만 원에 못 미쳐 <b>낼 세금이 없습니다.</b> 다만 신고는 하셔야 합니다.'
+    :r.due<0
+      ?'매입세액이 매출세액보다 많아 <b>'+won(-r.due)+'원을 돌려받습니다.</b> 인테리어나 설비처럼 큰 매입이 있었던 기간에 생깁니다.'
+      :'이번 신고분 부가가치세는 <b>'+won(r.due)+'원</b>입니다.';
+  const notes=[];
+  if(r.simple){
+    notes.push('간이과세자는 1년에 한 번, 다음 해 1월 25일까지 신고합니다. 세금계산서를 발행하는 간이과세자는 7월에 예정부과기간 신고도 합니다.');
+    notes.push('매입세액은 돌려받지 못하고 매입액의 0.5%만 세금에서 빼 줍니다. 큰 설비나 인테리어 투자가 있으면 일반과세자가 유리할 수 있습니다.');
+    if(r.free) notes.push('한 해 매출이 4,800만 원을 넘으면 그때부터 세금이 나옵니다. 세금계산서를 발행했다면 매출과 상관없이 그 부분은 내야 합니다.');
+    if(c.food) notes.push('간이과세자는 의제매입세액공제를 받지 못해 면세 농수산물 매입은 반영하지 않았습니다.');
+  }
+  if(!c.corp&&!c.simple&&r.due>0) notes.push('4월이나 10월에 예정고지로 미리 낸 세금이 있으면 그만큼 빼고 냅니다.');
+  if(c.corp&&c.salesCard>0) notes.push('법인은 신용카드매출전표 등 발행세액공제를 받을 수 없어 반영하지 않았습니다.');
+  if(!c.corp&&!c.consumer&&c.salesCard>0&&!r.free) notes.push('주로 개인 손님에게 파는 업종이라면 카드·현금영수증 매출의 1.3%를 더 뺄 수 있습니다. 해당하면 위에서 체크해 보세요.');
+  if(c.consumer&&c.salesCard*CARD_RATE>CARD_MAX) notes.push('카드 매출 세액공제는 한 해 1,000만 원까지라 1,000만 원만 반영했습니다. 올해 앞선 신고에서 이미 받았다면 그만큼 줄어듭니다.');
+  if(c.food&&c.farm>r.deemedCap) notes.push('면세 농수산물 매입이 공제 한도를 넘어 '+won(r.deemedCap)+'원까지만 의제매입세액공제에 반영했습니다.');
+  $('verdict').innerHTML=v+notes.map(n=>'<span class="note">'+n+'</span>').join('');
+
+  const srow=(l,m,val)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+val+'</td></tr>';
+  $('steps').innerHTML='<table class="stable">'
+    +srow('매출세액','(세금계산서 '+won(c.salesTax)+' + 카드·현금영수증 '+won(c.salesCard)+' + 현금·기타 '+won(c.salesCash)+') × 10/110',won(r.outTax)+'원')
+    +srow('매입세액','(세금계산서 '+won(c.buyTax)+' + 카드·현금영수증 '+won(c.buyCard)+') × 10/110','− '+won(r.inTax)+'원')
+    +(c.food?srow('의제매입세액공제',c.farm>0?'min(농수산물 '+won(c.farm)+', 한도 '+won(r.deemedCap)+' = 과세표준 '+won(r.supply)+' × '+Math.round(r.capRate*100)+'%) × '+r.rateName:'면세 농수산물 매입을 넣으면 반영합니다','− '+won(r.deemed)+'원'):'')
+    +(c.consumer?srow('신용카드매출전표 등 발행세액공제','카드·현금영수증 매출 '+won(c.salesCard)+' × 1.3% (한 해 1,000만 원, 납부할 세액 한도)','− '+won(r.card)+'원'):'')
+    +srow('이번에 낼 부가세','10원 미만 버림',money(r.due))
+    +'</table>';
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  if(!calcVat(read()).sales){ alert('매출을 한 칸 이상 넣어 주세요.'); return; }
+  render();
+});
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&calcVat(read()).sales) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&calcVat(read()).sales) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'예상 부가가치세', sub:document.getElementById('res-sub').textContent, filename:'한택스_부가가치세' })
+);
+</script>
+</body>
+</html>

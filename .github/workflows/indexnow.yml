@@ -1,0 +1,44 @@
+# 새로 생기거나 바뀐 페이지를 네이버에 알립니다 (IndexNow — 네이버가 Bing 등 참여 검색엔진과 공유)
+# 키 파일: 사이트 맨 위의 <KEY>.txt (키는 공개값이라 비밀 아님)
+name: IndexNow 네이버 알림
+
+on:
+  push:
+    branches: [main]
+    paths: ['**.html']
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    env:
+      KEY: 99a310a2bc3883ed83aa1512ead202d2
+      SITE: https://www.hantax47.com
+      BEFORE: ${{ github.event.before }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 바뀐 페이지 주소 모으기
+        run: |
+          # 이번 푸시에 들어온 커밋 전체를 비교 (강제 푸시 등으로 이전 기준이 없으면 직전 커밋과 비교)
+          git cat-file -e "$BEFORE^{commit}" 2>/dev/null || BEFORE=HEAD~1
+          : > urls.txt
+          git diff --name-only --diff-filter=AM "$BEFORE" HEAD -- '*.html' | while read -r f; do
+            case "$(basename "$f")" in _*) continue;; esac          # _template.html 같은 초안 제외
+            grep -q 'http-equiv="refresh"' "$f" && continue          # 옛 주소 이동 페이지 제외
+            p="${f%index.html}"                                       # column/index.html → column/
+            echo "$SITE/$p" >> urls.txt
+          done
+          echo "알릴 주소 $(wc -l < urls.txt)개"; cat urls.txt
+
+      - name: 네이버에 알리기
+        run: |
+          [ -s urls.txt ] || { echo "알릴 페이지 없음"; exit 0; }
+          sleep 90   # ponytail: GitHub Pages 배포가 끝나길 고정 시간 기다림, 배포가 느려지면 늘릴 것
+          jq -n --arg key "$KEY" --arg site "$SITE" --rawfile u urls.txt \
+            '{host:($site|sub("https://";"")), key:$key, keyLocation:($site+"/"+$key+".txt"), urlList:($u|split("\n")|map(select(length>0)))}' > body.json
+          code=$(curl -sS -o resp.txt -w "%{http_code}" -H "Content-Type: application/json; charset=utf-8" \
+            --data @body.json https://searchadvisor.naver.com/indexnow)
+          echo "네이버 응답 $code"; cat resp.txt; echo
+          case "$code" in 200|202) ;; *) exit 1;; esac

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업무용 차량, 사는 게 나을까요 빌리는 게 나을까요 | 한택스</title>
+<meta name="description" content="일시취득, 할부취득, 운용리스, 장기렌트 가운데 무엇이 맞는지 몇 가지 질문으로 골라 드립니다. 사고 빈도, 자금출처, 신용도, 번호판, 중도 처분 가능성을 함께 봅니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/car-choice.html">
+<meta property="og:title" content="업무용 차량, 어떻게 사는 게 맞을까요?">
+<meta property="og:description" content="몇 가지 질문으로 일시취득·할부취득·운용리스·장기렌트 가운데 맞는 방법을 골라 드립니다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/car-choice.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-car-choice.png?v=2">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:720px;margin:0 auto}
+.qbox{background:var(--soft);border-radius:14px;padding:26px 28px}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.qtop .step{font-size:12.5px;font-weight:800;letter-spacing:.08em;color:var(--blue)}
+.qtop .back{border:0;background:none;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer;padding:4px}
+.qtop .back:hover{color:var(--blue)}
+.qbar{height:4px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:22px}
+.qbar i{display:block;height:100%;background:var(--blue);transition:width .25s}
+.qbox h2{font-size:20px;font-weight:800;line-height:1.5;margin:0 0 8px;font-family:var(--sans);letter-spacing:-.01em}
+.qbox .qhelp{font-size:13.5px;line-height:1.75;color:var(--mute);margin-bottom:18px}
+.opts{display:grid;gap:9px}
+.opt{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:11px;padding:14px 16px;
+  font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;line-height:1.5}
+.opt:hover{border-color:var(--blue);background:var(--blue-soft)}
+.res{display:none}
+.verdict{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center}
+.verdict .lbl{font-size:14px;opacity:.85}
+.verdict .val{font-size:34px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.3}
+.verdict .sub{font-size:14px;opacity:.85;line-height:1.7}
+.box{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.box h3{font-size:15.5px;color:var(--ink);margin-bottom:10px}
+.box .lead2{font-size:13.5px;line-height:1.75;color:var(--mute);margin:-4px 0 12px}
+.box ul{margin:0;padding-left:18px;font-size:14.5px;line-height:1.85;color:var(--char)}
+.box li b{color:var(--ink)}
+.box li+li{margin-top:8px}
+.ways li{list-style:none;margin-left:-18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--soft)}
+.ways li:last-child{border-bottom:0}
+.ways b{display:block;color:var(--ink);margin-bottom:2px}
+.ways span.d{display:block;font-size:13.5px;color:var(--mute);line-height:1.7}
+.ways .tag{flex:none;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.tag.best{background:var(--blue-soft);color:var(--blue)}
+.tag.ok{background:var(--soft);color:var(--char)}
+.tag.no{background:var(--seal-soft);color:var(--seal)}
+.again{margin-top:18px;text-align:center}
+.again button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.again button:hover{background:var(--blue-soft)}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+@media(max-width:660px){
+.qbox{padding:20px 16px}.qbox h2{font-size:18px}
+.verdict{padding:22px 16px}.verdict .val{font-size:27px}
+.box{padding:16px}
+}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "이 결과만 보고 정해도 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "세금 계산이 아니라 상황에 맞는 구입 방법을 골라 드리는 안내입니다. 실제로 드는 돈과 세금 효과는 업무용 차량 계산기에서 확인해 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "대출 한도에 영향이 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "운용리스와 할부취득은 금융기관 부채로 잡혀 대출 한도에 영향을 줄 수 있고, 장기렌트는 렌트료를 비용으로 처리해 부채로 잡히지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "장기렌트 번호판은 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "허, 하, 호 번호판을 씁니다. 만기에 인수한 뒤에는 일반 번호판으로 바꿀 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "어떤 방법으로 사도 비용 한도는 같나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "같습니다. 업무용 승용차 비용은 운행기록부가 없으면 한 해 1,500만 원까지만 인정되고 감가상각비는 한 해 800만 원이 한도입니다. 법인은 업무전용 자동차보험을 들어야 합니다. 경차와 9인승 이상 승합차, 화물차는 이 한도를 받지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "경차나 승합차는 왜 리스가 빠지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "경차와 9인승 이상 승합차, 화물차는 일반과세자가 사거나 렌트하면 부가가치세를 돌려받습니다. 그런데 운용리스는 리스료에 부가가치세가 없어 차값의 10%를 돌려받지 못하기 때문입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "중간에 해지하면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "운용리스와 장기렌트는 위약금이 붙습니다. 계약 전에 위약금 조건을 꼭 확인해 주세요."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">세무설계</span>
+    <h1>업무용 차량,<br>어떻게 사는 게 맞을까요?</h1>
+    <p class="lead">일시취득, 할부취득, 운용리스, 장기렌트는 내는 돈만 놓고 보면 큰 차이가 없습니다. 갈리는 것은 사고가 잦은지, 자금출처가 신경 쓰이는지, 신용도가 중요한지 같은 상황입니다. 몇 가지만 답해 주시면 맞는 방법을 골라 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="qbox" id="qbox">
+        <div class="qtop"><span class="step" id="q-step"></span><button type="button" class="back" id="q-back">이전 질문</button></div>
+        <div class="qbar"><i id="q-bar"></i></div>
+        <h2 id="q-title"></h2>
+        <p class="qhelp" id="q-help"></p>
+        <div class="opts" id="q-opts"></div>
+      </div>
+
+      <div class="res" id="res">
+        <div class="verdict" id="verdict"></div>
+        <div class="box" id="corp-box" style="display:none">
+          <h3>명의는 법인으로 두세요</h3>
+          <p class="lead2" style="margin-bottom:0">법인과 개인사업자를 함께 가지고 계시면 차량은 법인 명의가 낫습니다. 법인세율이 소득세율보다 낮은 구간이 많고, 차량 비용과 보험·유지비를 법인 비용으로 한 번에 정리할 수 있습니다. 다만 법인 차량은 업무전용 자동차보험과 운행기록부를 챙겨야 비용으로 인정받습니다.</p>
+        </div>
+        <div class="box">
+          <h3>왜 이 방법인가요</h3>
+          <ul id="reasons"></ul>
+        </div>
+        <div class="box">
+          <h3>네 가지 방법을 나란히 보면</h3>
+          <p class="lead2">내는 돈은 크게 다르지 않습니다. 상황에 맞는지로 갈립니다.</p>
+          <ul class="ways" id="ways"></ul>
+        </div>
+        <div class="again"><button type="button" id="restart">처음부터 다시 하기</button></div>
+        <div class="ask">
+          <p><b>금액까지 비교해 보시겠어요?</b><br>차량 가격과 보유 기간을 넣으면 네 가지 방법의 실제 지출과 세금 효과를 계산해 드립니다.</p>
+          <div class="btns">
+            <a href="business-car.html" class="btn btn-primary">차량 비용 계산기 열기</a>
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>이 결과만 보고 정해도 되나요?</summary>
+          <div class="a">세금 계산이 아니라 상황에 맞는 구입 방법을 골라 드리는 안내입니다. 실제로 드는 돈과 세금 효과는 업무용 차량 계산기에서 확인해 주세요.</div>
+        </details>
+        <details>
+          <summary>대출 한도에 영향이 있나요?</summary>
+          <div class="a">운용리스와 할부취득은 금융기관 부채로 잡혀 대출 한도에 영향을 줄 수 있고, 장기렌트는 렌트료를 비용으로 처리해 부채로 잡히지 않습니다.</div>
+        </details>
+        <details>
+          <summary>장기렌트 번호판은 어떻게 되나요?</summary>
+          <div class="a">허, 하, 호 번호판을 씁니다. 만기에 인수한 뒤에는 일반 번호판으로 바꿀 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>어떤 방법으로 사도 비용 한도는 같나요?</summary>
+          <div class="a">같습니다. 업무용 승용차 비용은 운행기록부가 없으면 한 해 1,500만 원까지만 인정되고 감가상각비는 한 해 800만 원이 한도입니다. 법인은 업무전용 자동차보험을 들어야 합니다. 경차와 9인승 이상 승합차, 화물차는 이 한도를 받지 않습니다.</div>
+        </details>
+        <details>
+          <summary>경차나 승합차는 왜 리스가 빠지나요?</summary>
+          <div class="a">경차와 9인승 이상 승합차, 화물차는 일반과세자가 사거나 렌트하면 부가가치세를 돌려받습니다. 그런데 운용리스는 리스료에 부가가치세가 없어 차값의 10%를 돌려받지 못하기 때문입니다.</div>
+        </details>
+        <details>
+          <summary>중간에 해지하면 어떻게 되나요?</summary>
+          <div class="a">운용리스와 장기렌트는 위약금이 붙습니다. 계약 전에 위약금 조건을 꼭 확인해 주세요.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 상황에 맞는 방법을 고르기 위한 안내입니다. 실제로 드는 돈과 세금 효과는 업무용 차량 계산기에서 확인해 주세요.
+      </p>
+
+      <div class="morelinks">
+        <a href="business-car.html">업무용 차량 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="incorporation.html">법인전환 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 업무용 차량 구입 방법 고르기 ───────────────
+   점수가 높은 방법을 고르되, 못 쓰는 방법은 아예 빼고 이유를 보여 줍니다 */
+const WAYS={
+  cash:{name:'일시취득',desc:'한 번에 사서 끝냅니다. 이자와 수수료가 없어 총 지출이 가장 적지만, 목돈이 한 번에 나갑니다.'},
+  loan:{name:'할부취득',desc:'차는 내 것이고 값만 나눠 냅니다. 중간에 팔기 쉽지만 금융기관 부채로 잡힙니다.'},
+  lease:{name:'운용리스',desc:'매달 리스료를 내고 탑니다. 초기 목돈이 적지만 부채로 잡히고 중도 해지에 위약금이 있습니다.'},
+  rent:{name:'장기렌트',desc:'보험과 정비까지 묶어 매달 냅니다. 부채로 잡히지 않고 사고가 나도 보험료가 오르지 않지만, 허·하·호 번호판을 씁니다.'}
+};
+// 답변마다 [점수, 이유, 아예 빼는 방법]
+const QUESTIONS=[
+  {id:'owner',q:'사업자를 어떻게 가지고 계신가요?',
+   opts:[
+    ['indiv','개인사업자만 있습니다',{}],
+    ['corp','법인만 있습니다',{}],
+    ['both','법인과 개인사업자를 둘 다 가지고 있습니다',{why:'법인과 개인사업자를 함께 두고 계시니 차량은 법인 명의가 낫습니다.'}]
+   ]},
+  {id:'kind',q:'어떤 차를 들이시나요?',
+   help:'경차, 9인승 이상 승합차, 화물차는 차값의 부가세를 돌려받을 수 있고 업무용승용차 비용 한도도 받지 않습니다.',
+   opts:[
+    ['sedan','일반 승용차 (세단·SUV)',{}],
+    ['light','경차',{why:'경차는 업무용승용차가 아니라 연 1,500만 원 비용 한도, 감가상각비 800만 원 한도, 운행기록부 의무를 받지 않습니다.'}],
+    ['van','9인승 이상 승합차',{why:'9인승 이상 승합차는 업무용승용차가 아니라 연 1,500만 원 비용 한도, 감가상각비 800만 원 한도, 운행기록부 의무를 받지 않습니다.'}],
+    ['truck','화물차 (트럭·밴)',{why:'화물차는 업무용승용차가 아니라 연 1,500만 원 비용 한도, 감가상각비 800만 원 한도, 운행기록부 의무를 받지 않습니다.'}]
+   ]},
+  {id:'vat',when:a=>a.kind&&a.kind!=='sedan',q:'부가세 신고 때 매입세액을 공제받는 일반과세자인가요?',
+   help:'이 차종은 사거나 렌트하면 부가세를 돌려받지만, 운용리스는 리스료에 부가세가 없어 차값의 부가세 10%를 돌려받지 못합니다. 간이과세자나 병의원·학원 같은 면세사업자는 차이가 없습니다.',
+   opts:[
+    ['yes','예, 일반과세자입니다',{drop:{lease:'리스료에는 부가세가 없어 차값의 부가세 10%를 돌려받지 못합니다'},why:'일반과세자라 이 차종을 사거나 렌트하면 부가세를 돌려받지만, 운용리스는 차값의 부가세 10%를 돌려받지 못해 뺐습니다.'}],
+    ['no','간이과세자이거나 면세사업자입니다',{}],
+    ['unknown','잘 모르겠습니다',{why:'일반과세자라면 운용리스는 차값의 부가세 10%를 돌려받지 못해 불리합니다. 부가세를 어떻게 신고하고 계신지 확인해 보세요.'}]
+   ]},
+  {id:'spend',q:'한 번에 낼까요, 나눠 낼까요?',
+   help:'한 번에 사면 이자와 수수료가 없어 총액이 가장 적습니다. 나눠 내면 목돈이 묶이지 않는 대신 이자만큼 총액이 늘어납니다.',
+   opts:[
+    ['most','이자 없이 한 번에 내고 총 지출을 줄이겠습니다',{score:{cash:3},why:'이자와 수수료가 없는 일시취득이 총액으로는 가장 적습니다.'}],
+    ['mid','이자를 조금 내더라도 나눠 내겠습니다',{score:{lease:1,rent:1,loan:1},why:'이자를 감수하고 나눠 내기를 원하셔서 할부취득, 운용리스, 장기렌트에 점수를 더했습니다.'}]
+   ]},
+  {id:'fund',q:'차량 구입 자금의 출처가 신경 쓰이시나요?',
+   help:'목돈으로 차를 사면 그 돈을 어디서 마련했는지 설명해야 할 수 있습니다.',
+   opts:[
+    ['yes','신경 쓰입니다',{score:{rent:3,lease:3,cash:-3},why:'자금출처가 신경 쓰이면 목돈이 한 번에 나가지 않는 장기렌트나 운용리스가 낫습니다.'}],
+    ['no','상관없습니다',{}]
+   ]},
+  {id:'credit',q:'대출 한도나 신용도가 중요하신가요?',
+   help:'운용리스와 할부취득은 금융기관 부채로 잡혀 대출 한도에 영향을 줍니다. 장기렌트는 비용으로 처리되어 부채로 잡히지 않습니다.',
+   opts:[
+    ['yes','중요합니다. 부채로 잡히면 곤란합니다',{score:{rent:3},drop:{loan:'부채로 잡혀 대출 한도에 영향을 줍니다',lease:'부채로 잡혀 대출 한도에 영향을 줍니다'},why:'신용도가 중요하셔서 부채로 잡히는 할부취득과 운용리스는 뺐습니다. 장기렌트는 부채로 잡히지 않습니다.'}],
+    ['no','상관없습니다',{}]
+   ]},
+  {id:'crash',q:'운전하면서 사고가 잦은 편인가요?',
+   help:'장기렌트는 보험이 렌트사 명의라 사고가 나도 내 보험료가 오르지 않습니다.',
+   opts:[
+    ['often','잦은 편입니다',{score:{rent:3},why:'사고가 잦으면 보험이 렌트사 명의라 보험료가 오르지 않는 장기렌트가 유리합니다.'}],
+    ['rare','거의 없습니다',{}]
+   ]},
+  {id:'plate',q:'허·하·호 번호판이 불편하신가요?',
+   help:'장기렌트 차량은 영업용 번호판을 씁니다. 인수한 뒤에는 일반 번호판으로 바꿀 수 있습니다.',
+   opts:[
+    ['yes','불편합니다',{drop:{rent:'허·하·호 번호판을 써야 합니다'},why:'번호판이 불편하시다고 해서 장기렌트는 뺐습니다.'}],
+    ['no','상관없습니다',{}]
+   ]},
+  {id:'quit',q:'중간에 차를 바꾸거나 처분할 가능성이 있나요?',
+   opts:[
+    ['high','있습니다',{score:{cash:3,loan:3,lease:-2,rent:-2},why:'중도에 처분할 가능성이 있으면 위약금이 없는 일시취득이나 할부취득이 안전합니다. 운용리스와 장기렌트는 중도 해지에 위약금이 붙습니다.'}],
+    ['low','끝까지 탈 생각입니다',{}]
+   ]}
+];
+
+const $=id=>document.getElementById(id);
+let answers={}, idx=0;
+
+const visible=a=>QUESTIONS.filter(q=>!q.when||q.when(a));   // 답에 따라 필요한 질문만
+function show(){
+  const list=visible(answers);
+  if(idx>=list.length){ result(); return; }
+  const q=list[idx];
+  $('q-step').textContent=(idx+1)+' / '+list.length;
+  $('q-bar').style.width=Math.round(idx/list.length*100)+'%';
+  $('q-back').style.visibility=idx?'visible':'hidden';
+  $('q-title').textContent=q.q;
+  $('q-help').textContent=q.help||'';
+  $('q-help').style.display=q.help?'':'none';
+  $('q-opts').innerHTML=q.opts.map(([v,label])=>'<button type="button" class="opt" data-v="'+v+'">'+label+'</button>').join('');
+  $('qbox').style.display='';
+  $('res').style.display='none';
+}
+$('q-opts').addEventListener('click',e=>{
+  const b=e.target.closest('.opt'); if(!b) return;
+  answers[visible(answers)[idx].id]=b.dataset.v;
+  idx++; show();
+});
+$('q-back').addEventListener('click',()=>{ if(idx){ idx--; show(); } });
+$('restart').addEventListener('click',()=>{ answers={}; idx=0; show(); window.scrollTo({top:$('qbox').offsetTop-90,behavior:'smooth'}); });
+
+function decide(a){
+  const score={cash:0,loan:0,lease:0,rent:0}, dropped={}, why=[];
+  for(const q of visible(a)){   // 건너뛴 질문의 예전 답은 쓰지 않습니다
+    const picked=q.opts.find(o=>o[0]===a[q.id]); if(!picked) continue;
+    const eff=picked[2]||{};
+    if(eff.score) for(const k in eff.score) score[k]+=eff.score[k];
+    if(eff.drop) for(const k in eff.drop) dropped[k]=eff.drop[k];
+    if(eff.why) why.push(eff.why);
+  }
+  const left=Object.keys(WAYS).filter(k=>!dropped[k]);
+  const best=left.slice().sort((x,y)=>score[y]-score[x])[0];
+  const tie=left.filter(k=>score[k]===score[best]);
+  return {score,dropped,why,best,tie,corp:a.owner==='both'};
+}
+function result(){
+  const d=decide(answers), names=d.tie.map(k=>WAYS[k].name);
+  $('verdict').innerHTML='<div class="lbl">이 상황이라면</div>'
+    +'<div class="val">'+names.join(' 또는 ')+'</div>'
+    +'<div class="sub">'+(d.tie.length>1
+      ?'두 방법이 비슷하게 맞습니다. 금액은 계산기로 비교해 보시고 편한 쪽을 고르시면 됩니다.'
+      :WAYS[d.best].desc)+'</div>';
+  $('corp-box').style.display=d.corp?'':'none';
+  $('reasons').innerHTML=(d.why.length?d.why:['특별히 걸리는 조건이 없어 총 지출과 편의로만 봤습니다.']).map(w=>'<li>'+w+'</li>').join('');
+  $('ways').innerHTML=Object.keys(WAYS).map(k=>{
+    const tag=d.dropped[k]?['no','권하지 않음']:d.tie.includes(k)?['best','추천']:['ok','가능'];
+    return '<li><div><b>'+WAYS[k].name+'</b><span class="d">'+(d.dropped[k]?d.dropped[k]+'.':'')+' '+WAYS[k].desc+'</span></div>'
+      +'<span class="tag '+tag[0]+'">'+tag[1]+'</span></li>';
+  }).join('');
+  $('qbox').style.display='none';
+  $('res').style.display='block';
+  if(window.gtag) gtag('event','car_choice_result');
+}
+show();
+</script>
+</body>
+</html>

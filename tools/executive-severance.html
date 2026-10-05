@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>임원 퇴직금 한도 계산기, 2배수 한도와 손금 한도 | 한택스</title>
+<meta name="description" content="임원에게 줄 퇴직금이 소득세법 한도(퇴직 전 3년 평균급여의 10% × 근속연수 × 2배) 안에 들어오는지 계산합니다. 2011년 이전과 2012~2019년 근속분을 나눠 계산하고, 정관 규정이 없을 때의 법인세 손금 한도까지 함께 보여 드립니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/executive-severance.html">
+<meta property="og:title" content="임원 퇴직금, 얼마까지 인정되나요?">
+<meta property="og:description" content="2배수 한도와 법인세 손금 한도를 함께 보는 임원 퇴직금 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/executive-severance.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-executive-severance.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.ichk{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-size:13.5px;font-weight:600;color:var(--char);cursor:pointer}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.modes{display:flex;gap:9px;margin-bottom:16px}
+.modes button{flex:1;padding:13px 10px;border:1px solid var(--line);background:#fff;border-radius:12px;
+  font-family:inherit;color:var(--mute);cursor:pointer;text-align:center}
+.modes button b{display:block;font-size:15px;font-weight:800;color:var(--char)}
+.modes button em{display:block;margin-top:3px;font-style:normal;font-size:12.5px;color:var(--mute)}
+.modes button.on b{color:var(--blue)}
+.modes button.on em{color:var(--blue)}
+.modes button:hover{border-color:var(--blue-line)}
+.modes button.on{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call.warn{background:#8E2B24}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable .minus td+td{color:var(--blue)}
+.rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot.warn td{background:var(--seal-soft)}
+.rtable tr.tot.warn td+td{color:var(--seal)}
+.rtable tr.line td+td{color:var(--mute);font-weight:600}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict .note.warn b{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:18px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+/* 명세서: 화면에서는 숨기고 인쇄할 때만 보입니다 */
+#print-area{display:none;color:#1a1f2b}
+.pst-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:2px solid #0B1E3F;padding-bottom:10px;margin-bottom:16px}
+.pst-head h1{font-size:22px;margin:0;color:#0B1E3F}
+.pst-head p{margin:0;font-size:12.5px;color:#5C6572}
+.pst-info{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px}
+.pst-info th{background:#F3F5F9;color:#5C6572;font-weight:600;text-align:left;padding:7px 10px;border:1px solid #E1E6EE;width:17%}
+.pst-info td{padding:7px 10px;border:1px solid #E1E6EE;width:33%}
+.pst-info td span{color:#8b98a8;font-size:11.5px}
+.pst-sum{width:100%;border-collapse:collapse;margin-bottom:18px}
+.pst-sum th{background:#0B1E3F;color:#fff;padding:8px;font-size:12.5px;font-weight:700;border:1px solid #0B1E3F}
+.pst-sum td{padding:11px 8px;border:1px solid #E1E6EE;text-align:center;font-weight:800;font-size:14.5px}
+.pst-sum td.net{color:#1B4A9B}
+.pst h2{font-size:14px;margin:0 0 4px;color:#0B1E3F}
+.pst .stable{font-size:11.5px}
+.pst .stable td{padding:5px 8px}
+.pst-note{font-size:10.5px;color:#8b98a8;margin-top:14px;line-height:1.6}
+.pst-foot{font-size:10px;color:#aaaaaa;text-align:right;margin-top:6px}
+.codiv{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.codiv b{font-size:14.5px;color:var(--ink)}
+.codiv em{font-style:normal;font-size:12.5px;color:var(--mute)}
+@media print{
+  @page{size:A4;margin:0}   /* 여백이 0이면 브라우저가 날짜·제목·주소·쪽번호를 찍지 않습니다 */
+  body{background:#fff!important;margin:0}
+  body>*:not(#print-area){display:none!important}
+  #print-area{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #print-area .pst{padding:13mm 14mm}
+}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "임원 퇴직금 한도는 어떻게 계산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "퇴직 전 3년 평균급여의 10%에 근속연수를 곱한 뒤 2배를 한 금액입니다(소득세법 제22조). 2012년부터 2019년까지의 근속분은 2배가 아니라 3배이고, 2011년 이전 근속분은 한도 자체가 없습니다. 오래 재임하신 임원일수록 구간을 나눠 계산해야 한도가 제대로 나옵니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "한도를 넘으면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "넘는 금액은 퇴직소득이 아니라 그해 근로소득이 됩니다. 퇴직소득은 근속연수로 나눠 세금을 매겨 부담이 적지만, 근로소득은 그해 다른 소득과 합쳐져 6~45% 세율이 그대로 붙습니다. 같은 금액을 받아도 세금이 몇 배 차이 날 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "정관에 규정이 없으면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "회사 비용으로 인정되는 금액이 줄어듭니다. 정관이나 정관이 위임한 규정에 지급 기준이 있으면 그 금액까지 비용이 되지만, 없으면 퇴직 전 1년 총급여의 10%에 근속연수를 곱한 금액(1배수)까지만 인정됩니다. 넘는 금액은 회사 비용에서 빠지고 대표님 상여로 처분되어 근로소득세까지 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "한도가 두 개라는 게 무슨 뜻인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "소득세법 한도와 법인세법 한도가 따로 있습니다. 소득세법 한도는 받는 분의 세금 종류를 가르고(퇴직소득인지 근로소득인지), 법인세법 한도는 회사가 비용으로 넣을 수 있는 금액을 정합니다. 정관 규정 없이 2배수로 지급하면 양쪽에서 모두 걸릴 수 있어 함께 보셔야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "직원으로 일하다 임원이 되면 근속연수는 어떻게 보나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "임원이 되면서 퇴직금을 정산해 받으셨다면 임원이 된 날부터 다시 셉니다. 정산하지 않고 이어서 계산하기로 했다면 입사일부터 셉니다. 다만 이 경우 직원 기간까지 임원 한도 계산에 들어가므로, 정산 여부를 서류로 분명히 남겨 두셔야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "퇴직 전 3년 총급여에는 무엇이 들어가나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "퇴임일부터 거슬러 3년 동안 받은 급여와 상여를 더합니다. 재임 기간이 3년이 안 되면 그 기간 금액을 넣고 1년 평균으로 환산합니다. 비과세 급여와 퇴직금은 넣지 않습니다. 퇴직 직전에 급여를 크게 올리면 한도도 함께 올라가지만, 올린 이유가 설명되지 않으면 부인될 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "퇴직금을 중간정산할 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "임원도 법에서 정한 사유에 해당하면 중간정산할 수 있지만, 직원보다 사유가 좁고 정관이나 규정에 근거가 있어야 합니다. 요건을 갖추지 못한 중간정산은 퇴직금이 아니라 급여를 미리 준 것으로 보아 가지급금이 됩니다."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">임원 퇴직금</span>
+    <h1>임원 퇴직금,<br>얼마까지 인정되나요?</h1>
+    <p class="lead">임원에게 줄 퇴직금은 한도를 넘으면 퇴직소득이 아니라 근로소득이 됩니다. 넘는지 계산하고, 회사 비용으로 인정되는 금액까지 함께 짚어 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="modes" id="modes">
+        <button type="button" class="on" data-mode="limit"><b>한도 계산</b><em>최대 얼마까지 줄 수 있는지</em></button>
+        <button type="button" data-mode="check"><b>지급액 검토</b><em>정한 금액이 한도를 넘는지</em></button>
+      </div>
+      <div class="sim-in">
+        <div class="divider"><b>회사 규정</b><span>한도를 가르는 첫 기준입니다</span></div>
+        <div class="wide">
+          <label class="ichk"><input type="checkbox" id="i-rule" checked><span>정관이나 정관이 위임한 규정에 임원 퇴직금 지급 기준이 있습니다</span>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="정관에 직접 금액이나 산식을 적어 두었거나, 정관에서 주주총회 결의로 정하도록 위임하고 그 규정을 두었다면 체크해 주세요. 규정이 있으면 퇴직 전 3년 평균급여를 기준으로 2배수 한도까지, 규정이 없으면 퇴직 전 1년 급여를 기준으로 1배수까지만 인정됩니다. 지급할 때 급하게 만든 규정은 인정되지 않을 수 있습니다.">?</button>
+          </label>
+        </div>
+
+        <div class="divider"><b>재임 기간</b><span>등기임원이 된 날부터 그만두는 날까지</span></div>
+        <div>
+          <label for="i-start">취임일 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="임원으로 취임한 날입니다. 직원으로 일하다 임원이 되면서 퇴직금을 정산해 받으셨다면 임원이 된 날을, 정산하지 않고 이어서 계산한다면 입사일을 넣어 주세요.">?</button></label>
+          <input type="date" id="i-start">
+        </div>
+        <div>
+          <label for="i-end">퇴임일 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="임원에서 물러나는 날입니다. 근속 기간은 취임일부터 퇴임일까지의 개월 수로 보고, 한 달이 안 되는 끝수는 버립니다.">?</button></label>
+          <input type="date" id="i-end">
+        </div>
+
+        <div class="divider"><b>급여와 퇴직금</b><span>세전 금액으로 넣어 주세요</span></div>
+        <div id="pay3-box">
+          <label for="i-pay3">퇴직 전 3년 총급여 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴임일부터 거슬러 3년 동안 받은 급여와 상여를 모두 더한 금액입니다. 재임 기간이 3년이 안 되면 그 기간에 받은 금액을 넣어 주세요. 계산기가 1년 평균으로 환산합니다. 비과세 급여와 퇴직금은 넣지 않습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-pay3" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div id="pay1-box" style="display:none">
+          <label for="i-pay1">퇴직 전 1년 총급여 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴임일부터 거슬러 1년 동안 받은 급여와 상여를 더한 금액입니다. 정관에 규정이 없으면 이 금액의 10%에 근속연수를 곱한 금액까지만 인정되고, 넘는 금액은 회사 비용에서 빠지면서 상여로 처분됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-pay1" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div id="amount-box">
+          <label for="i-amount">지급할 퇴직금 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="정관이나 임원 퇴직금 지급규정에 따라 실제로 지급하려는 금액입니다. 직원처럼 평균임금으로 계산하는 것이 아니라 규정에서 정한 금액이 기준이 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-amount" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <div class="codiv"><b>명세서에 표시할 정보</b><em>없으면 비워 두세요</em></div>
+        <div>
+          <label for="i-co">회사명</label>
+          <input type="text" id="i-co" maxlength="40" autocomplete="organization">
+        </div>
+        <div>
+          <label for="i-name">임원 이름</label>
+          <input type="text" id="i-name" maxlength="20" autocomplete="off">
+        </div>
+
+        <div class="divider" id="rate-divider"><b>세율</b><span>한도를 넘는 금액에 매길 세율입니다</span></div>
+        <div id="rate-box">
+          <label for="i-rate">한도를 넘는 금액에 붙는 세율 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="한도를 넘는 금액은 퇴직소득이 아니라 그해 근로소득이 되어 다른 소득과 합산됩니다. 합산한 뒤의 세율을 모르면 평소 연봉에 맞는 세율을 골라 보세요. 대략의 금액을 가늠하는 용도입니다.">?</button></label>
+          <select id="i-rate">
+            <option value="0.06">6% (과세표준 1,400만 원 이하)</option>
+            <option value="0.15">15% (5,000만 원 이하)</option>
+            <option value="0.24">24% (8,800만 원 이하)</option>
+            <option value="0.35" selected>35% (1억 5천만 원 이하)</option>
+            <option value="0.38">38% (3억 원 이하)</option>
+            <option value="0.40">40% (5억 원 이하)</option>
+            <option value="0.42">42% (10억 원 이하)</option>
+            <option value="0.45">45% (10억 원 초과)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">임원 퇴직금 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2>임원 퇴직금 한도</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+          <button type="button" class="savebtn" id="save-pdf">PDF 저장</button>
+        </div>
+        <div class="call" id="call"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>구분</th><th>금액</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <details class="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps"></div>
+        </details>
+        <div class="ask">
+          <p><b>퇴직금을 주기 전에 규정부터 보셔야 합니다.</b><br>정관과 지급규정을 어떻게 두어야 하는지, 금액을 어디까지 잡는 것이 안전한지 함께 확인해 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>임원 퇴직금 한도는 어떻게 계산하나요?</summary>
+          <div class="a">퇴직 전 3년 평균급여의 10%에 근속연수를 곱한 뒤 2배를 한 금액입니다(소득세법 제22조). 2012년부터 2019년까지의 근속분은 2배가 아니라 3배이고, 2011년 이전 근속분은 한도 자체가 없습니다. 오래 재임하신 임원일수록 구간을 나눠 계산해야 한도가 제대로 나옵니다.</div>
+        </details>
+        <details>
+          <summary>한도를 넘으면 어떻게 되나요?</summary>
+          <div class="a">넘는 금액은 퇴직소득이 아니라 그해 근로소득이 됩니다. 퇴직소득은 근속연수로 나눠 세금을 매겨 부담이 적지만, 근로소득은 그해 다른 소득과 합쳐져 6~45% 세율이 그대로 붙습니다. 같은 금액을 받아도 세금이 몇 배 차이 날 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>정관에 규정이 없으면 어떻게 되나요?</summary>
+          <div class="a">회사 비용으로 인정되는 금액이 줄어듭니다. 정관이나 정관이 위임한 규정에 지급 기준이 있으면 그 금액까지 비용이 되지만, 없으면 퇴직 전 1년 총급여의 10%에 근속연수를 곱한 금액(1배수)까지만 인정됩니다. 넘는 금액은 회사 비용에서 빠지고 대표님 상여로 처분되어 근로소득세까지 붙습니다.</div>
+        </details>
+        <details>
+          <summary>한도가 두 개라는 게 무슨 뜻인가요?</summary>
+          <div class="a">소득세법 한도와 법인세법 한도가 따로 있습니다. 소득세법 한도는 받는 분의 세금 종류를 가르고(퇴직소득인지 근로소득인지), 법인세법 한도는 회사가 비용으로 넣을 수 있는 금액을 정합니다. 정관 규정 없이 2배수로 지급하면 양쪽에서 모두 걸릴 수 있어 함께 보셔야 합니다.</div>
+        </details>
+        <details>
+          <summary>직원으로 일하다 임원이 되면 근속연수는 어떻게 보나요?</summary>
+          <div class="a">임원이 되면서 퇴직금을 정산해 받으셨다면 임원이 된 날부터 다시 셉니다. 정산하지 않고 이어서 계산하기로 했다면 입사일부터 셉니다. 다만 이 경우 직원 기간까지 임원 한도 계산에 들어가므로, 정산 여부를 서류로 분명히 남겨 두셔야 합니다.</div>
+        </details>
+        <details>
+          <summary>퇴직 전 3년 총급여에는 무엇이 들어가나요?</summary>
+          <div class="a">퇴임일부터 거슬러 3년 동안 받은 급여와 상여를 더합니다. 재임 기간이 3년이 안 되면 그 기간 금액을 넣고 1년 평균으로 환산합니다. 비과세 급여와 퇴직금은 넣지 않습니다. 퇴직 직전에 급여를 크게 올리면 한도도 함께 올라가지만, 올린 이유가 설명되지 않으면 부인될 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>퇴직금을 중간정산할 수 있나요?</summary>
+          <div class="a">임원도 법에서 정한 사유에 해당하면 중간정산할 수 있지만, 직원보다 사유가 좁고 정관이나 규정에 근거가 있어야 합니다. 요건을 갖추지 못한 중간정산은 퇴직금이 아니라 급여를 미리 준 것으로 보아 가지급금이 됩니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용입니다. 실제 인정 여부는 정관과 지급규정의 내용, 지급 경위에 따라 달라집니다.<br>
+        · 소득세법 한도는 퇴직 전 3년 평균급여 × 10% × 근속연수에 2020년 이후 근속분 2배, 2012~2019년 근속분 3배를 적용해 계산했고 2011년 이전 근속분은 한도 없이 퇴직소득으로 보았습니다.<br>
+        · 근속연수는 개월 수로 계산하며 한 달이 안 되는 끝수는 버립니다. 퇴직소득세 계산에서는 1년이 안 되는 끝수를 1년으로 봅니다.<br>
+        · 한도를 넘는 금액의 세금은 고르신 세율로 가늠한 금액입니다. 실제로는 그해 다른 소득과 합산해 정해집니다.<br>
+        · PDF 저장을 누르면 인쇄 창이 열리니 대상을 PDF로 저장으로 고르세요. 카카오톡 안에서 열었다면 다른 브라우저로 열어 주세요.
+      </p>
+
+      <div class="morelinks">
+        <a href="severance-pay.html">직원 퇴직금 계산기</a>
+        <a href="income-transfer.html">대표 연봉 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div id="print-area" aria-hidden="true"></div>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 임원 퇴직금 한도 ──────────────────────── */
+// 종합소득세 기본세율 (퇴직소득세도 같은 세율을 씁니다)
+const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
+           [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
+function pitInfo(b){ if(b<=0) return {tax:0,rate:0,ded:0}; for(const[lim,r,d]of PIT) if(b<=lim) return {tax:Math.max(0,b*r-d),rate:r,ded:d}; return {tax:0,rate:0,ded:0}; }
+// 근속연수공제 (2023년 이후)
+function serviceDeduct(n){
+  if(n<=5) return 1000000*n;
+  if(n<=10) return 5000000+2000000*(n-5);
+  if(n<=20) return 15000000+2500000*(n-10);
+  return 40000000+3000000*(n-20);
+}
+// 환산급여공제
+function convDeduct(c){
+  if(c<=8000000) return c;
+  if(c<=70000000) return 8000000+(c-8000000)*0.6;
+  if(c<=100000000) return 45200000+(c-70000000)*0.55;
+  if(c<=300000000) return 61700000+(c-100000000)*0.45;
+  return 151700000+(c-300000000)*0.35;
+}
+const parse=s=>{ const p=String(s||'').split('-').map(Number); return p.length===3&&p[0]?new Date(p[0],p[1]-1,p[2]):null; };
+// 두 날짜 사이의 개월 수 (한 달이 안 되는 끝수는 버립니다)
+function monthsBetween(a,b){
+  if(!a||!b||b<=a) return 0;
+  let m=(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth());
+  if(b.getDate()<a.getDate()) m--;
+  return Math.max(0,m);
+}
+const B2012=new Date(2012,0,1), B2020=new Date(2020,0,1);
+const MULT_1219=3, MULT_2020=2;   // 2012~2019년 근속분 3배, 2020년 이후 2배
+
+function calcExec(c){
+  const start=parse(c.start), end=parse(c.end);
+  const months=monthsBetween(start,end);
+  // 근속 기간을 세 구간으로 나눕니다 (합계가 전체 개월 수와 맞도록 경계까지의 개월 수로 계산)
+  const to2011=start&&end?Math.min(monthsBetween(start,end<B2012?end:B2012),months):0;
+  const to2019=start&&end?Math.min(monthsBetween(start,end<B2020?end:B2020),months):0;
+  const m2011=to2011, m1219=Math.max(0,to2019-to2011), m2020=Math.max(0,months-to2019);
+
+  const years=months/12;
+  // 규정이 있으면 3년 평균급여로 2배수(2012~2019년분은 3배수) 한도를, 없으면 1년 급여로 1배수 한도를 봅니다
+  const avg=months>0?(c.rule?(months>=36?c.pay3/3:c.pay3/years):c.pay1):0;
+  const limit1219=c.rule?avg*0.1*(m1219/12)*MULT_1219:0;
+  const limit2020=c.rule?avg*0.1*(m2020/12)*MULT_2020:0;
+  const limitTax=c.rule?limit1219+limit2020:avg*0.1*years;        // 인정되는 한도
+
+  // 한도만 보는 경우에는 한도를 그대로 지급하는 것으로 봅니다 (2011년 이전분은 한도가 없어 금액으로 잡지 않습니다)
+  const limitMode=c.mode==='limit';
+  const amount=limitMode?limitTax:c.amount;
+  // 2011년 이전 재임분은 소득세법 한도가 없습니다 (규정이 없어 1배수로 보는 경우에는 따지지 않습니다)
+  const old=(limitMode||!c.rule)?0:(months>0?c.amount*m2011/months:0);
+  const rest=Math.max(0,amount-old);
+  const retirePay=old+Math.min(rest,limitTax);                    // 퇴직소득이 되는 금액
+  const over=Math.max(0,rest-limitTax);                           // 근로소득이 되는 금액
+
+  // 퇴직소득세 (근속연수는 1년이 안 되는 끝수를 1년으로)
+  const taxYears=Math.max(1,Math.ceil(months/12));
+  const sd=Math.min(retirePay,serviceDeduct(taxYears));
+  const conv=retirePay>0?(retirePay-sd)*12/taxYears:0;
+  const cd=Math.min(conv,convDeduct(conv));
+  const base=Math.max(0,conv-cd);
+  const info=pitInfo(base);
+  const retireTax=Math.floor(info.tax*taxYears/12/10)*10;
+  const retireLocal=Math.floor(retireTax*0.1/10)*10;
+
+  // 한도를 넘는 금액은 그해 근로소득이 되어 다른 소득과 합산됩니다 (고르신 세율로 가늠)
+  const overTax=Math.floor(over*c.rate/10)*10;
+  const overLocal=Math.floor(overTax*0.1/10)*10;
+  const totalTax=retireTax+retireLocal+overTax+overLocal;
+
+  // 규정이 없으면 위에서 구한 1배수가 곧 회사 비용으로 인정되는 한도입니다
+  const lossLimit=c.rule?null:limitTax;
+  const lossOver=lossLimit===null?0:Math.max(0,amount-lossLimit);
+
+  return {limitMode,amount,start,end,months,m2011,m1219,m2020,years,taxYears,avg,limit1219,limit2020,limitTax,
+          old,rest,retirePay,over,sd,conv,cd,base,info,retireTax,retireLocal,overTax,overLocal,totalTax,
+          net:amount-totalTax,lossLimit,lossOver};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+['i-pay3','i-amount','i-pay1'].forEach(id=>{
+  const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+// 규정이 있으면 3년 총급여를, 없으면 1년 총급여를 받습니다
+function syncRule(){
+  const rule=$('i-rule').checked;
+  $('pay3-box').style.display=rule?'':'none';
+  $('pay1-box').style.display=rule?'none':'';
+}
+$('i-rule').addEventListener('change',syncRule); syncRule();
+
+// 한도만 볼 때는 지급액과 세율 칸을 숨깁니다
+let MODE='limit';
+function syncMode(){
+  const limit=MODE==='limit';
+  $('amount-box').style.display=limit?'none':'';
+  $('rate-box').style.display=limit?'none':'';
+  $('rate-divider').style.display=limit?'none':'';
+  $('calc').textContent=limit?'한도 계산하기':'한도를 넘는지 보기';
+  $('modes').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.mode===MODE));
+}
+$('modes').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  MODE=b.dataset.mode; syncMode();
+  if(shown()&&ready()) render(); else $('res').style.display='none';
+});
+
+function read(){
+  return {mode:MODE,start:$('i-start').value,end:$('i-end').value,pay3:num($('i-pay3').value),
+    amount:num($('i-amount').value),pay1:num($('i-pay1').value),
+    rule:$('i-rule').checked,rate:Number($('i-rate').value)};
+}
+// 계산에 필요한 값이 다 들어왔는지
+function ready(){
+  const c=read();
+  return !!(c.start&&c.end&&(c.rule?c.pay3:c.pay1)&&(c.mode==='limit'||c.amount));
+}
+const shown=()=>$('res').style.display==='block';
+const yearWords=m=>Math.floor(m/12)+'년 '+(m%12)+'개월';
+syncMode();
+
+/* ── 명세서 PDF ────────────────────────────── */
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const kdate=d=>d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';
+function statementHtml(c,r){
+  const co=$('i-co').value.trim(), nm=$('i-name').value.trim();
+  const limitName=c.rule?'소득세법 한도':'회사 비용으로 인정되는 한도';
+  return '<section class="pst">'
+    +'<div class="pst-head"><h1>임원 퇴직금 계산 명세서</h1><p>'+(co?esc(co)+' · ':'')+'작성일 '+kdate(new Date())+'</p></div>'
+    +'<table class="pst-info">'
+      +'<tr><th>이름</th><td>'+(nm?esc(nm):'&nbsp;')+'</td><th>재임 기간</th><td>'+yearWords(r.months)+' <span>(세법상 근속연수 '+r.taxYears+'년)</span></td></tr>'
+      +'<tr><th>취임일</th><td>'+kdate(r.start)+'</td><th>퇴임일</th><td>'+kdate(r.end)+'</td></tr>'
+      +'<tr><th>'+(c.rule?'1년 평균급여':'퇴직 전 1년 총급여')+'</th><td>'+won(r.avg)+'원</td><th>정관 규정</th><td>'+(c.rule?'있음 (2배수 기준)':'없음 (1배수 기준)')+'</td></tr>'
+    +'</table>'
+    +'<table class="pst-sum"><tr><th>'+limitName+'</th><th>지급액</th><th>세금 합계</th><th>실제 지급액</th></tr>'
+    +'<tr><td>'+won(r.limitTax+r.old)+'원</td><td>'+won(r.amount)+'원</td><td>'+won(r.totalTax)+'원</td><td class="net">'+won(r.net)+'원</td></tr></table>'
+    +'<h2>계산 과정</h2>'+$('steps').innerHTML
+    +'<p class="pst-note">'+(r.over?'한도를 넘는 '+won(r.over)+'원은 퇴직소득이 아니라 그해 근로소득이 되어 다른 소득과 합산됩니다. 명세서의 세금은 고르신 세율로 가늠한 금액입니다. ':'')
+    +(c.rule?'정관이나 정관이 위임한 규정에 정한 금액까지 회사 비용으로 인정됩니다.':'정관에 규정이 없어 1배수까지만 보았습니다. 넘는 금액은 회사 비용에서 빠지고 상여로 처분됩니다.')
+    +' 원천징수 신고는 퇴직소득원천징수영수증으로 합니다.</p>'
+    +'<p class="pst-foot">한택스 임원 퇴직금 계산기 · hantax47.com</p>'
+    +'</section>';
+}
+function printStatement(){
+  if(!shown()) return;
+  if(/KAKAOTALK/i.test(navigator.userAgent)){
+    alert('카카오톡 안에서는 PDF로 저장할 수 없습니다. 화면 위쪽 메뉴에서 다른 브라우저로 열기를 누른 뒤 다시 계산해 주세요.');
+    return;
+  }
+  const c=read();
+  $('print-area').innerHTML=statementHtml(c,calcExec(c));
+  const nm=$('i-name').value.trim();
+  const old=document.title;
+  document.title='임원퇴직금명세서'+(nm?'_'+nm:'');
+  const back=()=>{ document.title=old; window.removeEventListener('afterprint',back); };
+  window.addEventListener('afterprint',back);
+  window.print();
+}
+
+/* ── 화면 ─────────────────────────────────── */
+function render(){
+  const c=read(), r=calcExec(c);
+  const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
+  const limitName=c.rule?'소득세법 한도':'회사 비용으로 인정되는 한도';
+  const limitWords=c.rule
+    ?(r.m1219?'2012~2019년 '+yearWords(r.m1219)+' × 3배':'')+(r.m1219&&r.m2020?' + ':'')+(r.m2020?'2020년 이후 '+yearWords(r.m2020)+' × 2배':'')
+    :'규정이 없어 1년 급여의 10% × '+r.years.toFixed(2)+'년 (1배수)';
+  $('rt-body').innerHTML=
+      (r.limitMode?'':row('지급할 퇴직금','재임 '+yearWords(r.months),won(r.amount)+'원','sum'))
+    +row(c.rule?'1년 평균급여':'퇴직 전 1년 총급여',c.rule?(r.months>=36?'퇴직 전 3년 총급여 ÷ 3':'재임 '+yearWords(r.months)+'로 환산'):'넣어 주신 금액',won(r.avg)+'원')
+    +(r.m2011&&!r.limitMode?row('2011년 이전 근속분','한도 없이 퇴직소득 ('+yearWords(r.m2011)+')',won(r.old)+'원'):'')
+    +row(limitName,limitWords,won(r.limitTax)+'원',r.limitMode?'tot':'line')
+    +row('퇴직소득으로 인정','퇴직소득세로 과세',won(r.retirePay)+'원','sum')
+    +row('퇴직소득세','지방소득세 포함','− '+won(r.retireTax+r.retireLocal)+'원','minus')
+    +(r.over
+      ?'<tr class="tot warn"><td>한도 초과<small>근로소득으로 과세</small></td><td>'+won(r.over)+'원</td></tr>'
+        +row('근로소득세',Math.round(c.rate*100)+'% 기준 · 지방소득세 포함','− '+won(r.overTax+r.overLocal)+'원','minus')
+      :'')
+    +'<tr class="tot"><td>세금 합계</td><td>'+won(r.totalTax)+'원</td></tr>'
+    +row('받으시는 금액',(r.limitMode?'한도를 다 받을 때':'지급액에서')+' 세금을 뺀 금액',won(r.net)+'원','sum');
+
+  $('res-sub').textContent='재임 '+yearWords(r.months)+' · '+(r.limitMode?(c.rule?'평균급여 ':'1년 급여 ')+won(r.avg)+'원 기준':'지급액 '+won(r.amount)+'원')+' · 한도 '+won(r.limitTax+r.old)+'원';
+
+  const call=$('call');
+  if(r.limitMode){
+    call.className='call';
+    call.innerHTML='<div class="lbl">퇴직소득으로 인정받을 수 있는 금액</div>'
+      +'<div class="val">'+won(r.limitTax)+'<small>원</small></div>'
+      +'<div class="sub">재임 '+yearWords(r.months)+' 기준입니다. '+(c.rule?'이 금액을 넘겨 지급하면 넘는 부분은 그해 근로소득이 되어 세금이 크게 늘어납니다.':'정관에 규정이 없어 1배수까지만 인정됩니다. 넘겨 지급하면 회사 비용에서 빠지고 상여로 처분되어 근로소득세가 붙습니다.')
+      +(r.m2011?'<br>2011년 이전 재임분 '+yearWords(r.m2011)+'에는 한도가 없어, 규정에 정한 금액만큼 이 금액에 더해 지급하실 수 있습니다.':'')+'</div>';
+  }else if(!r.over){
+    call.className='call';
+    call.innerHTML='<div class="lbl">지급할 퇴직금 '+won(r.amount)+'원</div>'
+      +'<div class="val">전액 퇴직소득으로<br>인정됩니다</div>'
+      +'<div class="sub">한도는 '+won(r.limitTax+r.old)+'원이고 지급액이 그 안에 들어옵니다. 퇴직소득세와 지방소득세로 '+won(r.retireTax+r.retireLocal)+'원을 떼고 '+won(r.net)+'원을 받으십니다.</div>';
+  }else{
+    call.className='call warn';
+    call.innerHTML='<div class="lbl">한도를 넘어 근로소득이 되는 금액</div>'
+      +'<div class="val">'+won(r.over)+'<small>원</small></div>'
+      +'<div class="sub">한도는 '+won(r.limitTax+r.old)+'원인데 '+won(r.amount)+'원을 지급하려 하십니다. 넘는 금액은 그해 근로소득이 되어 다른 소득과 합산됩니다. 지급액을 한도에 맞추거나, 규정과 금액을 미리 손보셔야 합니다.</div>';
+  }
+
+  const head=r.limitMode
+    ?'재임 '+yearWords(r.months)+' 기준으로 <b>'+won(r.limitTax)+'원</b>까지 퇴직소득으로 인정받습니다.'
+    :r.over
+      ?'지급액이 한도보다 <b>'+won(r.over)+'원</b> 많습니다.'
+      :'지급액이 한도 '+won(r.limitTax+r.old)+'원 안에 들어옵니다.';
+  const notes=[];
+  if(r.limitMode) notes.push({t:'한도는 <b>'+(c.rule?'1년 평균급여 '+won(r.avg)+'원 × 10% × 근속연수 × 배수':'퇴직 전 1년 총급여 '+won(r.avg)+'원 × 10% × 근속연수')+'</b>로 정해집니다. 급여를 올리면 한도도 함께 올라가지만, 퇴직 직전에 올린 급여는 이유가 설명되지 않으면 부인될 수 있습니다.'});
+  if(r.over) notes.push({warn:1,t:'넘는 금액은 퇴직소득세가 아니라 <b>근로소득세</b>로 과세됩니다. 퇴직소득은 근속연수로 나눠 세금을 매겨 부담이 적지만, 근로소득은 그해 다른 소득과 합쳐져 세율이 그대로 붙습니다.'});
+  if(r.m2011&&!r.limitMode&&c.rule) notes.push({t:'2011년 이전 재임분 '+yearWords(r.m2011)+'에 해당하는 '+won(r.old)+'원은 한도 없이 퇴직소득으로 보았습니다. 그 뒤 기간만 한도를 따집니다.'});
+  if(r.m2011&&r.limitMode&&c.rule) notes.push({t:'2011년 이전 재임분 '+yearWords(r.m2011)+'에는 한도가 없습니다. 위 금액은 2012년 이후 재임분의 한도이고, 2011년 이전 기간에 대해서는 규정에 정한 금액을 더해 지급하실 수 있습니다.'});
+  if(r.m1219&&c.rule) notes.push({t:'2012년부터 2019년까지의 재임분은 2배가 아니라 <b>3배</b>를 적용합니다. 오래 재임하신 임원일수록 이 구간 때문에 한도가 커집니다.'});
+  if(!c.rule) notes.push({warn:1,t:'정관이나 정관이 위임한 규정이 없어 <b>1배수</b>(퇴직 전 1년 총급여의 10% × 근속연수)까지만 보았습니다. 규정을 제대로 두시면 3년 평균급여 기준 2배수까지 인정받을 수 있으니, 지급 전에 정관과 지급규정을 먼저 손보시는 편이 훨씬 유리합니다.'
+    +(r.lossOver?' 지금 금액 가운데 '+won(r.lossOver)+'원은 회사 비용에서 빠지고 상여로 처분됩니다.':'')});
+  if(c.rule) notes.push({t:'정관이나 규정에 정한 금액까지는 회사 비용으로 인정됩니다. 다만 규정이 지급 직전에 만들어졌거나 특정인에게만 유리하면 인정되지 않을 수 있으니, 만든 시기와 결의 서류를 함께 보관해 주세요.'});
+  notes.push({t:'퇴직금을 개인형 퇴직연금(IRP) 계좌로 받으면 받을 때 퇴직소득세를 떼지 않고, 나중에 연금으로 나눠 받을 때 30~40% 줄어듭니다. 다만 한도를 넘어 근로소득이 된 금액은 해당되지 않습니다.'});
+  $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+
+  const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
+  $('steps').innerHTML='<table class="stable">'
+    +srow('재임 기간','취임일부터 퇴임일까지, 한 달 미만 끝수 버림',yearWords(r.months))
+    +srow(c.rule?'1년 평균급여':'퇴직 전 1년 총급여',c.rule?(r.months>=36?'퇴직 전 3년 총급여 '+won(c.pay3)+' ÷ 3':'총급여 '+won(c.pay3)+' ÷ '+r.years.toFixed(2)+'년'):'넣어 주신 금액',won(r.avg)+'원')
+    +(r.m1219?srow('2012~2019년분','평균급여 × 10% × '+(r.m1219/12).toFixed(2)+'년 × 3배',won(r.limit1219)+'원'):'')
+    +(r.m2020?srow('2020년 이후분','평균급여 × 10% × '+(r.m2020/12).toFixed(2)+'년 × 2배',won(r.limit2020)+'원'):'')
+    +(r.m2011&&!r.limitMode?srow('2011년 이전분','지급액 × '+r.m2011+'개월 ÷ '+r.months+'개월 (한도 없음)',won(r.old)+'원'):'')
+    +srow('퇴직소득 인정액',r.limitMode?'한도만큼 지급한다고 보았습니다':(r.m2011?'2011년 이전분 + 한도 안 금액':'한도 안 금액'),won(r.retirePay)+'원')
+    +srow('근속연수공제','근속연수 '+r.taxYears+'년 기준','− '+won(r.sd)+'원')
+    +srow('환산급여','(퇴직소득 − 근속연수공제) × 12 ÷ '+r.taxYears+'년',won(r.conv)+'원')
+    +srow('환산급여공제','환산급여 구간에 따라 공제','− '+won(r.cd)+'원')
+    +srow('퇴직소득세','과세표준 '+won(r.base)+' × '+Math.round(r.info.rate*100)+'% × '+r.taxYears+' ÷ 12',won(r.retireTax)+'원')
+    +srow('지방소득세','퇴직소득세의 10%',won(r.retireLocal)+'원')
+    +(r.over?srow('한도 초과분 세금','근로소득 '+won(r.over)+' × '+Math.round(c.rate*100)+'% + 지방소득세',won(r.overTax+r.overLocal)+'원'):'')
+    +(r.lossLimit!==null?srow('1배수 한도','퇴직 전 1년 총급여 '+won(c.pay1)+' × 10% × '+r.years.toFixed(2)+'년',won(r.lossLimit)+'원'):'')
+    +'</table>';
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  const c=read();
+  if(!c.start||!c.end){ alert('취임일과 퇴임일을 넣어 주세요.'); return; }
+  if(calcExec(c).months<=0){ alert('퇴임일이 취임일보다 뒤여야 합니다.'); return; }
+  if(c.rule&&!c.pay3){ alert('퇴직 전 3년 총급여를 넣어 주세요.'); return; }
+  if(!c.rule&&!c.pay1){ alert('퇴직 전 1년 총급여를 넣어 주세요.'); return; }
+  if(c.mode==='check'&&!c.amount){ alert('지급할 퇴직금을 넣어 주세요.'); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+$('save-pdf').addEventListener('click',printStatement);
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&ready()) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&ready()) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'임원 퇴직금 한도', sub:document.getElementById('res-sub').textContent, filename:'한택스_임원퇴직금' })
+);
+</script>
+</body>
+</html>
