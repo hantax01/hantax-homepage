@@ -158,7 +158,7 @@
    "name": "통합고용세액공제는 얼마나 받나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "2026년부터 1년차보다 2년차와 3년차에 더 많이 주는 구조로 바뀌었습니다. 중소기업이 청년 등 우대 대상을 뽑으면 수도권은 1년차 700만 원, 2년차 1,600만 원, 3년차 1,700만 원이고 비수도권은 1,000만 원, 1,900만 원, 2,000만 원입니다. 우대 대상이 아니면 수도권 400·900·1,000만 원, 비수도권 700·1,200·1,300만 원입니다. 공제는 상시근로자 수가 늘어야 받을 수 있고, 줄어들면 그만큼 공제가 빠집니다."
+    "text": "2026년부터 1년차보다 2년차와 3년차에 더 많이 주는 구조로 바뀌었습니다. 중소기업이 청년 등 우대 대상을 뽑으면 수도권은 1년차 700만 원, 2년차 1,600만 원, 3년차 1,700만 원이고 비수도권은 1,000만 원, 1,900만 원, 2,000만 원입니다. 우대 대상이 아니면 수도권 400·900·1,000만 원, 비수도권 700·1,200·1,300만 원입니다. 공제는 상시근로자 수가 늘어야 받을 수 있고, 줄어들면 그만큼 공제가 빠집니다. 임원과 최대주주, 그 가족, 근로계약기간이 1년 미만인 분은 상시근로자에서 빠져 공제를 받지 못합니다. 또 낼 세금이 적으면 그해에 다 쓰지 못하고 남는 금액은 5년 동안 이월됩니다."
    }
   },
   {
@@ -167,6 +167,14 @@
    "acceptedAnswer": {
     "@type": "Answer",
     "text": "5인 이상 우선지원대상기업이 취업애로청년을 정규직으로 뽑아 6개월 이상 고용을 유지하면 월 60만 원씩 1년 동안 720만 원을 받습니다. 취업애로청년은 채용일 기준 4개월 이상 실업 상태인 만 15~34세 청년 등입니다. 비수도권은 청년 본인에게도 2년간 따로 지원합니다. 채용 전에 고용24에서 참여 신청을 해야 하니 사람을 뽑기 전에 순서를 확인해 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "가족을 직원으로 올려도 공제를 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "받지 못합니다. 임원과 최대주주, 최대출자자, 그리고 그분들의 배우자와 직계존비속은 상시근로자에서 빠지기 때문입니다. 4대보험과 퇴직금은 똑같이 들어가니, 가족을 직원으로 올리실 때는 공제를 못 받는다는 점까지 보고 결정하셔야 합니다. 계산기에서 특수관계자 항목을 체크하시면 공제를 빼고 계산합니다."
    }
   },
   {
@@ -244,22 +252,11 @@
           <div class="unit"><input type="text" id="i-meal" inputmode="numeric"><span>원</span></div>
         </div>
 
-        <div class="divider"><b>사업장</b><span>공제 금액을 가릅니다</span></div>
-        <div class="wide">
-          <label for="i-area">사업장 위치 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="수도권은 서울, 인천, 경기입니다. 비수도권 사업장은 통합고용세액공제를 더 많이 받습니다.">?</button></label>
-          <select id="i-area"><option value="metro">수도권 (서울·인천·경기)</option><option value="local">비수도권</option></select>
-        </div>
-
-        <div class="divider"><b>채용하는 분과 지원제도</b></div>
+        <div class="divider"><b>채용하는 분</b><span>지원제도와 보험료를 가릅니다</span></div>
         <div class="chks">
           <div>
             <label class="ichk"><input type="checkbox" id="i-long" checked><span>1년 이상 일할 분입니다 <small>퇴직금과 통합고용세액공제에 반영합니다</small></span>
               <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴직금은 1년 이상 일하고 4주를 평균해 1주 15시간 이상 근무한 분에게 줍니다. 통합고용세액공제도 근로계약기간이 1년 미만인 분은 상시근로자에서 빠져 받지 못합니다. 체크를 풀면 퇴직금 적립과 세액공제를 빼고 계산합니다.">?</button>
-            </label>
-          </div>
-          <div>
-            <label class="ichk"><input type="checkbox" id="i-youth" checked><span>통합고용세액공제 청년 등 우대 대상입니다 <small>만 15~34세 청년, 60세 이상, 장애인, 경력단절</small></span>
-              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="통합고용세액공제는 우대 대상을 뽑으면 공제액이 훨씬 큽니다. 청년은 만 15~34세이고 병역을 마친 기간만큼 나이를 빼 줍니다. 60세 이상, 장애인, 경력단절 여성도 우대 대상입니다.">?</button>
             </label>
           </div>
           <div>
@@ -274,6 +271,24 @@
           </div>
         </div>
 
+        <div class="divider"><b>통합고용세액공제</b><span>공제 금액과 대상 여부를 가립니다</span></div>
+        <div class="wide">
+          <label for="i-area">사업장 위치 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="수도권은 서울, 인천, 경기입니다. 비수도권 사업장은 공제를 더 많이 받습니다. 공제는 1년차보다 2년차와 3년차가 크고, 중소기업이 비수도권에서 우대 대상을 뽑으면 3년 동안 1인당 4,900만 원까지 받습니다.">?</button></label>
+          <select id="i-area"><option value="metro">수도권 (서울·인천·경기)</option><option value="local">비수도권</option></select>
+        </div>
+        <div class="chks">
+          <div>
+            <label class="ichk"><input type="checkbox" id="i-youth" checked><span>청년 등 우대 대상입니다 <small>만 15~34세 청년, 60세 이상, 장애인, 경력단절</small></span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="우대 대상을 뽑으면 공제액이 훨씬 큽니다. 청년은 만 15~34세이고 병역을 마친 기간만큼 나이를 빼 줍니다. 60세 이상, 장애인, 경력단절 여성도 우대 대상입니다.">?</button>
+            </label>
+          </div>
+          <div>
+            <label class="ichk"><input type="checkbox" id="i-related"><span>임원, 주주, 가족 등 특수관계자입니다 <small>공제를 받지 못합니다</small></span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="임원과 최대주주, 최대출자자, 그리고 그분들의 배우자와 직계존비속은 상시근로자에서 빠집니다. 가족을 직원으로 올려도 통합고용세액공제는 받지 못하니 체크해 주세요. 4대보험과 퇴직금은 똑같이 듭니다.">?</button>
+            </label>
+          </div>
+        </div>
+
         <div class="divider"><b>세금</b><span>비용으로 처리하면 줄어드는 세금입니다</span></div>
         <div>
           <label for="i-biz">사업자 구분</label>
@@ -283,7 +298,7 @@
           <label for="i-profit"><span id="profit-label">당기순이익</span> <small>과세표준</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="이번 직원을 뽑기 전 기준으로 세금을 매기는 금액입니다. 법인은 당기순이익에서 세무조정을 한 과세표준, 개인사업자는 소득금액에서 소득공제를 뺀 과세표준입니다. 어림잡아 넣으셔도 되며, 이 금액에서 인건비를 빼 줄어드는 세금을 계산합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-profit" inputmode="numeric"><span>원</span></div>
         </div>
-        <div class="wide">
+        <div>
           <label for="i-relief">세액감면 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="감면을 받고 계시면 비용을 늘려 세금이 줄어들 때 감면액도 함께 줄어듭니다. 그래서 실제로 아끼는 돈은 감면율만큼 적어집니다. 감면을 100% 받고 계시면 지방소득세만 줄어듭니다. 지방소득세는 감면을 적용하지 않기 때문입니다.">?</button></label>
           <select id="i-relief">
             <option value="0">받지 않음</option>
@@ -295,15 +310,14 @@
             <option value="1">창업중소기업 세액감면 100%</option>
           </select>
         </div>
+        <div>
+          <label for="i-credit">올해 받을 세액공제 <small>이번 채용 말고</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="연구·인력개발비 세액공제, 통합투자세액공제, 지난해에서 이월된 공제처럼 이번 채용과 상관없이 올해 받을 세액공제를 더해 넣어 주세요. 공제를 많이 받고 계시면 인건비를 늘려도 줄어드는 세금이 적고, 통합고용세액공제도 올해 다 쓰지 못하고 이월됩니다. 계산기가 최저한세까지 따져 올해 쓸 수 있는 금액만 반영합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-credit" inputmode="numeric"><span>원</span></div>
+        </div>
         <div class="chks">
           <div>
             <label class="ichk"><input type="checkbox" id="i-notax"><span>이월결손금이나 적자라서 낼 세금이 없습니다</span>
-              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="지금 낼 세금이 없으면 비용을 늘려도 당장 줄어드는 세금이 없습니다. 다만 적자는 결손금으로 15년 동안 이월되어 나중에 이익이 날 때 세금을 줄여 주고, 통합고용세액공제도 5년 동안 이월해 쓸 수 있습니다.">?</button>
-            </label>
-          </div>
-          <div>
-            <label class="ichk"><input type="checkbox" id="i-mintax"><span>세액공제 이월액이 많아 최저한세만 냅니다</span>
-              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="공제와 감면을 다 받아도 최저한세보다 적게 낼 수는 없습니다. 중소법인은 과세표준의 7%, 개인사업자는 산출세액의 35%(과세표준 3,000만 원 초과분은 45%)가 최저한세입니다. 이미 최저한세만 내고 계시면 비용을 늘려도 그 비율만큼만 세금이 줄어듭니다.">?</button>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="지금 낼 세금이 없으면 비용을 늘려도 당장 줄어드는 세금이 없고, 통합고용세액공제도 올해는 받지 못합니다. 다만 적자는 결손금으로 15년 동안 이월되고 세액공제도 5년 동안 이월해 쓸 수 있습니다.">?</button>
             </label>
           </div>
         </div>
@@ -360,11 +374,15 @@
         </details>
         <details>
           <summary>통합고용세액공제는 얼마나 받나요?</summary>
-          <div class="a">2026년부터 1년차보다 2년차와 3년차에 더 많이 주는 구조로 바뀌었습니다. 중소기업이 청년 등 우대 대상을 뽑으면 수도권은 1년차 700만 원, 2년차 1,600만 원, 3년차 1,700만 원이고 비수도권은 1,000만 원, 1,900만 원, 2,000만 원입니다. 우대 대상이 아니면 수도권 400·900·1,000만 원, 비수도권 700·1,200·1,300만 원입니다. 공제는 상시근로자 수가 늘어야 받을 수 있고, 줄어들면 그만큼 공제가 빠집니다.</div>
+          <div class="a">2026년부터 1년차보다 2년차와 3년차에 더 많이 주는 구조로 바뀌었습니다. 중소기업이 청년 등 우대 대상을 뽑으면 수도권은 1년차 700만 원, 2년차 1,600만 원, 3년차 1,700만 원이고 비수도권은 1,000만 원, 1,900만 원, 2,000만 원입니다. 우대 대상이 아니면 수도권 400·900·1,000만 원, 비수도권 700·1,200·1,300만 원입니다. 공제는 상시근로자 수가 늘어야 받을 수 있고, 줄어들면 그만큼 공제가 빠집니다. 임원과 최대주주, 그 가족, 근로계약기간이 1년 미만인 분은 상시근로자에서 빠져 공제를 받지 못합니다. 또 낼 세금이 적으면 그해에 다 쓰지 못하고 남는 금액은 5년 동안 이월됩니다.</div>
         </details>
         <details>
           <summary>청년일자리도약장려금은 어떻게 받나요?</summary>
           <div class="a">5인 이상 우선지원대상기업이 취업애로청년을 정규직으로 뽑아 6개월 이상 고용을 유지하면 월 60만 원씩 1년 동안 720만 원을 받습니다. 취업애로청년은 채용일 기준 4개월 이상 실업 상태인 만 15~34세 청년 등입니다. 비수도권은 청년 본인에게도 2년간 따로 지원합니다. <b>채용 전에 고용24에서 참여 신청을 해야 하니</b> 사람을 뽑기 전에 순서를 확인해 주세요.</div>
+        </details>
+        <details>
+          <summary>가족을 직원으로 올려도 공제를 받나요?</summary>
+          <div class="a">받지 못합니다. 임원과 최대주주, 최대출자자, 그리고 그분들의 배우자와 직계존비속은 상시근로자에서 빠지기 때문입니다. 4대보험과 퇴직금은 똑같이 들어가니, 가족을 직원으로 올리실 때는 공제를 못 받는다는 점까지 보고 결정하셔야 합니다. 계산기에서 특수관계자 항목을 체크하시면 공제를 빼고 계산합니다.</div>
         </details>
         <details>
           <summary>세액공제와 지원금을 같이 받을 수 있나요?</summary>
@@ -386,7 +404,8 @@
 
       <p class="disc">
         · 계산 결과는 참고용입니다. 실제 금액은 업종과 보험료 신고 내용, 고용 인원 변동에 따라 달라집니다.<br>
-        · 줄어드는 세금은 넣으신 과세표준에서 한 해 인건비를 뺀 뒤 세금이 얼마나 줄어드는지로 계산했습니다. 법인세는 2억 원 이하 10%, 초과 20%, 종합소득세는 6~45% 누진세율에 지방소득세 10%를 더합니다.<br>
+        · 줄어드는 세금은 넣으신 과세표준에서 한 해 인건비를 뺀 뒤 세금이 얼마나 줄어드는지로 계산했습니다. 법인세는 2억 원 이하 10%, 초과 20%, 종합소득세는 6~45% 누진세율이고 지방소득세는 감면·공제 전 세액의 10%로 더했습니다.<br>
+        · 세액공제는 최저한세(중소법인 과세표준의 7%, 개인사업자 산출세액의 35%)까지 따져 올해 쓸 수 있는 금액만 반영하고, 남는 금액은 5년 이월로 표시합니다.<br>
         · 4대보험은 2026년 사업주 부담 요율로 계산했습니다. 국민연금 4.75%(기준소득월액 상한 월 659만 원), 건강보험 3.595%, 장기요양보험은 건강보험료의 13.14%, 고용보험 1.15%(150인 미만 기준)입니다.<br>
         · 산재보험료율은 업종 평균인 1.5%로 보았습니다. 실제 요율은 업종에 따라 0.6%에서 18%까지 다르니 근로복지공단에서 확인해 주세요.<br>
         · 개인사업자 첫 직원을 고르시면 그동안 보험료를 내지 않던 대표님에게 건강보험료가 새로 생기는 것으로 계산했습니다. 대표님 보수월액은 소득이 아직 없는 신규 사업자 기준으로 직원 보수월액과 같게 보았고, 사업소득이 있으시면 그 금액으로 신고하므로 보험료가 달라집니다.<br>
@@ -452,7 +471,6 @@ const GRANT=7200000;                                             // 청년일자
 
 function calcHire(c){
   const mealFree=c.meal;                            // 넣으신 비과세 수당은 전액 보험료에서 빼고 봅니다
-  const mealTax=0;
   const base=c.wage;                                // 보험료를 매기는 보수월액
   const pensionBase=Math.min(Math.max(base,base>0?PENSION_MIN:0),PENSION_MAX);
   const pension=Math.floor(pensionBase*PENSION/10)*10;
@@ -462,7 +480,6 @@ function calcHire(c){
   const injury=Math.floor(base*INJURY/10)*10;
   const insure=pension+health+care+employ+injury;   // 4대보험 회사부담
   const retire=c.longterm?Math.floor((c.wage+c.meal)*RETIRE/10)*10:0;   // 1년 미만이면 지급 의무가 없습니다
-  // 개인사업자가 첫 직원을 뽑으면 대표님도 직장가입자가 됩니다 (지역보험료는 없어집니다)
   // 소득이 없는 신규 사업자는 대표님 보수월액을 직원 보수월액으로 신고합니다
   const ceoBase=c.first?base:0;
   const ceoHealth=Math.floor(ceoBase*CEO_HEALTH/10)*10;
@@ -471,32 +488,44 @@ function calcHire(c){
   const monthly=c.wage+c.meal+insure+retire+ceoAdd;
   const yearly=monthly*12;
 
-  // 인건비를 비용으로 넣어 과세표준이 줄면 세금이 얼마나 줄어드는지 봅니다
+  // 임원과 최대주주, 그 가족은 상시근로자에서 빠져 통합고용세액공제를 받지 못합니다
+  const canCredit=c.longterm&&!c.related&&!c.noTax;
+  const credits=canCredit?CREDIT[c.youth?'youth':'base'][c.area].map(v=>v*10000):[0,0,0];
+
+  // 과세표준에서 인건비를 빼면 세금이 얼마나 줄어드는지 봅니다
   const table=c.corp?CIT:PIT;
-  const after=Math.max(0,c.profit-yearly);           // 인건비를 뺀 과세표준
-  const baseDiff=c.profit-after;                     // 줄어든 과세표준
-  const taxBefore=taxOf(table,c.profit), taxAfter=taxOf(table,after);
-  const diff=taxBefore-taxAfter;                     // 줄어든 산출세액
-  let save;
-  if(c.noTax) save=0;                                // 적자나 이월결손금으로 낼 세금이 없는 경우
-  else if(c.minTax) save=(c.corp?baseDiff*MIN_CORP:diff*MIN_INDIV)*1.1;   // 최저한세만 내는 경우
-  else save=diff*(1-c.relief)+diff*0.1;              // 감면율만큼 줄고, 지방소득세는 감면 전 세액 기준
-  save=Math.floor(save/10)*10;
-  // 근로계약기간이 1년 미만인 분은 상시근로자에서 빠져 통합고용세액공제를 받지 못합니다
-  const credits=c.longterm?CREDIT[c.youth?'youth':'base'][c.area].map(v=>v*10000):[0,0,0];
+  const after=Math.max(0,c.profit-yearly);
+  const baseDiff=c.profit-after;
+  // 공제·감면과 최저한세까지 따진 실제 세금
+  function taxDetail(b,empCredit){
+    const gross=taxOf(table,b);
+    const afterRelief=gross*(1-c.relief);
+    const floor=Math.min(c.corp?b*MIN_CORP:gross*MIN_INDIV,afterRelief);   // 최저한세 (감면 후 세액을 넘지 않습니다)
+    const room=Math.max(0,afterRelief-floor);                              // 공제로 줄일 수 있는 여유
+    const usedOther=Math.min(c.credit,room);                               // 이번 채용과 무관한 공제를 먼저 씁니다
+    const usedEmp=Math.min(empCredit,room-usedOther);                      // 남은 여유만큼 통합고용세액공제
+    return {gross,afterRelief,floor,room,usedOther,usedEmp,
+            tax:afterRelief-usedOther-usedEmp+gross*0.1};                  // 지방소득세는 감면·공제 전 세액 기준
+  }
+  const before=taxDetail(c.profit,0), plain=taxDetail(after,0);
+  const save=c.noTax?0:Math.floor((before.tax-plain.tax)/10)*10;           // 비용 처리로 줄어드는 세금
+  // 통합고용세액공제 가운데 해마다 실제로 쓸 수 있는 금액과 이월되는 금액
+  const empUsed=credits.map(v=>c.noTax?0:Math.floor(taxDetail(after,v).usedEmp/10)*10);
+  const carry=credits.map((v,i)=>v-empUsed[i]);
+
   const grant=c.grant?GRANT:0;
-  const net1=yearly-save-credits[0]-grant;           // 1년차 실제 부담
-  const net=[net1,yearly-save-credits[1],yearly-save-credits[2]];
-  return {taxBefore,taxAfter,diff,baseDiff,after,mealFree,mealTax,base,ceoBase,pension,health,care,employ,injury,insure,retire,
-          ceoHealth,ceoCare,ceoAdd,monthly,yearly,save,credits,grant,net,saveWords:saveWords(c,{taxBefore,taxAfter,after,baseDiff}),
-          };
+  const net=[0,1,2].map(i=>yearly-save-empUsed[i]-(i===0?grant:0));
+  return {taxBefore:before.tax,taxAfter:plain.tax,after,baseDiff,room:plain.room,
+          mealFree,base,ceoBase,pension,health,care,employ,injury,insure,retire,
+          ceoHealth,ceoCare,ceoAdd,monthly,yearly,save,credits,empUsed,carry,grant,net,canCredit,
+          saveWords:saveWords(c,{after})};
 }
 
 // 세금이 어떻게 줄어드는지 한 줄로 적습니다
 function saveWords(c,r){
   if(c.noTax) return '낼 세금이 없어 지금 줄어드는 세금도 없습니다';
   if(!c.profit) return (c.corp?'당기순이익':'소득금액')+'을 넣으시면 줄어드는 세금을 계산합니다';
-  if(c.minTax) return '최저한세만 내는 경우 ('+(c.corp?'과세표준의 7%':'산출세액의 35%')+')';
+  if(c.credit) return '과세표준 '+Math.round(c.profit).toLocaleString('ko-KR')+' → '+Math.round(r.after).toLocaleString('ko-KR')+'원 · 세액공제 '+Math.round(c.credit).toLocaleString('ko-KR')+'원 반영';
   const won2=n=>Math.round(n).toLocaleString('ko-KR');
   return '과세표준 '+won2(c.profit)+' → '+won2(r.after)+'원'
     +(c.relief?' · 감면 '+Math.round(c.relief*100)+'% 반영':'');
@@ -510,18 +539,28 @@ const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 function syncBiz(){ $('profit-label').textContent=$('i-biz').value==='corp'?'당기순이익':'소득금액'; }
 $('i-biz').addEventListener('change',()=>{ syncBiz(); if(shown()&&ready()) render(); });
 syncBiz();
-['i-wage','i-meal','i-profit'].forEach(id=>{
+['i-wage','i-meal','i-profit','i-credit'].forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
 function read(){
   return {wage:num($('i-wage').value),meal:num($('i-meal').value),
-    area:$('i-area').value,youth:$('i-youth').checked,grant:$('i-grant').checked,longterm:$('i-long').checked,
+    area:$('i-area').value,youth:$('i-youth').checked,grant:$('i-grant').checked,longterm:$('i-long').checked,related:$('i-related').checked,
     first:$('i-first').checked,
     corp:$('i-biz').value==='corp',profit:num($('i-profit').value),
-    relief:Number($('i-relief').value),noTax:$('i-notax').checked,minTax:$('i-mintax').checked};
+    relief:Number($('i-relief').value),credit:num($('i-credit').value),noTax:$('i-notax').checked};
 }
 const shown=()=>$('res').style.display==='block';
 const ready=()=>read().wage>0;
+
+// 통합고용세액공제를 올해 얼마나 쓸 수 있는지 적습니다
+function creditWords(c,r){
+  if(c.related) return '임원·주주·가족은 상시근로자에서 빠져 받지 못합니다';
+  if(!c.longterm) return '1년 미만 근로자는 상시근로자에서 빠져 받지 못합니다';
+  if(c.noTax) return '낼 세금이 없어 올해는 받지 못하고 5년 동안 이월됩니다';
+  const kind=(c.youth?'우대 대상':'일반')+' · '+(c.area==='metro'?'수도권':'비수도권');
+  const carry=r.carry.reduce((a,b)=>a+b,0);
+  return kind+(carry>0?' · 공제 한도에 걸려 '+won(carry)+'원은 5년 동안 이월됩니다':'');
+}
 
 /* ── 화면 ─────────────────────────────────── */
 function render(){
@@ -540,10 +579,12 @@ function render(){
   $('yt-body').innerHTML=
       yrow('회사가 쓰는 돈','급여가 그대로라고 보았습니다',[0,1,2].map(()=>won(r.yearly)+'원'))
     +yrow('비용 처리로 줄어드는 세금',r.saveWords,[0,1,2].map(()=>'− '+won(r.save)+'원'),'minus')
-    +yrow('통합고용세액공제',(c.youth?'우대 대상':'일반')+' · '+(c.area==='metro'?'수도권':'비수도권'),r.credits.map(v=>'− '+won(v)+'원'),'minus')
+    +yrow('통합고용세액공제',creditWords(c,r),r.empUsed.map(v=>'− '+won(v)+'원'),'minus')
     +(c.grant?yrow('청년일자리도약장려금','월 60만 원 × 12개월',['− '+won(r.grant)+'원','−','−'],'minus'):'')
     +yrow('실제 부담','',r.net.map(v=>won(v)+'원'),'sum');
-  $('ycap').textContent='통합고용세액공제는 고용을 이어 갈수록 커집니다. 3년 동안 받는 공제를 모두 더하면 '+won(r.credits[0]+r.credits[1]+r.credits[2])+'원입니다.';
+  $('ycap').textContent=r.canCredit
+    ?'통합고용세액공제는 고용을 이어 갈수록 커집니다. 3년 동안 받을 수 있는 공제가 '+won(r.credits[0]+r.credits[1]+r.credits[2])+'원이고, 지금 과세표준 기준으로 실제 쓸 수 있는 금액은 '+won(r.empUsed[0]+r.empUsed[1]+r.empUsed[2])+'원입니다.'
+    :'이번 채용은 통합고용세액공제를 받지 못하는 경우로 계산했습니다.';
 
   $('res-sub').textContent='월 급여 '+won(c.wage)+'원'+(c.meal?' · 식대 '+won(c.meal)+'원':'')+' · '+(c.area==='metro'?'수도권':'비수도권')+(c.youth?' · 우대 대상':'');
 
@@ -554,7 +595,7 @@ function render(){
 
   const head='1년차 실제 부담은 <b>'+won(r.net[0])+'원</b>입니다. 회사가 쓰는 돈 '+won(r.yearly)+'원에서 세금과 지원금을 뺀 금액입니다.';
   const notes=[];
-  notes.push({t:'세액공제와 지원금은 한 번 받고 끝이 아닙니다. 3년 동안 받는 통합고용세액공제가 '+won(r.credits[0]+r.credits[1]+r.credits[2])+'원이라, 사람을 오래 데리고 있을수록 부담이 줄어듭니다.'});
+  if(r.canCredit) notes.push({t:'세액공제는 한 번 받고 끝이 아닙니다. 3년 동안 받을 수 있는 통합고용세액공제가 '+won(r.credits[0]+r.credits[1]+r.credits[2])+'원이라, 사람을 오래 데리고 있을수록 부담이 줄어듭니다.'});
   if(!c.grant) notes.push({t:'5인 이상이시고 취업애로청년을 정규직으로 뽑으시면 청년일자리도약장려금 720만 원을 더 받을 수 있습니다. <b>채용 전에 고용24에서 참여 신청</b>을 해야 하니 순서를 먼저 확인해 주세요.'});
   if(c.grant) notes.push({warn:1,t:'청년일자리도약장려금은 <b>채용 전에 참여 신청</b>을 해야 합니다. 사람을 뽑은 뒤에 신청하면 받지 못하니 순서를 꼭 지켜 주세요.'});
   if(c.meal<FREE_GUIDE) notes.push({t:'식대 20만 원에 차량유지비 20만 원, 육아수당 20만 원까지 요건을 갖추면 월 60만 원을 비과세로 줄 수 있습니다. 같은 금액을 주더라도 비과세로 나누면 회사 부담이 줄고 직원 실수령액도 늘어납니다.'});
@@ -563,8 +604,9 @@ function render(){
   notes.push({warn:1,t:'통합고용세액공제는 <b>상시근로자 수가 늘어야</b> 받습니다. 그만둔 자리를 메우는 채용이면 받지 못하고, 뒤에 인원이 줄면 그만큼 공제가 빠집니다.'});
   if(c.first) notes.push({warn:1,t:'첫 직원을 뽑는 순간 사업장이 만들어지면서 <b>대표님 건강보험료 월 '+won(r.ceoAdd)+'원</b>이 함께 나오기 시작합니다. 소득이 아직 없는 신규 사업자는 직원 보수월액으로 신고하므로, 직원 급여를 올리면 대표님 보험료도 함께 올라갑니다. 직원 급여만 보고 계획을 세우면 이 금액에서 막히는 경우가 많습니다.'});
   if(c.noTax) notes.push({t:'지금은 낼 세금이 없어 당장 줄어드는 세금도 없습니다. 다만 적자는 결손금으로 15년 동안 이월되어 나중에 이익이 날 때 세금을 줄여 주고, 통합고용세액공제도 5년 동안 이월해 쓸 수 있습니다.'});
-  if(c.minTax&&!c.noTax) notes.push({t:'최저한세만 내고 계시면 공제와 감면을 더 받아도 세금이 그 아래로 내려가지 않습니다. 비용으로 줄어드는 세금도 '+(c.corp?'과세표준의 7%':'산출세액의 35%')+'만큼만 잡았습니다.'});
-  if(c.relief&&!c.noTax&&!c.minTax) notes.push({t:'세액감면 '+Math.round(c.relief*100)+'%를 받고 계셔서 비용이 늘면 감면액도 함께 줄어듭니다. 그만큼 실제로 아끼는 돈이 적어지는 것을 반영했습니다.'+(c.relief===1?' 감면을 100% 받으시면 지방소득세만 줄어듭니다.':'')});
+  if(c.related) notes.push({warn:1,t:'임원이나 최대주주, 그 가족은 상시근로자에서 빠져 <b>통합고용세액공제를 받지 못합니다.</b> 4대보험과 퇴직금은 똑같이 들어가니 가족을 직원으로 올리실 때는 이 점을 함께 보셔야 합니다.'});
+  if(r.carry[0]>0&&!c.noTax&&r.canCredit) notes.push({warn:1,t:'올해 낼 세금이 적어 통합고용세액공제 1년차 '+won(r.credits[0])+'원 가운데 <b>'+won(r.empUsed[0])+'원만 쓰고 '+won(r.carry[0])+'원은 이월</b>됩니다. 공제는 5년 동안 이월해 쓸 수 있으니 사라지는 것은 아닙니다.'});
+  if(c.relief&&!c.noTax) notes.push({t:'세액감면 '+Math.round(c.relief*100)+'%를 받고 계셔서 비용이 늘면 감면액도 함께 줄어듭니다. 그만큼 실제로 아끼는 돈이 적어지는 것을 반영했습니다.'+(c.relief===1?' 감면을 100% 받으시면 지방소득세만 줄어듭니다.':'')});
   if(!c.profit&&!c.noTax) notes.push({t:(c.corp?'당기순이익':'소득금액')+'을 넣으시면 인건비를 비용으로 넣을 때 줄어드는 세금까지 계산해 드립니다.'});
   if(c.profit&&c.profit<r.yearly&&!c.noTax) notes.push({warn:1,t:'인건비가 과세표준보다 커서 이번 채용으로 적자가 됩니다. 넘는 금액은 결손금으로 이월되어 다음 해부터 세금을 줄여 줍니다.'});
   $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
@@ -584,6 +626,8 @@ function render(){
     +(c.profit&&!c.noTax?srow('세금 절감 전','과세표준 '+won(c.profit)+'에 매기는 세금',won(r.taxBefore)+'원'):'')
     +(c.profit&&!c.noTax?srow('세금 절감 후','인건비를 뺀 과세표준 '+won(r.after),won(r.taxAfter)+'원'):'')
     +srow('줄어드는 세금',r.saveWords,won(r.save)+'원')
+    +(r.credits[0]?srow('통합고용세액공제','1년차 '+won(r.credits[0])+' 가운데 올해 쓸 수 있는 금액',won(r.empUsed[0])+'원'):'')
+    +(r.carry[0]>0?srow('이월되는 공제','세액공제 한도에 걸려 5년 동안 이월',won(r.carry[0])+'원'):'')
     +srow('통합고용세액공제','1년차 '+won(r.credits[0])+' · 2년차 '+won(r.credits[1])+' · 3년차 '+won(r.credits[2]),won(r.credits[0])+'원')
     +(c.grant?srow('청년일자리도약장려금','월 60만 원 × 12개월',won(r.grant)+'원'):'')
     +'</table>';
