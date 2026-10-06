@@ -377,6 +377,12 @@ nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classLi
 /* ── 배분 찾기 ─────────────────────────────── */
 const $=id=>document.getElementById(id);
 let NP=0, CUR_SAL=0, TAKE=0, PICK=null, FORCE_FULL=false;
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
+const dv=v=>Math.abs(v)<1e6?Math.round(v):r4(v);   // 화면에 보이는 값끼리 더하고 빼야 표가 맞습니다
+const dgross=r=>dv(r.cTax)+dv(r.pTax)+dv(r.ins.company)+dv(r.ins.self)+dv(r.dIns.total);
 function GP(){ return NP>0 ? NP+CUR_SAL+(INS_MODE?salaryInsurance(CUR_SAL).company:0) : 0; }
 const shortWon=v=>{
   if(v>=100000000){ const e=v/100000000; return (e>=10?Math.round(e):Math.round(e*10)/10)+'억'; }
@@ -402,7 +408,7 @@ function render(){
   const cases=[{k:'전액 연봉',div:0},{k:'가장 적게 내는 배분',div:sw.best.div},{k:'전액 배당',div:sw.maxDiv}];
   const rows=cases.map(c=>at(profit,c.div));
   const narrow=!FORCE_FULL && window.innerWidth<=660;
-  const amt=v=>(narrow?shortWon(v):won(v))+'원';
+  const amt=v=>narrow?shortWon(v)+'원':manwon(v);
   const cells=fn=>rows.map(r=>'<td>'+fn(r)+'</td>').join('');
   const bestI=1;
   $('h-sal').innerHTML='전액 연봉<br><small style="font-weight:400">연봉 '+shortWon(TAKE)+' · 배당 0</small>';
@@ -417,7 +423,7 @@ function render(){
               +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>amt(r.ins.self))+'</tr>'
               +'<tr><td>배당 건강보험료</td>'+cells(r=>amt(r.dIns.total))+'</tr>':'')
     +'<tr class="tot"><td>'+(INS_MODE?'세금·보험료 합계':'세금 합계')+'</td>'
-      +rows.map((r,i)=>'<td class="'+(i===bestI?'best':'')+'">'+amt(r.gross)+'</td>').join('')+'</tr>'
+      +rows.map((r,i)=>'<td class="'+(i===bestI?'best':'')+'">'+amt(dgross(r))+'</td>').join('')+'</tr>'
     +'<tr class="gap"><td colspan="4"></td></tr>'
     +'<tr class="cash"><td>대표님 세후 실수령액</td>'+cells(r=>amt(r.cash))+'</tr>'
     +'<tr><td>법인에 남는 이익</td>'+cells(r=>amt(r.left))+'</tr>';
@@ -425,23 +431,23 @@ function render(){
   $('res-sub').textContent='당기순이익 '+won(NP)+'원 · 가져갈 금액 '+won(TAKE)+'원'
     +({'1':' · 최저한세 7%','2':' · 이월결손금','3':' · 연구비 세액공제'}[CIT_MODE]||'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
 
-  const bestR=rows[1], salR=rows[0], gap=salR.gross-bestR.gross;
+  const bestR=rows[1], salR=rows[0], gap=dgross(salR)-dgross(bestR);
   $('headline').className='headline'+(gap<10000?' same':'');
   $('headline').innerHTML= gap<10000
     ? '이 금액대에서는 <b>전액 연봉으로 받으실 때 세금이 가장 적습니다.</b> 배당을 섞어도 세금이 줄지 않습니다.'
-    : '연봉 <b>'+won(TAKE-sw.best.div)+'원</b>에 배당 <b>'+won(sw.best.div)+'원</b>으로 나누면 세금이 가장 적습니다.<br>'
-      +'전액 연봉으로 받을 때보다 '+(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(gap)+'원</b> 덜 냅니다.';
+    : '연봉 <b>'+manwon(TAKE-sw.best.div)+'</b>에 배당 <b>'+manwon(sw.best.div)+'</b>으로 나누면 세금이 가장 적습니다.<br>'
+      +'전액 연봉으로 받을 때보다 '+(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+manwon(gap)+'</b> 덜 냅니다.';
 
   const w=$('warn');
   if(sw.maxDiv<TAKE){
     w.style.display='block';
-    w.innerHTML='배당은 법인세를 낸 뒤 남은 이익에서만 할 수 있습니다. 이 조건에서는 <b>'+won(sw.maxDiv)+'원</b>까지 배당할 수 있어 그만큼만 비교했습니다. 그전에 쌓인 이익잉여금이 있다면 더 배당할 수 있으니 상담에서 확인해 주세요.';
+    w.innerHTML='배당은 법인세를 낸 뒤 남은 이익에서만 할 수 있습니다. 이 조건에서는 <b>'+manwon(sw.maxDiv)+'</b>까지 배당할 수 있어 그만큼만 비교했습니다. 그전에 쌓인 이익잉여금이 있다면 더 배당할 수 있으니 상담에서 확인해 주세요.';
   } else w.style.display='none';
 
   const notes=[];
   if(sw.best.div>0) notes.push('배당은 연 2,000만 원까지 15.4%로 따로 과세하고 근로소득과 합치지 않습니다. 그 구간이 가장 유리합니다.');
   if(INS_MODE) notes.push('배당은 연 2,000만 원을 넘는 금액에만 건강보험료가 붙습니다. 연봉은 상한 없이 건강보험료가 계속 붙습니다.');
-  if(bestR.cash!==salR.cash) notes.push('세후 실수령액도 달라집니다. 가장 적게 내는 배분으로 받으시면 전액 연봉보다 '+won(Math.abs(bestR.cash-salR.cash))+'원 '+(bestR.cash>salR.cash?'더':'덜')+' 가져가십니다.');
+  if(bestR.cash!==salR.cash) notes.push('세후 실수령액도 달라집니다. 가장 적게 내는 배분으로 받으시면 전액 연봉보다 '+manwon(Math.abs(dv(bestR.cash)-dv(salR.cash)))+' '+(bestR.cash>salR.cash?'더':'덜')+' 가져가십니다.');
   notes.push('배당은 주주총회 결의가 필요하고, 주주가 여러 명이면 지분대로 나눠야 합니다.');
   $('verdict').innerHTML='연봉은 법인의 비용이라 법인세를 줄이지만 근로소득세와 4대보험이 붙습니다. 배당은 법인세를 줄이지 못하지만 2,000만 원까지는 낮은 세율로 끝납니다. 그래서 둘을 섞는 지점에서 세금이 가장 적어집니다.'
     +notes.map(n=>'<span class="note">'+n+'</span>').join('');
@@ -458,8 +464,8 @@ function render(){
 function updPick(sw){
   const r=at(GP(),PICK), best=sw.best.r;
   $('s-div-v').textContent=won(PICK)+'원';
-  $('sltotal').innerHTML='연봉 <b>'+won(TAKE-PICK)+'원</b> · 배당 <b>'+won(PICK)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+won(r.gross)+'원</b>'
-    +(r.gross-best.gross<10000?' · 가장 적은 배분입니다':' · 가장 적은 배분보다 <b class="dn">'+won(r.gross-best.gross)+'원 더 납부</b>');
+  $('sltotal').innerHTML='연봉 <b>'+won(TAKE-PICK)+'원</b> · 배당 <b>'+won(PICK)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+manwon(dgross(r))+'</b>'
+    +(dgross(r)-dgross(best)<10000?' · 가장 적은 배분입니다':' · 가장 적은 배분보다 <b class="dn">'+manwon(dgross(r)-dgross(best))+' 더 납부</b>');
 }
 
 /* ── 그래프 ────────────────────────────────── */

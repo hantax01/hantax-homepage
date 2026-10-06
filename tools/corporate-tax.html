@@ -355,6 +355,10 @@ function calcCit(c){
 /* ── 입력 ─────────────────────────────────── */
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 ['i-rev','i-cost','i-ceo','i-loss','i-credit','i-paid'].forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
@@ -391,12 +395,12 @@ function render(){
   const v=r.profit<=0
     ?'올해는 적자라 낼 법인세가 없습니다. 이 적자는 앞으로 15년 동안 이익에서 뺄 수 있습니다.'
     :r.total<0
-      ?'이미 낸 세금이 더 많아 <b>'+won(-r.total)+'원을 돌려받습니다.</b>'
-      :'다음 해 3월에 법인세와 지방소득세를 합해 <b>'+won(r.total)+'원</b>을 내게 됩니다.';
+      ?'이미 낸 세금이 더 많아 <b>'+manwon(-r.total)+'을 돌려받습니다.</b>'
+      :'다음 해 3월에 법인세와 지방소득세를 합해 <b>'+manwon(r.total)+'</b>을 내게 됩니다.';
   const notes=[];
-  if(c.reliefRate&&r.relief>0) notes.push(reliefName+'를 적용해 세금이 '+won(r.relief)+'원 줄었습니다.');
+  if(c.reliefRate&&r.relief>0) notes.push(reliefName+'를 적용해 세금이 '+manwon(r.relief)+' 줄었습니다.');
   if(!c.reliefRate&&r.base>0) notes.push('업종과 지역, 창업 시기에 따라 중소기업특별세액감면이나 창업중소기업 세액감면을 받을 수 있습니다. 해당되면 위에서 선택해 주세요.');
-  if(r.base>0&&r.save>0) notes.push('대표님 급여를 한 해 1,000만 원 더 가져가면 법인세와 지방소득세가 약 '+won(r.save)+'원 줄어듭니다. 다만 대표님 개인의 근로소득세와 4대보험이 늘어나니 <a href="income-transfer.html">연봉과 배당 계산기</a>로 함께 보셔야 합니다.');
+  if(r.base>0&&r.save>0) notes.push('대표님 급여를 한 해 1,000만 원 더 가져가면 법인세와 지방소득세가 약 '+manwon(r.save)+' 줄어듭니다. 다만 대표님 개인의 근로소득세와 4대보험이 늘어나니 <a href="income-transfer.html">연봉과 배당 계산기</a>로 함께 보셔야 합니다.');
   if(r.base>200000000) notes.push('과세표준 가운데 2억 원을 넘는 부분에는 20% 세율이 적용됩니다. 결산 전에 상여나 배당, 공제·감면을 함께 따져 볼 만합니다.');
   if(c.loss&&r.loss<c.loss) notes.push('이월결손금 '+won(c.loss)+'원 가운데 '+won(r.loss)+'원만 올해 이익에서 뺐습니다. 남은 금액은 다음 해로 넘어갑니다.');
   $('verdict').innerHTML=v+notes.map(n=>'<span class="note">'+n+'</span>').join('');

@@ -390,6 +390,10 @@ function salaryInsurance(salary){
 }
 function cit(base){ if(base<=0)return 0; return (base<=200000000 ? base*.1 : 20000000+(base-200000000)*.2)*LOCAL; }
 const won=n=>Math.round(n).toLocaleString('ko-KR');
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 
 function compute(income,deduct,red,salary){
@@ -418,26 +422,29 @@ function render(income,deduct,red,salary){
   const min=Math.min(...rows.map(r=>r.total));
   const base=rows[0].total;
   const tb=document.getElementById('res-body');
+  // 표 안 숫자끼리 맞도록 만 원으로 반올림한 항목을 더해 합계를 냅니다
+  rows.forEach(r=>{ r.d={corp:r4(r.corp||0),per:r4(r.per),insC:r4(r.ins.company),insS:r4(r.ins.self)}; r.d.total=r.d.corp+r.d.per+r.d.insC+r.d.insS; });
+  const dBase=rows[0].d.total;
   const cells=(fn)=>rows.map(r=>fn(r)).join('');
   tb.innerHTML=
-    '<tr><td>법인세</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':won(r.corp)+'원')+'</td>')+'</tr>'
-   +'<tr><td>대표님 개인 세금</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.per)+'원</td>')+'</tr>'
-   +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':won(r.ins.company)+'원')+'</td>')+'</tr>'
-             +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.ins.self)+'원</td>')+'</tr>':'')
-   +'<tr class="tot"><td>'+(INS_MODE?'총 부담 합계':'합계')+'</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+won(r.total)+'원</td>')+'</tr>'
+    '<tr><td>법인세</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':manwon(r.d.corp))+'</td>')+'</tr>'
+   +'<tr><td>대표님 개인 세금</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+manwon(r.d.per)+'</td>')+'</tr>'
+   +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':manwon(r.d.insC))+'</td>')+'</tr>'
+             +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+manwon(r.d.insS)+'</td>')+'</tr>':'')
+   +'<tr class="tot"><td>'+(INS_MODE?'총 부담 합계':'합계')+'</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+manwon(r.d.total)+'</td>')+'</tr>'
    +'<tr class="rate"><td>'+(INS_MODE?'소득 대비 부담률':'소득 대비 세율')+'</td>'+cells(r=>{
       const pct=income>0?(r.total/income*100):0;
       return '<td class="'+(r.total===min?'best':'')+'">'+pct.toFixed(1)+'%</td>';
    })+'</tr>'
    +'<tr class="diff"><td>현재 대비</td>'+cells(r=>{
       if(r.corp===null) return '<td class="'+(r.total===min?'best':'')+'">기준</td>';
-      const d=base-r.total;
+      const d=dBase-r.d.total;
       if(Math.abs(d)<1000) return '<td class="'+(r.total===min?'best':'')+'">비슷</td>';
-      return '<td class="'+(r.total===min?'best':'')+(d<0?' neg':'')+'">'+won(Math.abs(d))+'원<br><small>'+(d>0?'적게 냄':'더 냄')+'</small></td>';
+      return '<td class="'+(r.total===min?'best':'')+(d<0?' neg':'')+'">'+manwon(Math.abs(d))+'<br><small>'+(d>0?'적게 냄':'더 냄')+'</small></td>';
    })+'</tr>'
    +'<tr class="gap"><td colspan="5"></td></tr>'
-   +'<tr class="cash"><td>대표님 실수령액</td>'+cells(r=>'<td>'+won(r.cash)+'원</td>')+'</tr>'
-   +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+(r.corp===null?'해당 없음':won(r.left)+'원')+'</td>')+'</tr>';
+   +'<tr class="cash"><td>대표님 실수령액</td>'+cells(r=>'<td>'+manwon(r.cash)+'</td>')+'</tr>'
+   +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+(r.corp===null?'해당 없음':manwon(r.left))+'</td>')+'</tr>';
   document.getElementById('res-sub').textContent=
     '소득금액 '+won(income)+'원 · 소득공제 '+won(deduct)+'원'+(red>0?' · 감면 '+red+'%':' · 감면 없음')+(INS_MODE?' · 4대보험 포함':'');
   document.getElementById('res-title').textContent = INS_MODE ? '총 부담 비교 결과' : '세금 비교 결과';
@@ -446,8 +453,8 @@ function render(income,deduct,red,salary){
   const labels={0:'현재처럼 개인사업자로 두는 경우',1:'법인으로 전환해 대표님 연봉을 '+won(rows[1].sal)+'원으로 정하는 경우',2:'법인으로 전환해 이익 전액을 연봉으로 가져가는 경우'};
   const bestIdx=rows.indexOf(best);
   document.getElementById('verdict').innerHTML=
-    '<b>'+labels[bestIdx]+'</b>의 '+(INS_MODE?'부담':'세금')+'이 가장 적습니다. 합계는 '+won(best.total)+'원, 대표님 실수령액은 '+won(best.cash)+'원입니다.'
-    +(best.left>0?'<br><br>다만 나머지 '+won(best.left)+'원은 법인에 남습니다. 이 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.':'')
+    '<b>'+labels[bestIdx]+'</b>의 '+(INS_MODE?'부담':'세금')+'이 가장 적습니다. 합계는 '+manwon(best.d.total)+', 대표님 실수령액은 '+manwon(best.cash)+'입니다.'
+    +(best.left>0?'<br><br>다만 나머지 '+manwon(best.left)+'은 법인에 남습니다. 이 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.':'')
     + (INS_MODE
        ? '<br><br><span style="font-size:14px;color:var(--mute)">개인사업자는 소득 전체에 보험료가 붙고 전액 본인이 냅니다. 법인 대표님은 연봉에만 붙고 절반은 회사가 부담하므로, 연봉을 정하는 방식으로 보험료를 조절할 수 있습니다. 다만 개인사업자는 재산과 자동차에 따라 건강보험료가 더 나올 수 있어 실제 금액은 달라집니다.</span>'
        : '<br><br><span style="font-size:14px;color:var(--mute)">여기에 국민연금과 건강보험료가 추가로 나갑니다. 위 탭에서 <b>4대보험까지 보기</b>를 누르면 함께 계산한 결과를 보실 수 있습니다.</span>');

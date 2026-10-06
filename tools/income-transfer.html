@@ -402,6 +402,10 @@ nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classLi
 
 let CUR_SAL=0, CUR_DIV=0;   // 현재 받고 있는 방식 / 소득공제 / 세액공제
 let FORCE_FULL=false;   // 이미지로 만들 때만 금액을 온전히 적습니다
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 let NP=0;             // 입력한 당기순이익(대표님 연봉을 뺀 재무제표 숫자)
 let ALT_SAL=0, ALT_DIV=0;   // 슬라이더로 바꿔 보는 조합
 // 연봉을 바꿔 보려면 현재 연봉을 빼기 전 이익에서 출발해야 합니다.
@@ -421,7 +425,9 @@ function render(profit,total,salary){
   const cells=fn=>rows.map(r=>'<td>'+fn(r)+'</td>').join('');
   const narrow=!FORCE_FULL && window.innerWidth<=660;
   const baseLeft=scenario(profit,0,0).left;   // 한 푼도 가져가지 않았을 때 법인에 남는 돈
-  const amt=v=>(narrow?shortWon(v):won(v))+'원';
+  const amt=v=>narrow?shortWon(v)+'원':manwon(v);
+  const dv=v=>Math.abs(v)<1e6?Math.round(v):r4(v);   // 화면에 보이는 값끼리 빼야 차이가 맞습니다
+  const dnet=r=>dv(r.pTax)+dv(r.ins.company)+dv(r.ins.self)+dv(r.dIns.total)-dv(r.cSaved);   // 표의 항목을 더한 합계
   // 그 조합을 그대로 둔 채 100만 원을 더 가져가면 세금이 얼마나 더 붙나
   const stepMore=r=>{
     const cur=r.salary+r.dividend;
@@ -432,7 +438,7 @@ function render(profit,total,salary){
   };
   // 바꾼다면 − 현재. 부호 대신 말로 적습니다 (세금은 더 납부/덜 납부, 돈은 더/덜 가져감 등)
   const dcell=(a,b,goodUp,words)=>{
-    const d=b-a, w=words||['더 납부','덜 납부'];
+    const d=dv(b)-dv(a), w=words||['더 납부','덜 납부'];
     if(Math.abs(d)<1000) return '<td class="dc">같음</td>';
     const cls = goodUp===null ? '' : ((goodUp ? d>0 : d<0) ? ' up' : ' down');
     return '<td class="dc'+cls+'">'+amt(Math.abs(d))+' '+(d>0?w[0]:w[1])+'</td>';
@@ -448,7 +454,7 @@ function render(profit,total,salary){
              +'<tr><td>배당 건강보험료</td>'+cells(r=>r.dIns.total>0?amt(r.dIns.total):'0원')+dcell(rows[0].dIns.total,rows[1].dIns.total,false)+'</tr>':'')
    +'<tr class="tot"><td>합계'
       +'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉도 배당도 받지 않으셨을 때와 비교</small></td>'
-      +cells(r=>(r.net<0?'−':'')+amt(Math.abs(r.net)))+dcell(rows[0].net,rows[1].net,false)+'</tr>'
+      +cells(r=>(dnet(r)<0?'−':'')+amt(Math.abs(dnet(r))))+dcell(dnet(rows[0]),dnet(rows[1]),false)+'</tr>'
    +'<tr class="sub-row"><td>회사 지출액'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">한 푼도 가져가지 않았을 때보다 법인에 덜 남는 돈</small></td>'
       +cells(r=>amt(baseLeft-r.left))+dcell(baseLeft-rows[0].left,baseLeft-rows[1].left,null,['더 나감','덜 나감'])+'</tr>'
    +'<tr class="rate"><td>100만 원 더 가져갈 때'+'<br><small style="font-size:11.5px;color:var(--mute);font-weight:400">연봉과 배당 비율은 그대로 · 이 비율이 구간마다 어떻게 변하는지는 아래 그래프에서</small></td>'
@@ -470,7 +476,7 @@ function render(profit,total,salary){
   const shortRow=(rows[1].short>0)?rows[1]:null;
   if(shortRow){
     w.style.display='block';
-    w.innerHTML='배당은 법인세를 낸 뒤 남은 이익에서만 할 수 있습니다. 올해 이익으로는 <b>'+won(shortRow.after)+'원</b>까지 배당할 수 있어, 그만큼만 반영했습니다. 그전에 쌓인 이익잉여금이 있다면 더 배당할 수 있으니 상담에서 확인해 주세요.';
+    w.innerHTML='배당은 법인세를 낸 뒤 남은 이익에서만 할 수 있습니다. 올해 이익으로는 <b>'+manwon(shortRow.after)+'</b>까지 배당할 수 있어, 그만큼만 반영했습니다. 그전에 쌓인 이익잉여금이 있다면 더 배당할 수 있으니 상담에서 확인해 주세요.';
   } else w.style.display='none';
 
   const nowRow=rows[0], newRow=rows[1];
@@ -482,27 +488,27 @@ function render(profit,total,salary){
   } else {
     const mSal=marginal(profit,CUR_SAL,CUR_DIV,'sal'), mDiv=marginal(profit,CUR_SAL,CUR_DIV,'div');
     hl.className='headline';
-    const n=nowRow.net;
+    const n=dnet(nowRow);
     hl.innerHTML='현재처럼 <b>'+won(curTotal)+'원</b>을 가져가시면, 한 푼도 가져가지 않으실 때보다 '
-      +(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(Math.abs(n))+'원</b> '+(n>=0?'더':'덜')+' 내십니다.<br>'
-      +'여기서 100만 원을 더 가져가실 때 늘어나는 세금은 연봉이면 <b>'+won(mSal)+'원</b>'
+      +(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+manwon(Math.abs(n))+'</b> '+(n>=0?'더':'덜')+' 내십니다.<br>'
+      +'여기서 100만 원을 더 가져가실 때 늘어나는 세금은 연봉이면 <b>'+manwon(mSal)+'</b>'
       +(mDiv===null ? '이고, 배당할 수 있는 이익은 남아 있지 않습니다.'
-                    : ', 배당이면 <b>'+won(mDiv)+'원</b>입니다.');
+                    : ', 배당이면 <b>'+manwon(mDiv)+'</b>입니다.');
   }
   let msg='법인 통장에 있는 돈은 아직 대표님 개인 돈이 아닙니다. 연봉으로 받으면 근로소득세가, 배당으로 받으면 이미 법인세를 낸 이익에 다시 배당소득세가 붙습니다. '
     +'그래서 회사에 이익이 있어도 <b>꺼내는 순간 상당한 금액이 세금으로 나갑니다.</b> '
     +'연봉은 법인의 비용이라 그만큼 법인세가 줄지만, 배당은 배당을 하든 안 하든 법인세가 달라지지 않습니다.';
-  const diff=nowRow.gross-newRow.gross;
+  const diff=dv(nowRow.gross)-dv(newRow.gross);
   if(Math.abs(diff)>10000){
-    msg+='<br><br>연봉을 바꾼 안은 현재보다 '+won(Math.abs(diff))+'원 '+(diff>0?'덜':'더')+' 냅니다. '
+    msg+='<br><br>연봉을 바꾼 안은 현재보다 '+manwon(Math.abs(diff))+' '+(diff>0?'덜':'더')+' 냅니다. '
       +'연봉을 올리면 법인세가 줄지만 근로소득세와 4대보험이 더 빠르게 늘어나, 어느 지점부터는 손해가 됩니다.';
   } else {
     msg+='<br><br>연봉을 조금 바꿔서는 '+(INS_MODE?'부담':'세금')+' 차이가 크지 않습니다. <b>얼마를 가져가느냐가 세금을 가장 크게 좌우합니다.</b>';
   }
   if(CIT_MODE==='2') msg+='<br><br>이월결손금이 남아 있는 동안은 연봉을 올려도 올해 법인세가 줄지 않습니다. 대신 결손금을 덜 쓰게 되어, 남은 결손금으로 다음 해 이후 법인세를 줄일 수 있습니다.';
-  if(nowRow.cSaved>10000) msg+='<br><br>현재 연봉 '+won(CUR_SAL)+'원 덕분에 '+(CIT_MODE==='3'?'법인지방소득세를 ':'법인세를 ')+won(nowRow.cSaved)+'원 줄이고 계십니다. '
+  if(nowRow.cSaved>10000) msg+='<br><br>현재 연봉 '+won(CUR_SAL)+'원 덕분에 '+(CIT_MODE==='3'?'법인지방소득세를 ':'법인세를 ')+manwon(nowRow.cSaved)+' 줄이고 계십니다. '
     +'연봉을 올리면 이 절감액이 커지지만 근로소득세와 4대보험이 더 빠르게 늘고, <b>배당은 아무리 늘려도 법인세가 줄지 않습니다.</b>';
-  if(newRow.left>0) msg+='<br><br>법인에 남은 '+won(newRow.left)+'원은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세금이 적은 방법도 있으니 미리 준비하면 세금을 줄일 수 있습니다.';
+  if(newRow.left>0) msg+='<br><br>법인에 남은 '+manwon(newRow.left)+'은 법인세를 이미 낸 돈이지만, 대표님이 꺼내 쓰시려면 배당소득세를 한 번 더 내야 합니다. 퇴직금처럼 세금이 적은 방법도 있으니 미리 준비하면 세금을 줄일 수 있습니다.';
   msg+='<br><br><span style="font-size:14px;color:var(--mute)">연봉과 배당을 어떻게 나눌지는 <a href="pay-mix.html">연봉과 배당, 어떻게 나눌까요?</a> 계산기에서 비교해 보세요.</span>';
   msg+= INS_MODE
     ? '<br><br><span style="font-size:14px;color:var(--mute)">국민연금은 기준소득월액 상한(월 637만 원)이 있어 연봉 7,600만 원쯤부터는 더 늘지 않지만, 건강보험료는 상한 없이 계속 붙습니다. 배당은 연 2,000만 원까지 건강보험료가 붙지 않습니다.</span>'
@@ -513,10 +519,10 @@ function render(profit,total,salary){
   drawChart(profit);
   const st=document.getElementById('sltotal');
   if(st){
-    const d=rows[1].net-rows[0].net;
-    st.innerHTML='가져가는 돈 <b>'+won(total)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+(rows[1].net<0?'−':'')+won(Math.abs(rows[1].net))+'원</b>'
+    const d=dnet(rows[1])-dnet(rows[0]);
+    st.innerHTML='가져가는 돈 <b>'+won(total)+'원</b> · '+(INS_MODE?'부담':'세금')+' <b>'+(dnet(rows[1])<0?'−':'')+manwon(Math.abs(dnet(rows[1])))+'</b>'
       +(Math.abs(d)<1000 ? ' · 현재와 같음'
-        : ' · 현재보다 <b class="'+(d>0?'dn':'up')+'">'+won(Math.abs(d))+'원 '+(d>0?'더 납부':'덜 납부')+'</b>');
+        : ' · 현재보다 <b class="'+(d>0?'dn':'up')+'">'+manwon(Math.abs(d))+' '+(d>0?'더 납부':'덜 납부')+'</b>');
   }
   document.getElementById('res').style.display='block';
 }

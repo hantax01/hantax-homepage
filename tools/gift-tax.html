@@ -423,6 +423,10 @@ const AGG_FLOOR=10000000;      // 동일인 합계가 1천만 원 이상이면 �
 const FILE_CREDIT=0.03;        // 신고세액공제
 
 const won=n=>Math.round(n).toLocaleString('ko-KR');
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const kdate=s=>{const p=String(s).split('-');return p[0]+'년 '+Number(p[1])+'월 '+Number(p[2])+'일';};
@@ -518,10 +522,10 @@ function render(){
   let v;
   if(r.pay<=0){
     v='공제 범위 안이라 <b>낼 세금이 없습니다.</b> 세금이 없어도 신고는 해 두시는 편이 좋습니다. 나중에 이 돈의 출처를 설명해야 할 때 근거가 됩니다.';
-    if(r.free>r.amount) v+='<br><br>현재 조건이라면 <b>'+won(r.free)+'원</b>까지는 세금 없이 받으실 수 있습니다.';
+    if(r.free>r.amount) v+='<br><br>현재 조건이라면 <b>'+manwon(r.free)+'</b>까지는 세금 없이 받으실 수 있습니다.';
   }else{
-    v='내야 할 증여세는 <b>'+won(r.pay)+'원</b>입니다. 받으시는 '+won(r.amount)+'원의 '+(r.pay/r.amount*100).toFixed(1)+'%에 해당합니다.';
-    v+=r.free>0?'<br><br>세금 없이 받을 수 있는 금액은 '+won(r.free)+'원까지입니다.'
+    v='내야 할 증여세는 <b>'+manwon(r.pay)+'</b>입니다. 받으시는 '+won(r.amount)+'원의 '+(r.pay/r.amount*100).toFixed(1)+'%에 해당합니다.';
+    v+=r.free>0?'<br><br>세금 없이 받을 수 있는 금액은 '+manwon(r.free)+'까지입니다.'
                :'<br><br>10년 치 공제를 이미 다 쓰셔서 이번에는 받는 금액 전부에 세금이 붙습니다.';
   }
   if(r.merged&&r.freeDay)

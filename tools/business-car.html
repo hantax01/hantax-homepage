@@ -519,6 +519,10 @@ const KIND={sedan:'일반 승용차',van:'승합차·화물차',light:'경차'};
 const METHOD={cash:'일시취득',loan:'할부취득',lease:'운용리스',rent:'장기렌트'};
 
 const won=n=>Math.round(n).toLocaleString('ko-KR');
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const dec=s=>Number(String(s).replace(/[^0-9.]/g,''))||0;
 
@@ -622,13 +626,15 @@ function render(){
   const best=rows.find(r=>r.net===min);
 
   let html='';
+  // 표 안 숫자끼리 맞도록 만 원으로 반올림한 값으로 지출·부담액을 다시 맞춥니다
+  rows.forEach(r=>{ r.d={T:r4(r.cashOut+r.sale),S:r4(r.sale),sv:r4(r.save)}; r.d.C=r.d.T-r.d.S; r.d.net=r.d.C-r.d.sv; });
   rows.forEach(r=>{
     html+='<tr'+(r===best?' class="best"':'')+'>'
       +'<td><span class="nm">'+METHOD[r.method]+'</span></td>'
-      +'<td>'+won(r.cashOut)+'원<small>총 지출 '+won(r.cashOut+r.sale)+' − 매각 '+won(r.sale)+'</small>'+(r.deposit>0?'<small>보증금 '+won(r.deposit)+'원 별도 예치</small>':'')+'</td>'
-      +'<td>'+r.payback+'년'+(r.carry>0?'<small>한도초과 '+won(r.carry)+'원 이월</small>':'<small>보유기간 내 처리</small>')+'</td>'
-      +'<td>'+won(r.save)+'원'+(r.vatCredit>0?'<small>부가세 '+won(r.vatCredit)+'원 포함</small>':'')+'</td>'
-      +'<td>'+won(r.net)+'원</td></tr>';
+      +'<td>'+manwon(r.d.C)+'<small>총 지출 '+manwon(r.d.T)+' − 매각 '+manwon(r.d.S)+'</small>'+(r.deposit>0?'<small>보증금 '+manwon(r.deposit)+' 별도 예치</small>':'')+'</td>'
+      +'<td>'+r.payback+'년'+(r.carry>0?'<small>한도초과 '+manwon(r.carry)+' 이월</small>':'<small>보유기간 내 처리</small>')+'</td>'
+      +'<td>'+manwon(r.d.sv)+(r.vatCredit>0?'<small>부가세 '+manwon(r.vatCredit)+' 포함</small>':'')+'</td>'
+      +'<td>'+manwon(r.d.net)+'</td></tr>';
   });
   if(!hireOk(c)) html+=['lease','rent'].map(m=>'<tr class="na"><td><span class="nm">'+METHOD[m]+'</span></td>'
     +'<td colspan="4">계약이 보통 5년까지라 '+c.years+'년 보유는 계산하지 않았습니다</td></tr>').join('');
@@ -638,9 +644,9 @@ function render(){
     +(capped(best.owner,c)?' · 감가상각 800만 원 한도 적용':' · 감가상각 한도 없음');
 
   const second=rows.filter(r=>r!==best).sort((a,b)=>a.net-b.net)[0];
-  let v='<b>'+METHOD[best.method]+'</b>의 실제 부담액이 '+won(best.net)+'원으로 가장 적습니다. '
-    +'다음 순위인 '+METHOD[second.method]+'보다 '+won(second.net-best.net)+'원 적습니다.';
-  if(best.carry>0) v+='<br><br>감가상각비 한도초과액 '+won(best.carry)+'원은 보유기간 '+c.years+'년 안에 비용 처리되지 않고 이월되어 '+best.payback+'년차까지 나눠 인정됩니다. 위 금액은 이월분까지 모두 인정받는 것으로 계산했습니다.';
+  let v='<b>'+METHOD[best.method]+'</b>의 실제 부담액이 '+manwon(best.d.net)+'으로 가장 적습니다. '
+    +'다음 순위인 '+METHOD[second.method]+'보다 '+manwon(second.d.net-best.d.net)+' 적습니다.';
+  if(best.carry>0) v+='<br><br>감가상각비 한도초과액 '+manwon(best.carry)+'은 보유기간 '+c.years+'년 안에 비용 처리되지 않고 이월되어 '+best.payback+'년차까지 나눠 인정됩니다. 위 금액은 이월분까지 모두 인정받는 것으로 계산했습니다.';
   document.getElementById('verdict').innerHTML=v;
 
   document.getElementById('warns').innerHTML=warnings(c,rows).map(w=>'<div class="warn">'+w+'</div>').join('');

@@ -397,6 +397,10 @@ function calcVat(c){
 /* ── 입력 ─────────────────────────────────── */
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 ['i-s-tax','i-s-card','i-s-cash','i-b-tax','i-b-card','i-farm'].forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
@@ -461,8 +465,8 @@ function render(){
   const v=r.simple&&r.free
     ?'한 해 매출이 4,800만 원에 못 미쳐 <b>낼 세금이 없습니다.</b> 다만 신고는 하셔야 합니다.'
     :r.due<0
-      ?'매입세액이 매출세액보다 많아 <b>'+won(-r.due)+'원을 돌려받습니다.</b> 인테리어나 설비처럼 큰 매입이 있었던 기간에 생깁니다.'
-      :'이번 신고분 부가가치세는 <b>'+won(r.due)+'원</b>입니다.';
+      ?'매입세액이 매출세액보다 많아 <b>'+manwon(-r.due)+'을 돌려받습니다.</b> 인테리어나 설비처럼 큰 매입이 있었던 기간에 생깁니다.'
+      :'이번 신고분 부가가치세는 <b>'+manwon(r.due)+'</b>입니다.';
   const notes=[];
   if(r.simple){
     notes.push('간이과세자는 1년에 한 번, 다음 해 1월 25일까지 신고합니다. 세금계산서를 발행하는 간이과세자는 7월에 예정부과기간 신고도 합니다.');

@@ -357,6 +357,10 @@ const HI_RATE=0.03595, HI_MIN=10080, HI_MAX=4591740;   // 건강보험 근로자
 const LTC_OF_HI=0.9448/7.19, EI_RATE=0.009;
 const f10=v=>Math.floor(v/10)*10;
 const won=n=>Math.round(n).toLocaleString('ko-KR');
+// 결론·비교표 금액은 보여 줄 때만 만 원 단위로 반올림합니다(100만 원 미만은 원 단위 그대로). 계산은 원 단위 그대로입니다
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const man=v=>{ v=Math.round(v); if(v>=1e8){ const e=v/1e8; return (Math.round(e*100)/100).toLocaleString('ko-KR')+'억'; } return Math.round(v/1e4).toLocaleString('ko-KR')+'만'; };
 function bracket(b){ if(b<=0) return 0; for(const[lim,r,d]of PIT) if(b<=lim) return Math.max(0,b*r-d); return 0; }
@@ -736,11 +740,11 @@ function render(){
   const p=read(), g=Math.max(0,p.salary-p.nontax*12), r=calc(p,g);
   $('res-empty').hidden=p.salary>0; $('res').hidden=!(p.salary>0);
   if(!(p.salary>0)) return;
-  $('h-net').textContent=won(r.net)+'원';
-  $('h-net-m').textContent='월 평균 '+won(r.net/12)+'원';
-  $('h-tax').textContent=won(r.tax)+'원';
+  $('h-net').textContent=manwon(r.net);
+  $('h-net-m').textContent='월 평균 '+manwon(r.net/12);
+  $('h-tax').textContent=manwon(r.tax);
   $('h-tax-r').textContent=r.salary?'연봉의 '+(r.tax/r.salary*100).toFixed(1)+'%':'';
-  $('h-ins').textContent=won(r.ins.total)+'원';
+  $('h-ins').textContent=manwon(r.ins.total);
   const up=calc(p,g+1e6);
   $('marg').innerHTML='연봉이 <b>100만 원</b> 오르면 세금과 4대보험으로 <b>'+won(1e6-(up.net-r.net))+'원</b>이 더 나가고, 실수령액은 <b>'+won(up.net-r.net)+'원</b> 늘어납니다.';
 
