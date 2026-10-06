@@ -188,7 +188,7 @@
    "name": "할아버지가 손주에게 바로 주면 세금이 더 붙나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "30% 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다."
+    "text": "네. 산출세액의 30%가 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다."
    }
   },
   {
@@ -196,7 +196,7 @@
    "name": "신고는 언제까지 하나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 깎아 주며, 계산기는 이 공제를 받는 것으로 계산했습니다."
+    "text": "받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 공제하며, 이 계산기는 공제를 받는 것으로 계산했습니다."
    }
   },
   {
@@ -339,11 +339,11 @@
         </details>
         <details>
           <summary>할아버지가 손주에게 바로 주면 세금이 더 붙나요?</summary>
-          <div class="a">30% 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다.</div>
+          <div class="a">네. 산출세액의 30%가 더 붙습니다. 미성년자가 20억 원을 넘게 받으면 40%이고, 부모님이 먼저 돌아가신 경우에는 붙지 않습니다.</div>
         </details>
         <details>
           <summary>신고는 언제까지 하나요?</summary>
-          <div class="a">받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 깎아 주며, 계산기는 이 공제를 받는 것으로 계산했습니다.</div>
+          <div class="a">받은 달의 말일부터 3개월입니다. 기한 안에 신고하면 세금의 3%를 공제하며, 이 계산기는 공제를 받는 것으로 계산했습니다.</div>
         </details>
         <details>
           <summary>부동산이나 주식을 받을 때도 같나요?</summary>
@@ -508,7 +508,7 @@ function render(){
   if(r.credit>0) html+=cell('신고세액공제','기한 안에 신고하면 3%','− '+won(r.credit)+'원','minus');
   html+=cell('납부할 증여세','',won(r.pay)+'원','tot');
   html+='<tr class="gap"><td colspan="2"></td></tr>';
-  html+=cell('세금 내고 남는 돈','',won(r.amount-r.pay)+'원','cash');
+  html+=cell('세후 수령액','',won(r.amount-r.pay)+'원','cash');
   html+=cell('받은 금액 대비 세금 비율','',(r.amount>0?(r.pay/r.amount*100):0).toFixed(1)+'%');
   document.getElementById('res-body').innerHTML=html;
 
@@ -522,7 +522,7 @@ function render(){
   }else{
     v='내야 할 증여세는 <b>'+won(r.pay)+'원</b>입니다. 받으시는 '+won(r.amount)+'원의 '+(r.pay/r.amount*100).toFixed(1)+'%에 해당합니다.';
     v+=r.free>0?'<br><br>세금 없이 받을 수 있는 금액은 '+won(r.free)+'원까지입니다.'
-               :'<br><br>10년 치 공제를 이미 다 쓰셔서 이번에는 첫 원부터 세금이 붙습니다.';
+               :'<br><br>10년 치 공제를 이미 다 쓰셔서 이번에는 받는 금액 전부에 세금이 붙습니다.';
   }
   if(r.merged&&r.freeDay)
     v+='<br><br><span style="font-size:14px;color:var(--mute)">가장 먼저 받으신 '+kdate(r.oldestDate)+' 증여는 <b>'+kdate(r.freeDay)+'</b>부터 합산에서 빠집니다. 급하지 않으시면 시기를 나누는 것도 방법입니다.</span>';
@@ -617,7 +617,7 @@ function drawChart(g,r){
   // 현재 어느 구간인지, 얼마를 더 받으면 다음 구간인지
   let band;
   if(r.base<=0){
-    band=r.free>0?'현재 조건에서는 '+won(r.free)+'원까지 세금이 없습니다':'10년 치 공제를 다 쓰셔서 첫 원부터 세금이 붙습니다';
+    band=r.free>0?'현재 조건에서는 '+won(r.free)+'원까지 세금이 없습니다':'10년 치 공제를 다 쓰셔서 받는 금액 전부에 세금이 붙습니다';
   }else{
     band='현재 금액은 '+Math.round(r.info.rate*100)+'% 구간입니다';
     band+=next?' · '+won(Math.round((next.from-r.amount)/10000)*10000)+'원을 더 받으면 '+Math.round(next.rate*100)+'% 구간으로 올라갑니다'
@@ -631,7 +631,7 @@ function drawChart(g,r){
 function row(label,mid,val,key){ return '<tr'+(key?' class="key"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
 function renderSteps(r){
   const cut=new Date(r.date); cut.setFullYear(cut.getFullYear()-10);
-  let h='<div class="case"><b class="ttl">1. 지난 10년 치를 함께 묶습니다</b><table class="stable">'
+  let h='<div class="case"><b class="ttl">1. 지난 10년 치 증여를 합산합니다</b><table class="stable">'
    +row('합산 기간',kdate(ymd(cut))+' ~ '+kdate(r.date),'10년')
    +row('이번 증여',r.me.name+'께 받는 금액',won(r.amount)+'원')
    +row('합산할 옛 증여', r.merged?'같은 분께 10년 안에 받은 '+r.same.length+'건':(r.sameSum>0?'합계 '+won(r.sameSum)+'원으로 1천만 원이 안 되어 합산하지 않습니다':'없습니다'),
@@ -656,7 +656,7 @@ function renderSteps(r){
 
   h+='<p class="snote">증여세는 재산을 받은 분이 냅니다. 신고와 납부 기한은 증여받은 달의 말일부터 3개월입니다. '
    +'아버지와 어머니께 받은 것은 한 분께 받은 것으로 보아 합치고, 할아버지·할머니께 받은 것은 따로 합치되 공제 한도 5천만 원은 함께 씁니다. '
-   +'여러 해에 나눠 받으면 세율 구간이 낮아져 세금이 줄어들 수 있으니, 시기를 미리 계획해 보시는 것이 좋습니다.</p>';
+   +'여러 해에 나눠 받으면 세율 구간이 낮아져 세금이 줄어들 수 있으니, 시기를 미리 계획해 보세요.</p>';
   document.getElementById('steps-body').innerHTML=h;
 }
 

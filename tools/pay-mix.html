@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>연봉과 배당 계산기 2026, 어떻게 나눠야 세금이 가장 적을까요? | 한택스</title>
-<meta name="description" content="가져갈 금액을 정해 두고 연봉과 배당을 어떻게 나눌지 계산합니다. 법인세와 근로소득세, 배당소득세, 4대보험까지 더해 세금이 가장 적은 배분을 찾아 드립니다.">
+<meta name="description" content="가져갈 금액을 정해 두고 연봉과 배당을 어떻게 나눌지 계산합니다. 법인세와 근로소득세, 배당소득세, 4대보험까지 더해 세금이 가장 적은 배분을 찾습니다.">
 <link rel="canonical" href="https://www.hantax47.com/tools/pay-mix.html">
 <meta property="og:title" content="연봉과 배당, 어떻게 나눌까요?">
-<meta property="og:description" content="가져갈 금액을 정해 두고 세금이 가장 적은 연봉·배당 배분을 찾아 주는 계산기">
+<meta property="og:description" content="가져갈 금액을 정해 두고 세금이 가장 적은 연봉·배당 배분을 찾는 계산기">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.hantax47.com/tools/pay-mix.html">
 <meta property="og:image" content="https://www.hantax47.com/assets/og/tool-pay-mix.png">
@@ -157,10 +157,10 @@
  "mainEntity": [
   {
    "@type": "Question",
-   "name": "무엇을 찾아 주는 계산기인가요?",
+   "name": "어떤 계산기인가요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "가져갈 총액을 정해 두고 연봉과 배당을 어떻게 나누면 세금이 가장 적은지 찾아 드립니다. 연봉을 얼마로 정할지부터 보시려면 대표 연봉 계산기를 이용해 주세요."
+    "text": "가져갈 총액을 정해 두고 연봉과 배당을 어떻게 나누면 세금이 가장 적은지 계산합니다. 연봉을 얼마로 정할지부터 보시려면 대표 연봉 계산기를 이용해 주세요."
    }
   },
   {
@@ -184,7 +184,7 @@
    "name": "배당소득세는 어떻게 되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "연 2,000만 원 이하면 15.4%로 떼는 세금으로 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다."
+    "text": "연 2,000만 원 이하면 15.4% 원천징수로 과세가 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다."
    }
   },
   {
@@ -220,7 +220,7 @@
   <div class="wrap">
     <span class="eyebrow">세무설계</span>
     <h1>연봉과 배당,<br>어떻게 나눌까요?</h1>
-    <p class="lead">가져갈 금액을 정해 두고 연봉과 배당을 어떻게 나누는지에 따라 세금이 달라집니다. 법인세와 개인 세금을 모두 더해 가장 적게 내는 배분을 찾아 드립니다.</p>
+    <p class="lead">가져갈 금액이 같아도 연봉과 배당을 어떻게 나누느냐에 따라 세금이 달라집니다. 법인세와 개인 세금을 모두 더해 세금이 가장 적은 배분을 찾습니다.</p>
   </div>
 </section>
 
@@ -229,11 +229,11 @@
     <div class="sim">
       <div class="sim-in" id="sim-box">
         <div>
-          <label for="i-profit">당기순이익 <em>필수</em> <small>연봉을 빼고 난 재무제표 숫자</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 결산서 손익계산서 맨 아래 금액입니다. 대표님 연봉은 이미 비용으로 빠져 있으니 적힌 숫자를 그대로 넣으시면 됩니다. 아직 결산 전이면 올해 예상 이익을 넣어 보세요.">?</button></label>
+          <label for="i-profit">당기순이익 <em>필수</em> <small>연봉을 비용으로 뺀 결산 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인 결산서 손익계산서 맨 아래 금액입니다. 대표님 연봉은 이미 비용으로 빠져 있으니 적힌 숫자를 그대로 넣으시면 됩니다. 아직 결산 전이면 올해 예상 이익을 넣어 보세요.">?</button></label>
           <div class="unit"><input type="text" id="i-profit" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-cursal">현재 연봉 <em>필수</em> <small>올해 받기로 한 금액, 없으면 0</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="당기순이익에서 이미 빠져 있는 대표님 연봉입니다. 이 금액을 이익에 도로 더해 연봉을 바꿔 볼 수 있게 합니다. 세금과 4대보험을 떼기 전 금액으로 넣어 주세요.">?</button></label>
+          <label for="i-cursal">현재 연봉 <em>필수</em> <small>올해 받기로 한 금액, 없으면 0</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="당기순이익에서 이미 빠져 있는 대표님 연봉입니다. 이 금액을 이익에 다시 더한 뒤 연봉을 바꿔 계산합니다. 세금과 4대보험을 떼기 전 금액으로 넣어 주세요.">?</button></label>
           <div class="unit"><input type="text" id="i-cursal" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -308,8 +308,8 @@
       <div class="faq">
         <h3>자주 묻는 질문</h3>
         <details>
-          <summary>무엇을 찾아 주는 계산기인가요?</summary>
-          <div class="a">가져갈 총액을 정해 두고 연봉과 배당을 어떻게 나누면 세금이 가장 적은지 찾아 드립니다. 연봉을 얼마로 정할지부터 보시려면 대표 연봉 계산기를 이용해 주세요.</div>
+          <summary>어떤 계산기인가요?</summary>
+          <div class="a">가져갈 총액을 정해 두고 연봉과 배당을 어떻게 나누면 세금이 가장 적은지 계산합니다. 연봉을 얼마로 정할지부터 보시려면 대표 연봉 계산기를 이용해 주세요.</div>
         </details>
         <details>
           <summary>연봉과 배당은 무엇이 다른가요?</summary>
@@ -321,7 +321,7 @@
         </details>
         <details>
           <summary>배당소득세는 어떻게 되나요?</summary>
-          <div class="a">연 2,000만 원 이하면 15.4%로 떼는 세금으로 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.</div>
+          <div class="a">연 2,000만 원 이하면 15.4% 원천징수로 과세가 끝나고, 넘으면 근로소득과 합산해 종합과세하며 배당세액공제(10% 가산)와 비교과세를 적용했습니다.</div>
         </details>
         <details>
           <summary>4대보험은 어떻게 반영되나요?</summary>
@@ -419,8 +419,8 @@ function render(){
     +'<tr class="tot"><td>'+(INS_MODE?'세금·보험료 합계':'세금 합계')+'</td>'
       +rows.map((r,i)=>'<td class="'+(i===bestI?'best':'')+'">'+amt(r.gross)+'</td>').join('')+'</tr>'
     +'<tr class="gap"><td colspan="4"></td></tr>'
-    +'<tr class="cash"><td>대표님이 손에 쥐는 돈</td>'+cells(r=>amt(r.cash))+'</tr>'
-    +'<tr><td>법인에 남는 돈</td>'+cells(r=>amt(r.left))+'</tr>';
+    +'<tr class="cash"><td>대표님 세후 실수령액</td>'+cells(r=>amt(r.cash))+'</tr>'
+    +'<tr><td>법인에 남는 이익</td>'+cells(r=>amt(r.left))+'</tr>';
 
   $('res-sub').textContent='당기순이익 '+won(NP)+'원 · 가져갈 금액 '+won(TAKE)+'원'
     +({'1':' · 최저한세 7%','2':' · 이월결손금','3':' · 연구비 세액공제'}[CIT_MODE]||'')+(INS_MODE?' · 4대보험 포함':' · 세금만');
@@ -428,7 +428,7 @@ function render(){
   const bestR=rows[1], salR=rows[0], gap=salR.gross-bestR.gross;
   $('headline').className='headline'+(gap<10000?' same':'');
   $('headline').innerHTML= gap<10000
-    ? '이 금액대에서는 <b>전액 연봉으로 받으시는 것이 가장 적게 냅니다.</b> 배당을 섞어도 세금이 줄지 않습니다.'
+    ? '이 금액대에서는 <b>전액 연봉으로 받으실 때 세금이 가장 적습니다.</b> 배당을 섞어도 세금이 줄지 않습니다.'
     : '연봉 <b>'+won(TAKE-sw.best.div)+'원</b>에 배당 <b>'+won(sw.best.div)+'원</b>으로 나누면 세금이 가장 적습니다.<br>'
       +'전액 연봉으로 받을 때보다 '+(INS_MODE?'세금과 4대보험을':'세금을')+' <b>'+won(gap)+'원</b> 덜 냅니다.';
 
@@ -441,8 +441,8 @@ function render(){
   const notes=[];
   if(sw.best.div>0) notes.push('배당은 연 2,000만 원까지 15.4%로 따로 과세하고 근로소득과 합치지 않습니다. 그 구간이 가장 유리합니다.');
   if(INS_MODE) notes.push('배당은 연 2,000만 원을 넘는 금액에만 건강보험료가 붙습니다. 연봉은 상한 없이 건강보험료가 계속 붙습니다.');
-  if(bestR.cash!==salR.cash) notes.push('손에 쥐는 돈도 달라집니다. 가장 적게 내는 배분은 전액 연봉보다 '+won(Math.abs(bestR.cash-salR.cash))+'원 '+(bestR.cash>salR.cash?'더':'덜')+' 가져가십니다.');
-  notes.push('배당은 주주총회 결의가 필요하고, 주주가 여러 명이면 지분대로 나눠 가야 합니다.');
+  if(bestR.cash!==salR.cash) notes.push('세후 실수령액도 달라집니다. 가장 적게 내는 배분으로 받으시면 전액 연봉보다 '+won(Math.abs(bestR.cash-salR.cash))+'원 '+(bestR.cash>salR.cash?'더':'덜')+' 가져가십니다.');
+  notes.push('배당은 주주총회 결의가 필요하고, 주주가 여러 명이면 지분대로 나눠야 합니다.');
   $('verdict').innerHTML='연봉은 법인의 비용이라 법인세를 줄이지만 근로소득세와 4대보험이 붙습니다. 배당은 법인세를 줄이지 못하지만 2,000만 원까지는 낮은 세율로 끝납니다. 그래서 둘을 섞는 지점에서 세금이 가장 적어집니다.'
     +notes.map(n=>'<span class="note">'+n+'</span>').join('');
 
@@ -494,7 +494,7 @@ function drawChart(sw){
   $('csub').textContent='가져갈 금액은 그대로 두고 배당만 늘려 본 결과입니다. 배당을 늘린 만큼 연봉은 줄어듭니다.';
   $('cband').textContent=sw.best.div>0
     ? '배당 '+shortWon(sw.best.div)+'원 부근에서 '+(INS_MODE?'부담이':'세금이')+' 가장 적습니다'
-    : '이 금액대에서는 배당을 섞지 않는 쪽이 가장 적습니다';
+    : '이 금액대에서는 배당 없이 받을 때 가장 적습니다';
 }
 
 /* ── 계산 과정 ─────────────────────────────── */
@@ -509,8 +509,8 @@ function renderSteps(rows,cases,sw){
       +row('대표님 개인 세금',(r.dividend>0?r.mode+' · ':'')+'근로소득세와 배당소득세',won(r.pTax)+'원',true)
       +(INS_MODE?row('4대보험','회사 '+won(r.ins.company)+' + 본인 '+won(r.ins.self)+(r.dIns.total>0?' + 배당 건강보험료 '+won(r.dIns.total):''),won(r.ins.total+r.dIns.total)+'원'):'')
       +row((INS_MODE?'세금·보험료 합계':'세금 합계'),'법인세 + 개인 세금'+(INS_MODE?' + 보험료':''),won(r.gross)+'원',true)
-      +row('손에 쥐는 돈','연봉 + 배당 − 개인 세금'+(INS_MODE?' − 본인부담 보험료':''),won(r.cash)+'원',true)
-      +row('법인에 남는 돈','배당할 수 있는 이익 − 배당',won(r.left)+'원')
+      +row('세후 실수령액','연봉 + 배당 − 개인 세금'+(INS_MODE?' − 본인부담 보험료':''),won(r.cash)+'원',true)
+      +row('법인에 남는 이익','배당할 수 있는 이익 − 배당',won(r.left)+'원')
       +'</table></div>';
   });
   html+='<p class="snote">연봉은 법인의 비용이라 법인세 과세표준을 줄이고, 배당은 법인세를 낸 뒤 이익에서 나갑니다. 배당이 연 2,000만 원을 넘으면 근로소득과 합쳐 종합과세하되 배당가산액을 더했다가 같은 금액을 세액공제하고, 분리과세했을 때보다 적어지지 않도록 둘 중 큰 금액으로 결정합니다. 이전에 쌓인 이익잉여금은 반영하지 않았습니다.</p>';

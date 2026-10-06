@@ -128,7 +128,7 @@
    "name": "주식 양도세율은 어떻게 되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년도 갖고 있지 않고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다."
+    "text": "중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년 미만 보유하고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다."
    }
   },
   {
@@ -168,7 +168,7 @@
    "name": "기본공제 250만 원은 어떻게 적용되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "한 해에 주식을 넘겨 생긴 소득에서 250만 원을 빼 줍니다. 사람마다 한 해에 한 번이므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다."
+    "text": "한 해에 주식을 넘겨 생긴 소득에서 250만 원을 뺍니다. 1인당 한 해에 한 번만 받으므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다."
    }
   },
   {
@@ -222,7 +222,7 @@
       <div class="sim-in">
         <div class="divider"><b>넘기는 주식</b><span>1주당 금액과 주식 수로 넣어 주세요</span></div>
         <div>
-          <label for="i-price">1주당 양도가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="실제로 받기로 한 1주당 금액입니다. 비상장주식은 시가보다 싸게 넘기면 시가로 다시 계산되고, 가족이나 회사 관계자에게 넘기면 차액이 증여로 잡힐 수 있습니다. 적정한 금액은 비상장주식 계산기에서 먼저 가늠해 보세요.">?</button></label>
+          <label for="i-price">1주당 양도가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="받기로 한 1주당 금액입니다. 비상장주식은 시가보다 싸게 넘기면 시가로 다시 계산되고, 가족이나 회사 관계자에게 넘기면 차액이 증여로 잡힐 수 있습니다. 적정한 금액은 비상장주식 계산기에서 먼저 가늠해 보세요.">?</button></label>
           <div class="unit"><input type="text" id="i-price" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -234,7 +234,7 @@
           <div class="unit"><input type="text" id="i-cost" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-fee">그 밖의 비용 <small>수수료, 컨설팅비</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주식을 넘기면서 실제로 쓰신 중개수수료나 평가수수료, 계약서 작성 비용입니다. 영수증으로 보여 줄 수 있는 금액만 넣어 주세요. 증권거래세는 아래에서 자동으로 계산합니다.">?</button></label>
+          <label for="i-fee">그 밖의 비용 <small>수수료, 컨설팅비</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주식을 넘기면서 쓰신 중개수수료나 평가수수료, 계약서 작성 비용입니다. 영수증 등 증빙이 있는 금액만 넣어 주세요. 증권거래세는 아래에서 자동으로 계산합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-fee" inputmode="numeric"><span>원</span></div>
         </div>
 
@@ -252,7 +252,7 @@
           </div>
           <div>
             <label class="ichk" id="short-row"><input type="checkbox" id="i-short"><span>산 지 1년이 안 된 주식입니다</span>
-              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업이 아닌 회사의 주식을 대주주가 1년도 갖고 있지 않고 넘기면 세율이 30%로 올라갑니다. 중소기업 주식이거나 대주주가 아니면 보유 기간은 세율에 영향을 주지 않습니다.">?</button>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="중소기업이 아닌 회사의 주식을 대주주가 1년 미만 보유하고 넘기면 세율이 30%로 올라갑니다. 중소기업 주식이거나 대주주가 아니면 보유 기간은 세율에 영향을 주지 않습니다.">?</button>
             </label>
           </div>
         </div>
@@ -278,7 +278,7 @@
           <div class="body" id="steps"></div>
         </details>
         <div class="ask">
-          <p><b>지분을 넘기기 전에 금액부터 맞춰 보셔야 합니다.</b><br>얼마에 넘기는 것이 적정한지, 증여와 양도 중 무엇이 유리한지, 나눠 넘기면 세금이 얼마나 줄어드는지 함께 짚어 드립니다.</p>
+          <p><b>지분을 넘기기 전에 양도가액부터 검토하셔야 합니다.</b><br>얼마에 넘기는 것이 적정한지, 증여와 양도 중 무엇이 유리한지, 나눠 넘기면 세금이 얼마나 줄어드는지 함께 검토합니다.</p>
           <div class="btns">
             <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
             <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
@@ -290,7 +290,7 @@
         <h3>자주 묻는 질문</h3>
         <details>
           <summary>주식 양도세율은 어떻게 되나요?</summary>
-          <div class="a">중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년도 갖고 있지 않고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다.</div>
+          <div class="a">중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년 미만 보유하고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다.</div>
         </details>
         <details>
           <summary>대주주는 어떻게 판단하나요?</summary>
@@ -310,7 +310,7 @@
         </details>
         <details>
           <summary>기본공제 250만 원은 어떻게 적용되나요?</summary>
-          <div class="a">한 해에 주식을 넘겨 생긴 소득에서 250만 원을 빼 줍니다. 사람마다 한 해에 한 번이므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다.</div>
+          <div class="a">한 해에 주식을 넘겨 생긴 소득에서 250만 원을 뺍니다. 1인당 한 해에 한 번만 받으므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다.</div>
         </details>
         <details>
           <summary>손해를 보고 팔면 어떻게 되나요?</summary>
@@ -436,13 +436,13 @@ function render(){
     +row('양도소득세',r.words,won(r.tax)+'원')
     +row('지방소득세','양도소득세의 10%',won(r.local)+'원')
     +'<tr class="tot"><td>세금 합계<small>증권거래세 포함</small></td><td>'+won(r.total)+'원</td></tr>'
-    +row('손에 들어오는 돈','양도가액에서 비용과 세금을 뺀 금액',won(r.net)+'원','sum');
+    +row('세후 실수령액','양도가액에서 비용과 세금을 뺀 금액',won(r.net)+'원','sum');
 
   $('res-sub').textContent=c.shares.toLocaleString('ko-KR')+'주 · 양도가액 '+won(r.gross)+'원 · '+(c.sme?'중소기업':'중소기업 아님')+(c.big?' · 대주주':'');
 
   $('call').innerHTML=r.gain>0
     ?'<div class="lbl">내야 할 세금</div><div class="val">'+won(r.total)+'<small>원</small></div>'
-      +'<div class="sub">양도차익 '+won(r.gain)+'원에 '+r.words+'를 적용했습니다. 증권거래세 '+won(r.stt)+'원까지 더한 금액이고, 세금을 빼고 '+won(r.net)+'원이 손에 들어옵니다.</div>'
+      +'<div class="sub">양도차익 '+won(r.gain)+'원에 '+r.words+'를 적용했습니다. 증권거래세 '+won(r.stt)+'원까지 더한 금액이고, 세후 실수령액은 '+won(r.net)+'원입니다.</div>'
     :'<div class="lbl">양도차익이 없어</div><div class="val">양도소득세는<br>내지 않습니다</div>'
       +'<div class="sub">다만 증권거래세 '+won(r.stt)+'원은 이익과 상관없이 내야 합니다. 손실이 났다면 같은 해에 이익이 난 다른 주식과 합쳐 신고하시면 세금이 줄어듭니다.</div>';
 
@@ -451,9 +451,9 @@ function render(){
     :'이번 양도로는 양도차익이 나지 않았습니다.';
   const notes=[];
   if(r.gain>0) notes.push({t:'세금은 양도차익의 약 '+(r.rate*100).toFixed(1)+'%입니다(증권거래세 제외). 세율은 중소기업인지, 대주주인지로 갈리니 지분과 회사 요건을 먼저 확인하셔야 합니다.'});
-  if(c.big&&r.base>BIG_STEP) notes.push({t:'과세표준이 3억 원을 넘어 넘는 금액에는 25%가 붙었습니다. 여러 해에 나눠 넘기시면 3억 원 구간을 해마다 다시 쓸 수 있어 세금이 줄어듭니다.'});
+  if(c.big&&r.base>BIG_STEP) notes.push({t:'과세표준 가운데 3억 원을 넘는 금액에는 25%가 적용됐습니다. 여러 해에 나눠 넘기시면 3억 원 구간을 해마다 다시 쓸 수 있어 세금이 줄어듭니다.'});
   if(!c.big&&c.sme) notes.push({t:'대주주가 아니어서 10%로 계산했습니다. 본인과 가족 지분을 합해 4% 이상이거나 보유액이 50억 원 이상이면 대주주가 되어 20~25%로 올라가니, 넘기기 전 사업연도 말 지분율을 확인해 주세요.'});
-  if(c.big&&!c.sme&&c.short) notes.push({warn:1,t:'중소기업이 아닌 주식을 1년도 갖고 있지 않고 넘겨 <b>30%</b>가 적용됐습니다. 1년을 채우고 넘기시면 20~25%로 내려갑니다.'});
+  if(c.big&&!c.sme&&c.short) notes.push({warn:1,t:'중소기업이 아닌 주식을 1년 미만 보유하고 넘겨 <b>30%</b>가 적용됐습니다. 1년을 채우고 넘기시면 20~25%로 내려갑니다.'});
   notes.push({t:'비상장주식을 시가보다 싸게 넘기면 세금은 시가로 다시 계산되고, 차액은 받는 분의 증여로 잡힐 수 있습니다. 적정한 금액은 <a href="stock-value.html">비상장주식 계산기</a>에서 먼저 가늠해 보세요.'});
   notes.push({t:'신고는 양도일이 속하는 반기의 마지막 날부터 2개월 안에 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다.'});
   $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');

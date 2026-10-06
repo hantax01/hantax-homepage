@@ -125,7 +125,7 @@
    "name": "세율은 얼마인가요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "종합소득세 기본세율 6~45%이고, 지방소득세는 종합소득세의 10%가 따로 붙습니다."
+    "text": "종합소득세 기본세율은 6~45%이고, 지방소득세는 종합소득세의 10%가 따로 붙습니다."
    }
   },
   {
@@ -149,7 +149,7 @@
    "name": "이자와 배당도 합산하나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "한 해 2,000만 원 이하면 받을 때 떼는 세금으로 끝나 합산하지 않습니다. 2,000만 원을 넘는 경우와 기장세액공제, 가산세는 반영하지 않았으니 상담으로 확인해 주세요."
+    "text": "한 해 2,000만 원 이하면 받을 때 원천징수된 세금으로 끝나 합산하지 않습니다. 2,000만 원을 넘는 경우와 기장세액공제, 가산세는 반영하지 않았으니 상담으로 확인해 주세요."
    }
   },
   {
@@ -195,7 +195,7 @@
       <div class="sim-in">
         <div class="divider"><b>사업</b><span>올해 1~12월 · 부가세 뺀 금액</span></div>
         <div>
-          <label for="i-rev">매출 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="한 해 동안 사업으로 번 돈의 합계입니다. 부가가치세 신고를 했다면 1기와 2기 과세표준(공급가액)을 더한 금액입니다.">?</button></label>
+          <label for="i-rev">매출 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="한 해 동안 사업에서 올린 매출 합계입니다. 부가가치세 신고를 했다면 1기와 2기 과세표준(공급가액)을 더한 금액입니다.">?</button></label>
           <div class="unit"><input type="text" id="i-rev" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -205,7 +205,7 @@
 
         <div class="divider"><b>다른 소득</b><span>있을 때만 넣어 주세요</span></div>
         <div>
-          <label for="i-wage">근로소득 <small>연봉, 비과세 뺀 총급여</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사에 다니며 받은 급여입니다. 근로소득원천징수영수증의 총급여를 넣으면 근로소득공제와 근로소득세액공제를 알아서 계산합니다.">?</button></label>
+          <label for="i-wage">근로소득 <small>연봉, 비과세 뺀 총급여</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사에 다니며 받은 급여입니다. 근로소득원천징수영수증의 총급여를 넣으면 근로소득공제와 근로소득세액공제를 자동으로 계산합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-wage" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -264,7 +264,7 @@
           <div class="body" id="steps"></div>
         </details>
         <div class="ask">
-          <p><b>장부 작성부터 신고까지 한택스가 맡아 드립니다.</b><br>매출과 경비 자료를 보내 주시면 인정받을 수 있는 경비와 공제·감면을 꼼꼼히 챙겨 신고해 드립니다.</p>
+          <p><b>장부 작성부터 신고까지 한택스가 맡습니다.</b><br>매출과 경비 자료를 보내 주시면 인정받을 수 있는 경비와 공제·감면을 챙겨 신고합니다.</p>
           <div class="btns">
             <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
             <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
@@ -280,7 +280,7 @@
         </details>
         <details>
           <summary>세율은 얼마인가요?</summary>
-          <div class="a">종합소득세 기본세율 6~45%이고, 지방소득세는 종합소득세의 10%가 따로 붙습니다.</div>
+          <div class="a">종합소득세 기본세율은 6~45%이고, 지방소득세는 종합소득세의 10%가 따로 붙습니다.</div>
         </details>
         <details>
           <summary>근로소득이 함께 있으면 어떻게 계산되나요?</summary>
@@ -292,7 +292,7 @@
         </details>
         <details>
           <summary>이자와 배당도 합산하나요?</summary>
-          <div class="a">한 해 2,000만 원 이하면 받을 때 떼는 세금으로 끝나 합산하지 않습니다. 2,000만 원을 넘는 경우와 기장세액공제, 가산세는 반영하지 않았으니 상담으로 확인해 주세요.</div>
+          <div class="a">한 해 2,000만 원 이하면 받을 때 원천징수된 세금으로 끝나 합산하지 않습니다. 2,000만 원을 넘는 경우와 기장세액공제, 가산세는 반영하지 않았으니 상담으로 확인해 주세요.</div>
         </details>
         <details>
           <summary>사업에서 적자가 나면 어떻게 되나요?</summary>
@@ -440,7 +440,7 @@ function render(){
     +(c.reliefRate?srow('세액감면','산출세액 × 사업소득 몫 '+Math.round(r.bizShare*100)+'% × '+Math.round(c.reliefRate*100)+'%'+(c.reliefKind==='sme'?' (1억 원 한도)':''),'− '+won(r.relief)+'원'):'')
     +(c.wage?srow('근로소득세액공제','근로소득 몫 산출세액의 55%(130만 원 넘는 부분은 30%), 총급여별 한도','− '+won(r.lCredit)+'원'):'')
     +srow('표준세액공제',c.wage?'근로소득이 있어 13만 원':'7만 원','− '+won(r.std)+'원')
-    +(c.credit?srow('그 밖의 세액공제','넣어 주신 금액','− '+won(c.credit)+'원'):'')
+    +(c.credit?srow('그 밖의 세액공제','입력한 금액','− '+won(c.credit)+'원'):'')
     +(r.credit<r.lCredit+r.std+c.credit?srow('세액공제 한도','감면 뒤 남은 세액까지만 뺍니다','합계 − '+won(r.credit)+'원'):'')
     +srow('종합소득세','10원 미만 버림',won(r.decided)+'원')
     +(c.paid?srow('이미 낸 소득세','중간예납·원천징수','− '+won(c.paid)+'원'):'')
@@ -451,7 +451,7 @@ function render(){
 
 $('calc').addEventListener('click',()=>{
   const c=read();
-  if(!c.rev){ alert('매출을 넣어 주세요.'); return; }
+  if(!c.rev){ alert('매출을 입력해 주세요.'); return; }
   render();
   $('res').scrollIntoView({behavior:'smooth',block:'start'});
 });
