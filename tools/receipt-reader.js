@@ -13,17 +13,25 @@
     pts.forEach(p=>{ const r=rows.find(r=>Math.abs(r.y-p.y)<1.6); if(r) r.items.push(p); else rows.push({y:p.y,items:[p]}); });
     return rows.map(r=>{ r.items.sort((a,b)=>a.x-b.x); const toks=[];
       r.items.forEach(p=>{ const t=toks[toks.length-1];
-        if(t&&p.x-(t.x+t.w)<Math.max(2.2,p.h*.35)){ t.s+=p.s; t.w=p.x+p.w-t.x; } else toks.push({s:p.s,x:p.x,w:p.w}); });
-      return {y:r.y,toks}; });
+        // 금액 바로 뒤에 붙은 칸 이름(세무사랑 '1,234,567' + '48.종합소득…')은 따로 둡니다
+        if(t&&p.x-(t.x+t.w)<Math.max(2.2,p.h*.35)&&!(isNum(t.s)&&/^\s*[가-힣]|^\d{2}\./.test(p.s))){ t.s+=p.s; t.w=p.x+p.w-t.x; } else toks.push({s:p.s,x:p.x,w:p.w}); });
+      // 한 조각 안에 붙어 온 경우도 나눕니다
+      const out=[]; toks.forEach(t=>{ const m=t.s.match(/^([-△]?[\d,]*,\d{3})(\d{2}\..+)$/);
+        if(!m) return out.push(t); const w1=t.w*m[1].length/t.s.length; out.push({s:m[1],x:t.x,w:w1},{s:m[2],x:t.x+w1,w:t.w-w1}); });
+      return {y:r.y,toks:out}; });
   }
   const norm=s=>s.replace(/[\s①-⓿㉑-㉟㊱-㊿]/g,'');
   const isNum=s=>/^[-△]?[\d,]*\d$/.test(s.replace(/\s/g,''));
   const toNum=s=>{ const t=s.replace(/\s/g,''); const n=Number(t.replace(/[^\d]/g,''))||0; return /^[-△]/.test(t)?-n:n; };
 
-  /* 칸 이름이 있는 줄 찾기: zone 안의 낱말을 이어 붙여 정규식과 비교 */
+  /* 칸 이름이 있는 줄 찾기: zone 안의 낱말을 이어 붙여 정규식과 비교.
+     홈택스·세무사랑처럼 칸 이름 앞에 항목 번호('22', '31.', '가.')가 있으면 번호부터 읽고 번호는 뗍니다(왼쪽 세로 제목 글자 제외) */
+  const ITEM=/^\d{2}(-\d)?\.?(?![\d,])/;
   function lab(pg,zone,re,from){
     for(const l of pg){ if(from!=null&&l.y>=from) continue;
-      const txt=l.toks.filter(t=>t.x>=zone[0]&&t.x<zone[1]).map(t=>norm(t.s)).join('');
+      let toks=l.toks.filter(t=>t.x>=zone[0]&&t.x<zone[1]);
+      const i=toks.findIndex(t=>ITEM.test(norm(t.s))); if(i>0) toks=toks.slice(i);
+      const txt=toks.map(t=>norm(t.s)).join('').replace(ITEM,'').replace(/^[가-하]\./,'');
       const m=txt.match(re); if(m) return {y:l.y,txt,m}; }
     return null;
   }
@@ -59,18 +67,19 @@
     const left=(re,dy)=>{ const a=lab(pg,L,re); return a?val(pg,a.y,LV[0],LV[1],dy):0; };
     const right=(re)=>{ const a=lab(pg,R,re); return a?val(pg,a.y,RV[0],RV[1],3):0; };
     const cnt=re=>{ const a=lab(pg,L.concat?L:L,re)||lab(pg,R,re); return a&&a.m[1]?+a.m[1]:0; };
-    // '대상금액·공제금액' 두 줄짜리 칸: 칸 이름 바로 아래 '공제금액' 줄의 금액
+    // '대상금액·공제금액' 두 줄짜리 칸: 칸 이름 바로 아래 '공제금액' 줄의 금액. 공제금액을 비워 두는 프로그램(세무사랑)은 대상금액
     const sub=(re)=>{ const a=lab(pg,L,re); if(!a) return 0;
-      const s=pg.find(l=>l.y<=a.y+1&&l.y>=a.y-13&&l.toks.some(t=>t.x>=150&&t.x<240&&norm(t.s)==='공제금액'));
-      return s?val(pg,s.y,LV[0],LV[1],1):0; };
+      const amt=(w,up)=>{ const l=pg.filter(l=>l.y<=a.y+up&&l.y>=a.y-13&&l.toks.some(t=>t.x>=150&&t.x<240&&norm(t.s)===w)).sort((p,q)=>Math.abs(p.y-a.y)-Math.abs(q.y-a.y))[0];
+        const t=l&&l.toks.find(t=>t.x>=LV[0]&&t.x<LV[1]&&isNum(t.s)); return t?toNum(t.s):null; };
+      const d=amt('공제금액',1); return d!=null?d:(amt('대상금액',8)||0); };
 
     v.gross=left(/^총급여/,7);
     v.wageDed=left(/^근로소득공제/,3);
     v.earned=left(/^근로소득금액/,3);
     v.spouse=left(/^배우자/,3)>0?1:0;
-    v.dep=cnt(/부양가족\((\d+)명\)/);
-    v.old=cnt(/경로우대\((\d+)명\)/);
-    v.dis=cnt(/장애인\((\d+)명\)/);
+    v.dep=cnt(/부양가족\((\d+)\)?명/);
+    v.old=cnt(/경로우대\((\d+)\)?명/);
+    v.dis=cnt(/장애인\((\d+)\)?명/);
     v.woman=left(/^부녀자/,3)>0;
     v.single=left(/^한부모/,3)>0;
     v.np=sub(/^국민연금보험료/);
@@ -100,8 +109,8 @@
     v.redTreaty=right(/^조세조약/);
     v.wc=right(/^근로소득$/);
     v.marry=right(/^혼인세액공제/);
-    v.kids=cnt(/공제대상자녀\((\d+)명\)/); v.childCr=right(/^공제대상자녀/);
-    v.birthCnt=cnt(/출산.?입양자\((\d+)명\)/); v.birthCr=right(/^출산.?입양자/);
+    v.kids=cnt(/공제대상자녀\((\d+)\)?명/); v.childCr=right(/^공제대상자녀/);
+    v.birthCnt=cnt(/출산.?입양자\((\d+)\)?명/); v.birthCr=right(/^출산.?입양자/);
     v.stdCr=right(/^표준세액공제/);
     v.unionCr=right(/^납세조합공제/);
     v.houseCr=right(/^주택차입금/);
@@ -109,7 +118,8 @@
     v.crSum=right(/^세액공제계/);
     v.finCheck=right(/^결정세액/);
     // '공제대상금액·세액공제액' 짝: 두 줄 사이의 칸 이름으로 항목을 가립니다
-    const rowsOf=t=>pg.filter(l=>l.toks.some(k=>k.x>=440&&k.x<500&&norm(k.s)===t)).map(l=>l.y);
+    // 세무사랑은 '(특별재난지역)세액공제액'처럼 앞 글자와 붙어 나오기도 합니다
+    const rowsOf=t=>pg.filter(l=>l.toks.some(k=>{ const s=norm(k.s); return k.x>=435&&k.x<500&&s===t||k.x>=380&&k.x<500&&s.length>t.length&&s.endsWith(t); })).map(l=>l.y);
     const dedRows=rowsOf('공제대상금액'), crRows=rowsOf('세액공제액');
     let tenK=0;
     dedRows.forEach(y1=>{
@@ -118,7 +128,7 @@
       const amt=val(pg,y1,RV[0],RV[1],1);
       let k=null;
       if(/과학기술인/.test(txt)) k='penSci'; else if(/근로자퇴직급여|퇴직연금/.test(txt)) k='penRet';
-      else if(/연금저축/.test(txt)) k='penSav'; else if(/ISA/.test(txt)) k='isa';
+      else if(/연금저축/.test(txt)) k='penSav'; else if(/ISA|개인종합자산관리/.test(txt)) k='isa';
       else if(/장애인전용/.test(txt)) k='disIns'; else if(/보장성/.test(txt)) k='ins';
       else if(/의료비/.test(txt)) k='medDed'; else if(/교육비/.test(txt)) k='edu';
       else if(/특례/.test(txt)) k='donSpec'; else if(/우리사주/.test(txt)) k='donEsop';
@@ -132,9 +142,18 @@
   /* 3쪽: 카드 사용액·의료비 지출 합계 (열 제목 위치로 금액 배정) */
   function page3(pg,v){
     const center=t=>t.x+t.w/2;
-    const pick=(rowY,cols)=>{ const out={}; const l=pg.find(l=>Math.abs(l.y-rowY)<1);
-      // 인원수(한 자리)는 빼고 금액만 봅니다
-      (l?l.toks:[]).filter(t=>isNum(t.s)&&t.x>75&&t.s.replace(/\D/g,'').length>=3).forEach(t=>{ let best=null; cols.forEach(c=>{ const d=Math.abs(center(t)-c.c); if(!best||d<best.d) best={d,k:c.k}; }); if(best) out[best.k]=(out[best.k]||0)+toNum(t.s); });
+    const ROW=/(국세청|기타)(계)?$/;
+    const pick=(rowY,cols)=>{ const out={}; const l=pg.find(l=>Math.abs(l.y-rowY)<1); if(!l) return out;
+      const lb=l.toks.find(t=>ROW.test(norm(t.s)));
+      const nums=l.toks.filter(t=>isNum(t.s)&&t.x>Math.max(75,lb?lb.x:0));
+      // 칸이 좁아 두 줄로 나뉜 금액(홈택스 위 '1,234,' + 아래 '567')은 이어 붙입니다
+      const near=(a,b)=>pg.filter(k=>k.y-rowY>a&&k.y-rowY<=b).flatMap(k=>k.toks).filter(t=>/^[\d,]+$/.test(t.s));
+      const dn=near(-6,-2);
+      near(2,6).forEach(u=>{ const d=dn.find(d=>d.x-u.x>=0&&d.x-u.x<=25); if(d) nums.push({s:u.s+d.s,x:u.x,w:d.x+d.w-u.x}); });
+      nums.sort((a,b)=>a.x-b.x);
+      // 칸마다 0까지 다 찍혀 개수가 같으면 순서대로, 아니면 열 제목에 가까운 칸으로(인원수 한 자리는 빼고)
+      if(nums.length===cols.length) nums.forEach((t,i)=>out[cols[i].k]=toNum(t.s));
+      else nums.filter(t=>t.s.replace(/\D/g,'').length>=3).forEach(t=>{ let best=null; cols.forEach(c=>{ const d=Math.abs(center(t)-c.c); if(!best||d<best.d) best={d,k:c.k}; }); if(best) out[best.k]=(out[best.k]||0)+toNum(t.s); });
       return out; };
     // 카드: '신용카드·직불카드등·현금영수증' 머리 줄
     const ch=pg.find(l=>{ const t=l.toks.map(k=>norm(k.s)).join(''); return /신용카드/.test(t)&&/직불카드/.test(t); });
@@ -142,7 +161,7 @@
       const band=pg.filter(l=>l.y<=ch.y+14&&l.y>=ch.y-12).flatMap(l=>l.toks);
       const col=(re,k)=>{ const t=band.find(t=>re.test(norm(t.s))); return t?{k,c:center(t)}:null; };
       const cols=[col(/^신용카드$/,'credit'),col(/^직불카드/,'debit'),col(/^현금영수증/,'cash'),col(/^문화체육/,'culture'),col(/^전통시장/,'market'),col(/^대중교통/,'transit'),col(/^기부금/,'don')].filter(Boolean);
-      const rows=pg.filter(l=>l.y<ch.y-10&&l.toks.some(t=>/^(국세청계|기타계)$/.test(norm(t.s)))).slice(0,2);   // 바로 아래 '합계'의 국세청계·기타계
+      const rows=pg.filter(l=>l.y<ch.y-10&&l.toks.some(t=>/(국세청계|기타계)$/.test(norm(t.s)))).slice(0,2);   // 바로 아래 '합계'의 국세청계·기타계
       rows.forEach(r=>{ const o=pick(r.y,cols); Object.keys(o).forEach(k=>v['c_'+k]=(v['c_'+k]||0)+o[k]); });
     }
     // 의료비: 위쪽 표 머리(건강·고용·보장성·일반·난임·실손 …)
@@ -154,16 +173,16 @@
         ['gen',find(/^일반$/,t=>t.x<400)],['pre',find(/선천성|미숙아/)],['inf',find(/난임/)],['spec',find(/65세|장애인·건강/)],
         ['silson',find(/실손/)],['eduGen',find(/^일반$/,t=>t.x>=480)],['eduDis',find(/특수교육/)]].filter(c=>c[1]).map(([k,t])=>({k,c:center(t)}));
       // 표 머리 바로 아래 두 줄이 합계(국세청·기타), 그 아래 관계코드 0인 줄이 본인
-      const data=pg.filter(l=>l.y<mh.y-6&&l.toks.some(t=>/^(국세청|기타)$/.test(norm(t.s))));
+      const data=pg.filter(l=>l.y<mh.y-6&&l.toks.some(t=>ROW.test(norm(t.s))));
       data.slice(0,2).forEach(r=>{ const o=pick(r.y,cols); Object.keys(o).forEach(k=>v['m_'+k]=(v['m_'+k]||0)+o[k]); });
-      const selfIdx=data.findIndex((r,i)=>i>=2&&r.toks[0]&&norm(r.toks[0].s)==='0'&&r.toks[0].x<45);
+      const selfIdx=data.findIndex((r,i)=>i>=2&&r.toks[0]&&norm(r.toks[0].s)==='0'&&r.toks[0].x<80);
       if(selfIdx>=0) [data[selfIdx],data[selfIdx+1]].filter(Boolean).forEach(r=>{ const o=pick(r.y,cols); v.m_selfGen=(v.m_selfGen||0)+(o.gen||0); });
     }
   }
 
   function parse(pages){
     const all=pages.map(p=>p.map(l=>l.toks.map(t=>norm(t.s)).join('')).join(''));
-    if(!/근로소득원천징수영수증|근로소득지급명세서/.test(all[0]||'')) return {ok:false,msg:'근로소득 원천징수영수증이 아닌 것 같습니다. 회사에서 받은 원천징수영수증 PDF를 올려 주세요.'};
+    if(!/근로소득원천징수영수증|근로소득지급명세서/.test(all[0]||'')) return {ok:false,msg:'근로소득 원천징수영수증이 아닌 것 같습니다. 회사에서 받거나 홈택스에서 내려받은 원천징수영수증 PDF를 올려 주세요.'};
     const v={}, note=[];
     page1(pages[0],v);
     const p2=pages.findIndex(t=>/정산명세|종합소득과세표준/.test(all[pages.indexOf(t)]));
