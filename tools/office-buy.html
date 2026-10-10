@@ -198,7 +198,7 @@
   },
   {
    "@type": "Question",
-   "name": "묶인 돈의 이자는 왜 넣나요?",
+   "name": "자금 기회비용은 왜 넣나요?",
    "acceptedAnswer": {
     "@type": "Answer",
     "text": "사무실을 사려면 자기자금이 크게 묶이고, 월세도 보증금이 묶입니다. 그 돈을 예금에 넣었다면 받았을 이자도 비용으로 봐야 공정하게 비교됩니다. 이 값을 빼면 매입 쪽이 실제보다 유리하게 보입니다. 예금 이자율을 0으로 두시면 빼고 계산합니다."
@@ -308,7 +308,7 @@
           </select>
         </div>
         <div>
-          <label for="i-yield">예금 이자율 <small>묶이는 돈의 가치</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="보증금이나 매입에 넣은 자기자금은 다른 데 쓸 수 없게 묶입니다. 그 돈을 예금에 넣었다면 받았을 이자를 양쪽에 똑같이 비용으로 넣어야 공정하게 비교됩니다. 0으로 두시면 빼고 계산합니다.">?</button></label>
+          <label for="i-yield">예금 이자율 <small>자금 기회비용 계산용</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="보증금이나 매입에 넣은 자기자금은 다른 데 쓸 수 없게 묶입니다. 그 돈을 예금에 넣었다면 받았을 이자를 양쪽에 똑같이 비용으로 넣어야 공정하게 비교됩니다. 0으로 두시면 빼고 계산합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-yield" inputmode="decimal" value="3"><span>%</span></div>
         </div>
         <div class="wide" id="ceo-box">
@@ -384,7 +384,7 @@
           <div class="a">월세는 시세에 맞춰야 합니다. 시세보다 높게 받으면 넘는 금액은 회사 비용으로 인정되지 않고, 낮게 받으면 대표님 임대소득을 시세로 다시 계산할 수 있습니다. 대표님은 임대사업자로 등록하고 회사에 세금계산서를 발행해야 하며, 임대소득이 한 해 2,000만 원을 넘으면 건강보험료가 따로 붙습니다.</div>
         </details>
         <details>
-          <summary>묶인 돈의 이자는 왜 넣나요?</summary>
+          <summary>자금 기회비용은 왜 넣나요?</summary>
           <div class="a">사무실을 사려면 자기자금이 크게 묶이고, 월세도 보증금이 묶입니다. 그 돈을 예금에 넣었다면 받았을 이자도 비용으로 봐야 공정하게 비교됩니다. 이 값을 빼면 매입 쪽이 실제보다 유리하게 보입니다. 예금 이자율을 0으로 두시면 빼고 계산합니다.</div>
         </details>
       </div>
@@ -500,7 +500,8 @@ function calcOffice(c){
   const list=[o1,o2,o3].filter(Boolean);
   for(const o of list){
     o.out=o.pay+o.hold+o.traffic;                                   // 실제로 나가는 돈
-    o.year=o.out-o.save+o.ceoTax+o.ceoHealth+o.opp-o.rise;          // 한 해 실제 부담 (값이 오르는 금액은 뺍니다)
+    o.spend=o.out-o.save+o.ceoTax+o.ceoHealth;                      // 실제 지출액 (세금까지 반영)
+    o.year=o.spend+o.opp-o.rise;                                    // 최종 실제 부담 (자금 기회비용을 더하고 가치 상승분을 뺍니다)
     // 월세보다 한 해 덜 드는 금액으로 취득세를 메우는 데 걸리는 해
     const gap=o1.year-o.year;
     o.payback=o.acq&&gap>0?o.acq/gap:null;
@@ -553,21 +554,24 @@ function render(){
   $('yt-body').innerHTML=
       row('처음에 드는 돈','월세는 보증금, 매입은 자기자금과 취득세',o=>won(o.upfront)+'원')
     +row('그 가운데 취득세',c.heavy?'법인 9.4% 중과, 개인 4.6%':'매입가의 4.6%',o=>o.acq?won(o.acq)+'원':'-')
-    +sec('나가는 돈')
+    +sec('총지출액')
     +row('월세 · 대출이자','',o=>won(o.pay)+'원')
     +row('재산세 · 종부세 등','공시가격 기준',o=>won(o.hold)+'원')
     +(any('traffic')?row('교통유발부담금','넣어 주신 금액',o=>won(o.traffic)+'원'):'')
-    +row('나가는 돈 합계','',o=>won(o.out)+'원','sum')
-    +sec('비용 처리')
-    +row('비용으로 인정되는 금액',c.corp?'대표님 임대는 회사가 내는 월세':'나가는 돈과 같습니다',o=>won(o.cost)+'원')
+    +row('총지출액','한 해 동안 실제로 나가는 돈',o=>won(o.out)+'원','sum')
+    +sec('세금 반영')
+    +row('비용으로 인정되는 금액',c.corp?'대표님 임대는 회사가 내는 월세':'총지출액과 같습니다',o=>won(o.cost)+'원')
     +row('줄어드는 세금',c.noTax?'낼 세금이 없음':'',o=>minus(o.save),'minus')
-    +(c.corp?sec('대표님 개인')
-      +row('대표님 임대소득금액','회사에서 받는 월세 − 이자 − 보유세',o=>o.key==='ceo'?(o.inc<0?'적자 '+won(-o.inc)+'원':won(o.inc)+'원'):'-')
+    +(c.corp
+      ?row('대표님 임대소득금액','회사에서 받는 월세 − 이자 − 보유세',o=>o.key==='ceo'?(o.inc<0?'적자 '+won(-o.inc)+'원':won(o.inc)+'원'):'-')
       +row('대표님 소득세 증가','임대소득을 다른 소득과 합산',o=>o.key!=='ceo'?'-':o.inc<=0?'0원<small>임대소득이 적자라 늘지 않습니다</small>':won(o.ceoTax)+'원')
-      +(any('ceoHealth')?row('대표님 건강보험료','임대소득 2,000만 원 초과분',o=>o.key==='ceo'?won(o.ceoHealth)+'원':'-'):''):'')
-    +(c.yield?sec('묶인 돈')+row('묶인 돈의 이자','처음에 드는 돈 × 예금 이자율 '+(c.yield*100).toFixed(1).replace(/[.]0$/,'')+'%',o=>won(o.opp)+'원'):'')
-    +(c.grow?sec('사무실 값')+row('값이 오르는 금액','매입가 × 연 '+(c.grow*100).toFixed(1).replace(/[.]0$/,'')+'% · 팔 때 세금은 넣지 않음',o=>o.rise?minus(o.rise):'-','minus'):'')
-    +row('한 해 실제 부담','나가는 돈 − 줄어드는 세금'+(c.corp?' + 대표님 세금':'')+(c.yield?' + 묶인 돈의 이자':'')+(c.grow?' − 값이 오르는 금액':''),o=>won(o.year)+'원','tot',o=>o===r.best?'best':'');
+      +(any('ceoHealth')?row('대표님 건강보험료','임대소득 2,000만 원 초과분',o=>o.key==='ceo'?won(o.ceoHealth)+'원':'-'):'')
+      :'')
+    +row('실제 지출액','총지출액 − 줄어드는 세금'+(c.corp?' + 대표님 소득세·건강보험료':''),o=>won(o.spend)+'원','tot')
+    +(c.yield||c.grow?sec('그 밖에 따져 볼 것'):'')
+    +(c.yield?row('자금 기회비용','보증금과 자기자금을 예금에 넣었다면 받았을 이자 · 연 '+(c.yield*100).toFixed(1).replace(/[.]0$/,'')+'%',o=>won(o.opp)+'원'):'')
+    +(c.grow?row('부동산 가치 상승분','매입가 × 연 '+(c.grow*100).toFixed(1).replace(/[.]0$/,'')+'% · 팔 때 세금은 넣지 않음',o=>o.rise?minus(o.rise):'-','minus'):'')
+    +row('최종 실제 부담','실제 지출액'+(c.yield?' + 자금 기회비용':'')+(c.grow?' − 부동산 가치 상승분':''),o=>won(o.year)+'원','tot',o=>o===r.best?'best':'');
 
   $('res-sub').textContent=(c.corp?'법인':'개인사업자')+' · 매입가 '+won(c.price)+'원 · 월세 '+won(c.rent)+'원';
 
