@@ -254,6 +254,10 @@
           <label for="i-traffic">교통유발부담금 <small>한 해, 나오는 경우만</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="각 층 바닥면적을 합해 1,000㎡ 이상인 건물의 소유자에게 해마다 나옵니다. 여러 명이 나눠 가진 건물이면 내 소유 면적이 160㎡ 이상일 때만 나옵니다. 금액은 지역과 건물 규모, 용도에 따라 달라 직접 계산하기 어려우니, 중개사나 매도인에게 지난해 고지서 금액을 물어 넣어 주세요. 나오지 않으면 비워 두시면 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-traffic" inputmode="numeric"><span>원</span></div>
         </div>
+        <div>
+          <label for="i-grow">부동산 가치 상승률 <small>한 해, 가정</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사무실 값이 해마다 몇 % 오른다고 볼지 정하는 값입니다. 오르는 금액만큼 매입한 쪽의 한 해 부담에서 빼서 보여 드립니다. 결과가 이 값에 크게 좌우되므로 0%로도 넣어 보시는 것을 권하며, 결과 화면에서 값이 오르지 않을 때의 결과도 함께 알려 드립니다. 팔 때 내는 세금은 넣지 않았습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-grow" inputmode="decimal" value="2"><span>%</span></div>
+        </div>
 
         <div class="divider"><b>월세로 쓸 때</b><span>같은 사무실을 빌린다면</span></div>
         <div>
@@ -387,7 +391,7 @@
 
       <p class="disc">
         · 계산 결과는 참고용입니다. 실제 금액은 대출 조건과 공시가격, 지역 조례에 따라 달라집니다.<br>
-        · 오래 보유한다고 보고 한 해 부담을 비교했습니다. 시세 변동과 팔 때의 세금은 넣지 않았고, 대출은 이자만 내는 것으로 보았습니다.<br>
+        · 오래 보유한다고 보고 한 해 부담을 비교했습니다. 사무실 값이 오르는 금액은 넣으신 상승률로 매입한 쪽 부담에서 뺐고, 팔 때 내는 세금은 넣지 않았습니다. 대출은 이자만 내는 것으로 보았습니다.<br>
         · 감가상각비는 넣지 않았습니다. 감가상각한 만큼 나중에 팔 때 취득가액이 줄어 양도소득세(법인은 법인세)로 다시 돌아오고, 특히 개인은 양도소득세가 크게 늘어 실무에서는 대개 반영하지 않습니다. 비교를 일관되게 하려고 모든 경우에서 뺐습니다.<br>
         · 취득세는 4.6%, 과밀억제권역 설립 5년 이내 법인은 9.4%입니다.<br>
         · 보유세는 공시가격 기준 재산세(건물 0.25%, 토지 별도합산 0.2~0.4%, 공정시장가액비율 70%)와 지방교육세, 도시지역분, 토지 공시가격 80억 원 초과분의 종합부동산세(0.5~0.7%, 농어촌특별세 포함)로 계산했습니다. 종합부동산세의 재산세 중복분 공제는 반영하지 않았습니다.<br>
@@ -464,12 +468,13 @@ function calcOffice(c){
   const rentYear=c.rent*12;
   const hold=holdTaxes(c), traffic=c.traffic;
   const debt=Math.min(c.loan,c.price);
+  const rise=f10(c.price*(c.grow||0));                  // 한 해 동안 사무실 값이 오르는 금액 (매입한 쪽만)
   const interest=f10(debt*c.rate);
   const base=bizTax(c,c.profit);
 
   // ① 월세로 쓸 때
   const s1=f10(base-bizTax(c,c.profit-rentYear));
-  const o1={key:'rent',acq:0,upfront:c.deposit,pay:rentYear,hold:0,traffic:0,cost:rentYear,save:s1,
+  const o1={key:'rent',rise:0,acq:0,upfront:c.deposit,pay:rentYear,hold:0,traffic:0,cost:rentYear,save:s1,
             ceoTax:0,ceoHealth:0,opp:f10(c.deposit*c.yield)};
 
   // ② 사업자가 직접 살 때
@@ -477,7 +482,7 @@ function calcOffice(c){
   // 감가상각비는 넣지 않습니다 (팔 때 취득가액이 줄어 세금으로 돌아오고, 개인은 대개 반영하지 않으므로 모두 같은 기준으로)
   const cost2=interest+hold.total+traffic;
   const eq2=c.price-debt+acq2;
-  const o2={key:'buy',acq:acq2,upfront:eq2,pay:interest,hold:hold.total,traffic,cost:cost2,
+  const o2={key:'buy',rise,acq:acq2,upfront:eq2,pay:interest,hold:hold.total,traffic,cost:cost2,
             save:f10(base-bizTax(c,c.profit-cost2)),ceoTax:0,ceoHealth:0,opp:f10(eq2*c.yield)};
 
   // ③ 대표님이 사서 법인에 임대할 때 (법인만). 법인이 내는 월세는 대표님이 받으므로 둘을 합쳐 봅니다
@@ -489,13 +494,13 @@ function calcOffice(c){
     const ceoTax=inc>0?f10(pitAll(c.ceoBase+inc)-pitAll(c.ceoBase)):0;
     const ceoHealth=f10(Math.max(0,inc-HEALTH_FREE)*HEALTH*(1+CARE));
     const eq3=c.price-debt+acq3;
-    o3={key:'ceo',acq:acq3,upfront:eq3,pay:interest,hold:hold.total,traffic,cost:rentYear,save:s1,
+    o3={key:'ceo',rise,acq:acq3,upfront:eq3,pay:interest,hold:hold.total,traffic,cost:rentYear,save:s1,
         ceoTax,ceoHealth,inc,opp:f10(eq3*c.yield)};
   }
   const list=[o1,o2,o3].filter(Boolean);
   for(const o of list){
     o.out=o.pay+o.hold+o.traffic;                                   // 실제로 나가는 돈
-    o.year=o.out-o.save+o.ceoTax+o.ceoHealth+o.opp;                 // 한 해 실제 부담
+    o.year=o.out-o.save+o.ceoTax+o.ceoHealth+o.opp-o.rise;          // 한 해 실제 부담 (값이 오르는 금액은 뺍니다)
     // 월세보다 한 해 덜 드는 금액으로 취득세를 메우는 데 걸리는 해
     const gap=o1.year-o.year;
     o.payback=o.acq&&gap>0?o.acq/gap:null;
@@ -524,7 +529,7 @@ syncBiz();
 function read(){
   const corp=$('i-biz').value==='corp';
   return {price:num($('i-price').value),bld:pct('i-bld'),pub:num($('i-pub').value),traffic:num($('i-traffic').value),
-    deposit:num($('i-deposit').value),rent:num($('i-rent').value),
+    grow:pct('i-grow'),deposit:num($('i-deposit').value),rent:num($('i-rent').value),
     loan:num($('i-loan').value),rate:pct('i-rate'),heavy:corp&&$('i-heavy').checked,
     corp,profit:num($('i-profit').value),relief:Number($('i-relief').value),yield:pct('i-yield'),
     ceoBase:num($('i-ceo').value),noTax:$('i-notax').checked};
@@ -561,7 +566,8 @@ function render(){
       +row('대표님 소득세 증가','임대소득을 다른 소득과 합산',o=>o.key!=='ceo'?'-':o.inc<=0?'0원<small>임대소득이 적자라 늘지 않습니다</small>':won(o.ceoTax)+'원')
       +(any('ceoHealth')?row('대표님 건강보험료','임대소득 2,000만 원 초과분',o=>o.key==='ceo'?won(o.ceoHealth)+'원':'-'):''):'')
     +(c.yield?sec('묶인 돈')+row('묶인 돈의 이자','처음에 드는 돈 × 예금 이자율 '+(c.yield*100).toFixed(1).replace(/[.]0$/,'')+'%',o=>won(o.opp)+'원'):'')
-    +row('한 해 실제 부담','나가는 돈 − 줄어드는 세금'+(c.corp?' + 대표님 세금':'')+(c.yield?' + 묶인 돈의 이자':''),o=>won(o.year)+'원','tot',o=>o===r.best?'best':'');
+    +(c.grow?sec('사무실 값')+row('값이 오르는 금액','매입가 × 연 '+(c.grow*100).toFixed(1).replace(/[.]0$/,'')+'% · 팔 때 세금은 넣지 않음',o=>o.rise?minus(o.rise):'-','minus'):'')
+    +row('한 해 실제 부담','나가는 돈 − 줄어드는 세금'+(c.corp?' + 대표님 세금':'')+(c.yield?' + 묶인 돈의 이자':'')+(c.grow?' − 값이 오르는 금액':''),o=>won(o.year)+'원','tot',o=>o===r.best?'best':'');
 
   $('res-sub').textContent=(c.corp?'법인':'개인사업자')+' · 매입가 '+won(c.price)+'원 · 월세 '+won(c.rent)+'원';
 
@@ -577,7 +583,12 @@ function render(){
   $('ycap').textContent=L.map(o=>colName(c,o.key)+' 한 해 '+won(o.year)+'원').join(' · ');
 
   const notes=[{t:'감가상각비는 넣지 않았습니다. 감가상각한 만큼 나중에 팔 때 취득가액이 줄어 양도소득세(법인은 법인세)로 다시 돌아오고, 특히 개인은 양도소득세가 크게 늘어 실무에서는 대개 반영하지 않습니다. 비교를 일관되게 하려고 모든 경우에서 뺐습니다.'}];
-  for(const o of L) if(o.key!=='rent'&&!o.payback) notes.push({t:sayName(c,o.key)+'은 월세보다 한 해 부담이 커서 취득세를 메우지 못합니다. 사무실 값이 오르는 것까지 기대하실 때만 따져 볼 만합니다.'});
+  for(const o of L) if(o.key!=='rent'&&!o.payback) notes.push({t:sayName(c,o.key)+'은 월세보다 한 해 부담이 커서 취득세를 메우지 못합니다.'});
+  if(c.grow>0){
+    const z=calcOffice(Object.assign({},c,{grow:0}));
+    notes.push({warn:z.best.key!==r.best.key,t:'사무실 값이 오르지 않는다고 보면(0%) <b>'+sayName(c,z.best.key)+'이 가장 적게</b> 듭니다. 한 해 '
+      +z.list.map(o=>colName(c,o.key)+' '+won(o.year)+'원').join(', ')+'입니다.'});
+  }
   if(c.heavy) notes.push({warn:1,t:'과밀억제권역에서 설립 5년이 안 된 법인이라 취득세가 <b>9.4%('+won(r.o2.acq)+'원)</b>로 중과됩니다. 대표님이 사면 4.6%('+won(r.o3.acq)+'원)입니다.'});
   if(r.o3){
     notes.push({t:'대표님이 사서 회사에 임대하면 회사는 월세를 비용으로 넣고 대표님은 그 월세를 임대소득으로 받습니다. 회사 돈을 월세로 가져오는 셈이라 급여나 배당과 함께 따져 볼 만합니다. 월세는 시세에 맞춰야 하며, 시세와 다르면 부당행위로 다시 계산됩니다.'});
