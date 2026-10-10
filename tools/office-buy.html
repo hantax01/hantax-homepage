@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사무실 매입 계산기 2026, 월세로 쓸까요 살까요? | 한택스</title>
+<meta name="description" content="사무실과 상가를 월세로 쓸 때와 회사가 살 때, 대표님이 사서 회사에 임대할 때를 보유 기간 전체로 비교합니다. 대출이자와 재산세·종부세·교통유발부담금, 감가상각, 취득세와 팔 때 내는 세금까지 넣어 법인과 개인사업자의 절세 효과를 계산합니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/office-buy.html">
+<meta property="og:title" content="사무실, 월세로 쓸까요 살까요?">
+<meta property="og:description" content="이자·보유세·감가상각과 팔 때 세금까지 넣어 월세와 매입을 비교하는 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/office-buy.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-office-buy.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.chks{grid-column:1/-1;display:grid;gap:11px}
+.ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.ichk small{font-weight:400;color:var(--mute);font-size:12.5px}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable .minus td+td{color:var(--blue)}
+.rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td+td{color:var(--blue)}
+.ytable{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;margin-top:20px}
+.ytable th,.ytable td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:right}
+.ytable th:first-child,.ytable td:first-child{text-align:left;color:var(--char)}
+.ytable thead th{background:var(--soft);font-size:13px;color:var(--ink);border-bottom:2px solid var(--line);text-align:right}
+.ytable thead th:first-child{text-align:left}
+.ytable tr.sum td{font-weight:800;color:var(--ink);background:var(--blue-soft)}
+.ytable td.best{color:var(--blue);font-weight:800}
+.ytable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px;font-weight:400}
+#yt td+td,#yt th+th{white-space:nowrap}
+.steps .body{overflow-x:auto}
+.ycap{font-size:13px;color:var(--mute);margin-top:8px;line-height:1.7}
+#ft{margin-top:0}
+#ft td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px;font-weight:400}
+#ft tr.gap td{font-weight:800;color:var(--ink);background:var(--soft)}
+.fwarn{margin-top:16px;background:var(--seal-soft);border-radius:10px;padding:14px 16px;font-size:13.5px;line-height:1.75;color:var(--char)}
+.fwarn b{color:var(--seal)}
+.fnote{margin-top:10px;font-size:13px;line-height:1.75;color:var(--mute)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict .note.warn b{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:18px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.rtable,.ytable{font-size:13px}.rtable th,.rtable td,.ytable th,.ytable td{padding:10px 6px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "월세와 매입은 세금이 어떻게 다른가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "월세는 낸 금액이 전부 비용이 됩니다. 매입하면 산 돈 자체는 비용이 아니고, 대출 이자와 재산세 같은 보유세, 건물분 감가상각비만 비용이 됩니다. 대신 사무실이 자산으로 남아 팔 때 시세 차익을 얻고, 그 차익에 세금을 냅니다. 그래서 몇 년을 쓸지, 값이 얼마나 오를지에 따라 유불리가 갈립니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "감가상각은 얼마나 인정되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "건물만 감가상각이 되고 토지는 되지 않습니다. 철근콘크리트 건물은 기준내용연수가 40년이라, 건물분 취득가액(취득세 포함)을 40년에 나눠 해마다 비용으로 넣습니다. 30년에서 50년 사이로 신고해 조절할 수도 있습니다. 매매계약서에 건물분과 토지분을 나눠 적어 두시는 것이 좋습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "취득세는 얼마인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "사무실과 상가는 지방교육세와 농어촌특별세를 합해 4.6%입니다. 다만 과밀억제권역에서 설립한 지 5년이 안 된 법인이 그 안의 부동산을 사면 9.4%로 중과됩니다. 이 경우 대표님 개인이 사서 회사에 임대하면 4.6%로 살 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "재산세와 종합부동산세는 얼마나 나오나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "공시가격에 공정시장가액비율 70%를 곱해 건물은 0.25%, 토지는 0.2~0.4%의 재산세를 매기고 지방교육세와 도시지역분이 더 붙습니다. 사무실 부속토지는 공시가격 합계가 80억 원을 넘어야 종합부동산세가 나오므로 작은 사무실은 대개 해당하지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "교통유발부담금은 누가 내나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "바닥면적 합계가 1,000㎡ 이상인 건물의 소유자가 해마다 냅니다. 여러 명이 나눠 가진 건물은 소유 면적이 160㎡ 미만이면 나오지 않습니다. 금액은 면적에 단위부담금과 용도별 계수를 곱해 정하며, 서울 업무시설은 대략 ㎡당 1,260원 안팎입니다. 월세로 쓸 때는 건물주가 내지만 관리비에 넣어 받는 경우도 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "법인이 살까요, 대표님이 사서 임대할까요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "법인이 사면 이자와 감가상각이 법인 비용이 되고 차익도 법인에 남습니다. 대표님이 사서 임대하면 법인은 월세를 비용으로 넣고, 대표님은 그 월세를 임대소득으로 받습니다. 회사 돈을 월세로 가져오는 셈이라 급여나 배당과 비교해 볼 만하고, 팔 때는 개인 양도소득세에 장기보유특별공제가 적용됩니다. 대신 대표님 종합소득세와 건강보험료가 늘어납니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "대표님 소유 사무실을 회사에 임대할 때 주의할 점은요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "월세는 시세에 맞춰야 합니다. 시세보다 높게 받으면 넘는 금액은 회사 비용으로 인정되지 않고, 낮게 받으면 대표님 임대소득을 시세로 다시 계산할 수 있습니다. 대표님은 임대사업자로 등록하고 회사에 세금계산서를 발행해야 하며, 임대소득이 한 해 2,000만 원을 넘으면 건강보험료가 따로 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "묶인 돈의 이자는 왜 넣나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "사무실을 사려면 자기자금이 크게 묶이고, 월세도 보증금이 묶입니다. 그 돈을 예금에 넣었다면 받았을 이자도 비용으로 봐야 공정하게 비교됩니다. 이 값을 빼면 매입 쪽이 실제보다 유리하게 보입니다. 예금 이자율을 0으로 두시면 빼고 계산합니다."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">사무실</span>
+    <h1>사무실,<br>월세로 쓸까요 살까요?</h1>
+    <p class="lead">월세로 쓸 때와 회사가 직접 살 때, 대표님이 사서 회사에 임대할 때를 보유 기간 전체로 비교합니다. 이자와 보유세, 감가상각, 팔 때 내는 세금까지 넣어 절세 효과를 함께 보여 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>사무실</b><span>부가가치세를 뺀 금액으로 넣어 주세요</span></div>
+        <div>
+          <label for="i-price">매입가 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="토지와 건물을 합한 매매가격입니다. 건물분에는 부가가치세 10%가 붙지만 일반과세자는 돌려받으므로 빼고 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-price" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-bld">건물분 비율 <small>감가상각 대상</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="매입가 가운데 건물값이 차지하는 비율입니다. 토지는 감가상각이 되지 않고 건물만 됩니다. 매매계약서나 세금계산서에 건물분이 따로 적혀 있으면 그 비율을 넣으시고, 모르시면 도심 사무실은 30~50% 정도입니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-bld" inputmode="decimal" value="40"><span>%</span></div>
+        </div>
+        <div>
+          <label for="i-pub">공시가격 <small>비우면 매입가의 70%</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재산세와 종합부동산세는 매매가격이 아니라 공시가격(건물 시가표준액과 토지 공시지가)으로 매깁니다. 재산세 고지서나 부동산 공시가격 알리미에서 확인하실 수 있고, 비워 두시면 매입가의 70%로 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-pub" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-area">면적 <small>교통유발부담금용</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="소유하실 부분의 바닥면적 합계입니다. 바닥면적이 1,000㎡ 이상인 건물에서 소유 면적이 160㎡ 이상이면 해마다 교통유발부담금이 나옵니다. 서울 업무시설 기준으로 ㎡당 약 1,260원으로 계산하며, 건물 규모와 지역에 따라 다릅니다. 모르시면 비워 두세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-area" inputmode="numeric"><span>㎡</span></div>
+        </div>
+        <div>
+          <label for="i-years">보유 기간 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사서 쓰다가 팔 때까지의 기간입니다. 매입은 처음에 취득세가 들고 팔 때 시세 차익이 생기므로, 짧게 보면 불리하고 길게 볼수록 유리해지는 경우가 많습니다.">?</button></label>
+          <select id="i-years"><option value="3">3년</option><option value="5">5년</option><option value="10" selected>10년</option><option value="15">15년</option><option value="20">20년</option></select>
+        </div>
+        <div>
+          <label for="i-grow">연 시세 상승률 <small>가정</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="해마다 사무실 값이 몇 % 오른다고 볼지 정하는 값입니다. 결과가 이 값에 크게 좌우되므로, 0%로도 넣어 보시는 것을 권합니다. 결과 화면에서 시세가 그대로일 때의 결과도 함께 알려 드립니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-grow" inputmode="decimal" value="2"><span>%</span></div>
+        </div>
+
+        <div class="divider"><b>월세로 쓸 때</b><span>같은 사무실을 빌린다면</span></div>
+        <div>
+          <label for="i-deposit">보증금</label>
+          <div class="unit"><input type="text" id="i-deposit" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-rent">월세 <small>부가세 빼고</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="같은 사무실을 빌릴 때 내는 한 달 임대료입니다. 대표님이 사서 회사에 임대하는 경우에도 이 금액을 시세 임대료로 보고 계산합니다. 관리비는 어느 쪽이든 비슷하게 들어 넣지 않습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-rent" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <div class="divider"><b>살 때</b><span>대출과 취득세</span></div>
+        <div>
+          <label for="i-loan">대출금</label>
+          <div class="unit"><input type="text" id="i-loan" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-rate">대출 이자율 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="대출 이자는 비용으로 인정됩니다. 이 계산기는 이자만 내다가 팔 때 원금을 한꺼번에 갚는 것으로 봅니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-rate" inputmode="decimal" value="4.5"><span>%</span></div>
+        </div>
+        <div class="chks" id="heavy-row">
+          <div>
+            <label class="ichk"><input type="checkbox" id="i-heavy"><span>과밀억제권역에서 설립한 지 5년이 안 된 법인입니다 <small>취득세 중과</small></span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="서울 전역과 인천·경기 일부 같은 과밀억제권역에서 설립한 지 5년이 안 된 법인이 그 안의 부동산을 사면 취득세가 4.6%에서 9.4%로 올라갑니다. 대표님 개인이 사는 경우에는 중과되지 않습니다.">?</button>
+            </label>
+          </div>
+        </div>
+
+        <div class="divider"><b>세금과 돈의 가치</b></div>
+        <div>
+          <label for="i-biz">사업자 구분</label>
+          <select id="i-biz"><option value="corp">법인</option><option value="indiv">개인사업자</option></select>
+        </div>
+        <div>
+          <label for="i-profit"><span id="profit-label">당기순이익</span> <small>과세표준</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사무실 비용을 넣기 전 기준으로 세금을 매기는 금액입니다. 법인은 당기순이익에서 세무조정을 한 과세표준, 개인사업자는 소득금액에서 소득공제를 뺀 과세표준입니다. 이 금액에서 월세나 이자·감가상각을 빼 줄어드는 세금을 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-profit" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="i-relief">세액감면 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="감면을 받고 계시면 비용이 늘어 세금이 줄 때 감면액도 함께 줄어 실제로 아끼는 돈이 적어집니다. 팔 때 생기는 처분이익에는 감면이 적용되지 않습니다.">?</button></label>
+          <select id="i-relief">
+            <option value="0">받지 않음</option>
+            <option value="0.1">중소기업특별세액감면 10%</option>
+            <option value="0.2">중소기업특별세액감면 20%</option>
+            <option value="0.3">중소기업특별세액감면 30%</option>
+            <option value="0.5">창업중소기업 세액감면 50%</option>
+            <option value="0.8">창업중소기업 세액감면 80%</option>
+            <option value="1">창업중소기업 세액감면 100%</option>
+          </select>
+        </div>
+        <div>
+          <label for="i-yield">예금 이자율 <small>묶이는 돈의 가치</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="보증금이나 매입에 넣은 자기자금은 다른 데 쓸 수 없게 묶입니다. 그 돈을 예금에 넣었다면 받았을 이자를 양쪽에 똑같이 비용으로 넣어야 공정하게 비교됩니다. 0으로 두시면 빼고 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-yield" inputmode="decimal" value="3"><span>%</span></div>
+        </div>
+        <div class="wide" id="ceo-box">
+          <label for="i-ceo">대표님 다른 종합소득 과세표준 <small>대표님이 사서 임대할 때 비교용</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="대표님이 사무실을 사서 회사에 임대하면 받는 월세가 임대소득이 되어 급여 같은 다른 소득과 합쳐 세금을 매깁니다. 연봉에서 근로소득공제와 소득공제를 뺀 과세표준을 넣어 주세요. 모르시면 연봉의 70% 정도로 넣으시면 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-ceo" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="chks">
+          <div>
+            <label class="ichk"><input type="checkbox" id="i-notax"><span>이월결손금이나 적자라서 낼 세금이 없습니다</span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="지금 낼 세금이 없으면 월세나 이자를 비용으로 넣어도 당장 줄어드는 세금이 없습니다. 적자는 결손금으로 15년 동안 이월됩니다.">?</button>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">월세와 매입 비교하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2>월세와 매입 비교</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="call" id="call"></div>
+        <div style="overflow-x:auto">
+          <table class="ytable" id="yt">
+            <thead id="yt-head"></thead>
+            <tbody id="yt-body"></tbody>
+          </table>
+        </div>
+        <p class="ycap" id="ycap"></p>
+        <div class="verdict" id="verdict"></div>
+        <details class="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps"></div>
+        </details>
+        <div class="ask">
+          <p><b>누구 명의로 살지는 사기 전에 정해야 합니다.</b><br>회사가 살지 대표님이 사서 임대할지, 취득세 중과와 대출, 나중에 팔 때의 세금까지 함께 따져 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>월세와 매입은 세금이 어떻게 다른가요?</summary>
+          <div class="a">월세는 낸 금액이 전부 비용이 됩니다. 매입하면 산 돈 자체는 비용이 아니고, 대출 이자와 재산세 같은 보유세, 건물분 감가상각비만 비용이 됩니다. 대신 사무실이 자산으로 남아 팔 때 시세 차익을 얻고, 그 차익에 세금을 냅니다. 그래서 몇 년을 쓸지, 값이 얼마나 오를지에 따라 유불리가 갈립니다.</div>
+        </details>
+        <details>
+          <summary>감가상각은 얼마나 인정되나요?</summary>
+          <div class="a">건물만 감가상각이 되고 토지는 되지 않습니다. 철근콘크리트 건물은 기준내용연수가 40년이라, 건물분 취득가액(취득세 포함)을 40년에 나눠 해마다 비용으로 넣습니다. 30년에서 50년 사이로 신고해 조절할 수도 있습니다. 매매계약서에 건물분과 토지분을 나눠 적어 두시는 것이 좋습니다.</div>
+        </details>
+        <details>
+          <summary>취득세는 얼마인가요?</summary>
+          <div class="a">사무실과 상가는 지방교육세와 농어촌특별세를 합해 4.6%입니다. 다만 과밀억제권역에서 설립한 지 5년이 안 된 법인이 그 안의 부동산을 사면 9.4%로 중과됩니다. 이 경우 대표님 개인이 사서 회사에 임대하면 4.6%로 살 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>재산세와 종합부동산세는 얼마나 나오나요?</summary>
+          <div class="a">공시가격에 공정시장가액비율 70%를 곱해 건물은 0.25%, 토지는 0.2~0.4%의 재산세를 매기고 지방교육세와 도시지역분이 더 붙습니다. 사무실 부속토지는 공시가격 합계가 80억 원을 넘어야 종합부동산세가 나오므로 작은 사무실은 대개 해당하지 않습니다.</div>
+        </details>
+        <details>
+          <summary>교통유발부담금은 누가 내나요?</summary>
+          <div class="a">바닥면적 합계가 1,000㎡ 이상인 건물의 소유자가 해마다 냅니다. 여러 명이 나눠 가진 건물은 소유 면적이 160㎡ 미만이면 나오지 않습니다. 금액은 면적에 단위부담금과 용도별 계수를 곱해 정하며, 서울 업무시설은 대략 ㎡당 1,260원 안팎입니다. 월세로 쓸 때는 건물주가 내지만 관리비에 넣어 받는 경우도 있습니다.</div>
+        </details>
+        <details>
+          <summary>법인이 살까요, 대표님이 사서 임대할까요?</summary>
+          <div class="a">법인이 사면 이자와 감가상각이 법인 비용이 되고 차익도 법인에 남습니다. 대표님이 사서 임대하면 법인은 월세를 비용으로 넣고, 대표님은 그 월세를 임대소득으로 받습니다. 회사 돈을 월세로 가져오는 셈이라 급여나 배당과 비교해 볼 만하고, 팔 때는 개인 양도소득세에 장기보유특별공제가 적용됩니다. 대신 대표님 종합소득세와 건강보험료가 늘어납니다.</div>
+        </details>
+        <details>
+          <summary>대표님 소유 사무실을 회사에 임대할 때 주의할 점은요?</summary>
+          <div class="a">월세는 시세에 맞춰야 합니다. 시세보다 높게 받으면 넘는 금액은 회사 비용으로 인정되지 않고, 낮게 받으면 대표님 임대소득을 시세로 다시 계산할 수 있습니다. 대표님은 임대사업자로 등록하고 회사에 세금계산서를 발행해야 하며, 임대소득이 한 해 2,000만 원을 넘으면 건강보험료가 따로 붙습니다.</div>
+        </details>
+        <details>
+          <summary>묶인 돈의 이자는 왜 넣나요?</summary>
+          <div class="a">사무실을 사려면 자기자금이 크게 묶이고, 월세도 보증금이 묶입니다. 그 돈을 예금에 넣었다면 받았을 이자도 비용으로 봐야 공정하게 비교됩니다. 이 값을 빼면 매입 쪽이 실제보다 유리하게 보입니다. 예금 이자율을 0으로 두시면 빼고 계산합니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용입니다. 실제 금액은 대출 조건과 공시가격, 지역 조례, 매각 시점의 시세에 따라 달라집니다.<br>
+        · 대출은 이자만 내다가 팔 때 원금을 한꺼번에 갚는 것으로 보았습니다. 월세와 금리는 보유 기간 동안 그대로라고 보았습니다.<br>
+        · 감가상각은 건물분(취득세 포함)만 40년 정액으로 계산했습니다. 취득세는 4.6%, 과밀억제권역 설립 5년 이내 법인은 9.4%입니다.<br>
+        · 보유세는 공시가격 기준 재산세(건물 0.25%, 토지 별도합산 0.2~0.4%, 공정시장가액비율 70%)와 지방교육세, 도시지역분, 토지 공시가격 80억 원 초과분의 종합부동산세(0.5~0.7%, 농어촌특별세 포함)로 계산했습니다. 종합부동산세의 재산세 중복분 공제는 반영하지 않았습니다.<br>
+        · 교통유발부담금은 소유 면적 160㎡ 이상일 때 ㎡당 약 1,260원(서울 업무시설, 단위부담금 700원 × 계수 1.8)으로 대략 계산했습니다. 건물 규모와 지역에 따라 다릅니다.<br>
+        · 건물분 부가가치세는 일반과세자가 돌려받는 것으로 보았습니다. 간이과세자나 면세사업자는 돌려받지 못해 비용이 늘어납니다.<br>
+        · 대표님이 사서 임대하는 경우는 보증금 없이 같은 월세를 받는 것으로 보았고, 임대소득은 대표님 다른 종합소득과 합산하며 한 해 2,000만 원을 넘는 금액에 건강보험료(7.19%와 장기요양보험)를 더했습니다.<br>
+        · 개인이 팔 때는 양도소득세(장기보유특별공제 연 2%, 최대 30%, 기본공제 250만 원)를 계산하고, 그동안 비용으로 넣은 감가상각비는 취득가액에서 뺐습니다. 법인이 팔 때의 처분이익에는 감면을 적용하지 않았습니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="income-transfer.html">대표 연봉 계산기</a>
+        <a href="incorporation.html">법인전환 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 사무실 월세와 매입 ────────────────────── */
+// 법인세와 종합소득세 (2026년 기준)
+const CIT=[[200000000,.10,0],[Infinity,.20,20000000]];
+const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
+           [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
+function taxOf(table,b){ if(b<=0) return 0; for(const[lim,r,d]of table) if(b<=lim) return Math.max(0,b*r-d); return 0; }
+const f10=x=>(x<0?-1:1)*Math.floor(Math.abs(x)/10+1e-9)*10;
+const ACQ=0.046, ACQ_HEAVY=0.094;       // 취득세 (지방교육세·농특세 포함), 과밀억제권역 설립 5년 이내 법인 중과
+const LIFE=40;                          // 건물 기준내용연수
+const PUB_RATIO=0.7;                    // 공시가격을 모르면 매입가의 70%
+const FMV=0.7;                          // 재산세 공정시장가액비율
+const TRAFFIC=700*1.8;                  // 교통유발부담금 ㎡당 (서울 업무시설, 단위부담금 × 계수, 대략)
+const TRAFFIC_MIN=160;                  // 소유 면적이 이보다 작으면 부과하지 않습니다
+const HEALTH_FREE=20000000, HEALTH=0.0719, CARE=0.1314;   // 보수 외 소득 2천만 원 초과분 건강보험료
+
+// 재산세·지방교육세·도시지역분·종합부동산세 (한 해)
+function holdTaxes(c){
+  const pub=c.pub||c.price*PUB_RATIO;
+  const bld=pub*c.bld, land=pub*(1-c.bld);
+  const bldTax=bld*FMV*0.0025;
+  const lb=land*FMV;   // 별도합산토지
+  const landTax=lb<=2e8?lb*0.002:lb<=1e9?400000+(lb-2e8)*0.003:2800000+(lb-1e9)*0.004;
+  const prop=bldTax+landTax, edu=prop*0.2, city=pub*FMV*0.0014;
+  const jbBase=Math.max(0,land-8e9);   // 별도합산토지 80억 원 공제, 공정시장가액비율 100%
+  const jb0=jbBase<=2e10?jbBase*0.005:jbBase<=4e10?1e8+(jbBase-2e10)*0.006:2.2e8+(jbBase-4e10)*0.007;
+  const jb=jb0*1.2;                    // 농어촌특별세 20%
+  return {pub,local:f10(prop+edu+city),jb:f10(jb),total:f10(prop+edu+city+jb)};
+}
+const trafficFee=area=>area>=TRAFFIC_MIN?f10(area*TRAFFIC):0;
+// 사업자 본인의 법인세·소득세와 지방소득세 (감면은 법인세·소득세에만, 지방소득세는 감면 전 세액 기준)
+function bizTax(c,b){ if(c.noTax) return 0; const g=taxOf(c.corp?CIT:PIT,b); return g*(1-c.relief)+g*0.1; }
+const pitAll=b=>taxOf(PIT,b)*1.1;
+// 개인이 팔 때 양도소득세 (사업용 건물·토지, 장기보유특별공제 연 2% 최대 30%, 기본공제 250만 원)
+function transferTax(gain,years){
+  if(gain<=0) return 0;
+  const lt=years>=3?Math.min(0.3,0.02*years):0;
+  return f10(pitAll(gain*(1-lt)-2500000));
+}
+
+function calcOffice(c){
+  const N=c.years, rentYear=c.rent*12;
+  const hold=holdTaxes(c), traffic=trafficFee(c.area);
+  const interest=f10(c.loan*c.rate);
+  const sale=f10(c.price*Math.pow(1+c.grow,N));
+  const gain=sale-c.price;                          // 시세 차익
+  const base=bizTax(c,c.profit);
+  const debt=Math.min(c.loan,c.price);
+
+  // ① 월세로 쓸 때
+  const s1=f10(base-bizTax(c,c.profit-rentYear));
+  const o1={key:'rent',upfront:c.deposit,pay:rentYear,hold:0,traffic:0,dep:0,save:s1,ceoTax:0,ceoHealth:0,
+            opp:f10(c.deposit*c.yield),acq:0,gain:0,saleTax:0};
+
+  // ② 사업자가 직접 살 때
+  const acq2=f10(c.price*(c.corp&&c.heavy?ACQ_HEAVY:ACQ));
+  const dep2=f10((c.price+acq2)*c.bld/LIFE);
+  const cost2=interest+hold.total+traffic+dep2;
+  const after2=c.profit-cost2;
+  const s2=f10(base-bizTax(c,after2));
+  const book2=c.price+acq2-dep2*N;                 // 팔 때 장부가액 (감가상각한 만큼 줄어듭니다)
+  const tax2=c.corp
+    ?(c.noTax?0:f10((taxOf(CIT,Math.max(0,after2)+sale-book2)-taxOf(CIT,Math.max(0,after2)))*1.1))   // 처분이익에는 감면이 없습니다
+    :transferTax(sale-book2,N);
+  const eq2=c.price-debt+acq2;
+  const o2={key:'buy',upfront:eq2,pay:interest,hold:hold.total,traffic,dep:dep2,save:s2,ceoTax:0,ceoHealth:0,
+            opp:f10(eq2*c.yield),acq:acq2,gain,saleTax:tax2,book:book2,cost:cost2};
+
+  // ③ 대표님이 사서 법인에 임대할 때 (법인만). 법인이 내는 월세는 대표님이 받으므로 둘을 합쳐 봅니다
+  let o3=null;
+  if(c.corp){
+    const acq3=f10(c.price*ACQ);
+    const dep3=f10((c.price+acq3)*c.bld/LIFE);
+    const inc=rentYear-interest-hold.total-traffic-dep3;      // 대표님 임대소득금액
+    // 부동산임대업 적자는 다른 소득과 합치지 못하고 이월됩니다
+    const ceoTax=inc>0?f10(pitAll(c.ceoBase+inc)-pitAll(c.ceoBase)):0;
+    const ceoHealth=f10(Math.max(0,inc-HEALTH_FREE)*HEALTH*(1+CARE));
+    const book3=c.price+acq3-dep3*N;
+    const eq3=c.price-debt+acq3;
+    o3={key:'ceo',upfront:eq3,pay:interest,hold:hold.total,traffic,dep:dep3,save:s1,ceoTax,ceoHealth,inc,
+        opp:f10(eq3*c.yield),acq:acq3,gain,saleTax:transferTax(sale-book3,N),book:book3};
+  }
+  const list=[o1,o2,o3].filter(Boolean);
+  for(const o of list){
+    o.year=o.pay+o.hold+o.traffic-o.save+o.ceoTax+o.ceoHealth+o.opp;   // 한 해 실제 부담
+    o.total=o.year*N+o.acq+o.saleTax-o.gain;                        // 보유 기간 전체 실제 부담
+  }
+  const best=list.reduce((a,b)=>b.total<a.total?b:a);
+  return {N,rentYear,hold,traffic,interest,sale,gain,list,best,o1,o2,o3};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const pct=id=>(Number(String($(id).value).replace(/[^0-9.]/g,''))||0)/100;
+['i-price','i-pub','i-area','i-deposit','i-rent','i-loan','i-profit','i-ceo'].forEach(id=>{
+  const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
+});
+// 법인일 때만 취득세 중과와 대표님 임대 비교를 묻습니다
+function syncBiz(){
+  const corp=$('i-biz').value==='corp';
+  $('profit-label').textContent=corp?'당기순이익':'소득금액';
+  $('ceo-box').style.display=corp?'':'none';
+  $('heavy-row').style.display=corp?'':'none';
+}
+$('i-biz').addEventListener('change',syncBiz);
+syncBiz();
+function read(){
+  const corp=$('i-biz').value==='corp';
+  return {price:num($('i-price').value),bld:pct('i-bld'),pub:num($('i-pub').value),area:num($('i-area').value),
+    years:Number($('i-years').value),grow:pct('i-grow'),deposit:num($('i-deposit').value),rent:num($('i-rent').value),
+    loan:num($('i-loan').value),rate:pct('i-rate'),heavy:corp&&$('i-heavy').checked,
+    corp,profit:num($('i-profit').value),relief:Number($('i-relief').value),yield:pct('i-yield'),
+    ceoBase:num($('i-ceo').value),noTax:$('i-notax').checked};
+}
+const shown=()=>$('res').style.display==='block';
+const ready=()=>{ const c=read(); return !!(c.price&&c.rent); };
+
+/* ── 화면 ─────────────────────────────────── */
+const colName=(c,k)=>({rent:'월세',buy:c.corp?'법인이 매입':'매입',ceo:'대표님이 매입 후 임대'})[k];
+const sayName=(c,k)=>({rent:'월세로 쓰는 쪽',buy:c.corp?'법인이 사는 쪽':'사는 쪽',ceo:'대표님이 사서 회사에 임대하는 쪽'})[k];
+const money=v=>v<0?'− '+won(-v)+'원':won(v)+'원';
+const minus=v=>v?'− '+won(v)+'원':'0원';
+
+function render(){
+  const c=read(), r=calcOffice(c), L=r.list, N=r.N;
+  $('yt-head').innerHTML='<tr><th>보유 '+N+'년 기준</th>'+L.map(o=>'<th>'+colName(c,o.key)+'</th>').join('')+'</tr>';
+  const row=(l,sm,f,cls,cellCls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td>'
+    +L.map(o=>'<td'+(cellCls&&cellCls(o)?' class="'+cellCls(o)+'"':'')+'>'+f(o)+'</td>').join('')+'</tr>';
+  const any=k=>L.some(o=>o[k]);
+  $('yt-body').innerHTML=
+      row('처음에 드는 돈','월세는 보증금, 매입은 자기자금과 취득세',o=>won(o.upfront)+'원')
+    +row('월세 · 대출이자','한 해',o=>won(o.pay)+'원')
+    +row('재산세 · 종부세 등','한 해',o=>won(o.hold)+'원')
+    +(any('traffic')?row('교통유발부담금','한 해 · 소유자 부담',o=>won(o.traffic)+'원'):'')
+    +row('감가상각비','한 해 · 돈은 나가지 않고 비용으로만 인정',o=>o.dep?won(o.dep)+'원':'-')
+    +row('비용 처리로 줄어드는 세금','한 해',o=>minus(o.save),'minus')
+    +(c.corp?row('대표님 소득세 증가','한 해 · 임대소득을 다른 소득과 합산',o=>o.key==='ceo'?won(o.ceoTax)+'원':'-'):'')
+    +(any('ceoHealth')?row('대표님 건강보험료','한 해 · 임대소득 2,000만 원 초과분',o=>o.key==='ceo'?won(o.ceoHealth)+'원':'-'):'')
+    +(c.yield?row('묶인 돈의 이자','한 해 · 예금 이자율 '+(c.yield*100).toFixed(1).replace(/[.]0$/,'')+'%',o=>won(o.opp)+'원'):'')
+    +row('한 해 실제 부담','',o=>won(o.year)+'원','tot')
+    +row(N+'년 동안 실제 부담','한 해 실제 부담 × '+N,o=>won(o.year*N)+'원')
+    +row('취득세','처음에 한 번',o=>won(o.acq)+'원')
+    +row('팔 때 내는 세금',c.corp?'법인은 처분이익 법인세, 개인은 양도소득세':'양도소득세',o=>money(o.saleTax))
+    +row('시세 차익','연 '+(c.grow*100).toFixed(1).replace(/[.]0$/,'')+'% 오른다고 가정',o=>o.gain?minus(o.gain):'0원','minus')
+    +row(N+'년 합계 실제 부담','',o=>won(o.total)+'원','sum',o=>o===r.best?'best':'');
+
+  $('res-sub').textContent=(c.corp?'법인':'개인사업자')+' · 매입가 '+won(c.price)+'원 · 월세 '+won(c.rent)+'원 · 보유 '+N+'년';
+
+  // 결론
+  const rent=r.o1, best=r.best;
+  const others=L.filter(o=>o!==best);
+  const nextBest=others.reduce((a,b)=>b.total<a.total?b:a);
+  $('call').innerHTML='<div class="lbl">보유 '+N+'년 동안 보면</div>'
+    +'<div class="val">'+sayName(c,best.key)+'이<br>가장 적게 듭니다</div>'
+    +'<div class="sub">'+(best===rent
+        ?sayName(c,nextBest.key)+'보다 '+won(nextBest.total-best.total)+'원 덜 듭니다.'
+        :'월세로 쓰는 쪽보다 '+won(rent.total-best.total)+'원 덜 듭니다.')
+    +' 결과는 시세 상승률 가정에 크게 좌우되니 아래 안내도 함께 보세요.</div>';
+  $('ycap').textContent=L.map(o=>colName(c,o.key)+' '+won(o.total)+'원').join(' · ');
+
+  const notes=[];
+  if(c.grow>0){
+    const z=calcOffice(Object.assign({},c,{grow:0}));
+    notes.push({warn:z.best.key!==best.key,t:'시세가 오르지 않는다고 보면(0%) <b>'+sayName(c,z.best.key)+'이 가장 적게</b> 듭니다. '
+      +L.map(o=>colName(c,o.key)+' '+won(z.list.find(x=>x.key===o.key).total)+'원').join(', ')+'입니다.'});
+  }
+  if(c.heavy) notes.push({warn:1,t:'과밀억제권역에서 설립 5년이 안 된 법인이라 취득세가 <b>9.4%('+won(r.o2.acq)+'원)</b>로 중과됩니다. 대표님이 사면 4.6%('+won(r.o3.acq)+'원)입니다.'});
+  if(r.o3){
+    notes.push({t:'대표님이 사서 회사에 임대하면 회사는 월세를 비용으로 넣고 대표님은 그 월세를 임대소득으로 받습니다. 회사 돈을 월세로 가져오는 셈이라 급여나 배당과 함께 따져 볼 만합니다. 월세는 시세에 맞춰야 하며, 시세와 다르면 부당행위로 다시 계산됩니다.'});
+    if(r.o3.inc<0) notes.push({t:'대표님 임대소득이 이자와 감가상각 때문에 한 해 '+won(-r.o3.inc)+'원 적자입니다. 부동산임대업 적자는 급여 같은 다른 소득과 합치지 못하고 15년 동안 이월됩니다.'});
+    if(r.o3.ceoHealth) notes.push({t:'대표님 임대소득이 한 해 2,000만 원을 넘어 건강보험료가 한 해 '+won(r.o3.ceoHealth)+'원 더 붙습니다.'});
+    if(!c.ceoBase) notes.push({t:'대표님 다른 종합소득 과세표준을 넣으시면 임대소득이 합쳐질 때 늘어나는 세금을 더 정확히 계산합니다.'});
+    notes.push({t:'법인이 사면 차익이 회사에 남아, 대표님이 가져가려면 배당세가 다시 붙습니다. 대표님이 사면 팔 때 개인 양도소득세에 장기보유특별공제가 적용됩니다.'});
+  }
+  if(r.hold.jb) notes.push({t:'토지 공시가격이 80억 원을 넘어 종합부동산세가 한 해 '+won(r.hold.jb)+'원 나옵니다.'});
+  if(r.traffic) notes.push({t:'교통유발부담금은 소유자가 냅니다. 월세로 쓸 때는 건물주가 내지만 관리비에 넣어 받는 건물도 있습니다.'});
+  if(c.noTax) notes.push({t:'지금 낼 세금이 없어 월세나 이자를 비용으로 넣어도 당장 줄어드는 세금이 없는 것으로 계산했습니다.'});
+  if(!c.profit&&!c.noTax) notes.push({t:(c.corp?'당기순이익':'소득금액')+'을 넣으시면 비용 처리로 줄어드는 세금까지 계산합니다.'});
+  $('verdict').innerHTML=notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+
+  const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
+  const o2=r.o2;
+  $('steps').innerHTML='<table class="stable">'
+    +srow('공시가격',c.pub?'넣어 주신 금액':'매입가 × 70%',won(r.hold.pub)+'원')
+    +srow('재산세 등','건물 0.25%, 토지 0.2~0.4% (공정시장가액비율 70%) + 지방교육세 + 도시지역분',won(r.hold.local)+'원')
+    +(r.hold.jb?srow('종합부동산세','토지 공시가격 80억 원 초과분 0.5~0.7% + 농특세',won(r.hold.jb)+'원'):'')
+    +(r.traffic?srow('교통유발부담금','면적 '+won(c.area)+'㎡ × 약 1,260원',won(r.traffic)+'원'):'')
+    +srow('대출이자','대출금 '+won(Math.min(c.loan,c.price))+' × '+(c.rate*100).toFixed(2).replace(/[.]?0+$/,'')+'%',won(r.interest)+'원')
+    +srow('취득세',c.heavy?'매입가 × 9.4% (법인 중과)':'매입가 × 4.6%',won(o2.acq)+'원')
+    +srow('감가상각비','(매입가 + 취득세) × 건물분 '+Math.round(c.bld*100)+'% ÷ 40년',won(o2.dep)+'원')
+    +srow('팔 때 시세','매입가 × (1 + '+(c.grow*100).toFixed(1).replace(/[.]0$/,'')+'%)의 '+N+'제곱',won(r.sale)+'원')
+    +srow('팔 때 장부가액','매입가 + 취득세 − 감가상각 '+N+'년',won(o2.book)+'원')
+    +srow('팔 때 내는 세금',c.corp?'처분이익(시세 − 장부가액)에 법인세':'양도차익에서 장기보유특별공제와 기본공제를 빼고 세율 적용',money(o2.saleTax))
+    +(r.o3?srow('대표님 임대소득금액','월세 − 이자 − 보유세 − 교통유발부담금 − 감가상각',money(r.o3.inc)):'')
+    +'</table>';
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  const c=read();
+  if(!c.price){ alert('매입가를 넣어 주세요.'); return; }
+  if(!c.rent){ alert('같은 사무실을 빌릴 때의 월세를 넣어 주세요.'); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&ready()) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&ready()) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('yt'),
+  ()=>({ title:'사무실 월세와 매입 비교', sub:document.getElementById('res-sub').textContent, filename:'한택스_사무실매입' })
+);
+</script>
+</body>
+</html>
