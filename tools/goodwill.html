@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영업권 평가 계산기 2026, 세무상 평가액과 감정평가 추정액 | 한택스</title>
+<meta name="description" content="법인전환이나 사업양도 때 필요한 영업권 가치를 계산합니다. 상속세 및 증여세법 산식으로 구한 세무상 평가액과 감정평가사 금액을 어림한 추정액을 함께 보여 드립니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/goodwill.html">
+<meta property="og:title" content="우리 사업의 영업권, 얼마로 평가될까요?">
+<meta property="og:description" content="세무상 평가액과 감정평가 추정액을 함께 계산하는 영업권 평가 계산기">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/goodwill.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-goodwill.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.chks{grid-column:1/-1;display:grid;gap:11px}
+.ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.ichk.off{opacity:.45}
+[hidden]{display:none!important}
+.vals{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.vals .call{margin-bottom:0}
+.call.est{background:#fff;color:var(--ink);border:2px solid var(--blue-line)}
+.call .tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:var(--seal);color:#fff;font-size:11.5px;font-weight:700;vertical-align:1px}
+.rtable td:nth-child(3),.rtable th:nth-child(3){background:#fafbfd}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable .minus td+td{color:var(--blue)}
+.rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td+td{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict .note.warn b{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:18px 22px;font-size:14px;line-height:1.9;color:var(--char)}
+.stable{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.stable td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+.stable td:first-child{width:150px;color:var(--mute);white-space:nowrap}
+.stable td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.stable td.mid{color:var(--char);font-weight:400;text-align:left}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.vals{grid-template-columns:1fr}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+.stable td:first-child{width:auto}
+.stable td.mid{font-size:12.5px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "영업권이 무엇인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "사업이 자리를 잡아 같은 재산을 가진 다른 사업보다 더 많이 버는 힘의 값입니다. 단골과 거래처, 입지, 노하우, 상호의 인지도가 여기에 들어갑니다. 장부에는 없지만 사업을 넘길 때는 따로 값을 매겨 사고팔 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세무상 평가액은 어떻게 계산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "상속세 및 증여세법이 정한 산식으로 계산합니다. 최근 3년 이익을 직전 연도 3, 2년 전 2, 3년 전 1의 비중으로 평균 낸 뒤 그 절반에서 자기자본의 10%를 뺀 금액을 한 해 초과이익으로 봅니다. 이 초과이익이 5년 동안 이어진다고 보고 10%로 할인해 더한 금액이 평가액입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "감정평가 금액은 왜 다르게 나오나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "세법 산식은 이익의 절반만 보고 기간과 할인율도 고정이지만, 감정평가사는 앞으로의 이익 전망과 업종 위험을 따져 초과이익, 할인율, 지속 기간을 직접 정합니다. 그래서 같은 사업이라도 금액이 크게 다를 수 있습니다. 이 계산기의 감정평가 금액은 실제 감정평가가 아니라, 최근 이익이 이어진다고 보고 넣으신 가정으로 어림한 추정치입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "둘 중 어느 금액으로 넘겨야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "대표님이 세운 법인처럼 특수관계인 사이의 거래는 시가로 해야 합니다. 감정평가법인의 감정가액이 있으면 그 금액을, 없으면 세무상 평가액을 시가로 봅니다. 감정가액이 더 크면 더 많은 금액을 받을 수 있지만 감정 수수료가 들고, 거래 뒤에 소급해서 받은 감정은 인정받지 못한 사례도 있으니 거래 전에 받으셔야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "영업권을 넘기면 세금은 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "법인전환 때 영업권을 꼭 평가해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "반드시 받아야 하는 것은 아니지만, 대가 없이 사업을 넘겼다가 나중에 영업권도 함께 넘긴 것으로 보아 세금이 매겨진 사례가 있습니다. 대가를 받으면 대표님은 경비를 많이 인정받는 기타소득으로 돈을 가져오고 법인은 비용 처리를 할 수 있어, 법인전환 때 많이 검토합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "이익이 적거나 적자면 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "최근 이익의 절반이 자기자본의 10%에 못 미치면 초과이익이 없어 세무상 영업권은 0원입니다. 이익에 비해 재산이 많은 사업일수록 영업권이 잘 나오지 않습니다. 최근 3년 내내 적자였다면 영업권을 평가하지 않습니다."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">영업권 평가</span>
+    <h1>우리 사업의 영업권,<br>얼마로 평가될까요?</h1>
+    <p class="lead">법인전환이나 사업을 넘길 때 필요한 영업권 가치를 두 가지로 계산합니다. 세법이 정한 산식으로 구한 세무상 평가액과, 감정평가사가 평가할 때의 금액을 어림한 추정액을 함께 보여 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>최근 3년 이익</b>
+          <label style="display:flex;align-items:center;gap:8px;margin:0;font-weight:400;font-size:13px;color:var(--mute)">금액 단위
+            <select id="i-unit" style="width:auto;padding:6px 10px;font-size:13px"><option value="1">원</option><option value="1000">천원</option><option value="1000000">백만원</option></select>
+          </label>
+        </div>
+        <div>
+          <label for="i-ni1">한 해 이익 <small>직전 연도</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="개인사업자는 종합소득세 신고서의 사업소득금액을, 법인은 손익계산서의 당기순이익을 넣어 주세요. 적자였다면 앞에 - 를 붙여 주세요. 개인사업자에서 법인으로 바뀐 경우 개인사업자 때 이익도 이어서 넣습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-ni1" inputmode="text" class="signed"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-ni2">한 해 이익 <small>2년 전</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="사업한 지 3년이 안 됐으면 있는 해만 넣고 나머지는 비워 두세요. 있는 해만으로 평균을 냅니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-ni2" inputmode="text" class="signed"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-ni3">한 해 이익 <small>3년 전</small></label>
+          <div class="unit"><input type="text" id="i-ni3" inputmode="text" class="signed"><span class="u">원</span></div>
+        </div>
+        <div></div>
+
+        <div class="divider"><b>평가하는 날의 재산</b><span>사업에 쓰는 재산과 빚만 넣어 주세요</span></div>
+        <div>
+          <label for="i-assets">자산 <small>사업용</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재무상태표의 자산총계입니다. 개인사업자는 사업에 쓰는 예금, 매출채권, 재고, 시설, 보증금 같은 재산만 넣어 주세요. 영업권은 빼고 넣습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-assets" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-debt">부채 <small>사업용</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재무상태표의 부채총계입니다. 사업 때문에 진 빚(대출, 외상값, 미지급금 등)만 넣어 주세요. 부채가 없으면 0을 넣어 주세요. 자산에서 부채를 뺀 자기자본이 클수록 영업권은 작아집니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-debt" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+
+        <div class="divider"><b>감정평가 추정에 쓸 가정</b><span>실제 감정평가와 다를 수 있습니다</span></div>
+        <div>
+          <label for="i-ceo">대표님 인건비 상당액 <small>한 해</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="개인사업자의 이익에는 대표님이 직접 일한 대가가 섞여 있어, 감정평가에서는 적정 급여만큼 빼고 초과이익을 보는 경우가 많습니다. 법인으로 바꾼 뒤 받으실 연봉을 넣어 보세요. 법인은 급여가 이미 비용에 들어가 있으니 비워 두세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-ceo" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-rate">할인율 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="앞으로 벌 초과이익을 지금 가치로 바꿀 때 쓰는 비율입니다. 사업이 불안정할수록 높게 잡아 영업권이 작아집니다. 감정평가에서는 업종 위험을 따져 정하며, 작은 사업은 10~15% 정도가 많습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-rate" inputmode="decimal" value="12"><span>%</span></div>
+        </div>
+        <div>
+          <label for="i-years">초과이익이 이어지는 기간 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="지금처럼 남보다 많이 버는 상태가 몇 년 이어질지 정하는 값입니다. 세법은 5년으로 고정하고, 감정평가에서는 단골, 입지, 계약 관계를 보고 감정평가사가 정합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-years" inputmode="numeric" value="5"><span>년</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">영업권 평가하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2>영업권 평가액</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="vals">
+          <div class="call" id="call-tax"></div>
+          <div class="call est" id="call-est"></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>구분</th><th>세무상 평가</th><th>감정평가 추정</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <details class="steps">
+          <summary>계산 과정 자세히 보기</summary>
+          <div class="body" id="steps"></div>
+        </details>
+        <div class="ask">
+          <p><b>법인전환 때 영업권을 얼마로 넘길지는 세금과 함께 정해야 합니다.</b><br>감정평가를 받을지, 세무상 평가액으로 할지, 영업권 대가를 받으면 대표님과 법인의 세금이 어떻게 달라지는지 함께 검토합니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>영업권이 무엇인가요?</summary>
+          <div class="a">사업이 자리를 잡아 같은 재산을 가진 다른 사업보다 더 많이 버는 힘의 값입니다. 단골과 거래처, 입지, 노하우, 상호의 인지도가 여기에 들어갑니다. 장부에는 없지만 사업을 넘길 때는 따로 값을 매겨 사고팔 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>세무상 평가액은 어떻게 계산하나요?</summary>
+          <div class="a">상속세 및 증여세법이 정한 산식으로 계산합니다. 최근 3년 이익을 직전 연도 3, 2년 전 2, 3년 전 1의 비중으로 평균 낸 뒤 그 절반에서 자기자본의 10%를 뺀 금액을 한 해 초과이익으로 봅니다. 이 초과이익이 5년 동안 이어진다고 보고 10%로 할인해 더한 금액이 평가액입니다.</div>
+        </details>
+        <details>
+          <summary>감정평가 금액은 왜 다르게 나오나요?</summary>
+          <div class="a">세법 산식은 이익의 절반만 보고 기간과 할인율도 고정이지만, 감정평가사는 앞으로의 이익 전망과 업종 위험을 따져 초과이익, 할인율, 지속 기간을 직접 정합니다. 그래서 같은 사업이라도 금액이 크게 다를 수 있습니다. 이 계산기의 감정평가 금액은 실제 감정평가가 아니라, 최근 이익이 이어진다고 보고 넣으신 가정으로 어림한 추정치입니다.</div>
+        </details>
+        <details>
+          <summary>둘 중 어느 금액으로 넘겨야 하나요?</summary>
+          <div class="a">대표님이 세운 법인처럼 특수관계인 사이의 거래는 시가로 해야 합니다. 감정평가법인의 감정가액이 있으면 그 금액을, 없으면 세무상 평가액을 시가로 봅니다. 감정가액이 더 크면 더 많은 금액을 받을 수 있지만 감정 수수료가 들고, 거래 뒤에 소급해서 받은 감정은 인정받지 못한 사례도 있으니 거래 전에 받으셔야 합니다.</div>
+        </details>
+        <details>
+          <summary>영업권을 넘기면 세금은 어떻게 되나요?</summary>
+          <div class="a">영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다.</div>
+        </details>
+        <details>
+          <summary>법인전환 때 영업권을 꼭 평가해야 하나요?</summary>
+          <div class="a">반드시 받아야 하는 것은 아니지만, 대가 없이 사업을 넘겼다가 나중에 영업권도 함께 넘긴 것으로 보아 세금이 매겨진 사례가 있습니다. 대가를 받으면 대표님은 경비를 많이 인정받는 기타소득으로 돈을 가져오고 법인은 비용 처리를 할 수 있어, 법인전환 때 많이 검토합니다.</div>
+        </details>
+        <details>
+          <summary>이익이 적거나 적자면 어떻게 되나요?</summary>
+          <div class="a">최근 이익의 절반이 자기자본의 10%에 못 미치면 초과이익이 없어 세무상 영업권은 0원입니다. 이익에 비해 재산이 많은 사업일수록 영업권이 잘 나오지 않습니다. 최근 3년 내내 적자였다면 영업권을 평가하지 않습니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용입니다. 실제 평가액은 평가하는 날 현재의 장부와 세무조정 내용에 따라 달라집니다.<br>
+        · 세무상 평가액은 상속세 및 증여세법 시행령 제59조의 산식(이익의 50%, 자기자본의 10%, 5년, 10% 할인)으로 계산했습니다.<br>
+        · <b>감정평가 추정액은 실제 감정평가가 아닙니다.</b> 최근 3년 평균 이익이 그대로 이어진다고 보고, 넣으신 대표님 인건비와 할인율, 기간으로 어림한 추정치입니다. 실제 감정평가액은 감정평가법인이 사업 전망과 업종 위험을 따져 정하므로 크게 달라질 수 있습니다.<br>
+        · 자기자본은 넣으신 자산에서 부채를 뺀 금액으로 보았고, 자산을 시가로 다시 평가하는 과정은 반영하지 않았습니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="incorporation.html">법인전환 계산기</a>
+        <a href="stock-value.html">비상장주식 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 영업권 평가 ───────────────────────────── */
+// 세무상 평가: 상증법 시행령 제59조 (이익의 50% − 자기자본 × 10%를 5년 동안 10%로 할인)
+const TAX_SHARE=0.5, EQ_RATE=0.10, TAX_DISC=0.10, TAX_YEARS=5;
+const annuity=(r,n)=>r>0?(1-Math.pow(1+r,-n))/r:n;   // n년 동안 해마다 1원씩 받는 돈의 지금 가치
+
+// 최근 이익의 가중평균: 3년이면 3:2:1, 2년이면 2:1, 1년이면 그해 이익
+function wAvg(ni){
+  const n=ni.length, w=ni.map((v,i)=>n-i);
+  return ni.reduce((s,v,i)=>s+v*w[i],0)/w.reduce((a,b)=>a+b,0);
+}
+
+function calcGoodwill(c){
+  const avg=wAvg(c.ni);
+  const equity=Math.max(0,c.assets-c.debt);           // 자기자본 (마이너스면 0)
+  const normal=equity*EQ_RATE;                        // 자기자본이 보통 벌어들이는 이익
+  const allLoss=c.ni.every(v=>v<=0);
+  // 세무상 평가
+  const taxBase=avg*TAX_SHARE;
+  const taxExcess=allLoss?0:Math.max(0,taxBase-normal);
+  const taxFactor=annuity(TAX_DISC,TAX_YEARS);
+  const tax=Math.round(taxExcess*taxFactor);
+  // 감정평가 추정 (최근 평균 이익이 이어진다고 보고, 대표님 인건비를 뺀 이익 전체로 초과이익을 봅니다)
+  const estBase=avg-c.ceo;
+  const estExcess=allLoss?0:Math.max(0,estBase-normal);
+  const estFactor=annuity(c.rate,c.years);
+  const est=Math.round(estExcess*estFactor);
+  return {avg,equity,normal,allLoss,taxBase,taxExcess,taxFactor,tax,estBase,estExcess,estFactor,est};
+}
+
+/* ── 입력 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const r4=v=>Math.round(v/1e4)*1e4;
+const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
+  return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const pctOf=s=>parseFloat(String(s).replace(/[^0-9.]/g,''))||0;
+// 적자 표기 -, △, (괄호)를 모두 음수로 읽습니다
+const snum=s=>{ const t=String(s).trim(); const neg=/^[-△▲(]/.test(t)||/^\(.*\)$/.test(t); const v=num(t); return neg?-v:v; };
+function fmt(el,signed){
+  el.addEventListener('input',()=>{
+    const t=el.value.trim(), neg=signed&&/^[-△▲(]/.test(t), v=num(t);
+    el.value=v?(neg?'-':'')+v.toLocaleString('ko-KR'):(neg?'-':/0/.test(t)?'0':'');   // 0도 입력으로 남깁니다(부채 0 등)
+  });
+}
+['i-assets','i-debt','i-ceo'].forEach(id=>fmt($(id),false));
+document.querySelectorAll('.signed').forEach(el=>fmt(el,true));
+$('i-unit').addEventListener('change',()=>{
+  const u=$('i-unit').selectedOptions[0].text;
+  document.querySelectorAll('.u').forEach(s=>s.textContent=u);
+});
+
+function read(){
+  const k=Number($('i-unit').value);
+  // 비워 둔 해는 없는 해로 봅니다 (직전 연도부터 이어서)
+  const ni=[];
+  for(const id of ['i-ni1','i-ni2','i-ni3']){ if(!$(id).value.trim()) break; ni.push(snum($(id).value)*k); }
+  return {ni,assets:num($('i-assets').value)*k,debt:num($('i-debt').value)*k,ceo:num($('i-ceo').value)*k,
+    rate:pctOf($('i-rate').value)/100,years:Math.max(1,Math.round(num($('i-years').value)||5))};
+}
+function check(c){
+  if(!c.ni.length) return '직전 연도 이익을 넣어 주세요.';
+  if(!$('i-assets').value.trim()) return '사업용 자산을 넣어 주세요.';
+  if(!$('i-debt').value.trim()) return '사업용 부채를 넣어 주세요. 부채가 없으면 0을 넣어 주세요.';
+  return '';
+}
+const shown=()=>$('res').style.display==='block';
+
+/* ── 화면 ─────────────────────────────────── */
+function render(){
+  const c=read(), r=calcGoodwill(c);
+  const pct=v=>(v*100).toFixed(1).replace(/[.]0$/,'')+'%';
+  const fac=v=>v.toFixed(4);
+  const yrs=c.ni.length;
+  const avgWords=yrs===3?'직전 3 : 2년 전 2 : 3년 전 1':yrs===2?'직전 2 : 2년 전 1':'직전 연도 이익';
+
+  $('call-tax').innerHTML='<div class="lbl">세무상 평가액</div><div class="val">'+(r.tax?manwon(r.tax).replace(/ ?원$/,'')+'<small>원</small>':'0<small>원</small>')+'</div>'
+    +'<div class="sub">상속세 및 증여세법 산식</div>';
+  $('call-est').innerHTML='<div class="lbl">감정평가 추정액 <span class="tag">추정치</span></div><div class="val">'+(r.est?manwon(r.est).replace(/ ?원$/,'')+'<small>원</small>':'0<small>원</small>')+'</div>'
+    +'<div class="sub">실제 감정평가가 아닌 어림값입니다</div>';
+
+  const row=(l,sm,a,b,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+a+'</td><td>'+b+'</td></tr>';
+  $('rt-body').innerHTML=
+      row('최근 이익 가중평균',avgWords,won(r.avg)+'원',won(r.avg)+'원')
+    +row('초과이익에 반영하는 이익','세법은 절반만 봅니다',won(r.taxBase)+'원 <small>50%</small>',won(r.estBase)+'원'+(c.ceo?'<small>대표님 인건비 '+won(c.ceo)+'원 차감</small>':'<small>100%</small>'))
+    +row('자기자본의 보통 이익','자기자본 '+won(r.equity)+'원 × 10%','− '+won(r.normal)+'원','− '+won(r.normal)+'원','minus')
+    +row('한 해 초과이익','',won(r.taxExcess)+'원',won(r.estExcess)+'원','sum')
+    +row('이어지는 기간과 할인율','',TAX_YEARS+'년 · 10%',c.years+'년 · '+pct(c.rate))
+    +row('현재가치 계수','기간 동안 해마다 1원의 지금 가치',fac(r.taxFactor),fac(r.estFactor))
+    +'<tr class="tot"><td>영업권 평가액</td><td>'+won(r.tax)+'원</td><td>'+won(r.est)+'원<small>추정치</small></td></tr>';
+
+  $('res-sub').textContent='최근 '+yrs+'년 이익 기준 · 자기자본 '+manwon(r.equity);
+
+  const head=r.tax||r.est
+    ?'세무상 평가액은 <b>'+manwon(r.tax)+'</b>, 감정평가 추정액은 <b>'+manwon(r.est)+'</b>입니다.'
+    :'두 방법 모두 영업권이 나오지 않습니다.';
+  const notes=[{warn:1,t:'<b>감정평가 추정액은 실제 감정평가가 아닙니다.</b> 최근 이익이 그대로 이어진다고 보고 넣으신 가정으로 어림한 값이며, 실제 감정평가액은 감정평가법인이 사업 전망과 업종 위험을 따져 정하므로 크게 달라질 수 있습니다.'}];
+  if(r.allLoss) notes.push({t:'최근 이익이 모두 적자여서 영업권을 평가하지 않습니다.'});
+  else if(!r.taxExcess) notes.push({t:'최근 이익의 절반('+manwon(r.taxBase)+')이 자기자본의 10%('+manwon(r.normal)+')에 못 미쳐 세무상 영업권은 0원입니다. 이익에 비해 재산이 많은 사업은 영업권이 나오지 않습니다.'});
+  if(r.est>r.tax&&r.tax>0) notes.push({t:'감정평가 추정액이 세무상 평가액의 약 '+(r.est/r.tax).toFixed(1)+'배입니다. 세법 산식은 이익의 절반만 보기 때문에 감정평가가 대개 더 크게 나옵니다. 대표님이 세운 법인에 넘길 때는 감정가액이 있으면 그 금액을, 없으면 세무상 평가액을 시가로 봅니다.'});
+  if(c.ceo) notes.push({t:'감정평가 추정에서는 대표님 인건비 '+manwon(c.ceo)+'을 이익에서 뺐습니다. 법인으로 바뀐 뒤 받으실 연봉이 클수록 초과이익과 영업권은 작아집니다.'});
+  else notes.push({t:'개인사업자라면 대표님 인건비 상당액을 넣어 보세요. 감정평가에서는 대표님이 직접 일한 대가를 이익에서 빼고 보는 경우가 많아 추정액이 줄어듭니다.'});
+  if(r.tax||r.est) notes.push({t:'영업권만 법인에 넘기고 대가를 받으면 대표님은 받은 금액의 60%를 경비로 빼는 기타소득으로 신고하고(받을 때 8.8% 원천징수), 법인은 5년 동안 나눠 비용으로 처리합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다.'});
+  $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+
+  const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
+  const avgCalc=yrs===3?'('+won(c.ni[0])+' × 3 + '+won(c.ni[1])+' × 2 + '+won(c.ni[2])+') ÷ 6'
+    :yrs===2?'('+won(c.ni[0])+' × 2 + '+won(c.ni[1])+') ÷ 3':won(c.ni[0]);
+  $('steps').innerHTML='<table class="stable">'
+    +srow('가중평균 이익',avgCalc,won(r.avg)+'원')
+    +srow('자기자본','자산 '+won(c.assets)+' − 부채 '+won(c.debt),won(r.equity)+'원')
+    +srow('<b>세무상 평가</b>','','')
+    +srow('한 해 초과이익','가중평균 × 50% − 자기자본 × 10%',won(r.taxExcess)+'원')
+    +srow('평가액','초과이익 × '+fac(r.taxFactor)+' (5년, 10% 할인)',won(r.tax)+'원')
+    +srow('<b>감정평가 추정</b>','','')
+    +srow('한 해 초과이익','가중평균'+(c.ceo?' − 대표님 인건비':'')+' − 자기자본 × 10%',won(r.estExcess)+'원')
+    +srow('추정액','초과이익 × '+fac(r.estFactor)+' ('+c.years+'년, '+pct(c.rate)+' 할인)',won(r.est)+'원')
+    +'</table>';
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  const msg=check(read());
+  if(msg){ alert(msg); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&!check(read())) render(); });
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!check(read())) render(); });
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'영업권 평가액', sub:document.getElementById('res-sub').textContent, filename:'한택스_영업권평가' })
+);
+</script>
+</body>
+</html>
