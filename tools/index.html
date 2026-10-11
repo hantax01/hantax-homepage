@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>세금 계산기 | 한택스</title>
-<meta name="description" content="법인전환, 대표 연봉과 배당, 증여세, 업무용 차량, 퇴직금, 급여 실수령액까지 대표님들이 자주 물으시는 세금을 미리 계산해 보는 세금 계산기입니다.">
+<meta name="description" content="부가세·법인세·종합소득세, 직원 채용 비용과 퇴직금, 연말정산, 법인전환과 영업권, 증여세까지 대표님들이 자주 물으시는 세금을 금액만 넣으면 계산 과정과 함께 보여 주는 세무사의 세금 계산기입니다. 2026년 세법 기준입니다.">
 <link rel="canonical" href="https://www.hantax47.com/tools/">
 <meta property="og:title" content="세금 계산기">
 <meta property="og:description" content="법인전환·연봉과 배당·증여세·업무용 차량·퇴직금·급여 실수령액을 숫자로 먼저 확인해 보세요">
@@ -13,6 +13,18 @@
 <meta property="og:image" content="https://www.hantax47.com/assets/og.png?v=3">
 <meta property="og:site_name" content="한택스">
 <link rel="icon" href="../assets/favicon.png?v=4">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"계산기 결과로 바로 신고해도 되나요?","acceptedAnswer":{"@type":"Answer","text":"계산기는 입력하신 숫자에 올해 세율과 공제를 적용해 원 단위까지 계산합니다. 다만 실제 신고는 장부와 증빙을 바탕으로 하고, 감면과 공제는 업종이나 상시근로자 수 같은 요건을 확인해야 해서 금액이 달라질 수 있습니다. 신고 전에는 세무사와 숫자를 맞춰 보세요."}},
+    {"@type":"Question","name":"입력한 금액이나 올린 파일이 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"저장되지 않습니다. 계산은 보고 계신 화면 안에서만 이루어지고, 연말정산 계산기에 올리는 원천징수영수증 PDF도 서버로 보내지 않고 화면에서 읽기만 합니다."}},
+    {"@type":"Question","name":"다른 사이트 계산기와 결과가 다른 이유는 무엇인가요?","acceptedAnswer":{"@type":"Answer","text":"먼저 어느 해 세법을 기준으로 했는지 확인해 보세요. 세율과 4대보험 요율, 공제 한도는 해마다 바뀝니다. 한택스 계산기는 2026년 기준으로 맞춰 두었고, 세법이 바뀌면 세무사가 직접 고칩니다."}},
+    {"@type":"Question","name":"한택스 고객이 아니어도 쓸 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 회원가입이나 연락처 입력 없이 누구나 쓰실 수 있습니다. 계산해 보신 결과를 두고 상담이 필요하시면 카카오톡이나 상담 신청서로 남겨 주세요."}}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
@@ -32,10 +44,16 @@
 .tgroup.first{margin-top:0}
 .tgroup h2{font-family:var(--sans);font-size:19px;font-weight:800;letter-spacing:-.01em;margin:0}
 .tgroup span{font-size:13.5px;color:var(--mute)}
+.why{max-width:900px;margin:22px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.why li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:14px;color:var(--mute);line-height:1.7}
+.why b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.tools-faq{max-width:900px;margin:44px auto 0}
+.tools-faq h2{font-family:var(--sans);font-size:19px;font-weight:800;letter-spacing:-.01em;margin:16px 0 4px}
 .note{max-width:900px;margin:34px auto 0;font-size:13px;color:var(--mute);line-height:1.8;
   padding-top:20px;border-top:1px solid var(--line)}
 @media(max-width:720px){
 .tools{grid-template-columns:1fr;gap:16px}
+.why{grid-template-columns:1fr}
 .tool{padding:22px 24px}
 .tool b{font-size:19px}
 }
@@ -64,6 +82,11 @@
     <span class="eyebrow">세무설계</span>
     <h1>세금 계산기</h1>
     <p class="lead">대표님들이 자주 물으시는 세금 문제를 미리 숫자로 확인해 보실 수 있도록 만들었습니다. 금액을 넣으시면 계산 과정까지 볼 수 있습니다.</p>
+    <ul class="why">
+      <li><b>상담 질문을 숫자로</b>고객분들이 자주 물으시는 질문을 어림값이 아니라, 올해 세율과 공제를 적용한 금액으로 보여 드리려고 만들었습니다.</li>
+      <li><b>누구나 바로</b>한택스 고객이 아니어도 회원가입이나 연락처 입력 없이 쓰실 수 있습니다. 입력한 숫자는 화면 안에서만 계산합니다.</li>
+      <li><b>바뀐 세법 반영</b>세율과 4대보험 요율이 바뀌면 세무사가 직접 계산기를 고칩니다. 지금은 2026년 기준입니다.</li>
+    </ul>
   </div>
 </section>
 
@@ -203,8 +226,16 @@
 
     <p class="note">
       계산 결과는 참고용입니다. 실제 세액은 회사의 자산 구성, 그동안 쌓인 이익잉여금, 받고 계신 공제와 감면에 따라 달라집니다.
-      결과 화면 아래 <b>결과를 이미지로 저장</b>을 누르시면 표를 그대로 저장하거나 카카오톡으로 보내실 수 있습니다.
+      결과 화면의 <b>이미지 저장</b>을 누르시면 표를 그대로 저장하거나 카카오톡으로 보내실 수 있습니다.
     </p>
+
+    <section class="faq tools-faq">
+      <h2>자주 묻는 질문</h2>
+      <details><summary>계산기 결과로 바로 신고해도 되나요?</summary><p>계산기는 입력하신 숫자에 올해 세율과 공제를 적용해 원 단위까지 계산합니다. 다만 실제 신고는 장부와 증빙을 바탕으로 하고, 감면과 공제는 업종이나 상시근로자 수 같은 요건을 확인해야 해서 금액이 달라질 수 있습니다. 신고 전에는 세무사와 숫자를 맞춰 보세요.</p></details>
+      <details><summary>입력한 금액이나 올린 파일이 저장되나요?</summary><p>저장되지 않습니다. 계산은 보고 계신 화면 안에서만 이루어지고, 연말정산 계산기에 올리는 원천징수영수증 PDF도 서버로 보내지 않고 화면에서 읽기만 합니다.</p></details>
+      <details><summary>다른 사이트 계산기와 결과가 다른 이유는 무엇인가요?</summary><p>먼저 어느 해 세법을 기준으로 했는지 확인해 보세요. 세율과 4대보험 요율, 공제 한도는 해마다 바뀝니다. 한택스 계산기는 2026년 기준으로 맞춰 두었고, 세법이 바뀌면 세무사가 직접 고칩니다.</p></details>
+      <details><summary>한택스 고객이 아니어도 쓸 수 있나요?</summary><p>네. 회원가입이나 연락처 입력 없이 누구나 쓰실 수 있습니다. 계산해 보신 결과를 두고 상담이 필요하시면 카카오톡이나 상담 신청서로 남겨 주세요.</p></details>
+    </section>
 
     <div class="art-cta" style="margin-top:40px">
       <p>우리 회사는 어떻게 하는 게 좋을까요?</p>
