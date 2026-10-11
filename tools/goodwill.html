@@ -319,33 +319,33 @@
 
         <div class="part2" id="part2">
           <div class="reshead">
-            <div><h2>영업권을 법인에 넘기면</h2><p class="sub" id="tx-sub"></p></div>
-            <button type="button" class="savebtn" id="save-img2">이미지 저장</button>
+            <div><h2>영업권으로 가져갈 때와 급여로 가져갈 때</h2><p class="sub" id="tx-sub"></p></div>
+            <button type="button" class="savebtn" id="save-img3">이미지 저장</button>
           </div>
           <div class="vals">
-            <div class="call" id="call-pit"></div>
-            <div class="call est" id="call-cit"></div>
+            <div class="call" id="call-gap"></div>
+            <div class="call est" id="call-keep"></div>
           </div>
           <div style="overflow-x:auto">
-            <table class="rtable" id="rt2">
-              <thead><tr><th>구분</th><th>금액</th></tr></thead>
-              <tbody id="rt2-body"></tbody>
+            <table class="rtable" id="rt3">
+              <thead><tr><th>구분</th><th>영업권 대가로</th><th>급여로 5년 나눠</th></tr></thead>
+              <tbody id="rt3-body"></tbody>
             </table>
           </div>
-          <div class="verdict" id="tx-verdict"></div>
+          <div class="verdict" id="cmp-verdict"></div>
 
           <div class="cmp">
             <div class="reshead">
-              <div><h3>급여로 가져갈 때와 비교</h3><p class="sub" id="cmp-sub"></p></div>
-              <button type="button" class="savebtn" id="save-img3">이미지 저장</button>
+              <div><h3>영업권 대가의 세금 자세히</h3></div>
+              <button type="button" class="savebtn" id="save-img2">이미지 저장</button>
             </div>
             <div style="overflow-x:auto">
-              <table class="rtable" id="rt3">
-                <thead><tr><th>구분</th><th>영업권 대가로</th><th>급여로 5년 나눠</th></tr></thead>
-                <tbody id="rt3-body"></tbody>
+              <table class="rtable" id="rt2">
+                <thead><tr><th>구분</th><th>금액</th></tr></thead>
+                <tbody id="rt2-body"></tbody>
               </table>
             </div>
-            <div class="verdict" id="cmp-verdict"></div>
+            <div class="verdict" id="tx-verdict"></div>
           </div>
         </div>
         <details class="steps">
@@ -623,12 +623,7 @@ function renderTransfer(c,r){
   if(!t.price) return;
   const pickName=c.pick==='est'?'감정평가 추정액':c.pick==='own'?'직접 넣은 금액':'세무상 평가액';
   const rate=v=>(v*100).toFixed(1).replace(/[.]0$/,'')+'%';
-  const big=v=>manwon(v).replace(/ ?원$/,'')+'<small>원</small>';
-  $('tx-sub').textContent=pickName+' '+manwon(t.price)+'에 넘길 때';
-  $('call-pit').innerHTML='<div class="lbl">대표님 소득세'+(t.health?'와 건강보험료':'')+'</div><div class="val">'+big(t.pit+t.health)+'</div>'
-    +'<div class="sub">지방소득세 포함 · 받는 금액의 '+rate((t.pit+t.health)/t.price)+'</div>';
-  $('call-cit').innerHTML='<div class="lbl">법인세 절감 <small style="font-size:12px">5년 합계</small></div><div class="val">'+(t.corpSave?big(t.corpSave):'0<small>원</small>')+'</div>'
-    +'<div class="sub">해마다 '+manwon(t.yearSave)+'씩 덜 냅니다</div>';
+  $('tx-sub').textContent=pickName+' '+manwon(t.price)+'을 대표님이 가져갈 때';
 
   const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
   const sec=l=>'<tr class="sec"><td>'+l+'</td><td></td></tr>';
@@ -648,7 +643,7 @@ function renderTransfer(c,r){
     +row('한 해 상각비','영업권 대가 ÷ 5년',won(t.amort)+'원')
     +row('한 해 법인세 절감','과세표준 '+won(t.corpBase)+'원 기준 · 지방소득세 포함','−&nbsp;'+won(t.yearSave)+'원','minus')
     +row('5년 법인세 절감','','−&nbsp;'+won(t.corpSave)+'원','minus')
-    +'<tr class="tot"><td>순 세부담<small>대표님 세금'+(t.health?'·건강보험료':'')+' − 법인세 절감</small></td><td>'+(t.net<0?'−&nbsp;'+won(-t.net):won(t.net))+'원<small>받는 금액의 '+rate(t.net/t.price)+'</small></td></tr>';
+    +row('순 세부담','대표님 세금'+(t.health?'·건강보험료':'')+' − 법인세 절감',(t.net<0?'−&nbsp;'+won(-t.net):won(t.net))+'원<small>받는 금액의 '+rate(t.net/t.price)+'</small>','sum');
 
   const notes=[];
   if(c.pick==='est') notes.push({warn:1,t:'감정평가 추정액으로 계산했습니다. 실제로 이 금액에 넘기려면 거래 전에 감정평가를 받아야 하고, 감정가액이 달라지면 세금도 달라집니다.'});
@@ -668,7 +663,13 @@ function renderCompare(c,t){
   const W=v=>won(v)+'원', M=v=>v?'−&nbsp;'+won(v)+'원':'0원';
   const row=(l,sm,a,b,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+a+'</td><td>'+b+'</td></tr>';
   const better=t.net<=g.net?'gw':'pay';
-  $('cmp-sub').textContent='같은 '+manwon(t.price)+'을 대표님이 가져갈 때';
+  const gap=Math.abs(g.net-t.net), keepGap=t.keep-g.keep;
+  const big=v=>manwon(v).replace(/ ?원$/,'')+'<small>원</small>';
+  $('call-gap').innerHTML=better==='gw'
+    ?'<div class="lbl">영업권으로 가져가시면 급여보다</div><div class="val">'+big(gap)+'</div><div class="sub">세금과 보험료를 덜 냅니다 (5년 합계, 법인세 절감 반영)</div>'
+    :'<div class="lbl">이 조건에서는 급여로 받으시면</div><div class="val">'+big(gap)+'</div><div class="sub">세금과 보험료를 덜 냅니다 (5년 합계, 법인세 절감 반영)</div>';
+  $('call-keep').innerHTML='<div class="lbl">대표님 손에 남는 돈</div><div class="val">'+big(Math.abs(keepGap))+'</div>'
+    +'<div class="sub">'+(keepGap>=0?'영업권으로 받을 때 더 많습니다':'급여로 받을 때 더 많습니다')+'<br>영업권 '+manwon(t.keep)+' · 급여 '+manwon(g.keep)+'</div>';
   $('rt3-body').innerHTML=
       row('대표님이 받는 돈','',W(t.price)+'<small>한 번에</small>',W(t.price)+'<small>해마다 '+won(g.extra)+'원</small>','sum')
     +row('대표님 소득세','지방소득세 포함',W(t.pit)+'<small>기타소득, 60% 경비</small>',W(g.tax)+'<small>근로소득, 5년 합계</small>')
@@ -676,17 +677,18 @@ function renderCompare(c,t){
     +row('대표님 손에 남는 돈','',W(t.keep),W(g.keep),'sum')
     +row('회사가 내는 4대보험','대표이사는 고용·산재 없음','0원',W(g.corpIns))
     +row('법인세 절감','5년 합계 · 지방소득세 포함',M(t.corpSave),M(g.corpSave),'minus')
-    +'<tr class="tot"><td>순 세부담<small>대표님 세금·보험 + 회사 보험 − 법인세 절감</small></td><td>'+W(t.net)+(better==='gw'?'<small>더 적음</small>':'')+'</td><td>'+W(g.net)+(better==='pay'?'<small>더 적음</small>':'')+'</td></tr>';
+    +row('순 세부담','대표님 세금·보험 + 회사 보험 − 법인세 절감',W(t.net),W(g.net),'sum')
+    +'<tr class="tot"><td>'+(better==='gw'?'영업권이 덜 내는 금액':'급여가 덜 내는 금액')+'<small>두 순 세부담의 차이</small></td>'
+      +(better==='gw'?'<td>'+W(gap)+'</td><td>-</td>':'<td>-</td><td>'+W(gap)+'</td>')+'</tr>';
 
-  const gap=Math.abs(g.net-t.net);
   const notes=[
     {t:'급여는 영업권 상각과 같은 5년 동안 해마다 '+manwon(g.extra)+'씩 더 받는다고 보고 비교했습니다. 영업권 대가는 한 번에 받는 대신 그해 세율이 높아지고, 급여는 나눠 받아 세율이 덜 오르지만 4대보험이 붙습니다.'},
     {t:'대표님 다른 소득 과세표준이 5년 동안 같다고 보았고, 4대보험 상한은 대표님 인건비 상당액('+(c.ceo?manwon(c.ceo):'넣지 않음')+')을 지금 연봉으로 보고 따졌습니다.'}];
   if(c.ceo/12<W_PENSION_MAX) notes.splice(1,0,{t:'급여로 늘어나는 국민연금은 나중에 연금으로 돌아오므로 모두 사라지는 돈은 아닙니다.'});
   if(!c.ceo) notes.push({t:'대표님 인건비 상당액을 넣으시면 국민연금 상한이 반영되어 급여 쪽 보험료가 더 정확해집니다.'});
   $('cmp-verdict').innerHTML=(better==='gw'
-      ?'영업권 대가로 가져가시면 급여로 받을 때보다 순 세부담이 <b>'+manwon(gap)+'</b> 적고, 대표님 손에 남는 돈은 '+manwon(Math.abs(t.keep-g.keep))+' '+(t.keep>=g.keep?'많습니다.':'적습니다.')
-      :'이 조건에서는 급여로 나눠 받는 쪽이 순 세부담이 <b>'+manwon(gap)+'</b> 적습니다. 대표님 다른 소득이 적어 급여 세율이 낮을 때 이렇게 나옵니다.')
+      ?'영업권 대가로 가져가시면 순 세부담이 '+manwon(t.net)+'으로, 급여로 받을 때('+manwon(g.net)+')보다 <b>'+manwon(gap)+'</b> 적습니다. 대표님 손에 남는 돈은 '+manwon(Math.abs(keepGap))+' '+(keepGap>=0?'많습니다.':'적습니다.')
+      :'이 조건에서는 급여로 나눠 받는 쪽이 순 세부담이 '+manwon(g.net)+'으로, 영업권('+manwon(t.net)+')보다 <b>'+manwon(gap)+'</b> 적습니다. 대표님 다른 소득이 적어 급여 세율이 낮을 때 이렇게 나옵니다.')
     +notes.map(n=>'<span class="note">'+n.t+'</span>').join('');
 }
 
@@ -705,12 +707,12 @@ document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!c
 HantaxImage.attach(
   document.getElementById('save-img3'),
   ()=>document.getElementById('rt3'),
-  ()=>({ title:'영업권과 급여 비교', sub:document.getElementById('cmp-sub').textContent, filename:'한택스_영업권급여비교' })
+  ()=>({ title:'영업권과 급여 비교', sub:document.getElementById('tx-sub').textContent, filename:'한택스_영업권급여비교' })
 );
 HantaxImage.attach(
   document.getElementById('save-img2'),
   ()=>document.getElementById('rt2'),
-  ()=>({ title:'영업권을 법인에 넘기면', sub:document.getElementById('tx-sub').textContent, filename:'한택스_영업권세금' })
+  ()=>({ title:'영업권 대가의 세금', sub:document.getElementById('tx-sub').textContent, filename:'한택스_영업권세금' })
 );
 HantaxImage.attach(
   document.getElementById('save-img'),
