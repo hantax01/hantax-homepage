@@ -54,6 +54,8 @@
 .rtable td:nth-child(3),.rtable th:nth-child(3){background:#fafbfd}
 .part2{margin-top:38px;padding-top:30px;border-top:1px solid var(--line)}
 .rtable tr.sec td{background:var(--soft);font-weight:800;color:var(--ink);font-size:13.5px;padding-top:9px;padding-bottom:9px}
+.cmp{margin-top:34px}
+.cmp h3{font-size:18px;color:var(--ink);margin-bottom:4px}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:34px}
 .reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
@@ -170,7 +172,7 @@
    "name": "영업권을 넘기면 세금은 어떻게 되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다. 계산기 아래쪽에서 대표님 소득세와 법인세 절감액을 함께 계산해 드립니다."
+    "text": "영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다. 계산기 아래쪽에서 대표님 소득세와 법인세 절감액, 같은 금액을 급여로 받을 때와의 비교까지 계산해 드립니다."
    }
   },
   {
@@ -331,6 +333,20 @@
             </table>
           </div>
           <div class="verdict" id="tx-verdict"></div>
+
+          <div class="cmp">
+            <div class="reshead">
+              <div><h3>급여로 가져갈 때와 비교</h3><p class="sub" id="cmp-sub"></p></div>
+              <button type="button" class="savebtn" id="save-img3">이미지 저장</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="rtable" id="rt3">
+                <thead><tr><th>구분</th><th>영업권 대가로</th><th>급여로 5년 나눠</th></tr></thead>
+                <tbody id="rt3-body"></tbody>
+              </table>
+            </div>
+            <div class="verdict" id="cmp-verdict"></div>
+          </div>
         </div>
         <details class="steps">
           <summary>계산 과정 자세히 보기</summary>
@@ -365,7 +381,7 @@
         </details>
         <details>
           <summary>영업권을 넘기면 세금은 어떻게 되나요?</summary>
-          <div class="a">영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다. 계산기 아래쪽에서 대표님 소득세와 법인세 절감액을 함께 계산해 드립니다.</div>
+          <div class="a">영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다. 계산기 아래쪽에서 대표님 소득세와 법인세 절감액, 같은 금액을 급여로 받을 때와의 비교까지 계산해 드립니다.</div>
         </details>
         <details>
           <summary>세금을 내면서까지 영업권을 넘기는 이유는 무엇인가요?</summary>
@@ -388,7 +404,8 @@
         · 자기자본은 넣으신 자산에서 부채를 뺀 금액으로 보았고, 자산을 시가로 다시 평가하는 과정은 반영하지 않았습니다.<br>
         · 영업권 대가는 영업권만 넘기는 기타소득(필요경비 60%)으로 보았고, 사업양수도로 넘겨 부가가치세는 없는 것으로 계산했습니다.<br>
         · 법인세는 과세표준 2억 원까지 10%, 넘는 금액은 20%에 지방소득세 10%를 더했고, 5년 동안 같은 과세표준이 이어진다고 보았습니다. 감면과 최저한세는 반영하지 않았습니다.<br>
-        · 건강보험료는 기타소득금액 중 2,000만 원을 넘는 금액에 2026년 요율(7.19%, 장기요양 13.14%)을 적용한 1년치 추정액입니다.
+        · 건강보험료는 기타소득금액 중 2,000만 원을 넘는 금액에 2026년 요율(7.19%, 장기요양 13.14%)을 적용한 1년치 추정액입니다.<br>
+        · 급여 비교는 같은 금액을 5년 동안 나눠 더 받는다고 보고, 근로소득공제와 대표이사 4대보험(국민연금 4.75%, 건강보험 3.595%, 장기요양, 근로자·회사 같은 몫)을 반영했습니다. 근로소득세액공제 등 다른 공제는 이미 받고 있다고 보았습니다.
       </p>
 
       <div class="morelinks">
@@ -479,6 +496,29 @@ function calcTransfer(c,r){
   return {price,income,withheld,comb,sep,pit,due:pit-withheld,health,corpBase,amort,yearSave,corpSave,
           keep:price-pit-health,                              // 대표님 손에 남는 돈
           net:pit+health-corpSave};                           // 대표님 세금에서 법인세 절감을 뺀 순 세부담
+}
+
+// 같은 금액을 급여로 5년 동안 나눠 받을 때 (영업권 상각과 같은 기간이라 법인 비용 시점이 같습니다)
+// 대표이사는 고용보험·산재보험이 없고 국민연금·건강보험·장기요양만 냅니다 (2026년 요율, 근로자·회사 같은 몫)
+const W_PENSION=0.0475, W_PENSION_MAX=6590000, W_HEALTH=0.03595, W_HEALTH_MAX=4591740;
+function insOf(w){
+  const m=w/12;
+  return (Math.min(m,W_PENSION_MAX)*W_PENSION+Math.min(m*W_HEALTH,W_HEALTH_MAX)*(1+CARE))*12;
+}
+// 근로소득공제 (한도 2,000만 원)
+function wageDed(w){
+  const d=w<=5e6?w*0.7:w<=15e6?3.5e6+(w-5e6)*0.4:w<=45e6?7.5e6+(w-15e6)*0.15:w<=1e8?12e6+(w-45e6)*0.05:14.75e6+(w-1e8)*0.02;
+  return Math.min(d,2e7);
+}
+function calcSalary(c,t){
+  const extra=t.price/AMORT_YEARS, w0=c.ceo, w1=c.ceo+extra;    // 해마다 더 받는 급여
+  const ins=f10(insOf(w1)-insOf(w0));                           // 늘어나는 4대보험 (대표님 몫 = 회사 몫)
+  const incGap=(w1-wageDed(w1))-(w0-wageDed(w0))-ins;           // 늘어나는 과세표준 (보험료는 소득공제)
+  const taxY=f10((taxOf(PIT,c.ceoBase+incGap)-taxOf(PIT,c.ceoBase))*1.1);
+  const saveY=f10((taxOf(CIT,t.corpBase)-taxOf(CIT,t.corpBase-extra-ins))*1.1);
+  const n=AMORT_YEARS;
+  return {extra,ins,taxY,saveY,pay:t.price+ins*n,tax:taxY*n,mine:ins*n,corpIns:ins*n,corpSave:saveY*n,
+          keep:t.price-taxY*n-ins*n, net:(taxY+ins+ins-saveY)*n};
 }
 
 /* ── 입력 ─────────────────────────────────── */
@@ -617,9 +657,37 @@ function renderTransfer(c,r){
   if(!t.sep) notes.push({t:'기타소득금액이 300만 원을 넘어 다음 해 5월에 다른 소득과 합쳐 신고합니다. 받을 때 원천징수된 '+manwon(t.withheld)+'은 그때 낼 세금에서 뺍니다.'});
   if(t.health) notes.push({t:'건강보험료는 직장가입자인 대표님의 보수 외 소득이 2,000만 원을 넘을 때 붙는 금액을 1년치로 어림했습니다. 다른 보수 외 소득이 있으면 더 늘어납니다.'});
   notes.push({t:'사업용 토지나 건물과 함께 넘기면 영업권 대가도 양도소득세로 계산하므로 결과가 달라집니다.'});
+  renderCompare(c,t);
   $('tx-verdict').innerHTML='영업권 대가 <b>'+manwon(t.price)+'</b>을 받으면 대표님 소득세'+(t.health?'와 건강보험료':'')+'가 '+manwon(t.pit+t.health)
     +' 늘고, 법인은 5년 동안 법인세를 '+manwon(t.corpSave)+' 덜 냅니다. 둘을 합친 순 세부담은 <b>'+(t.net<0?'오히려 '+manwon(-t.net)+' 이득':manwon(t.net))+'</b>입니다.'
     +notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+}
+
+function renderCompare(c,t){
+  const g=calcSalary(c,t);
+  const W=v=>won(v)+'원', M=v=>v?'−&nbsp;'+won(v)+'원':'0원';
+  const row=(l,sm,a,b,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+a+'</td><td>'+b+'</td></tr>';
+  const better=t.net<=g.net?'gw':'pay';
+  $('cmp-sub').textContent='같은 '+manwon(t.price)+'을 대표님이 가져갈 때';
+  $('rt3-body').innerHTML=
+      row('대표님이 받는 돈','',W(t.price)+'<small>한 번에</small>',W(t.price)+'<small>해마다 '+won(g.extra)+'원</small>','sum')
+    +row('대표님 소득세','지방소득세 포함',W(t.pit)+'<small>기타소득, 60% 경비</small>',W(g.tax)+'<small>근로소득, 5년 합계</small>')
+    +row('대표님 4대보험·건강보험료','',W(t.health)+'<small>보수 외 소득 건강보험료</small>',W(g.mine)+'<small>국민연금·건강·장기요양</small>')
+    +row('대표님 손에 남는 돈','',W(t.keep),W(g.keep),'sum')
+    +row('회사가 내는 4대보험','대표이사는 고용·산재 없음','0원',W(g.corpIns))
+    +row('법인세 절감','5년 합계 · 지방소득세 포함',M(t.corpSave),M(g.corpSave),'minus')
+    +'<tr class="tot"><td>순 세부담<small>대표님 세금·보험 + 회사 보험 − 법인세 절감</small></td><td>'+W(t.net)+(better==='gw'?'<small>더 적음</small>':'')+'</td><td>'+W(g.net)+(better==='pay'?'<small>더 적음</small>':'')+'</td></tr>';
+
+  const gap=Math.abs(g.net-t.net);
+  const notes=[
+    {t:'급여는 영업권 상각과 같은 5년 동안 해마다 '+manwon(g.extra)+'씩 더 받는다고 보고 비교했습니다. 영업권 대가는 한 번에 받는 대신 그해 세율이 높아지고, 급여는 나눠 받아 세율이 덜 오르지만 4대보험이 붙습니다.'},
+    {t:'대표님 다른 소득 과세표준이 5년 동안 같다고 보았고, 4대보험 상한은 대표님 인건비 상당액('+(c.ceo?manwon(c.ceo):'넣지 않음')+')을 지금 연봉으로 보고 따졌습니다.'}];
+  if(c.ceo/12<W_PENSION_MAX) notes.splice(1,0,{t:'급여로 늘어나는 국민연금은 나중에 연금으로 돌아오므로 모두 사라지는 돈은 아닙니다.'});
+  if(!c.ceo) notes.push({t:'대표님 인건비 상당액을 넣으시면 국민연금 상한이 반영되어 급여 쪽 보험료가 더 정확해집니다.'});
+  $('cmp-verdict').innerHTML=(better==='gw'
+      ?'영업권 대가로 가져가시면 급여로 받을 때보다 순 세부담이 <b>'+manwon(gap)+'</b> 적고, 대표님 손에 남는 돈은 '+manwon(Math.abs(t.keep-g.keep))+' '+(t.keep>=g.keep?'많습니다.':'적습니다.')
+      :'이 조건에서는 급여로 나눠 받는 쪽이 순 세부담이 <b>'+manwon(gap)+'</b> 적습니다. 대표님 다른 소득이 적어 급여 세율이 낮을 때 이렇게 나옵니다.')
+    +notes.map(n=>'<span class="note">'+n.t+'</span>').join('');
 }
 
 $('calc').addEventListener('click',()=>{
@@ -634,6 +702,11 @@ document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!c
 <script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
 <script>
+HantaxImage.attach(
+  document.getElementById('save-img3'),
+  ()=>document.getElementById('rt3'),
+  ()=>({ title:'영업권과 급여 비교', sub:document.getElementById('cmp-sub').textContent, filename:'한택스_영업권급여비교' })
+);
 HantaxImage.attach(
   document.getElementById('save-img2'),
   ()=>document.getElementById('rt2'),
