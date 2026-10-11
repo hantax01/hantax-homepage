@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>영업권 평가 계산기 2026, 세무상 평가액과 감정평가 추정액 | 한택스</title>
-<meta name="description" content="법인전환이나 사업양도 때 필요한 영업권 가치를 계산합니다. 상속세 및 증여세법 산식으로 구한 세무상 평가액과 감정평가사 금액을 어림한 추정액을 함께 보여 드립니다.">
+<meta name="description" content="법인전환이나 사업양도 때 필요한 영업권 가치를 계산합니다. 상속세 및 증여세법 산식으로 구한 세무상 평가액과 감정평가 추정액, 법인에 넘길 때 대표님 소득세와 법인세 절감액까지 함께 계산합니다.">
 <link rel="canonical" href="https://www.hantax47.com/tools/goodwill.html">
 <meta property="og:title" content="우리 사업의 영업권, 얼마로 평가될까요?">
 <meta property="og:description" content="세무상 평가액과 감정평가 추정액을 함께 계산하는 영업권 평가 계산기">
@@ -52,6 +52,8 @@
 .call.est{background:#fff;color:var(--ink);border:2px solid var(--blue-line)}
 .call .tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:var(--seal);color:#fff;font-size:11.5px;font-weight:700;vertical-align:1px}
 .rtable td:nth-child(3),.rtable th:nth-child(3){background:#fafbfd}
+.part2{margin-top:38px;padding-top:30px;border-top:1px solid var(--line)}
+.rtable tr.sec td{background:var(--soft);font-weight:800;color:var(--ink);font-size:13.5px;padding-top:9px;padding-bottom:9px}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:34px}
 .reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
@@ -168,7 +170,15 @@
    "name": "영업권을 넘기면 세금은 어떻게 되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다."
+    "text": "영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다. 계산기 아래쪽에서 대표님 소득세와 법인세 절감액을 함께 계산해 드립니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "세금을 내면서까지 영업권을 넘기는 이유는 무엇인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "법인의 돈을 대표님 개인에게 옮기는 방법 가운데 세 부담이 낮은 편이기 때문입니다. 받은 금액의 60%를 경비로 빼 주어 실제로는 40%에만 세금이 붙고, 같은 금액을 법인은 5년 동안 비용으로 처리해 법인세를 덜 냅니다. 급여나 배당으로 같은 돈을 가져올 때보다 세금이 적은 경우가 많아 법인전환 때 함께 검토합니다."
    }
   },
   {
@@ -212,7 +222,7 @@
   <div class="wrap">
     <span class="eyebrow">영업권 평가</span>
     <h1>우리 사업의 영업권,<br>얼마로 평가될까요?</h1>
-    <p class="lead">법인전환이나 사업을 넘길 때 필요한 영업권 가치를 두 가지로 계산합니다. 세법이 정한 산식으로 구한 세무상 평가액과, 감정평가사가 평가할 때의 금액을 어림한 추정액을 함께 보여 드립니다.</p>
+    <p class="lead">법인전환이나 사업을 넘길 때 필요한 영업권 가치를 두 가지로 계산합니다. 세법이 정한 산식으로 구한 세무상 평가액과, 감정평가사가 평가할 때의 금액을 어림한 추정액을 함께 보여 드리고, 영업권을 법인에 넘길 때 대표님 소득세와 법인세 절감액까지 계산합니다.</p>
   </div>
 </section>
 
@@ -262,6 +272,28 @@
           <label for="i-years">초과이익이 이어지는 기간 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="지금처럼 남보다 많이 버는 상태가 몇 년 이어질지 정하는 값입니다. 세법은 5년으로 고정하고, 감정평가에서는 단골, 입지, 계약 관계를 보고 감정평가사가 정합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-years" inputmode="numeric" value="5"><span>년</span></div>
         </div>
+
+        <div class="divider"><b>영업권을 법인에 넘길 때</b><span>대표님 소득세와 법인세 절감액을 계산합니다</span></div>
+        <div>
+          <label for="i-pick">넘기는 금액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인에 영업권을 넘기고 받을 금액입니다. 감정평가 추정액으로 넘기려면 실제로 거래 전에 감정평가를 받아야 합니다. 감정가액을 이미 받으셨다면 직접 넣기를 골라 그 금액을 넣어 주세요.">?</button></label>
+          <select id="i-pick">
+            <option value="tax">세무상 평가액으로</option>
+            <option value="est">감정평가 추정액으로</option>
+            <option value="own">직접 넣기</option>
+          </select>
+        </div>
+        <div data-pick="own" hidden>
+          <label for="i-amount">직접 넣는 금액</label>
+          <div class="unit"><input type="text" id="i-amount" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-ceobase">대표님 다른 소득 과세표준 <small>받는 해</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="영업권 대가를 받는 해에 대표님의 다른 종합소득 과세표준입니다. 법인전환한 해라면 개인사업자 때 소득과 법인에서 받은 급여가 함께 들어갑니다. 영업권 대가는 이 금액 위에 얹혀 세율이 정해집니다. 비워 두면 다른 소득이 없다고 보고 계산합니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-ceobase" inputmode="numeric"><span class="u">원</span></div>
+        </div>
+        <div>
+          <label for="i-corpbase">법인의 한 해 과세표준 <small>예상</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인전환 뒤 법인이 한 해에 낼 법인세의 과세표준(이익)입니다. 영업권 상각비를 빼기 전 금액으로 넣어 주세요. 비워 두면 최근 이익 평균에서 대표님 인건비 상당액을 뺀 금액으로 봅니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-corpbase" inputmode="numeric"><span class="u">원</span></div>
+        </div>
       </div>
 
       <button class="btn btn-primary simbtn" id="calc">영업권 평가하기</button>
@@ -282,6 +314,24 @@
           </table>
         </div>
         <div class="verdict" id="verdict"></div>
+
+        <div class="part2" id="part2">
+          <div class="reshead">
+            <div><h2>영업권을 법인에 넘기면</h2><p class="sub" id="tx-sub"></p></div>
+            <button type="button" class="savebtn" id="save-img2">이미지 저장</button>
+          </div>
+          <div class="vals">
+            <div class="call" id="call-pit"></div>
+            <div class="call est" id="call-cit"></div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="rtable" id="rt2">
+              <thead><tr><th>구분</th><th>금액</th></tr></thead>
+              <tbody id="rt2-body"></tbody>
+            </table>
+          </div>
+          <div class="verdict" id="tx-verdict"></div>
+        </div>
         <details class="steps">
           <summary>계산 과정 자세히 보기</summary>
           <div class="body" id="steps"></div>
@@ -315,7 +365,11 @@
         </details>
         <details>
           <summary>영업권을 넘기면 세금은 어떻게 되나요?</summary>
-          <div class="a">영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다.</div>
+          <div class="a">영업권만 법인에 넘기고 대가를 받으면 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 받을 때 금액의 8.8%가 원천징수되고 다음 해 5월에 다른 소득과 합쳐 신고합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세 대상입니다. 영업권을 산 법인은 5년 동안 나눠 비용으로 처리합니다. 계산기 아래쪽에서 대표님 소득세와 법인세 절감액을 함께 계산해 드립니다.</div>
+        </details>
+        <details>
+          <summary>세금을 내면서까지 영업권을 넘기는 이유는 무엇인가요?</summary>
+          <div class="a">법인의 돈을 대표님 개인에게 옮기는 방법 가운데 세 부담이 낮은 편이기 때문입니다. 받은 금액의 60%를 경비로 빼 주어 실제로는 40%에만 세금이 붙고, 같은 금액을 법인은 5년 동안 비용으로 처리해 법인세를 덜 냅니다. 급여나 배당으로 같은 돈을 가져올 때보다 세금이 적은 경우가 많아 법인전환 때 함께 검토합니다.</div>
         </details>
         <details>
           <summary>법인전환 때 영업권을 꼭 평가해야 하나요?</summary>
@@ -331,7 +385,10 @@
         · 계산 결과는 참고용입니다. 실제 평가액은 평가하는 날 현재의 장부와 세무조정 내용에 따라 달라집니다.<br>
         · 세무상 평가액은 상속세 및 증여세법 시행령 제59조의 산식(이익의 50%, 자기자본의 10%, 5년, 10% 할인)으로 계산했습니다.<br>
         · <b>감정평가 추정액은 실제 감정평가가 아닙니다.</b> 최근 3년 평균 이익이 그대로 이어진다고 보고, 넣으신 대표님 인건비와 할인율, 기간으로 어림한 추정치입니다. 실제 감정평가액은 감정평가법인이 사업 전망과 업종 위험을 따져 정하므로 크게 달라질 수 있습니다.<br>
-        · 자기자본은 넣으신 자산에서 부채를 뺀 금액으로 보았고, 자산을 시가로 다시 평가하는 과정은 반영하지 않았습니다.
+        · 자기자본은 넣으신 자산에서 부채를 뺀 금액으로 보았고, 자산을 시가로 다시 평가하는 과정은 반영하지 않았습니다.<br>
+        · 영업권 대가는 영업권만 넘기는 기타소득(필요경비 60%)으로 보았고, 사업양수도로 넘겨 부가가치세는 없는 것으로 계산했습니다.<br>
+        · 법인세는 과세표준 2억 원까지 10%, 넘는 금액은 20%에 지방소득세 10%를 더했고, 5년 동안 같은 과세표준이 이어진다고 보았습니다. 감면과 최저한세는 반영하지 않았습니다.<br>
+        · 건강보험료는 기타소득금액 중 2,000만 원을 넘는 금액에 2026년 요율(7.19%, 장기요양 13.14%)을 적용한 1년치 추정액입니다.
       </p>
 
       <div class="morelinks">
@@ -396,6 +453,34 @@ function calcGoodwill(c){
   return {avg,equity,normal,allLoss,taxBase,taxExcess,taxFactor,tax,estBase,estExcess,estFactor,est};
 }
 
+/* ── 법인에 넘길 때의 세금 ──────────────────── */
+// 대표님: 영업권만 넘긴 대가는 기타소득(필요경비 60%), 받을 때 기타소득금액의 22% 원천징수, 다음 해 5월 종합과세
+// 법인: 영업권을 5년 동안 나눠 비용 처리(정액 상각)해 법인세가 줄어듭니다
+const PIT=[[14000000,.06,0],[50000000,.15,1260000],[88000000,.24,5760000],[150000000,.35,15440000],
+           [300000000,.38,19940000],[500000000,.40,25940000],[1000000000,.42,35940000],[Infinity,.45,65940000]];
+const CIT=[[200000000,.10,0],[Infinity,.20,20000000]];
+function taxOf(table,b){ if(b<=0) return 0; for(const[lim,r,d]of table) if(b<=lim) return Math.max(0,b*r-d); return 0; }
+const f10=x=>Math.floor(x/10+1e-9)*10;
+const EXP_RATE=0.6, SEP_LIMIT=3000000, AMORT_YEARS=5;
+const HEALTH_FREE=20000000, HEALTH=0.0719, CARE=0.1314;   // 보수 외 소득 2천만 원 초과분 건강보험료
+
+function calcTransfer(c,r){
+  const price=c.pick==='est'?r.est:c.pick==='own'?c.amount:r.tax;
+  const income=f10(price*(1-EXP_RATE));                       // 기타소득금액
+  const withheld=f10(income*0.2)+f10(income*0.02);            // 받을 때 원천징수 (소득세 20% + 지방소득세 2%)
+  const comb=f10((taxOf(PIT,c.ceoBase+income)-taxOf(PIT,c.ceoBase))*1.1);   // 다른 소득과 합칠 때 늘어나는 세금
+  const sep=income<=SEP_LIMIT&&withheld<comb;                 // 300만 원 이하면 원천징수로 끝낼 수 있습니다
+  const pit=sep?withheld:comb;
+  const health=f10(Math.max(0,income-HEALTH_FREE)*HEALTH*(1+CARE));
+  const corpBase=c.corpBase!=null?c.corpBase:Math.max(0,r.avg-c.ceo);
+  const amort=price/AMORT_YEARS;                              // 한 해 상각비
+  const yearSave=f10((taxOf(CIT,corpBase)-taxOf(CIT,corpBase-amort))*1.1);
+  const corpSave=yearSave*AMORT_YEARS;
+  return {price,income,withheld,comb,sep,pit,due:pit-withheld,health,corpBase,amort,yearSave,corpSave,
+          keep:price-pit-health,                              // 대표님 손에 남는 돈
+          net:pit+health-corpSave};                           // 대표님 세금에서 법인세 절감을 뺀 순 세부담
+}
+
 /* ── 입력 ─────────────────────────────────── */
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
@@ -412,7 +497,8 @@ function fmt(el,signed){
     el.value=v?(neg?'-':'')+v.toLocaleString('ko-KR'):(neg?'-':/0/.test(t)?'0':'');   // 0도 입력으로 남깁니다(부채 0 등)
   });
 }
-['i-assets','i-debt','i-ceo'].forEach(id=>fmt($(id),false));
+['i-assets','i-debt','i-ceo','i-amount','i-ceobase','i-corpbase'].forEach(id=>fmt($(id),false));
+$('i-pick').addEventListener('change',()=>{ document.querySelector('[data-pick]').hidden=$('i-pick').value!=='own'; });
 document.querySelectorAll('.signed').forEach(el=>fmt(el,true));
 $('i-unit').addEventListener('change',()=>{
   const u=$('i-unit').selectedOptions[0].text;
@@ -425,7 +511,9 @@ function read(){
   const ni=[];
   for(const id of ['i-ni1','i-ni2','i-ni3']){ if(!$(id).value.trim()) break; ni.push(snum($(id).value)*k); }
   return {ni,assets:num($('i-assets').value)*k,debt:num($('i-debt').value)*k,ceo:num($('i-ceo').value)*k,
-    rate:pctOf($('i-rate').value)/100,years:Math.max(1,Math.round(num($('i-years').value)||5))};
+    rate:pctOf($('i-rate').value)/100,years:Math.max(1,Math.round(num($('i-years').value)||5)),
+    pick:$('i-pick').value,amount:num($('i-amount').value)*k,ceoBase:num($('i-ceobase').value)*k,
+    corpBase:$('i-corpbase').value.trim()?num($('i-corpbase').value)*k:null};
 }
 function check(c){
   if(!c.ni.length) return '직전 연도 이익을 넣어 주세요.';
@@ -485,7 +573,53 @@ function render(){
     +srow('한 해 초과이익','가중평균'+(c.ceo?' − 대표님 인건비':'')+' − 자기자본 × 10%',won(r.estExcess)+'원')
     +srow('추정액','초과이익 × '+fac(r.estFactor)+' ('+c.years+'년, '+pct(c.rate)+' 할인)',won(r.est)+'원')
     +'</table>';
+  renderTransfer(c,r);
   $('res').style.display='block';
+}
+
+function renderTransfer(c,r){
+  const t=calcTransfer(c,r);
+  $('part2').hidden=!t.price;
+  if(!t.price) return;
+  const pickName=c.pick==='est'?'감정평가 추정액':c.pick==='own'?'직접 넣은 금액':'세무상 평가액';
+  const rate=v=>(v*100).toFixed(1).replace(/[.]0$/,'')+'%';
+  const big=v=>manwon(v).replace(/ ?원$/,'')+'<small>원</small>';
+  $('tx-sub').textContent=pickName+' '+manwon(t.price)+'에 넘길 때';
+  $('call-pit').innerHTML='<div class="lbl">대표님 소득세'+(t.health?'와 건강보험료':'')+'</div><div class="val">'+big(t.pit+t.health)+'</div>'
+    +'<div class="sub">지방소득세 포함 · 받는 금액의 '+rate((t.pit+t.health)/t.price)+'</div>';
+  $('call-cit').innerHTML='<div class="lbl">법인세 절감 <small style="font-size:12px">5년 합계</small></div><div class="val">'+(t.corpSave?big(t.corpSave):'0<small>원</small>')+'</div>'
+    +'<div class="sub">해마다 '+manwon(t.yearSave)+'씩 덜 냅니다</div>';
+
+  const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
+  const sec=l=>'<tr class="sec"><td>'+l+'</td><td></td></tr>';
+  $('rt2-body').innerHTML=
+      sec('대표님')
+    +row('영업권 대가',pickName,won(t.price)+'원','sum')
+    +row('필요경비','받는 금액의 60%','−&nbsp;'+won(t.price-t.income)+'원','minus')
+    +row('기타소득금액','',won(t.income)+'원')
+    +row('받을 때 원천징수','기타소득금액의 22% (받는 금액의 8.8%)',won(t.withheld)+'원')
+    +(t.sep
+      ?row('소득세','300만 원 이하라 원천징수로 끝냅니다',won(t.pit)+'원')
+      :row('늘어나는 종합소득세','다른 소득 과세표준 '+won(c.ceoBase)+'원에 합산 · 지방소득세 포함',won(t.pit)+'원')
+       +row('다음 해 5월에 더 낼 세금','늘어나는 세금 − 원천징수',(t.due<0?'환급&nbsp;'+won(-t.due):won(t.due))+'원'))
+    +(t.health?row('건강보험료','기타소득금액 중 2,000만 원 넘는 금액 · 1년치 추정',won(t.health)+'원'):'')
+    +row('대표님 손에 남는 돈','영업권 대가 − 소득세'+(t.health?' − 건강보험료':''),won(t.keep)+'원','sum')
+    +sec('법인')
+    +row('한 해 상각비','영업권 대가 ÷ 5년',won(t.amort)+'원')
+    +row('한 해 법인세 절감','과세표준 '+won(t.corpBase)+'원 기준 · 지방소득세 포함','−&nbsp;'+won(t.yearSave)+'원','minus')
+    +row('5년 법인세 절감','','−&nbsp;'+won(t.corpSave)+'원','minus')
+    +'<tr class="tot"><td>순 세부담<small>대표님 세금'+(t.health?'·건강보험료':'')+' − 법인세 절감</small></td><td>'+(t.net<0?'−&nbsp;'+won(-t.net):won(t.net))+'원<small>받는 금액의 '+rate(t.net/t.price)+'</small></td></tr>';
+
+  const notes=[];
+  if(c.pick==='est') notes.push({warn:1,t:'감정평가 추정액으로 계산했습니다. 실제로 이 금액에 넘기려면 거래 전에 감정평가를 받아야 하고, 감정가액이 달라지면 세금도 달라집니다.'});
+  if(c.corpBase==null) notes.push({t:'법인 과세표준은 최근 이익 평균에서 대표님 인건비 상당액을 뺀 '+manwon(t.corpBase)+'으로 보았습니다. 예상 금액을 아시면 넣어 주세요.'});
+  if(t.corpBase<t.amort) notes.push({t:'법인 이익보다 한 해 상각비가 커서 법인세 절감이 줄었습니다. 남는 결손금은 다음 해로 넘겨 쓸 수 있지만 계산에는 넣지 않았습니다.'});
+  if(!t.sep) notes.push({t:'기타소득금액이 300만 원을 넘어 다음 해 5월에 다른 소득과 합쳐 신고합니다. 받을 때 원천징수된 '+manwon(t.withheld)+'은 그때 낼 세금에서 뺍니다.'});
+  if(t.health) notes.push({t:'건강보험료는 직장가입자인 대표님의 보수 외 소득이 2,000만 원을 넘을 때 붙는 금액을 1년치로 어림했습니다. 다른 보수 외 소득이 있으면 더 늘어납니다.'});
+  notes.push({t:'사업용 토지나 건물과 함께 넘기면 영업권 대가도 양도소득세로 계산하므로 결과가 달라집니다.'});
+  $('tx-verdict').innerHTML='영업권 대가 <b>'+manwon(t.price)+'</b>을 받으면 대표님 소득세'+(t.health?'와 건강보험료':'')+'가 '+manwon(t.pit+t.health)
+    +' 늘고, 법인은 5년 동안 법인세를 '+manwon(t.corpSave)+' 덜 냅니다. 둘을 합친 순 세부담은 <b>'+(t.net<0?'오히려 '+manwon(-t.net)+' 이득':manwon(t.net))+'</b>입니다.'
+    +notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
 }
 
 $('calc').addEventListener('click',()=>{
@@ -500,6 +634,11 @@ document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!c
 <script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
 <script>
+HantaxImage.attach(
+  document.getElementById('save-img2'),
+  ()=>document.getElementById('rt2'),
+  ()=>({ title:'영업권을 법인에 넘기면', sub:document.getElementById('tx-sub').textContent, filename:'한택스_영업권세금' })
+);
 HantaxImage.attach(
   document.getElementById('save-img'),
   ()=>document.getElementById('rt'),
