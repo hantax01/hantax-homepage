@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>주식 양도세 계산기 2026, 비상장주식 양도소득세 | 한택스</title>
-<meta name="description" content="주식을 팔 때 내는 양도소득세를 계산합니다. 중소기업과 대주주 여부에 따른 세율 10·20·25·30%와 양도소득 기본공제 250만 원, 증권거래세 0.35%를 함께 반영합니다.">
+<title>주식 양도세 계산기 2026, 상장·비상장·해외주식 양도소득세 | 한택스</title>
+<meta name="description" content="국내 상장주식, 비상장주식, 해외주식을 팔 때 내는 양도소득세를 계산합니다. 상장주식은 작년 말 보유 금액과 지분율로 대주주인지 판정하고, 세율 10~30%와 해외주식 22%, 기본공제 250만 원, 시장별 증권거래세를 함께 반영합니다.">
 <link rel="canonical" href="https://www.hantax47.com/tools/stock-transfer.html">
 <meta property="og:title" content="주식을 팔면 세금이 얼마나 나올까요?">
-<meta property="og:description" content="중소기업과 대주주 여부로 세율을 가려 계산하는 주식 양도소득세 계산기">
+<meta property="og:description" content="상장·비상장·해외주식 양도세와 대주주 판정까지 한 번에 계산합니다">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.hantax47.com/tools/stock-transfer.html">
 <meta property="og:image" content="https://www.hantax47.com/assets/og/tool-stock-transfer.png">
@@ -46,6 +46,10 @@
 .ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
 .ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
 .ichk.off{opacity:.45}
+[hidden]{display:none!important}
+.judge{grid-column:1/-1;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.7;color:var(--char)}
+.judge b{color:var(--blue)}
+.judge.big b{color:var(--seal)}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:34px}
 .reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
@@ -128,7 +132,7 @@
    "name": "주식 양도세율은 어떻게 되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년 미만 보유하고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다."
+    "text": "국내 상장주식은 대주주가 아닌 분이 증권시장에서 팔면 양도소득세가 없습니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년 미만 보유하고 넘기면 30%입니다. 대주주가 아닌 분이 비상장주식을 넘기면 중소기업 10%, 그 밖 20%입니다. 해외주식은 20%입니다. 모두 지방소득세가 세액의 10%만큼 더 붙습니다."
    }
   },
   {
@@ -136,7 +140,7 @@
    "name": "대주주는 어떻게 판단하나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 넘기기 직전 사업연도 말을 기준으로 판단하므로, 연말 지분율에 따라 다음 해 세율이 달라집니다."
+    "text": "작년 말(회사의 직전 사업연도 말) 기준으로 한 종목을 50억 원어치 이상 갖고 있거나, 지분율이 코스피 1%, 코스닥 2%, 코넥스와 비상장 4% 이상이면 대주주입니다. 본인 보유분이 기준이고, 본인 쪽이 회사의 최대주주이면 배우자, 부모, 자녀 등 가족 보유분까지 합칩니다. 지분율은 올해 주식을 더 사서 기준을 넘으면 그때부터 대주주가 됩니다. K-OTC에서 거래되는 벤처기업 주식은 금액 기준이 40억 원입니다."
    }
   },
   {
@@ -144,7 +148,23 @@
    "name": "상장주식도 세금을 내나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "소액주주가 증권시장에서 파는 상장주식은 양도소득세를 내지 않습니다. 다만 대주주가 팔거나, 상장주식이라도 시장 밖에서 당사자끼리 거래하면 세금을 냅니다. 이 계산기는 비상장주식을 기준으로 만들었습니다."
+    "text": "대주주가 아닌 분이 증권시장에서 파는 상장주식은 양도소득세를 내지 않고 증권거래세만 냅니다. 대주주가 팔거나, 상장주식이라도 시장 밖에서 당사자끼리 거래하면 양도소득세를 냅니다. 계산기에서 국내 상장주식을 고르시면 작년 말 보유 금액과 지분율로 대주주인지 함께 가려 드립니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "해외주식은 어떻게 계산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "해외주식은 대주주인지와 상관없이 이익이 나면 세금을 냅니다. 한 해 동안 판 이익에서 250만 원을 빼고 20%를 매기며, 지방소득세까지 합하면 22%입니다. 산 날과 판 날의 기준환율로 각각 원화로 바꿔 계산하고, 다음 해 5월에 직접 신고합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "연말에 주식을 팔면 대주주를 피할 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "대주주는 작년 말 보유 금액과 지분율로 정하므로, 연말 전에 보유액을 50억 원 아래로 줄여 두면 다음 해에는 대주주가 아닌 것으로 봅니다. 다만 본인 쪽이 최대주주이면 가족 보유분까지 합치고, 지분율 기준은 올해 다시 사서 넘는 순간 대주주가 되니 함께 확인하셔야 합니다."
    }
   },
   {
@@ -152,7 +172,7 @@
    "name": "언제까지 신고하나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "양도일이 속하는 반기의 마지막 날부터 2개월 안에 예정신고를 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다. 한 해에 여러 번 넘기셨다면 다음 해 5월에 확정신고로 합산합니다."
+    "text": "국내 주식은 양도일이 속하는 반기의 마지막 날부터 2개월 안에 예정신고를 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다. 한 해에 여러 번 넘기셨다면 다음 해 5월에 확정신고로 합산합니다. 해외주식은 예정신고 없이 다음 해 5월에 한 번 신고합니다."
    }
   },
   {
@@ -160,7 +180,7 @@
    "name": "증권거래세는 따로 내나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "네. 이익이 났는지와 상관없이 양도가액의 0.35%를 냅니다. 손해를 보고 넘기셔도 내야 하고, 양도소득세와 같은 기한에 신고합니다. 계산기는 증권거래세를 양도비용으로 빼서 양도차익을 구했습니다."
+    "text": "네. 이익이 났는지와 상관없이 국내 주식을 팔 때 냅니다. 증권시장에서 팔면 코스피와 코스닥 0.20%(코스피는 농어촌특별세 포함), 코넥스 0.10%이고 증권사가 거래할 때 떼어 갑니다. 비상장주식이나 시장 밖 거래는 0.35%이고 양도소득세와 같은 기한에 직접 신고합니다. 해외주식은 국내 증권거래세가 없습니다."
    }
   },
   {
@@ -168,7 +188,7 @@
    "name": "기본공제 250만 원은 어떻게 적용되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "한 해에 주식을 넘겨 생긴 소득에서 250만 원을 뺍니다. 1인당 한 해에 한 번만 받으므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다."
+    "text": "한 해에 주식을 넘겨 생긴 소득에서 250만 원을 뺍니다. 국내 주식과 해외주식을 합쳐 1인당 한 해에 한 번만 받으므로, 올해 이미 다른 주식으로 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다."
    }
   },
   {
@@ -176,7 +196,7 @@
    "name": "손해를 보고 팔면 어떻게 되나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "같은 해에 넘긴 다른 주식에서 난 이익과 합쳐 계산하므로 그만큼 세금이 줄어듭니다. 다만 주식에서 난 손실은 부동산 양도소득과는 합치지 못하고, 다음 해로 넘겨 쓸 수도 없습니다. 이익이 난 해에 손실 난 주식을 함께 정리하면 세금을 줄일 수 있습니다."
+    "text": "같은 해에 넘긴 다른 주식에서 난 이익과 합쳐 계산하므로 그만큼 세금이 줄어듭니다. 국내 주식과 해외주식의 손익도 서로 합칠 수 있습니다(세금이 없는 상장주식 장내 거래분은 빼고). 다만 부동산 양도소득과는 합치지 못하고, 다음 해로 넘겨 쓸 수도 없습니다."
    }
   },
   {
@@ -212,7 +232,7 @@
   <div class="wrap">
     <span class="eyebrow">주식 양도</span>
     <h1>주식을 팔면,<br>세금이 얼마나 나올까요?</h1>
-    <p class="lead">비상장주식을 넘기실 때 내는 양도소득세를 계산합니다. 중소기업인지, 대주주인지에 따라 세율이 달라지고 증권거래세도 따로 붙습니다.</p>
+    <p class="lead">국내 상장주식, 비상장주식, 해외주식을 팔 때 내는 양도소득세를 계산합니다. 상장주식은 작년 말 보유 금액과 지분율로 대주주인지 먼저 가려 드립니다.</p>
   </div>
 </section>
 
@@ -220,9 +240,34 @@
   <div class="wrap">
     <div class="sim">
       <div class="sim-in">
+        <div class="divider"><b>주식 종류</b><span>종류에 따라 세금이 크게 달라집니다</span></div>
+        <div>
+          <label for="i-kind">어떤 주식인가요?</label>
+          <select id="i-kind">
+            <option value="listed">국내 상장주식</option>
+            <option value="unlisted">국내 비상장주식</option>
+            <option value="foreign">해외주식</option>
+          </select>
+        </div>
+        <div data-k="listed">
+          <label for="i-market">상장된 시장 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사 주식이 상장된 시장입니다. 시장에 따라 대주주가 되는 지분율과 증권거래세율이 다릅니다.">?</button></label>
+          <select id="i-market">
+            <option value="kospi">코스피</option>
+            <option value="kosdaq">코스닥</option>
+            <option value="konex">코넥스</option>
+          </select>
+        </div>
+        <div class="chks" data-k="listed">
+          <div>
+            <label class="ichk"><input type="checkbox" id="i-otc"><span>증권시장 밖에서 직접 사고팔았습니다</span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="증권사 앱이나 HTS로 판 것이 아니라 상대방과 직접 계약해 넘기신 경우입니다. 이때는 대주주가 아니어도 양도소득세(중소기업 10%, 그 밖 20%)를 내고, 증권거래세도 0.35%입니다.">?</button>
+            </label>
+          </div>
+        </div>
+
         <div class="divider"><b>넘기는 주식</b><span>1주당 금액과 주식 수로 넣어 주세요</span></div>
         <div>
-          <label for="i-price">1주당 양도가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="받기로 한 1주당 금액입니다. 비상장주식은 시가보다 싸게 넘기면 시가로 다시 계산되고, 가족이나 회사 관계자에게 넘기면 차액이 증여로 잡힐 수 있습니다. 적정한 금액은 비상장주식 계산기에서 먼저 가늠해 보세요.">?</button></label>
+          <label for="i-price">1주당 양도가액 <small data-k="foreign">원화로 바꾼 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="판 1주당 금액입니다. 해외주식은 판 날의 기준환율로 바꾼 원화 금액을 넣어 주세요. 비상장주식을 가족이나 회사 관계자에게 시가보다 싸게 넘기면 시가로 다시 계산되고 차액이 증여로 잡힐 수 있으니, 적정한 금액은 비상장주식 계산기에서 먼저 가늠해 보세요.">?</button></label>
           <div class="unit"><input type="text" id="i-price" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
@@ -230,24 +275,28 @@
           <div class="unit"><input type="text" id="i-shares" inputmode="numeric"><span>주</span></div>
         </div>
         <div>
-          <label for="i-cost">1주당 취득가액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주식을 처음 살 때나 증자할 때 낸 1주당 금액입니다. 설립 때 받은 주식이면 액면가인 경우가 많습니다. 증여나 상속으로 받으셨다면 그때 신고한 평가액이 취득가액이 됩니다.">?</button></label>
+          <label for="i-cost">1주당 취득가액 <small data-k="foreign">원화로 바꾼 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주식을 살 때 낸 1주당 금액입니다. 여러 번 나눠 사셨다면 평균 금액을 넣어 주세요. 해외주식은 산 날의 기준환율로 바꾼 원화 금액입니다. 설립 때 받은 비상장주식은 액면가인 경우가 많고, 증여나 상속으로 받으셨다면 그때 신고한 평가액이 취득가액이 됩니다.">?</button></label>
           <div class="unit"><input type="text" id="i-cost" inputmode="numeric"><span>원</span></div>
         </div>
         <div>
-          <label for="i-fee">그 밖의 비용 <small>수수료, 컨설팅비</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주식을 넘기면서 쓰신 중개수수료나 평가수수료, 계약서 작성 비용입니다. 영수증 등 증빙이 있는 금액만 넣어 주세요. 증권거래세는 아래에서 자동으로 계산합니다.">?</button></label>
+          <label for="i-fee">그 밖의 비용 <small>수수료 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="증권사 수수료나 중개수수료, 평가수수료처럼 주식을 넘기면서 쓰신 비용입니다. 증빙이 있는 금액만 넣어 주세요. 국내 증권거래세는 자동으로 계산합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-fee" inputmode="numeric"><span>원</span></div>
         </div>
 
-        <div class="divider"><b>회사와 지분</b><span>세율을 가르는 조건입니다</span></div>
-        <div class="chks">
+        <div class="divider" data-k="listed unlisted"><b>대주주 판정</b><span>작년 말 기준으로 판단합니다</span></div>
+        <div data-k="listed unlisted">
+          <label for="i-hold">작년 말 보유 금액 <small>이 종목</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년 마지막 거래일에 이 종목을 얼마어치 갖고 계셨는지 넣어 주세요(종가 × 보유 주식 수). 50억 원 이상이면 대주주입니다. 본인 보유분이 기준이고, 본인 쪽이 회사의 최대주주이면 배우자, 부모, 자녀 등 가족 보유분까지 합칩니다. 비상장주식은 평가액으로 보며, 모르시면 비워 두고 지분율만 넣어 주세요.">?</button></label>
+          <div class="unit"><input type="text" id="i-hold" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div data-k="listed unlisted">
+          <label for="i-ratio">지분율 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="회사가 발행한 전체 주식 가운데 갖고 계신 비율입니다. 코스피 1%, 코스닥 2%, 코넥스와 비상장 4% 이상이면 금액과 상관없이 대주주입니다. 작년 말 기준이지만, 올해 주식을 더 사서 이 비율을 넘으면 그때부터 대주주가 됩니다. 가족 보유분을 합치는 방법은 보유 금액과 같습니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-ratio" inputmode="decimal"><span>%</span></div>
+        </div>
+        <div class="judge" id="judge" data-k="listed unlisted"></div>
+        <div class="chks" data-k="listed unlisted">
           <div>
-            <label class="ichk"><input type="checkbox" id="i-sme" checked><span>중소기업 주식입니다</span>
-              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="조세특례제한법에서 정한 중소기업이면 체크해 주세요. 대주주가 아닌 분이 중소기업 주식을 넘기면 세율이 10%로 가장 낮습니다. 중소기업이 아니면 20%입니다.">?</button>
-            </label>
-          </div>
-          <div>
-            <label class="ichk"><input type="checkbox" id="i-big"><span>대주주입니다</span>
-              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%입니다. 기준은 바뀔 수 있으니 양도 전에 확인해 주세요.">?</button>
+            <label class="ichk"><input type="checkbox" id="i-sme"><span>중소기업 주식입니다</span>
+              <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="조세특례제한법에서 정한 중소기업이면 체크해 주세요. 대주주가 아닌 분이 비상장 중소기업 주식을 넘기면(상장주식은 증권시장 밖에서 거래할 때) 세율이 10%로 가장 낮습니다. 중소기업이 아니면 20%입니다.">?</button>
             </label>
           </div>
           <div>
@@ -278,7 +327,7 @@
           <div class="body" id="steps"></div>
         </details>
         <div class="ask">
-          <p><b>지분을 넘기기 전에 양도가액부터 검토하셔야 합니다.</b><br>얼마에 넘기는 것이 적정한지, 증여와 양도 중 무엇이 유리한지, 나눠 넘기면 세금이 얼마나 줄어드는지 함께 검토합니다.</p>
+          <p id="ask-txt"><b>지분을 넘기기 전에 양도가액부터 검토하셔야 합니다.</b><br>얼마에 넘기는 것이 적정한지, 증여와 양도 중 무엇이 유리한지, 나눠 넘기면 세금이 얼마나 줄어드는지 함께 검토합니다.</p>
           <div class="btns">
             <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
             <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
@@ -290,31 +339,39 @@
         <h3>자주 묻는 질문</h3>
         <details>
           <summary>주식 양도세율은 어떻게 되나요?</summary>
-          <div class="a">중소기업 주식을 대주주가 아닌 분이 넘기면 10%, 중소기업이 아니면 20%입니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년 미만 보유하고 넘기면 30%입니다. 여기에 지방소득세가 세액의 10%만큼 더 붙습니다.</div>
+          <div class="a">국내 상장주식은 대주주가 아닌 분이 증권시장에서 팔면 양도소득세가 없습니다. 대주주는 과세표준 3억 원까지 20%, 넘는 금액은 25%이고, 중소기업이 아닌 회사의 주식을 1년 미만 보유하고 넘기면 30%입니다. 대주주가 아닌 분이 비상장주식을 넘기면 중소기업 10%, 그 밖 20%입니다. 해외주식은 20%입니다. 모두 지방소득세가 세액의 10%만큼 더 붙습니다.</div>
         </details>
         <details>
           <summary>대주주는 어떻게 판단하나요?</summary>
-          <div class="a">비상장법인은 본인과 가족 등의 지분을 합해 4% 이상이거나, 보유한 주식의 시가총액이 50억 원 이상이면 대주주로 봅니다(벤처기업은 40억 원). 넘기기 직전 사업연도 말을 기준으로 판단하므로, 연말 지분율에 따라 다음 해 세율이 달라집니다.</div>
+          <div class="a">작년 말(회사의 직전 사업연도 말) 기준으로 한 종목을 50억 원어치 이상 갖고 있거나, 지분율이 코스피 1%, 코스닥 2%, 코넥스와 비상장 4% 이상이면 대주주입니다. 본인 보유분이 기준이고, 본인 쪽이 회사의 최대주주이면 배우자, 부모, 자녀 등 가족 보유분까지 합칩니다. 지분율은 올해 주식을 더 사서 기준을 넘으면 그때부터 대주주가 됩니다. K-OTC에서 거래되는 벤처기업 주식은 금액 기준이 40억 원입니다.</div>
         </details>
         <details>
           <summary>상장주식도 세금을 내나요?</summary>
-          <div class="a">소액주주가 증권시장에서 파는 상장주식은 양도소득세를 내지 않습니다. 다만 대주주가 팔거나, 상장주식이라도 시장 밖에서 당사자끼리 거래하면 세금을 냅니다. 이 계산기는 비상장주식을 기준으로 만들었습니다.</div>
+          <div class="a">대주주가 아닌 분이 증권시장에서 파는 상장주식은 양도소득세를 내지 않고 증권거래세만 냅니다. 대주주가 팔거나, 상장주식이라도 시장 밖에서 당사자끼리 거래하면 양도소득세를 냅니다. 계산기에서 국내 상장주식을 고르시면 작년 말 보유 금액과 지분율로 대주주인지 함께 가려 드립니다.</div>
+        </details>
+        <details>
+          <summary>해외주식은 어떻게 계산하나요?</summary>
+          <div class="a">해외주식은 대주주인지와 상관없이 이익이 나면 세금을 냅니다. 한 해 동안 판 이익에서 250만 원을 빼고 20%를 매기며, 지방소득세까지 합하면 22%입니다. 산 날과 판 날의 기준환율로 각각 원화로 바꿔 계산하고, 다음 해 5월에 직접 신고합니다.</div>
+        </details>
+        <details>
+          <summary>연말에 주식을 팔면 대주주를 피할 수 있나요?</summary>
+          <div class="a">대주주는 작년 말 보유 금액과 지분율로 정하므로, 연말 전에 보유액을 50억 원 아래로 줄여 두면 다음 해에는 대주주가 아닌 것으로 봅니다. 다만 본인 쪽이 최대주주이면 가족 보유분까지 합치고, 지분율 기준은 올해 다시 사서 넘는 순간 대주주가 되니 함께 확인하셔야 합니다.</div>
         </details>
         <details>
           <summary>언제까지 신고하나요?</summary>
-          <div class="a">양도일이 속하는 반기의 마지막 날부터 2개월 안에 예정신고를 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다. 한 해에 여러 번 넘기셨다면 다음 해 5월에 확정신고로 합산합니다.</div>
+          <div class="a">국내 주식은 양도일이 속하는 반기의 마지막 날부터 2개월 안에 예정신고를 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다. 한 해에 여러 번 넘기셨다면 다음 해 5월에 확정신고로 합산합니다. 해외주식은 예정신고 없이 다음 해 5월에 한 번 신고합니다.</div>
         </details>
         <details>
           <summary>증권거래세는 따로 내나요?</summary>
-          <div class="a">네. 이익이 났는지와 상관없이 양도가액의 0.35%를 냅니다. 손해를 보고 넘기셔도 내야 하고, 양도소득세와 같은 기한에 신고합니다. 계산기는 증권거래세를 양도비용으로 빼서 양도차익을 구했습니다.</div>
+          <div class="a">네. 이익이 났는지와 상관없이 국내 주식을 팔 때 냅니다. 증권시장에서 팔면 코스피와 코스닥 0.20%(코스피는 농어촌특별세 포함), 코넥스 0.10%이고 증권사가 거래할 때 떼어 갑니다. 비상장주식이나 시장 밖 거래는 0.35%이고 양도소득세와 같은 기한에 직접 신고합니다. 해외주식은 국내 증권거래세가 없습니다.</div>
         </details>
         <details>
           <summary>기본공제 250만 원은 어떻게 적용되나요?</summary>
-          <div class="a">한 해에 주식을 넘겨 생긴 소득에서 250만 원을 뺍니다. 1인당 한 해에 한 번만 받으므로, 올해 이미 다른 주식을 넘겨 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다.</div>
+          <div class="a">한 해에 주식을 넘겨 생긴 소득에서 250만 원을 뺍니다. 국내 주식과 해외주식을 합쳐 1인당 한 해에 한 번만 받으므로, 올해 이미 다른 주식으로 공제를 쓰셨다면 이번에는 받지 못합니다. 부동산 양도소득의 기본공제와는 따로 계산합니다.</div>
         </details>
         <details>
           <summary>손해를 보고 팔면 어떻게 되나요?</summary>
-          <div class="a">같은 해에 넘긴 다른 주식에서 난 이익과 합쳐 계산하므로 그만큼 세금이 줄어듭니다. 다만 주식에서 난 손실은 부동산 양도소득과는 합치지 못하고, 다음 해로 넘겨 쓸 수도 없습니다. 이익이 난 해에 손실 난 주식을 함께 정리하면 세금을 줄일 수 있습니다.</div>
+          <div class="a">같은 해에 넘긴 다른 주식에서 난 이익과 합쳐 계산하므로 그만큼 세금이 줄어듭니다. 국내 주식과 해외주식의 손익도 서로 합칠 수 있습니다(세금이 없는 상장주식 장내 거래분은 빼고). 다만 부동산 양도소득과는 합치지 못하고, 다음 해로 넘겨 쓸 수도 없습니다.</div>
         </details>
         <details>
           <summary>가족에게 싸게 넘기면 어떻게 되나요?</summary>
@@ -325,7 +382,9 @@
       <p class="disc">
         · 계산 결과는 참고용입니다. 실제 세금은 주식의 종류와 취득 경위, 그해 다른 양도 내역에 따라 달라집니다.<br>
         · 세율과 증권거래세율은 2026년 기준이며 지방소득세는 양도소득세의 10%로 계산했습니다.<br>
+        · 대주주는 넣어 주신 작년 말 보유 금액과 지분율로만 판정했습니다. 가족 보유분 합산이나 올해 추가로 산 주식에 따라 달라질 수 있습니다.<br>
         · 양도소득 기본공제 250만 원을 모두 쓸 수 있는 것으로 보고 계산했습니다. 올해 이미 다른 주식을 넘기셨다면 공제가 줄어듭니다.<br>
+        · 해외주식은 원화로 바꾼 금액을 넣는 것으로 보았고, 외국에서 낸 세금의 공제는 반영하지 않았습니다.<br>
         · 창업자 지분 특례나 벤처기업 주식 특례, 이월과세 같은 제도는 반영하지 않았습니다.
       </p>
 
@@ -363,13 +422,26 @@ mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu
 nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
 
 /* ── 주식 양도소득세 ───────────────────────── */
-const STT_RATE=0.0035;        // 증권거래세 (비상장주식)
-const BASIC_DEDUCT=2500000;   // 양도소득 기본공제 (한 해 한 번)
+const BASIC_DEDUCT=2500000;   // 양도소득 기본공제 (국내·해외 주식 합쳐 한 해 한 번)
 const BIG_STEP=300000000;     // 대주주 세율이 올라가는 과세표준
+const BIG_AMT=5000000000;     // 대주주 보유 금액 기준 (작년 말, 종목별)
+const BIG_RATIO={kospi:1,kosdaq:2,konex:4,unlisted:4};          // 대주주 지분율 기준 (%)
+const STT={kospi:0.002,kosdaq:0.002,konex:0.001,off:0.0035};    // 증권거래세 (코스피는 농어촌특별세 포함), 비상장·장외 0.35%
+const MARKET={kospi:'코스피',kosdaq:'코스닥',konex:'코넥스'};
+
+// 대주주 판정: 작년 말 보유 금액 50억 원 이상이거나 지분율이 시장별 기준 이상
+function judgeBig(c){
+  if(c.kind==='foreign') return {big:false};
+  const lim=BIG_RATIO[c.kind==='listed'?c.market:'unlisted'];
+  const byAmt=c.hold>=BIG_AMT, byRatio=c.ratio>=lim;
+  return {big:byAmt||byRatio,byAmt,byRatio,lim};
+}
+const sttRate=c=>c.kind==='foreign'?0:c.kind==='unlisted'||c.otc?STT.off:STT[c.market];
 
 // 과세표준에 매길 세금과 세율 설명
 function stockTax(base,c){
   if(base<=0) return {tax:0,words:'과세표준이 없습니다'};
+  if(c.kind==='foreign') return {tax:base*0.2,words:'해외주식 20%'};
   if(c.big){
     if(!c.sme&&c.short) return {tax:base*0.3,words:'중소기업이 아닌 주식을 1년 안에 넘겨 30%'};
     if(base<=BIG_STEP) return {tax:base*0.2,words:'대주주 3억 원 이하 20%'};
@@ -379,18 +451,20 @@ function stockTax(base,c){
 }
 
 function calcStock(c){
+  const judge=judgeBig(c), big=judge.big;
+  const exempt=c.kind==='listed'&&!c.otc&&!big;   // 소액주주가 증권시장에서 판 상장주식은 비과세
   const gross=c.price*c.shares;                 // 양도가액
   const cost=c.cost*c.shares;                   // 취득가액
-  const stt=Math.floor(gross*STT_RATE/10)*10;   // 증권거래세 (10원 미만 버림)
+  const stt=Math.floor(gross*sttRate(c)/10+1e-9)*10;   // 증권거래세 (10원 미만 버림)
   const expense=stt+c.fee;                      // 양도비용
   const gain=gross-cost-expense;                // 양도차익
-  const deduct=Math.min(Math.max(0,gain),BASIC_DEDUCT);
-  const base=Math.max(0,gain-deduct);           // 과세표준
-  const t=stockTax(base,c);
+  const deduct=exempt?0:Math.min(Math.max(0,gain),BASIC_DEDUCT);
+  const base=exempt?0:Math.max(0,gain-deduct);  // 과세표준
+  const t=exempt?{tax:0,words:'소액주주가 증권시장에서 판 상장주식은 비과세'}:stockTax(base,Object.assign({},c,{big}));
   const tax=Math.floor(t.tax/10)*10;
   const local=Math.floor(tax*0.1/10)*10;
   const total=tax+local+stt;                    // 증권거래세까지 더한 세금
-  return {gross,cost,stt,expense,gain,deduct,base,tax,local,total,words:t.words,
+  return {gross,cost,stt,expense,gain,deduct,base,tax,local,total,words:t.words,big,judge,exempt,
           net:gross-expense-tax-local,          // 손에 들어오는 돈
           profit:gain-tax-local,                // 세금까지 뺀 차익
           rate:gain>0?(tax+local)/gain:0};
@@ -404,77 +478,126 @@ const r4=v=>Math.round(v/1e4)*1e4;
 const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
   return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
-['i-price','i-shares','i-cost','i-fee'].forEach(id=>{
+const pctOf=s=>parseFloat(String(s).replace(/[^0-9.]/g,''))||0;
+const pctTxt=v=>(v*100).toFixed(2).replace(/0+$/,'').replace(/[.]$/,'')+'%';
+['i-price','i-shares','i-cost','i-fee','i-hold'].forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
-// 보유 기간은 중소기업이 아닌 회사의 대주주일 때만 세율에 영향을 줍니다
-function syncShort(){
-  const on=!$('i-sme').checked&&$('i-big').checked;
-  $('short-row').classList.toggle('off',!on);
-  $('i-short').disabled=!on;
+// 주식 종류에 맞는 칸만 보여 줍니다
+function syncKind(){
+  const k=$('i-kind').value;
+  document.querySelectorAll('[data-k]').forEach(el=>{ el.hidden=!el.dataset.k.split(' ').includes(k); });
 }
-$('i-sme').addEventListener('change',syncShort);
-$('i-big').addEventListener('change',syncShort);
-syncShort();
+$('i-kind').addEventListener('change',()=>{ $('i-sme').checked=$('i-kind').value==='unlisted'; syncKind(); syncBig(); });
+const k0=new URLSearchParams(location.search).get('kind');
+if(['listed','unlisted','foreign'].includes(k0)) $('i-kind').value=k0;
+$('i-sme').checked=$('i-kind').value==='unlisted';
+syncKind();
 
 function read(){
-  return {price:num($('i-price').value),shares:num($('i-shares').value),cost:num($('i-cost').value),
-    fee:num($('i-fee').value),sme:$('i-sme').checked,big:$('i-big').checked,
+  return {kind:$('i-kind').value,market:$('i-market').value,otc:$('i-otc').checked,
+    price:num($('i-price').value),shares:num($('i-shares').value),cost:num($('i-cost').value),fee:num($('i-fee').value),
+    hold:num($('i-hold').value),ratio:pctOf($('i-ratio').value),sme:$('i-sme').checked,
     short:$('i-short').checked&&!$('i-short').disabled};
 }
+// 대주주인지 바로 보여 주고, 보유 기간은 중소기업이 아닌 회사의 대주주일 때만 열어 둡니다
+function syncBig(){
+  const c=read(), j=judgeBig(c);
+  const on=!c.sme&&j.big;
+  $('short-row').classList.toggle('off',!on);
+  $('i-short').disabled=!on;
+  if(c.kind==='foreign') return;
+  const mk=c.kind==='listed'?MARKET[c.market]:'비상장';
+  const free=c.kind==='listed'&&!c.otc?' 증권시장에서 파시면 양도소득세가 없습니다.':'';
+  $('judge').classList.toggle('big',j.big);
+  $('judge').innerHTML=!c.hold&&!c.ratio
+    ?'작년 말 보유 금액이나 지분율을 넣으시면 대주주인지 알려 드립니다. 비워 두시면 대주주가 아닌 것으로 계산합니다.'
+    :j.big
+      ?'<b>대주주입니다.</b> '+[j.byAmt?'보유 금액 '+manwon(c.hold)+'이 50억 원 이상':'',j.byRatio?'지분율 '+c.ratio+'%가 '+mk+' 기준 '+j.lim+'% 이상':''].filter(Boolean).join(', ')+'입니다.'
+      :'<b>대주주가 아닙니다.</b> 보유 금액 50억 원, 지분율 '+j.lim+'%('+mk+' 기준)에 모두 못 미칩니다.'+free;
+}
+['i-market','i-otc','i-hold','i-ratio','i-sme'].forEach(id=>$(id).addEventListener('input',syncBig));
+$('i-otc').addEventListener('change',syncBig);
+$('i-sme').addEventListener('change',syncBig);
+syncBig();
+
 const shown=()=>$('res').style.display==='block';
 const ready=()=>{ const c=read(); return !!(c.price&&c.shares); };
 
 /* ── 화면 ─────────────────────────────────── */
 function render(){
-  const c=read(), r=calcStock(c);
+  const c=read(), r=calcStock(c), j=r.judge;
+  const dom=c.kind!=='foreign';
+  const sh=c.shares.toLocaleString('ko-KR')+'주';
+  const kindName=c.kind==='listed'?MARKET[c.market]+' 상장주식':c.kind==='unlisted'?'비상장주식':'해외주식';
+  const sttWords='양도가액의 '+pctTxt(sttRate(c))+(c.kind==='listed'&&!c.otc&&c.market==='kospi'?' · 농어촌특별세 포함':'');
+  const bigWhy=j.big?(j.byAmt?'작년 말 보유 금액 50억 원 이상':'지분율 '+j.lim+'% 이상'):'보유 금액 50억 원, 지분율 '+j.lim+'% 미만';
   const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
   $('rt-body').innerHTML=
-      row('양도가액',won(c.price)+'원 × '+c.shares.toLocaleString('ko-KR')+'주',won(r.gross)+'원','sum')
-    +(c.cost?row('취득가액',won(c.cost)+'원 × '+c.shares.toLocaleString('ko-KR')+'주','− '+won(r.cost)+'원','minus'):'')
-    +row('증권거래세','양도가액의 0.35%','− '+won(r.stt)+'원','minus')
+      (dom?row('대주주 판정',bigWhy,j.big?'대주주':'대주주 아님'):'')
+    +row('양도가액',won(c.price)+'원 × '+sh,won(r.gross)+'원','sum')
+    +(c.cost?row('취득가액',won(c.cost)+'원 × '+sh,'− '+won(r.cost)+'원','minus'):'')
+    +(dom?row('증권거래세',sttWords,'− '+won(r.stt)+'원','minus'):'')
     +(c.fee?row('그 밖의 비용','수수료 등','− '+won(c.fee)+'원','minus'):'')
     +row('양도차익','',won(r.gain)+'원','sum')
-    +(r.deduct?row('기본공제','한 해 250만 원','− '+won(r.deduct)+'원','minus'):'')
-    +row('과세표준','',won(r.base)+'원')
-    +row('양도소득세',r.words,won(r.tax)+'원')
-    +row('지방소득세','양도소득세의 10%',won(r.local)+'원')
-    +'<tr class="tot"><td>세금 합계<small>증권거래세 포함</small></td><td>'+won(r.total)+'원</td></tr>'
+    +(r.exempt?row('양도소득세',r.words,'0원')
+      :(r.deduct?row('기본공제','한 해 250만 원','− '+won(r.deduct)+'원','minus'):'')
+      +row('과세표준','',won(r.base)+'원')
+      +row('양도소득세',r.words,won(r.tax)+'원')
+      +row('지방소득세','양도소득세의 10%',won(r.local)+'원'))
+    +'<tr class="tot"><td>세금 합계<small>'+(dom?'증권거래세 포함':'양도소득세 + 지방소득세')+'</small></td><td>'+won(r.total)+'원</td></tr>'
     +row('세후 실수령액','양도가액에서 비용과 세금을 뺀 금액',won(r.net)+'원','sum');
 
-  $('res-sub').textContent=c.shares.toLocaleString('ko-KR')+'주 · 양도가액 '+won(r.gross)+'원 · '+(c.sme?'중소기업':'중소기업 아님')+(c.big?' · 대주주':'');
+  $('res-sub').textContent=sh+' · 양도가액 '+won(r.gross)+'원 · '+kindName+(dom?(r.big?' · 대주주':' · 대주주 아님'):'')+(c.kind==='listed'&&c.otc?' · 장외 거래':'');
 
-  $('call').innerHTML=r.gain>0
+  const sttSay=dom?'증권거래세 '+manwon(r.stt)+'까지 더한 금액이고, ':'';
+  $('call').innerHTML=r.exempt
+    ?'<div class="lbl">대주주가 아니고 증권시장에서 파셔서</div><div class="val">양도소득세는<br>내지 않습니다</div>'
+      +'<div class="sub">증권거래세 '+manwon(r.stt)+'만 내며, 증권사가 거래할 때 떼어 갑니다. 세후 실수령액은 '+manwon(r.net)+'입니다.</div>'
+    :r.gain>0
     ?'<div class="lbl">내야 할 세금</div><div class="val">'+manwon(r.total).replace(/ ?원$/,'')+'<small>원</small></div>'
-      +'<div class="sub">양도차익 '+manwon(r.gain)+'에 '+r.words+'를 적용했습니다. 증권거래세 '+manwon(r.stt)+'까지 더한 금액이고, 세후 실수령액은 '+manwon(r.net)+'입니다.</div>'
+      +'<div class="sub">양도차익 '+manwon(r.gain)+'에 '+r.words+'를 적용했습니다. '+sttSay+'세후 실수령액은 '+manwon(r.net)+'입니다.</div>'
     :'<div class="lbl">양도차익이 없어</div><div class="val">양도소득세는<br>내지 않습니다</div>'
-      +'<div class="sub">다만 증권거래세 '+manwon(r.stt)+'은 이익과 상관없이 내야 합니다. 손실이 났다면 같은 해에 이익이 난 다른 주식과 합쳐 신고하시면 세금이 줄어듭니다.</div>';
+      +'<div class="sub">'+(dom?'다만 증권거래세 '+manwon(r.stt)+'은 이익과 상관없이 내야 합니다. ':'')+'손실이 났다면 같은 해에 이익이 난 다른 주식과 합쳐 신고하시면 세금이 줄어듭니다.</div>';
 
-  const head=r.gain>0
+  const head=r.exempt
+    ?'작년 말 기준 <b>대주주가 아니어서</b> 양도소득세 없이 증권거래세만 냅니다.'
+    :r.gain>0
     ?'양도차익 <b>'+manwon(r.gain)+'</b>에 세금이 '+manwon(r.total)+' 붙습니다.'
     :'이번 양도로는 양도차익이 나지 않았습니다.';
   const notes=[];
-  if(r.gain>0) notes.push({t:'세금은 양도차익의 약 '+(r.rate*100).toFixed(1)+'%입니다(증권거래세 제외). 세율은 중소기업인지, 대주주인지로 갈리니 지분과 회사 요건을 먼저 확인하셔야 합니다.'});
-  if(c.big&&r.base>BIG_STEP) notes.push({t:'과세표준 가운데 3억 원을 넘는 금액에는 25%가 적용됐습니다. 여러 해에 나눠 넘기시면 3억 원 구간을 해마다 다시 쓸 수 있어 세금이 줄어듭니다.'});
-  if(!c.big&&c.sme) notes.push({t:'대주주가 아니어서 10%로 계산했습니다. 본인과 가족 지분을 합해 4% 이상이거나 보유액이 50억 원 이상이면 대주주가 되어 20~25%로 올라가니, 넘기기 전 사업연도 말 지분율을 확인해 주세요.'});
-  if(c.big&&!c.sme&&c.short) notes.push({warn:1,t:'중소기업이 아닌 주식을 1년 미만 보유하고 넘겨 <b>30%</b>가 적용됐습니다. 1년을 채우고 넘기시면 20~25%로 내려갑니다.'});
-  notes.push({t:'비상장주식을 시가보다 싸게 넘기면 세금은 시가로 다시 계산되고, 차액은 받는 분의 증여로 잡힐 수 있습니다. 적정한 금액은 <a href="stock-value.html">비상장주식 계산기</a>에서 먼저 가늠해 보세요.'});
-  notes.push({t:'신고는 양도일이 속하는 반기의 마지막 날부터 2개월 안에 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다.'});
+  if(r.exempt) notes.push({t:'작년 말에 이 종목을 50억 원어치 이상 갖고 계시거나 지분율이 '+j.lim+'% 이상이면 대주주가 되어, 다음 해에는 증권시장에서 팔아도 20~25% 세금이 붙습니다. 연말 보유액을 미리 확인해 두세요.'});
+  if(r.gain>0&&!r.exempt) notes.push({t:'세금은 양도차익의 약 '+(r.rate*100).toFixed(1)+'%입니다'+(dom?'(증권거래세 제외). 세율은 중소기업인지, 대주주인지로 갈리니 지분과 회사 요건을 먼저 확인하셔야 합니다.':'. 기본공제 250만 원을 뺀 금액에 지방소득세까지 22%가 붙습니다.')});
+  if(r.big&&r.base>BIG_STEP) notes.push({t:'과세표준 가운데 3억 원을 넘는 금액에는 25%가 적용됐습니다. 여러 해에 나눠 넘기시면 3억 원 구간을 해마다 다시 쓸 수 있어 세금이 줄어듭니다.'});
+  if(r.big&&!c.sme&&c.short) notes.push({warn:1,t:'중소기업이 아닌 주식을 1년 미만 보유하고 넘겨 <b>30%</b>가 적용됐습니다. 1년을 채우고 넘기시면 20~25%로 내려갑니다.'});
+  if(c.kind==='unlisted') notes.push({t:'비상장주식을 시가보다 싸게 넘기면 세금은 시가로 다시 계산되고, 차액은 받는 분의 증여로 잡힐 수 있습니다. 적정한 금액은 <a href="stock-value.html">비상장주식 계산기</a>에서 먼저 가늠해 보세요.'});
+  if(!dom){
+    notes.push({t:'외화로 사고파셨다면 산 날과 판 날의 기준환율로 각각 원화로 바꿔 계산합니다. 증권사에서 주는 해외주식 양도소득 자료에 원화 금액이 나와 있습니다.'});
+    notes.push({t:'해외주식은 같은 해 국내 주식과 손익을 합쳐 계산하고, 기본공제 250만 원도 합쳐 한 번만 받습니다. 손실 난 종목이 있다면 같은 해에 함께 정리하면 세금이 줄어듭니다.'});
+  }
+  notes.push({t:r.exempt?'증권거래세는 증권사가 떼어 가므로 따로 신고하실 것은 없습니다.'
+    :dom?'신고는 양도일이 속하는 반기의 마지막 날부터 2개월 안에 합니다. 상반기에 넘기셨으면 8월 31일까지, 하반기면 다음 해 2월 말까지입니다.'
+    :'신고는 판 다음 해 5월 1일부터 31일까지 직접 합니다. 해외주식은 예정신고가 없습니다.'});
   $('verdict').innerHTML=head+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
 
   const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
   $('steps').innerHTML='<table class="stable">'
-    +srow('양도가액',won(c.price)+' × '+c.shares.toLocaleString('ko-KR')+'주',won(r.gross)+'원')
-    +srow('취득가액',won(c.cost)+' × '+c.shares.toLocaleString('ko-KR')+'주','− '+won(r.cost)+'원')
-    +srow('증권거래세','양도가액 × 0.35%','− '+won(r.stt)+'원')
+    +(dom?srow('대주주 판정',bigWhy,j.big?'대주주':'대주주 아님'):'')
+    +srow('양도가액',won(c.price)+' × '+sh,won(r.gross)+'원')
+    +srow('취득가액',won(c.cost)+' × '+sh,'− '+won(r.cost)+'원')
+    +(dom?srow('증권거래세','양도가액 × '+pctTxt(sttRate(c)),'− '+won(r.stt)+'원'):'')
     +(c.fee?srow('그 밖의 비용','수수료 등','− '+won(c.fee)+'원'):'')
     +srow('양도차익','양도가액 − 취득가액 − 비용',won(r.gain)+'원')
-    +srow('기본공제','한 해 250만 원 한도','− '+won(r.deduct)+'원')
-    +srow('과세표준','양도차익 − 기본공제',won(r.base)+'원')
-    +srow('양도소득세',r.words,won(r.tax)+'원')
-    +srow('지방소득세','양도소득세의 10%',won(r.local)+'원')
-    +srow('세금 합계','양도소득세 + 지방소득세 + 증권거래세',won(r.total)+'원')
+    +(r.exempt?srow('양도소득세',r.words,'0원')
+      :srow('기본공제','한 해 250만 원 한도','− '+won(r.deduct)+'원')
+      +srow('과세표준','양도차익 − 기본공제',won(r.base)+'원')
+      +srow('양도소득세',r.words,won(r.tax)+'원')
+      +srow('지방소득세','양도소득세의 10%',won(r.local)+'원'))
+    +srow('세금 합계',dom?'양도소득세 + 지방소득세 + 증권거래세':'양도소득세 + 지방소득세',won(r.total)+'원')
     +'</table>';
+  $('ask-txt').innerHTML=c.kind==='unlisted'
+    ?'<b>지분을 넘기기 전에 양도가액부터 검토하셔야 합니다.</b><br>얼마에 넘기는 것이 적정한지, 증여와 양도 중 무엇이 유리한지, 나눠 넘기면 세금이 얼마나 줄어드는지 함께 검토합니다.'
+    :'<b>팔기 전에 대주주 여부와 손익 정리부터 확인하세요.</b><br>연말 보유액 관리, 손실 난 종목과 함께 정리하는 시점, 해외주식 신고까지 함께 검토합니다.';
   $('res').style.display='block';
 }
 
