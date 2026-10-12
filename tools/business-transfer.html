@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사업 포괄양수도 체크리스트 2026, 부가세·직원 승계·영업권 점검 | 한택스</title>
+<meta name="description" content="사업을 통째로 넘기거나 넘겨받을 때 부가가치세 포괄양수도 요건과 세금계산서 발급 여부, 직원 퇴직금·연차 승계, 영업권(권리금) 세무처리, 법인전환 이월과세까지 질문 몇 개로 점검합니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/business-transfer.html">
+<meta property="og:title" content="사업 포괄양수도, 놓친 것은 없을까요?">
+<meta property="og:description" content="부가세 포괄양수도 요건, 직원 승계, 영업권 세무처리를 점검하는 체크리스트">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/business-transfer.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-business-transfer.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:720px;margin:0 auto}
+.qbox{background:var(--soft);border-radius:14px;padding:26px 28px}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.qtop .step{font-size:12.5px;font-weight:800;letter-spacing:.08em;color:var(--blue)}
+.qtop .back{border:0;background:none;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer;padding:4px}
+.qtop .back:hover{color:var(--blue)}
+.qbar{height:4px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:22px}
+.qbar i{display:block;height:100%;background:var(--blue);transition:width .25s}
+.qbox h2{font-size:20px;font-weight:800;line-height:1.5;margin:0 0 8px;font-family:var(--sans);letter-spacing:-.01em}
+.qbox .qhelp{font-size:13.5px;line-height:1.75;color:var(--mute);margin-bottom:18px}
+.opts{display:grid;gap:9px}
+.opt{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:11px;padding:14px 16px;
+  font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;line-height:1.5}
+.opt:hover{border-color:var(--blue);background:var(--blue-soft)}
+.opt.on{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.res{display:none}
+.verdict{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center}
+.verdict .lbl{font-size:14px;opacity:.85}
+.verdict .val{font-size:32px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.3}
+.verdict .val small{font-size:18px;font-weight:700;opacity:.9}
+.verdict .sub{font-size:14px;opacity:.85;line-height:1.7}
+.verdict.warn{background:#8E2B24}
+.verdict .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.verdict .chips span{font-size:12.5px;font-weight:700;border-radius:99px;padding:4px 12px;background:rgba(255,255,255,.16)}
+.checks .lv{flex:none;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap;margin-left:10px}
+.lv.risk{background:var(--seal-soft);color:var(--seal)}
+.lv.ask{background:var(--soft);color:var(--mute)}
+.checks li{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.checks li>div{flex:1}
+.box{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.box h3{font-size:15.5px;color:var(--ink);margin-bottom:10px}
+.box ul{margin:0;padding-left:18px;font-size:14.5px;line-height:1.85;color:var(--char)}
+.box li b{color:var(--ink)}
+.box li+li{margin-top:8px}
+.needs li{list-style:none;margin-left:-18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--soft)}
+.needs li:last-child{border-bottom:0}
+.needs .tag{flex:none;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.tag.ok{background:var(--blue-soft);color:var(--blue)}
+.tag.no{background:#FDEBEA;color:var(--seal)}
+.tag.ask{background:var(--soft);color:var(--mute)}
+.box .lead2{font-size:13.5px;line-height:1.75;color:var(--mute);margin:-4px 0 12px}
+.checks li{list-style:none;margin-left:-18px;padding:12px 0;border-bottom:1px solid var(--soft)}
+.checks li:last-child{border-bottom:0;padding-bottom:0}
+.checks b{display:block;color:var(--ink);margin-bottom:3px}
+.checks em{font-style:normal;font-size:12px;font-weight:800;color:var(--blue);margin-right:7px}
+.todo li{font-size:14.5px;line-height:1.8}
+.checks span{display:block;font-size:13.5px;color:var(--mute);line-height:1.7;margin-top:4px}
+.again{margin-top:18px;text-align:center}
+.again button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.again button:hover{background:var(--blue-soft)}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.backlink{margin-top:30px;text-align:center;font-size:14px}
+.backlink a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px solid var(--blue-line);padding-bottom:3px}
+.backlink a:hover{border-color:var(--blue)}
+@media(max-width:660px){
+.qbox{padding:20px 16px}.qbox h2{font-size:18px}
+.verdict{padding:22px 16px}.verdict .val{font-size:25px}
+.box{padding:16px}
+}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "포괄양수도면 왜 세금계산서를 발급하지 않나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "부가가치세법은 사업장별로 그 사업에 관한 모든 권리와 의무를 넘기는 것을 재화의 공급으로 보지 않습니다. 그래서 넘기는 쪽은 부가세를 내지 않고, 넘겨받는 쪽도 큰 부가세를 미리 냈다가 돌려받을 필요가 없습니다. 계약서 이름보다 실제로 무엇을 넘겼는지로 판단합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "포괄양수도인지 애매하면 어떻게 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "넘겨받는 쪽이 대가를 줄 때 부가세를 떼어 직접 세무서에 내는 대리납부를 쓰면 됩니다. 이때는 세금계산서를 발급하고, 넘겨받는 쪽은 낸 부가세를 매입세액으로 공제받습니다. 포괄양수도로 인정되지 않을 때 넘기는 쪽에 부가세와 가산세가 나오는 위험을 막을 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미수금이나 미지급금은 빼고 넘겨도 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "됩니다. 다만 빼도 되는 미수금·미지급금은 일반 거래 밖에서 생긴 채권·채무를 말하고, 사업과 관계없는 토지·건물도 뺄 수 있습니다. 외상매출금이나 외상매입금처럼 거래처와의 채권·채무까지 빼면 포괄 승계로 보지 않을 수 있으니, 빼는 항목은 계약서 별지에 정확히 적어 두세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "직원 퇴직금은 어떻게 넘기나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "두 가지 방법이 있습니다. 넘기기 전에 퇴직금을 정산하려면 직원이 스스로 사직하고 다시 입사하는 데 동의해야 근속기간이 끊깁니다. 근속기간을 이어서 넘기면 넘겨받는 쪽이 나중에 전체 기간 퇴직금을 주므로, 그동안 쌓인 퇴직금만큼 양수 대가에서 빼거나 부채로 넘겨받습니다. 연차도 근속기간에 따라 함께 이어집니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "영업권(권리금)은 세금이 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "개인이 영업권만 넘기고 받은 돈은 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 대가를 주는 사업자는 받는 금액의 8.8%를 원천징수합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세로 계산합니다. 넘겨받는 쪽은 영업권을 무형자산으로 올려 5년 동안 나눠 비용으로 처리하고, 포괄양수도가 아니면 영업권 대가에도 부가세가 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "법인전환 때 양도소득세를 미룰 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "사업용 부동산이 있으면 양도소득세 이월과세를 받을 수 있습니다. 개인사업자가 발기인이 되어 개인사업의 순자산가액(시가 기준, 영업권 제외) 이상을 자본금으로 내 법인을 세우고, 설립일부터 3개월 안에 사업을 포괄적으로 넘겨야 합니다. 주택과 주점 같은 소비성서비스업은 제외되고, 5년 안에 사업을 그만두거나 주식을 절반 이상 처분하면 미룬 세금을 냅니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "넘기는 쪽의 밀린 세금을 넘겨받는 쪽이 내야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "가족이나 대표님 법인처럼 특수관계인이 넘겨받거나, 세금을 피하려고 넘겨받은 경우에는 넘기는 쪽의 사업 관련 체납 세금을 넘겨받은 재산 한도에서 대신 낼 수 있습니다(제2차 납세의무). 거래 전에 넘기는 쪽의 납세증명서를 받아 두시는 것이 안전합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "넘겨받은 직원으로 고용 세액공제를 받을 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "받지 못합니다. 사업을 넘겨받으면서 승계한 직원은 직전 연도부터 있던 인원으로 계산해 증가 인원에서 빠집니다. 개인사업자를 법인으로 전환한 경우도 같고, 넘겨받은 뒤 새로 뽑은 인원만 통합고용세액공제 대상이 됩니다."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">포괄양수도</span>
+    <h1>사업 포괄양수도,<br>놓친 것은 없을까요?</h1>
+    <p class="lead">사업을 통째로 넘기거나 넘겨받을 때 놓치기 쉬운 것을 질문 몇 개로 점검합니다. 부가가치세 포괄양수도 요건과 세금계산서, 직원 퇴직금·연차 승계, 영업권 세무처리까지 확인할 항목과 해야 할 일을 정리해 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="qbox" id="qbox">
+        <div class="qtop"><span class="step" id="q-step"></span><button type="button" class="back" id="q-back">이전 질문</button></div>
+        <div class="qbar"><i id="q-bar"></i></div>
+        <h2 id="q-title"></h2>
+        <p class="qhelp" id="q-help"></p>
+        <div class="opts" id="q-opts"></div>
+      </div>
+
+      <div class="res" id="res">
+        <div class="verdict" id="verdict"></div>
+        <div class="box">
+          <h3>부가가치세 포괄양수도 판단</h3>
+          <p class="lead2">사업장별로 사업에 관한 모든 권리와 의무를 넘겨야 포괄양수도로 보고, 그때는 세금계산서를 발급하지 않습니다.</p>
+          <ul class="needs" id="vat"></ul>
+        </div>
+        <div class="box" id="check-box">
+          <h3 id="check-title">확인할 항목</h3>
+          <p class="lead2"><b>위험</b>은 그대로 두면 세금이나 분쟁이 생길 수 있는 항목이고, <b>확인</b>은 자료를 보고 판단해야 하는 항목입니다.</p>
+          <ul class="checks" id="checks"></ul>
+        </div>
+        <div class="box">
+          <h3>해야 할 일</h3>
+          <ul class="todo" id="todo"></ul>
+        </div>
+        <div class="again"><button type="button" id="restart">처음부터 다시 하기</button></div>
+        <div class="ask">
+          <p><b>포괄양수도는 계약서를 쓰기 전에 점검해야 합니다.</b><br>세금계산서 처리, 직원 퇴직금 정산, 영업권 금액과 원천징수까지 계약서에 맞게 정리해 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>포괄양수도면 왜 세금계산서를 발급하지 않나요?</summary>
+          <div class="a">부가가치세법은 사업장별로 그 사업에 관한 모든 권리와 의무를 넘기는 것을 재화의 공급으로 보지 않습니다. 그래서 넘기는 쪽은 부가세를 내지 않고, 넘겨받는 쪽도 큰 부가세를 미리 냈다가 돌려받을 필요가 없습니다. 계약서 이름보다 실제로 무엇을 넘겼는지로 판단합니다.</div>
+        </details>
+        <details>
+          <summary>포괄양수도인지 애매하면 어떻게 하나요?</summary>
+          <div class="a">넘겨받는 쪽이 대가를 줄 때 부가세를 떼어 직접 세무서에 내는 대리납부를 쓰면 됩니다. 이때는 세금계산서를 발급하고, 넘겨받는 쪽은 낸 부가세를 매입세액으로 공제받습니다. 포괄양수도로 인정되지 않을 때 넘기는 쪽에 부가세와 가산세가 나오는 위험을 막을 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>미수금이나 미지급금은 빼고 넘겨도 되나요?</summary>
+          <div class="a">됩니다. 다만 빼도 되는 미수금·미지급금은 일반 거래 밖에서 생긴 채권·채무를 말하고, 사업과 관계없는 토지·건물도 뺄 수 있습니다. 외상매출금이나 외상매입금처럼 거래처와의 채권·채무까지 빼면 포괄 승계로 보지 않을 수 있으니, 빼는 항목은 계약서 별지에 정확히 적어 두세요.</div>
+        </details>
+        <details>
+          <summary>직원 퇴직금은 어떻게 넘기나요?</summary>
+          <div class="a">두 가지 방법이 있습니다. 넘기기 전에 퇴직금을 정산하려면 직원이 스스로 사직하고 다시 입사하는 데 동의해야 근속기간이 끊깁니다. 근속기간을 이어서 넘기면 넘겨받는 쪽이 나중에 전체 기간 퇴직금을 주므로, 그동안 쌓인 퇴직금만큼 양수 대가에서 빼거나 부채로 넘겨받습니다. 연차도 근속기간에 따라 함께 이어집니다.</div>
+        </details>
+        <details>
+          <summary>영업권(권리금)은 세금이 어떻게 되나요?</summary>
+          <div class="a">개인이 영업권만 넘기고 받은 돈은 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 대가를 주는 사업자는 받는 금액의 8.8%를 원천징수합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세로 계산합니다. 넘겨받는 쪽은 영업권을 무형자산으로 올려 5년 동안 나눠 비용으로 처리하고, 포괄양수도가 아니면 영업권 대가에도 부가세가 붙습니다.</div>
+        </details>
+        <details>
+          <summary>법인전환 때 양도소득세를 미룰 수 있나요?</summary>
+          <div class="a">사업용 부동산이 있으면 양도소득세 이월과세를 받을 수 있습니다. 개인사업자가 발기인이 되어 개인사업의 순자산가액(시가 기준, 영업권 제외) 이상을 자본금으로 내 법인을 세우고, 설립일부터 3개월 안에 사업을 포괄적으로 넘겨야 합니다. 주택과 주점 같은 소비성서비스업은 제외되고, 5년 안에 사업을 그만두거나 주식을 절반 이상 처분하면 미룬 세금을 냅니다.</div>
+        </details>
+        <details>
+          <summary>넘기는 쪽의 밀린 세금을 넘겨받는 쪽이 내야 하나요?</summary>
+          <div class="a">가족이나 대표님 법인처럼 특수관계인이 넘겨받거나, 세금을 피하려고 넘겨받은 경우에는 넘기는 쪽의 사업 관련 체납 세금을 넘겨받은 재산 한도에서 대신 낼 수 있습니다(제2차 납세의무). 거래 전에 넘기는 쪽의 납세증명서를 받아 두시는 것이 안전합니다.</div>
+        </details>
+        <details>
+          <summary>넘겨받은 직원으로 고용 세액공제를 받을 수 있나요?</summary>
+          <div class="a">받지 못합니다. 사업을 넘겨받으면서 승계한 직원은 직전 연도부터 있던 인원으로 계산해 증가 인원에서 빠집니다. 개인사업자를 법인으로 전환한 경우도 같고, 넘겨받은 뒤 새로 뽑은 인원만 통합고용세액공제 대상이 됩니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 답해 주신 내용으로 짚어 본 간이 점검입니다. 실제 판단은 계약서와 장부, 직원 현황을 보고 합니다.<br>
+        · 부가가치세법 제10조와 시행령 제23조, 제52조(대리납부), 국세기본법 제41조(사업양수인의 제2차 납세의무), 조세특례제한법 제32조(법인전환 이월과세) 등 2026년 기준으로 만들었습니다.<br>
+        · 직원 승계와 퇴직금, 연차는 근로기준법과 판례의 일반 원칙입니다. 개별 사안은 노무 검토가 필요합니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="goodwill.html">영업권 평가 계산기</a>
+        <a href="incorporation.html">법인전환 계산기</a>
+        <a href="severance-pay.html">퇴직금 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 사업 포괄양수도 체크리스트 ─────────────── */
+const hasStaff=a=>a.staff==='all'||a.staff==='some';
+const QUESTIONS=[
+  {id:'type',sec:'거래',q:'어떤 사업양수도인가요?',
+   help:'대표님 법인이나 가족에게 넘기는 경우는 특수관계인 사이 거래라 금액과 체납 세금을 더 꼼꼼히 봐야 합니다.',
+   opts:[['conv','개인사업자를 대표님 법인으로 넘깁니다 (법인전환)'],['family','가족이나 친척에게 넘깁니다'],['third','관계없는 다른 사람과 사고팝니다']]},
+  {id:'scope',sec:'부가가치세',q:'사업에 딸린 자산과 부채, 거래처를 모두 넘기나요?',
+   help:'사업장별로 사업에 관한 모든 권리와 의무를 넘겨야 포괄양수도로 봅니다. 일반 거래 밖에서 생긴 미수금·미지급금과 사업과 관계없는 토지·건물은 빼도 됩니다.',
+   opts:[['all','빼는 것 없이 모두 넘깁니다'],['misc','미수금·미지급금이나 사업과 관계없는 토지·건물만 뺍니다'],
+     ['ar','외상매출금·외상매입금 같은 거래처 채권·채무도 뺍니다'],['asset','기계·재고·차량 같은 사업 자산 일부만 넘깁니다'],['unknown','잘 모르겠습니다']]},
+  {id:'unit',sec:'부가가치세',q:'사업장 단위로 통째로 넘기나요?',
+   opts:[['whole','사업장 하나를 통째로 넘깁니다'],['multi','여러 사업장 가운데 한 곳을 통째로 넘깁니다'],['part','한 사업장 안의 일부 사업만 떼어 넘깁니다']]},
+  {id:'buyer',sec:'부가가치세',q:'넘겨받는 쪽은 어떻게 사업을 이어가나요?',
+   opts:[['general','일반과세자나 법인으로 같은 사업을 이어갑니다'],['change','업종을 바꾸거나 새 업종을 더해 이어갑니다'],
+     ['simple','간이과세자로 등록하려 합니다'],['exempt','부가세가 면제되는 사업만 하려 합니다'],['unknown','아직 정하지 않았습니다']]},
+  {id:'staff',sec:'직원',q:'직원도 함께 넘기나요?',
+   opts:[['all','직원 모두 넘깁니다'],['some','일부 직원만 넘깁니다'],['none','직원이 없습니다'],['quit','직원은 모두 정리하고 넘깁니다']]},
+  {id:'invoice',sec:'부가가치세',q:'세금계산서는 어떻게 하려고 하나요?',
+   help:'포괄양수도면 재화의 공급으로 보지 않아 세금계산서를 발급하지 않습니다. 넘겨받는 쪽이 부가세를 떼어 직접 내는 대리납부를 하면 세금계산서를 발급합니다.',
+   opts:[['none','발급하지 않습니다'],['issue','발급하고 부가세를 주고받습니다'],['proxy','넘겨받는 쪽이 부가세를 대리납부합니다'],['unknown','잘 모르겠습니다']]},
+  {id:'sev',sec:'직원',when:hasStaff,q:'직원 퇴직금은 어떻게 하나요?',
+   help:'사업을 넘기면 근로관계도 원칙적으로 그대로 넘어갑니다. 퇴직금을 정산해 근속기간을 끊으려면 직원이 스스로 사직하고 다시 입사하는 데 동의해야 합니다.',
+   opts:[['settle','넘기기 전에 정산하고, 직원이 사직한 뒤 다시 입사합니다'],['pay','퇴직금만 정산해 주고 근무는 그대로 이어집니다'],
+     ['carry','근속기간을 이어서 넘기고, 넘겨받는 쪽이 나중에 줍니다'],['unknown','정하지 않았습니다']]},
+  {id:'debt',sec:'직원',when:a=>hasStaff(a)&&a.sev==='carry',q:'그동안 쌓인 퇴직금을 양수 대가에 반영했나요?',
+   opts:[['yes','쌓인 퇴직금만큼 대가에서 빼거나 부채로 넘겨받습니다'],['no','따로 반영하지 않았습니다']]},
+  {id:'leave',sec:'직원',when:hasStaff,q:'남은 연차는 어떻게 하나요?',
+   opts:[['pay','넘기기 전에 남은 연차를 수당으로 정산합니다'],['carry','그대로 이어서 넘깁니다'],['unknown','정하지 않았습니다']]},
+  {id:'agree',sec:'직원',when:hasStaff,q:'직원들에게 승계를 알리고 동의를 받았나요?',
+   opts:[['yes','알렸고 근로계약서도 새로 씁니다'],['no','아직입니다']]},
+  {id:'credit',sec:'직원',when:hasStaff,q:'넘겨받은 직원으로 통합고용세액공제를 받으려 하나요?',
+   opts:[['yes','직원 수가 늘었으니 받으려 합니다'],['no','아닙니다']]},
+  {id:'gw',sec:'영업권',q:'영업권(권리금)을 따로 주고받나요?',
+   help:'단골, 입지, 노하우처럼 장부에 없는 사업의 가치입니다. 상가 권리금도 같은 성격입니다.',
+   opts:[['yes','금액을 따로 정했습니다'],['no','따로 주고받지 않습니다'],['unknown','잘 모르겠습니다']]},
+  {id:'gwprice',sec:'영업권',when:a=>a.gw==='yes',q:'영업권 금액은 어떻게 정했나요?',
+   opts:[['appraisal','감정평가를 받았습니다'],['tax','세법상 평가 방법(상속세 및 증여세법)으로 계산했습니다'],['deal','당사자끼리 협의했습니다']]},
+  {id:'gwland',sec:'영업권',when:a=>a.gw==='yes',q:'사업용 토지나 건물도 함께 넘기나요?',
+   opts:[['yes','함께 넘깁니다'],['no','영업권만 넘깁니다 (건물은 빌려 씁니다)']]},
+  {id:'gwseller',sec:'영업권',when:a=>a.gw==='yes'&&a.gwland==='no',q:'영업권 대가를 받는 쪽은 누구인가요?',
+   opts:[['person','개인입니다'],['corp','법인입니다']]},
+  {id:'gwwh',sec:'영업권',when:a=>a.gw==='yes'&&a.gwland==='no'&&a.gwseller==='person',q:'영업권 대가를 줄 때 원천징수를 하나요?',
+   help:'개인이 영업권만 넘기고 받는 돈은 기타소득입니다. 사업자가 대가를 줄 때 받는 금액의 8.8%를 떼어 다음 달 10일까지 신고·납부합니다.',
+   opts:[['yes','8.8%를 떼고 줍니다'],['no','떼지 않습니다 / 몰랐습니다']]},
+  {id:'arrears',sec:'그 밖에',q:'넘기는 쪽에 밀린 세금이 없는지 확인했나요?',
+   help:'특수관계인이 사업을 넘겨받으면 넘기는 쪽의 사업 관련 체납 세금을 넘겨받은 재산 한도에서 대신 낼 수 있습니다(제2차 납세의무).',
+   opts:[['yes','납세증명서로 확인했습니다'],['no','확인하지 않았습니다']]},
+  {id:'carryover',sec:'법인전환',when:a=>a.type==='conv',q:'사업용 부동산이 있어 양도소득세 이월과세를 받으려 하나요?',
+   opts:[['yes','받으려 합니다'],['no','사업용 부동산이 없거나 받지 않습니다']]},
+  {id:'capital',sec:'법인전환',when:a=>a.type==='conv'&&a.carryover==='yes',q:'새 법인은 어떻게 세우나요?',
+   help:'이월과세를 받으려면 개인사업자가 발기인이 되어 개인사업의 순자산가액(시가 기준, 영업권 제외) 이상을 자본금으로 내 법인을 세우고, 설립일부터 3개월 안에 사업을 포괄적으로 넘겨야 합니다.',
+   opts:[['ok','순자산가액 이상 자본금으로 세우고 3개월 안에 넘깁니다'],['short','자본금이 순자산가액보다 적습니다'],['late','법인을 세운 지 3개월이 넘었습니다'],['unknown','잘 모르겠습니다']]}
+];
+
+// 부가가치세 포괄양수도 판단: no(해당 안 됨) · ask(애매함) · ok(요건 갖춤)
+function vatStatus(a){
+  if(a.scope==='asset'||a.unit==='part') return 'no';
+  if(['ar','unknown'].includes(a.scope)||a.buyer==='exempt'||a.staff==='quit') return 'ask';
+  return 'ok';
+}
+// 세금계산서 처리: [수준, 제목, 설명]
+function invoiceCheck(a,v){
+  if(a.invoice==='proxy') return null;
+  if(v==='no'){
+    if(a.invoice==='issue') return null;
+    return ['risk','포괄양수도가 아닌데 세금계산서를 '+(a.invoice==='none'?'발급하지 않으려 합니다':'정하지 않았습니다'),
+      '포괄양수도로 보지 않으면 넘기는 자산을 판 것이라 세금계산서를 발급하고 부가세를 받아야 합니다. 발급하지 않으면 넘기는 쪽에 부가세와 가산세가 나옵니다.'];
+  }
+  if(v==='ask'){
+    if(a.invoice==='issue') return ['ask','애매한 상태에서 세금계산서를 발급하려 합니다','포괄양수도로 인정되면 발급한 세금계산서로 넘겨받는 쪽이 매입세액을 공제받지 못할 수 있습니다. 넘겨받는 쪽이 부가세를 떼어 직접 내는 대리납부로 처리하면 어느 쪽이든 안전합니다.'];
+    return ['ask','포괄양수도인지 애매합니다','포괄양수도로 인정되지 않으면 넘기는 쪽에 부가세와 가산세가 나올 수 있습니다. 판단이 어려우면 넘겨받는 쪽이 대리납부하고 세금계산서를 발급하는 방법이 안전합니다.'];
+  }
+  if(a.invoice==='issue') return ['risk','포괄양수도인데 세금계산서를 발급하려 합니다','포괄양수도는 재화의 공급이 아니어서 세금계산서를 발급할 거래가 아닙니다. 발급하고 부가세를 주고받으면 넘겨받는 쪽이 매입세액을 공제받지 못할 수 있으니, 발급하려면 대리납부로 처리하세요.'];
+  if(a.invoice==='unknown') return ['ask','세금계산서 처리를 정해야 합니다','포괄양수도 요건을 갖췄다면 세금계산서를 발급하지 않습니다. 계약서에 포괄양수도라는 점과 부가세 처리 방법을 적어 두세요.'];
+  return null;
+}
+
+// 확인할 항목: [조건, 수준, 구분, 제목, 설명]
+const CHECKS=[
+  [a=>a.scope==='asset','risk','부가가치세','사업 자산 일부만 넘깁니다','일부 자산만 넘기면 포괄양수도가 아니라 자산을 판 것으로 봅니다. 넘기는 자산에 세금계산서를 발급하고 부가세를 주고받아야 합니다.'],
+  [a=>a.scope==='ar','ask','부가가치세','거래처 채권·채무까지 빼고 넘깁니다','빼도 되는 미수금·미지급금은 일반 거래 밖에서 생긴 것입니다. 외상매출금·외상매입금까지 빼면 포괄 승계로 보지 않을 수 있으니 빼는 항목을 계약서 별지에 정확히 적고 장부와 맞춰 두세요.'],
+  [a=>a.scope==='unknown','ask','부가가치세','넘기는 범위를 정해야 합니다','넘기는 자산·부채와 빼는 항목을 목록으로 만들어 보세요. 빼는 것이 많을수록 포괄양수도로 인정받기 어렵습니다.'],
+  [a=>a.unit==='part','risk','부가가치세','한 사업장 안의 일부 사업만 넘깁니다','같은 사업장에서 여러 사업 가운데 한 부문만 넘기면 포괄양수도로 보지 않는다는 해석이 있습니다. 세금계산서를 발급하거나 대리납부로 처리해야 합니다.'],
+  [a=>a.buyer==='simple','ask','부가가치세','간이과세자로 등록하려 합니다','넘기는 쪽이 일반과세자이면 포괄양수한 사업자는 간이과세자가 될 수 없고 일반과세자로 등록해야 합니다.'],
+  [a=>a.buyer==='exempt','ask','부가가치세','면세사업으로 바꿔 이어갑니다','업종을 바꿔도 사업양도로 보지만, 면세사업자가 넘겨받는 경우는 해석이 갈릴 수 있어 미리 확인하는 편이 안전합니다.'],
+  [a=>a.buyer==='unknown','ask','부가가치세','넘겨받는 쪽의 사업자 유형을 정해야 합니다','일반과세자에게서 사업을 넘겨받으면 간이과세자가 될 수 없습니다. 사업자등록 전에 유형을 정해 두세요.'],
+  [a=>a.staff==='quit','ask','부가가치세','직원을 모두 정리하고 넘깁니다','직원이 빠져도 사업이 그대로 이어지면 포괄양수도로 볼 수 있지만 판단이 갈릴 수 있습니다. 또 사업양도를 이유로 한 해고는 정당한 이유가 있어야 하니 노무 검토가 필요합니다.'],
+  [a=>a.staff==='some','ask','직원','일부 직원만 넘깁니다','사업을 넘기면 근로관계는 원칙적으로 함께 넘어갑니다. 일부 직원을 빼기로 하는 약정은 해고와 같아 정당한 이유가 있어야 효력이 있습니다.'],
+  [a=>hasStaff(a)&&a.sev==='pay','risk','직원','퇴직금만 정산하고 근무는 그대로 이어집니다','직원이 스스로 사직하지 않았는데 퇴직금만 주면 근속기간이 끊긴 것으로 보지 않습니다. 나중에 넘겨받는 쪽이 처음부터의 근무기간으로 퇴직금을 다시 계산해 줘야 할 수 있습니다.'],
+  [a=>hasStaff(a)&&a.sev==='settle','ask','직원','퇴직금을 정산하고 다시 입사합니다','직원이 자기 뜻으로 사직하고 정산받아야 근속기간이 끊깁니다. 회사가 일괄로 사직서를 받으면 다툼이 생길 수 있으니 직원별 동의서를 받아 두세요.'],
+  [a=>hasStaff(a)&&a.sev==='unknown','risk','직원','퇴직금 처리 방법을 정하지 않았습니다','정하지 않고 넘기면 근속기간이 그대로 이어져, 넘겨받는 쪽이 넘기기 전 기간의 퇴직금까지 떠안습니다. 정산할지, 이어서 넘기며 대가에서 뺄지 계약서에 적어 두세요.'],
+  [a=>hasStaff(a)&&a.sev==='carry'&&a.debt==='no','risk','직원','쌓인 퇴직금을 대가에 반영하지 않았습니다','넘겨받는 쪽이 넘기기 전 기간의 퇴직금까지 나중에 줘야 합니다. 그만큼 양수 대가에서 빼거나 퇴직금 부채로 넘겨받고, 계산 근거를 계약서에 남겨 두세요.'],
+  [a=>hasStaff(a)&&a.leave==='unknown','ask','직원','남은 연차 처리를 정해야 합니다','근속기간이 이어지면 연차도 이어서 계산합니다. 넘기기 전에 수당으로 정산할지, 넘겨받는 쪽이 이어서 줄지 정해 두세요.'],
+  [a=>hasStaff(a)&&a.agree==='no','ask','직원','직원 안내와 동의가 아직입니다','직원은 승계를 거부할 수 있고, 근로조건은 불리하게 바꿀 수 없습니다. 승계 사실을 알리고 근로계약서를 새로 써 두세요.'],
+  [a=>hasStaff(a)&&a.credit==='yes','risk','직원','넘겨받은 직원으로 통합고용세액공제를 받으려 합니다','사업을 넘겨받으며 승계한 직원은 직전 연도부터 있던 인원으로 계산해 증가 인원에서 빠집니다. 법인전환도 같고, 넘겨받은 뒤 새로 뽑은 인원만 공제 대상입니다.'],
+  [a=>a.gw==='unknown','ask','영업권','영업권을 주고받을지 정해야 합니다','장부에 없더라도 사업의 가치가 있으면 영업권이 함께 넘어간 것으로 볼 수 있습니다. 금액을 정할지 먼저 검토하세요.'],
+  [a=>a.gw==='no'&&a.type==='conv','ask','영업권','영업권 없이 법인으로 넘깁니다','대가 없이 넘겼다가 나중에 영업권도 함께 넘긴 것으로 보아 세금이 매겨진 사례가 있습니다. 반대로 대가를 받으면 대표님은 60%를 경비로 인정받는 기타소득으로 돈을 가져올 수 있으니 <a href="goodwill.html">영업권 평가 계산기</a>로 먼저 따져 보세요.'],
+  [a=>a.gw==='yes'&&a.gwprice==='deal'&&a.type!=='third','risk','영업권','특수관계인 사이에 협의로 금액을 정했습니다','대표님 법인이나 가족과의 거래는 시가로 해야 합니다. 감정평가액이 있으면 그 금액, 없으면 세법상 평가액이 시가입니다. 시가와 다르면 세금이 다시 계산되고 증여세 문제가 생길 수 있습니다.'],
+  [a=>a.gw==='yes'&&a.gwprice==='appraisal'&&a.type!=='third','ask','영업권','감정평가액으로 넘깁니다','감정평가는 거래 전에 받아야 합니다. 거래 뒤에 소급해서 받은 감정은 인정받지 못한 사례가 있습니다.'],
+  [a=>a.gw==='yes'&&a.gwland==='yes','ask','영업권','토지·건물과 함께 넘깁니다','사업용 토지·건물과 함께 넘기는 영업권은 기타소득이 아니라 양도소득세로 계산합니다. 법인전환이면 이월과세 대상에 들어가는지도 함께 봐야 합니다.'],
+  [a=>a.gw==='yes'&&a.gwwh==='no','risk','영업권','영업권 대가에서 원천징수를 하지 않으려 합니다','개인에게 영업권 대가를 주는 사업자는 받는 금액의 8.8%(기타소득금액 40%의 22%)를 떼어 다음 달 10일까지 신고·납부해야 합니다. 하지 않으면 원천징수 가산세가 붙습니다.'],
+  [a=>a.gw==='yes'&&vatStatus(a)==='no','ask','영업권','영업권 대가에도 부가세가 붙습니다','포괄양수도가 아니면 사업자가 받는 영업권 대가도 부가세 과세 대상이라 세금계산서를 발급해야 합니다.'],
+  [a=>a.arrears==='no'&&a.type!=='third','risk','그 밖에','넘기는 쪽의 체납 세금을 확인하지 않았습니다','대표님 법인이나 가족처럼 특수관계인이 넘겨받으면 넘기는 쪽의 사업 관련 체납 세금을 넘겨받은 재산 한도에서 대신 낼 수 있습니다(제2차 납세의무). 납세증명서를 받아 두세요.'],
+  [a=>a.arrears==='no'&&a.type==='third','ask','그 밖에','넘기는 쪽의 체납 세금을 확인하지 않았습니다','관계없는 사람이 넘겨받으면 원칙적으로 대신 내지 않지만, 체납이 있으면 자산 압류 등으로 거래가 꼬일 수 있습니다. 납세증명서를 받아 두세요.'],
+  [a=>a.capital==='short','risk','법인전환','자본금이 순자산가액보다 적습니다','이월과세는 새 법인 자본금이 개인사업의 순자산가액(시가 기준, 영업권 제외) 이상이어야 받습니다. 모자라면 양도소득세를 바로 냅니다.'],
+  [a=>a.capital==='late','risk','법인전환','법인을 세운 지 3개월이 넘었습니다','사업양수도 방식 이월과세는 법인 설립일부터 3개월 안에 사업을 넘겨야 받습니다.'],
+  [a=>a.capital==='unknown','ask','법인전환','순자산가액과 일정을 확인해야 합니다','개인사업 자산을 시가로 평가해 순자산가액을 구하고, 그 이상을 자본금으로 내 법인을 세운 뒤 3개월 안에 넘겨야 합니다.'],
+  [a=>a.carryover==='yes','ask','법인전환','이월과세 사후관리를 지켜야 합니다','주택과 주택을 취득할 권리는 이월과세 대상이 아니고, 주점 같은 소비성서비스업도 제외됩니다. 법인 설립일부터 5년 안에 사업을 그만두거나 주식을 절반 이상 처분하면 미룬 양도소득세를 내야 합니다.']
+];
+
+// 해야 할 일
+function todos(a){
+  const t=['사업양수도 계약서에 사업 일체를 포괄적으로 넘긴다는 문구를 넣고, 넘기는 자산·부채·직원 목록과 빼는 항목을 붙입니다.',
+    '넘기는 쪽: 폐업신고를 하고, 폐업일이 속한 달의 다음 달 25일까지 부가가치세 확정신고를 하면서 사업양도신고서를 함께 냅니다.',
+    '넘겨받는 쪽: 사업자등록을 새로 하면서 사업양수 사실과 계약서를 냅니다. 영업신고 같은 인허가가 필요한 업종은 지위승계 신고를 합니다.',
+    '임대차계약은 임대인 동의를 받아 승계하거나 새로 쓰고, 거래처에는 계약과 채권·채무가 넘어간다는 사실을 알립니다.'];
+  if(a.invoice==='proxy') t.push('대리납부: 넘겨받는 쪽이 대가를 줄 때 부가세를 떼어 다음 달 25일까지 사업장 관할 세무서에 신고·납부합니다. 넘기는 쪽은 확정신고 때 대리납부된 세액을 뺍니다.');
+  if(hasStaff(a)) t.push('4대보험은 사업장 승계 신고를 하거나 직원별 상실·취득 신고를 하고, 퇴직연금이 있으면 계약 이전도 함께 처리합니다.');
+  if(a.gw==='yes'&&a.gwwh!=='no'&&a.gwseller==='person') t.push('영업권 대가: 지급한 달의 다음 달 10일까지 원천징수세액을 신고·납부하고 지급명세서를 냅니다. 받은 분은 다음 해 5월에 다른 소득과 합쳐 신고합니다.');
+  if(a.gw==='yes') t.push('넘겨받는 쪽은 영업권을 무형자산으로 올려 5년 동안 나눠 비용으로 처리합니다. 평가서나 계약서처럼 금액의 근거를 보관해 두세요.');
+  t.push('넘기는 쪽이 개인사업자라면 넘긴 재고 금액은 그해 사업소득 수입에 들어가고, 복식부기의무자는 차량·기계 같은 사업용 자산을 넘긴 이익도 사업소득에 들어갑니다.');
+  if(a.carryover==='yes') t.push('이월과세: 양도소득세 신고 때 새 법인과 함께 이월과세적용신청서를 냅니다. 사업용 부동산 취득세 감면은 요건이 따로 있으니 함께 확인합니다.');
+  return t;
+}
+
+function decide(a){
+  const v=vatStatus(a);
+  const checks=CHECKS.filter(([f])=>f(a)).map(([,lv,sec,t,s])=>[lv,sec,t,s]);
+  const inv=invoiceCheck(a,v);
+  if(inv) checks.unshift([inv[0],'부가가치세',inv[1],inv[2]]);
+  checks.sort((x,y)=>(x[0]==='risk'?0:1)-(y[0]==='risk'?0:1));
+  return {v,checks,risks:checks.filter(c=>c[0]==='risk').length,asks:checks.filter(c=>c[0]==='ask').length};
+}
+
+/* ── 화면 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+let answers={}, order=[], idx=0;
+const visible=()=>QUESTIONS.filter(q=>!q.when||q.when(answers));
+function show(){
+  order=visible();
+  if(idx>=order.length){ result(); return; }
+  const q=order[idx];
+  $('q-step').textContent=q.sec+' · '+(idx+1)+' / '+order.length;
+  $('q-bar').style.width=Math.round(idx/order.length*100)+'%';
+  $('q-back').style.visibility=idx?'visible':'hidden';
+  $('q-title').textContent=q.q;
+  $('q-help').textContent=q.help||'';
+  $('q-help').style.display=q.help?'':'none';
+  $('q-opts').innerHTML=q.opts.map(([v,label])=>'<button type="button" class="opt'+(answers[q.id]===v?' on':'')+'" data-v="'+v+'">'+label+'</button>').join('');
+  $('qbox').style.display='';
+  $('res').style.display='none';
+}
+$('q-opts').addEventListener('click',e=>{
+  const b=e.target.closest('.opt'); if(!b) return;
+  answers[order[idx].id]=b.dataset.v;
+  idx++; show();
+});
+$('q-back').addEventListener('click',()=>{ if(idx){ idx--; show(); } });
+$('restart').addEventListener('click',()=>{ answers={}; idx=0; show(); window.scrollTo({top:$('qbox').offsetTop-90,behavior:'smooth'}); });
+
+function result(){
+  const a=answers, d=decide(a);
+  const head={
+    no:['넘기는 방식을 보면','포괄양수도로<br>보기 어렵습니다','자산을 판 것으로 보아 세금계산서를 발급하고 부가세를 주고받아야 합니다. 넘겨받는 쪽이 대리납부하는 방법도 있습니다.'],
+    ask:['답해 주신 내용으로는','포괄양수도인지<br>확인이 필요합니다','판단이 갈릴 수 있는 부분이 있습니다. 애매하면 넘겨받는 쪽이 대리납부하고 세금계산서를 발급하는 방법이 안전합니다.'],
+    ok:['부가가치세법상','포괄양수도 요건을<br>갖춘 것으로 보입니다','세금계산서를 발급하지 않고 사업양도신고서를 내면 됩니다. 아래 직원·영업권 항목까지 함께 확인해 주세요.']
+  }[d.v];
+  if(d.v==='ok'&&d.risks) head.splice(0,3,'부가가치세 포괄양수도 요건은 갖췄지만','그대로 두면 위험한<br>항목이 '+d.risks+'가지 있습니다','세금계산서는 발급하지 않아도 됩니다. 아래 위험 항목부터 정리해 주세요.');
+  $('verdict').className='verdict'+(d.v==='no'||d.risks?' warn':'');
+  $('verdict').innerHTML='<div class="lbl">'+head[0]+'</div><div class="val">'+head[1]+'</div><div class="sub">'+head[2]+'</div>'
+    +(d.checks.length?'<div class="chips">'+(d.risks?'<span>위험 '+d.risks+'가지</span>':'')+(d.asks?'<span>확인 '+d.asks+'가지</span>':'')+'</div>':'');
+
+  const need=(t,txt,tag)=>'<li><span><b>'+t+'</b> '+txt+'</span><span class="tag '+tag[0]+'">'+tag[1]+'</span></li>';
+  const OK=['ok','충족'], NO=['no','해당 안 됨'], ASK=['ask','확인 필요'];
+  const scopeTxt={all:'빼는 것 없이 모두 넘깁니다',misc:'미수금·미지급금이나 사업과 관계없는 토지·건물만 뺍니다',ar:'거래처 채권·채무까지 뺍니다',asset:'사업 자산 일부만 넘깁니다',unknown:'넘기는 범위를 정하지 않았습니다'}[a.scope];
+  const unitTxt={whole:'사업장 하나를 통째로 넘깁니다',multi:'여러 사업장 가운데 한 곳을 통째로 넘깁니다',part:'한 사업장 안의 일부 사업만 넘깁니다'}[a.unit];
+  const buyerTxt={general:'같은 사업을 이어갑니다',change:'업종을 바꾸거나 더해 이어갑니다 (사업양도로 봅니다)',simple:'간이과세자로 등록하려 합니다',exempt:'면세사업만 하려 합니다',unknown:'사업자 유형을 정하지 않았습니다'}[a.buyer];
+  const invTxt={none:'발급하지 않습니다',issue:'발급하고 부가세를 주고받습니다',proxy:'넘겨받는 쪽이 대리납부합니다',unknown:'정하지 않았습니다'}[a.invoice];
+  const inv=invoiceCheck(a,d.v);
+  $('vat').innerHTML=
+      need('넘기는 범위',scopeTxt,['all','misc'].includes(a.scope)?OK:a.scope==='asset'?NO:ASK)
+    +need('사업장 단위',unitTxt,a.unit==='part'?NO:OK)
+    +need('넘겨받는 쪽',buyerTxt,['general','change'].includes(a.buyer)?OK:ASK)
+    +need('세금계산서',invTxt,!inv?['ok','맞습니다']:inv[0]==='risk'?['no','바꿔야 합니다']:ASK);
+
+  $('check-title').textContent='확인할 항목'+(d.risks||d.asks?': '+[d.risks?'위험 '+d.risks+'가지':'',d.asks?'확인 '+d.asks+'가지':''].filter(Boolean).join(', '):'');
+  $('checks').innerHTML=d.checks.length
+    ? d.checks.map(([lv,sec,t,s])=>'<li><div><b><em>'+sec+'</em>'+t+'</b><span>'+s+'</span></div><span class="lv '+lv+'">'+(lv==='risk'?'위험':'확인')+'</span></li>').join('')
+    : '<li><div><b>답해 주신 내용에서는 걸리는 항목이 없습니다</b><span>다만 실제 판단은 계약서와 장부, 직원 현황을 보고 합니다.</span></div></li>';
+  $('todo').innerHTML=todos(a).map(x=>'<li>'+x+'</li>').join('');
+
+  $('qbox').style.display='none';
+  $('res').style.display='block';
+  if(window.gtag) gtag('event','business_transfer_result');
+}
+show();
+</script>
+</body>
+</html>
