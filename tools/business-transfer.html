@@ -580,7 +580,7 @@ function result(){
 
   $('qbox').style.display='none';
   $('res').style.display='block';
-  if(window.gtag) gtag('event','business_transfer_result');
+  if(window.gtag){ gtag('event','business_transfer_result'); gtag('event','calc_run'); }   // 계산기와 같은 이름으로도 셉니다
 }
 show();
 </script>

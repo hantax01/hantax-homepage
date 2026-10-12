@@ -736,10 +736,15 @@ function drawCharts(p,g){
 
 /* ── 화면 ─────────────────────────────────────── */
 function row(label,mid,val,cls){ return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>'; }
+// 방문 통계: 결과가 나온 뒤 2초 동안 입력이 멈추면 한 번 셉니다 (글자마다, 같은 결과를 다시 세지 않게)
+var gaT, gaLast='';
+function countRun(sig){ clearTimeout(gaT); gaT=setTimeout(function(){ if(sig!==gaLast&&window.gtag){ gaLast=sig; gtag('event','calc_run'); } },2000); }
+
 function render(){
   const p=read(), g=Math.max(0,p.salary-p.nontax*12), r=calc(p,g);
   $('res-empty').hidden=p.salary>0; $('res').hidden=!(p.salary>0);
   if(!(p.salary>0)) return;
+  countRun(r.net+'|'+r.tax);
   $('h-net').textContent=manwon(r.net);
   $('h-net-m').textContent='월 평균 '+manwon(r.net/12);
   $('h-tax').textContent=manwon(r.tax);

@@ -402,7 +402,7 @@ function result(){
   }).join('');
   $('qbox').style.display='none';
   $('res').style.display='block';
-  if(window.gtag) gtag('event','car_choice_result');
+  if(window.gtag){ gtag('event','car_choice_result'); gtag('event','calc_run'); }   // 계산기와 같은 이름으로도 셉니다
 }
 show();
 </script>
