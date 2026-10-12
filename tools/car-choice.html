@@ -52,6 +52,11 @@
 .tag.best{background:var(--blue-soft);color:var(--blue)}
 .tag.ok{background:var(--soft);color:var(--char)}
 .tag.no{background:var(--seal-soft);color:var(--seal)}
+.restop{display:flex;justify-content:flex-end;margin-bottom:12px}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
 .again{margin-top:18px;text-align:center}
 .again button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
   font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
@@ -183,6 +188,7 @@
       </div>
 
       <div class="res" id="res">
+        <div class="restop"><button type="button" class="savebtn" id="save-img">이미지 복사·저장</button></div>
         <div class="verdict" id="verdict"></div>
         <div class="box" id="corp-box" style="display:none">
           <h3>명의는 법인으로 두세요</h3>
@@ -399,6 +405,14 @@ function result(){
   if(window.gtag) gtag('event','car_choice_result');
 }
 show();
+</script>
+<script src="../assets/save-image.js?v=3"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('res'),
+  ()=>({ title:'업무용 차량 구입 방법 진단 결과', sub:'일시취득 · 할부취득 · 운용리스 · 장기렌트 비교', filename:'한택스_차량구입방법' })
+);
 </script>
 </body>
 </html>

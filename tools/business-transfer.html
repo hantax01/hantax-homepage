@@ -66,6 +66,11 @@
 .checks em{font-style:normal;font-size:12px;font-weight:800;color:var(--blue);margin-right:7px}
 .todo li{font-size:14.5px;line-height:1.8}
 .checks span{display:block;font-size:13.5px;color:var(--mute);line-height:1.7;margin-top:4px}
+.restop{display:flex;justify-content:flex-end;margin-bottom:12px}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
 .again{margin-top:18px;text-align:center}
 .again button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
   font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
@@ -167,6 +172,14 @@
   },
   {
    "@type": "Question",
+   "name": "시설권리금과 영업권리금은 어떻게 다른가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "시설권리금은 인테리어, 시설, 집기처럼 눈에 보이는 시설을 넘기는 대가이고, 영업권리금은 단골과 거래처, 노하우, 상권과 입지(바닥권리금)처럼 보이지 않는 가치의 대가입니다. 시설권리금은 사업용 자산을 판 것이라 기타소득 원천징수 대상이 아니고, 양도자가 복식부기의무자면 사업소득에 들어갑니다. 양수자는 시설장치나 비품으로 올려 감가상각합니다. 영업권리금은 기타소득(받은 금액의 60% 경비)이라 받을 때 8.8%를 원천징수하고, 양수자는 영업권으로 올려 5년 동안 나눠 비용으로 처리합니다. 포괄양수도가 아니면 둘 다 부가세가 붙으니 계약서에 금액을 나눠 적어 두세요."
+   }
+  },
+  {
+   "@type": "Question",
    "name": "법인전환 때 양도소득세를 미룰 수 있나요?",
    "acceptedAnswer": {
     "@type": "Answer",
@@ -230,6 +243,7 @@
       </div>
 
       <div class="res" id="res">
+        <div class="restop"><button type="button" class="savebtn" id="save-img">이미지 복사·저장</button></div>
         <div class="verdict" id="verdict"></div>
         <div class="box">
           <h3>부가가치세 포괄양수도 판단</h3>
@@ -284,6 +298,10 @@
         <details>
           <summary>영업권(권리금)은 세금이 어떻게 되나요?</summary>
           <div class="a">개인이 영업권만 넘기고 받은 돈은 기타소득으로, 받은 금액의 60%를 경비로 빼 줍니다. 대가를 주는 사업자는 받는 금액의 8.8%를 원천징수합니다. 사업용 토지나 건물과 함께 넘기면 양도소득세로 계산합니다. 양수자는 영업권을 무형자산으로 올려 5년 동안 나눠 비용으로 처리하고, 포괄양수도가 아니면 영업권 대가에도 부가세가 붙습니다.</div>
+        </details>
+        <details>
+          <summary>시설권리금과 영업권리금은 어떻게 다른가요?</summary>
+          <div class="a">시설권리금은 인테리어, 시설, 집기처럼 눈에 보이는 시설을 넘기는 대가이고, 영업권리금은 단골과 거래처, 노하우, 상권과 입지(바닥권리금)처럼 보이지 않는 가치의 대가입니다. 시설권리금은 사업용 자산을 판 것이라 기타소득 원천징수 대상이 아니고, 양도자가 복식부기의무자면 사업소득에 들어갑니다. 양수자는 시설장치나 비품으로 올려 감가상각합니다. 영업권리금은 기타소득(받은 금액의 60% 경비)이라 받을 때 8.8%를 원천징수하고, 양수자는 영업권으로 올려 5년 동안 나눠 비용으로 처리합니다. 포괄양수도가 아니면 둘 다 부가세가 붙으니 계약서에 금액을 나눠 적어 두세요.</div>
         </details>
         <details>
           <summary>법인전환 때 양도소득세를 미룰 수 있나요?</summary>
@@ -382,7 +400,7 @@ const QUESTIONS=[
   {id:'credit',sec:'직원',when:hasStaff,q:'넘겨받은 직원으로 통합고용세액공제를 받으려 하나요?',
    opts:[['yes','직원 수가 늘었으니 받으려 합니다'],['no','아닙니다']]},
   {id:'gw',sec:'영업권',q:'영업권(권리금)을 따로 주고받나요?',
-   help:'단골, 입지, 노하우처럼 장부에 없는 사업의 가치입니다. 상가 권리금도 같은 성격입니다.',
+   help:'상가 권리금은 인테리어·시설·집기 값인 시설권리금과, 단골·거래처·노하우·입지(바닥권리금) 값인 영업권리금으로 나뉘고 세금 처리가 다릅니다. 이 질문은 영업권리금을 기준으로 답해 주세요. 시설권리금은 사업 자산을 넘기는 대가로 봅니다.',
    opts:[['yes','금액을 따로 정했습니다'],['no','따로 주고받지 않습니다'],['unknown','잘 모르겠습니다']]},
   {id:'gwprice',sec:'영업권',when:a=>a.gw==='yes',q:'영업권 금액은 어떻게 정했나요?',
    opts:[['appraisal','감정평가를 받았습니다'],['tax','세법상 평가 방법(상속세 및 증여세법)으로 계산했습니다'],['deal','당사자끼리 협의했습니다']]},
@@ -481,6 +499,7 @@ function todos(a){
   if(a.invoice==='proxy') t.push('대리납부: 양수자가 대가를 줄 때 부가세를 떼어 다음 달 25일까지 사업장 관할 세무서에 신고·납부합니다. 양도자는 확정신고 때 대리납부된 세액을 뺍니다.');
   if(hasStaff(a)) t.push('4대보험은 사업장 승계 신고를 하거나 직원별 상실·취득 신고를 하고, 퇴직연금이 있으면 계약 이전도 함께 처리합니다.');
   if(a.gw==='yes'&&a.gwland==='no'&&a.gwwh!=='no'&&sellerPerson(a)) t.push('영업권 대가: 지급한 달의 다음 달 10일까지 원천징수세액을 신고·납부하고 지급명세서를 냅니다. 받은 분은 다음 해 5월에 다른 소득과 합쳐 신고합니다.');
+  if(a.gw==='yes') t.push('권리금은 시설권리금과 영업권리금으로 나눠 계약서에 적습니다. 시설권리금은 시설·집기를 판 대가라 원천징수 대상이 아니고, 영업권리금만 기타소득으로 원천징수합니다.');
   if(a.gw==='yes') t.push('양수자는 영업권을 무형자산으로 올려 5년 동안 나눠 비용으로 처리합니다. 평가서나 계약서처럼 금액의 근거를 보관해 두세요.');
   t.push('양도자가 개인사업자라면 넘긴 재고 금액은 그해 사업소득 수입에 들어가고, 복식부기의무자는 차량·기계 같은 사업용 자산을 넘긴 이익도 사업소득에 들어갑니다.');
   if(a.carryover==='yes') t.push('이월과세: 양도소득세 신고 때 새 법인과 함께 이월과세적용신청서를 냅니다. 사업용 부동산 취득세 감면은 요건이 따로 있으니 함께 확인합니다.');
@@ -564,6 +583,14 @@ function result(){
   if(window.gtag) gtag('event','business_transfer_result');
 }
 show();
+</script>
+<script src="../assets/save-image.js?v=3"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('res'),
+  ()=>({ title:'사업 포괄양수도 점검 결과', sub:({conv:'개인사업자를 대표님 법인으로 넘기는 법인전환',family:'가족·친척에게 넘기는 사업양도',third:'관계없는 사람과의 사업양수도'}[answers.type]||'')+' · 간이 점검', filename:'한택스_포괄양수도점검' })
+);
 </script>
 </body>
 </html>

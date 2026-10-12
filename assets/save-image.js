@@ -141,6 +141,151 @@ window.HantaxImage = (function () {
     return new Promise(res => cv.toBlob(res, 'image/png'));
   }
 
+  /* 글자를 폭에 맞춰 여러 줄로 나눕니다 (띄어쓰기 기준, 너무 긴 낱말은 글자 단위) */
+  function wrap(g, text, max) {
+    const out = [];
+    let line = '';
+    for (const word of text.split(/\s+/).filter(Boolean)) {
+      const t = line ? line + ' ' + word : word;
+      if (g.measureText(t).width <= max) { line = t; continue; }
+      if (line) out.push(line);
+      line = '';
+      for (const ch of word) {
+        if (g.measureText(line + ch).width > max && line) { out.push(line); line = ''; }
+        line += ch;
+      }
+    }
+    if (line) out.push(line);
+    return out;
+  }
+  const txt = el => el ? el.textContent.replace(/\s+/g, ' ').trim() : '';
+
+  /* 체크리스트·진단 결과(판정 상자와 목록 상자)를 화면 구조 그대로 읽어 이미지로 만듭니다 */
+  async function fromResult(root, opt) {
+    opt = opt || {};
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+    const W = 860, PAD = 34, IN = W - PAD * 2;
+    const cv = document.createElement('canvas');
+    const g = cv.getContext('2d');
+    const font = (w, s) => { g.font = w + ' ' + s + 'px ' + SANS; };
+    const ops = [];                                     // 먼저 자리를 잡고, 높이를 안 뒤에 그립니다
+    let y = 46;
+
+    font(700, 23); ops.push({ t: 'text', s: (opt.title || '점검 결과').trim(), x: PAD, y, f: [700, 23], c: C.ink });
+    y += 30;
+    if (opt.sub) { ops.push({ t: 'text', s: opt.sub.trim(), x: PAD, y, f: [400, 13.5], c: C.mute, fit: IN }); }
+    y += 28;
+
+    /* 판정 상자 */
+    const v = root.querySelector('.verdict');
+    if (v) {
+      const bg = getComputedStyle(v).backgroundColor, top = y, pad = 22, w = IN - pad * 2;
+      const parts = [];
+      const lbl = txt(v.querySelector('.lbl')), val = v.querySelector('.val'), sub = txt(v.querySelector('.sub'));
+      const chips = [...v.querySelectorAll('.chips span')].map(txt).join(' · ');
+      let h = pad;
+      if (lbl) { font(400, 13.5); parts.push({ y: h + 9, s: lbl, f: [400, 13.5], o: .85 }); h += 26; }
+      if (val) {
+        const c = val.cloneNode(true); c.querySelectorAll('br').forEach(b => b.replaceWith(' '));
+        font(800, 22);
+        for (const l of wrap(g, txt(c), w)) { parts.push({ y: h + 14, s: l, f: [800, 22], o: 1 }); h += 32; }
+        h += 4;
+      }
+      if (sub) { font(400, 13.5); for (const l of wrap(g, sub, w)) { parts.push({ y: h + 10, s: l, f: [400, 13.5], o: .88 }); h += 22; } }
+      if (chips) { h += 6; parts.push({ y: h + 10, s: chips, f: [700, 13], o: 1 }); h += 22; }
+      h += pad - 4;
+      ops.push({ t: 'box', x: PAD, y: top, w: IN, h, fill: bg, r: 12 });
+      parts.forEach(p => ops.push({ t: 'text', s: p.s, x: W / 2, y: top + p.y, f: p.f, c: '#fff', a: 'center', o: p.o }));
+      y = top + h + 18;
+    }
+
+    /* 목록 상자 */
+    for (const box of root.querySelectorAll('.box')) {
+      if (getComputedStyle(box).display === 'none') continue;
+      const top = y, pad = 20, w = IN - pad * 2;
+      let h = pad;
+      const inner = [];
+      const h3 = txt(box.querySelector('h3'));
+      if (h3) { inner.push({ t: 'text', s: h3, x: pad, y: h + 9, f: [700, 16], c: C.ink }); h += 30; }
+      const items = [...box.querySelectorAll('li')];
+      if (!items.length) {
+        font(400, 13.5);
+        for (const p of box.querySelectorAll('p')) for (const l of wrap(g, txt(p), w)) { inner.push({ t: 'text', s: l, x: pad, y: h + 10, f: [400, 13.5], c: C.char }); h += 22; }
+      }
+      items.forEach((li, i) => {
+        const badge = li.querySelector('.tag,.lv');
+        const b = li.querySelector('b');
+        const rest = li.cloneNode(true);
+        rest.querySelectorAll('b,.tag,.lv').forEach(e => e.remove());
+        const em = b && b.querySelector('em');
+        const bt = b ? b.cloneNode(true) : null;
+        if (bt) bt.querySelectorAll('em').forEach(e => e.remove());
+        const title = (em ? txt(em) + ' · ' : '') + txt(bt);
+        const desc = txt(rest);
+        let bw = 0;
+        if (badge) {
+          font(700, 12);
+          bw = g.measureText(txt(badge)).width + 20;
+          const cs = getComputedStyle(badge);
+          inner.push({ t: 'box', x: pad + w - bw, y: h + 1, w: bw, h: 22, fill: cs.backgroundColor, r: 11 });
+          inner.push({ t: 'text', s: txt(badge), x: pad + w - bw / 2, y: h + 12, f: [700, 12], c: cs.color, a: 'center' });
+        }
+        const tw = w - (bw ? bw + 14 : 0);
+        const start = h;
+        if (!b && !badge) {                                      // 그냥 문장인 목록
+          font(400, 14);
+          wrap(g, desc, tw - 14).forEach((l, k) => {
+            if (!k) inner.push({ t: 'text', s: '·', x: pad, y: h + 11, f: [700, 14], c: C.mute });
+            inner.push({ t: 'text', s: l, x: pad + 14, y: h + 11, f: [400, 14], c: C.char }); h += 23;
+          });
+        } else {
+          if (title) { font(700, 14.5); for (const l of wrap(g, title, tw)) { inner.push({ t: 'text', s: l, x: pad, y: h + 11, f: [700, 14.5], c: C.ink }); h += 23; } }
+          if (desc) { font(400, 13); for (const l of wrap(g, desc, tw)) { inner.push({ t: 'text', s: l, x: pad, y: h + 10, f: [400, 13], c: C.mute }); h += 21; } }
+          h = Math.max(h, start + 24);
+        }
+        h += 10;
+        if (i < items.length - 1 && (b || badge)) { inner.push({ t: 'line', x: pad, y: h, w }); h += 10; }
+      });
+      h += pad - 10;
+      ops.push({ t: 'box', x: PAD, y: top, w: IN, h, stroke: C.line, r: 12 });
+      inner.forEach(o => ops.push(Object.assign({}, o, { x: PAD + o.x, y: top + o.y })));
+      y = top + h + 14;
+    }
+
+    const H = y + 60;
+    cv.width = W * 2; cv.height = H * 2;
+    g.scale(2, 2);
+    g.textBaseline = 'middle';
+    g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+    g.fillStyle = C.navy; g.fillRect(0, 0, W, 5);
+    const round = (o) => { g.beginPath(); if (g.roundRect) g.roundRect(o.x, o.y, o.w, o.h, o.r); else g.rect(o.x, o.y, o.w, o.h); };
+    for (const o of ops) {
+      if (o.t === 'box') {
+        round(o);
+        if (o.fill) { g.fillStyle = o.fill; g.fill(); }
+        if (o.stroke) { g.strokeStyle = o.stroke; g.lineWidth = 1; g.stroke(); }
+      } else if (o.t === 'line') {
+        g.strokeStyle = C.soft; g.lineWidth = 1;
+        g.beginPath(); g.moveTo(o.x, o.y); g.lineTo(o.x + o.w, o.y); g.stroke();
+      } else {
+        g.globalAlpha = o.o == null ? 1 : o.o;
+        g.textAlign = o.a || 'left';
+        g.fillStyle = o.c;
+        g.font = o.f[0] + ' ' + (o.fit ? fit(g, o.s, o.fit, o.f[1], o.f[0]) : o.f[1]) + 'px ' + SANS;
+        g.fillText(o.s, o.x, o.y);
+        g.globalAlpha = 1;
+      }
+    }
+    /* 꼬리말 */
+    y += 22;
+    g.textAlign = 'left'; g.fillStyle = C.blue; g.font = '700 14px ' + SANS;
+    g.fillText('한택스 · hantax47.com', PAD, y);
+    g.textAlign = 'right'; g.fillStyle = C.mute; g.font = '400 12.5px ' + SANS;
+    const d = new Date();
+    g.fillText(d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + ' 기준', W - PAD, y);
+    return new Promise(res => cv.toBlob(res, 'image/png'));
+  }
+
   const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
     || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
 
@@ -225,7 +370,8 @@ window.HantaxImage = (function () {
       btn.disabled = true; btn.textContent = '이미지를 만드는 중';
       if (hooks.before) { try { hooks.before(); } catch (e) {} }
       try {
-        const blobPromise = fromTable(getTable(), getOpt());
+        const el = getTable();   // 표면 표로, 체크리스트 결과 영역이면 목록으로 그립니다
+        const blobPromise = el.tagName === 'TABLE' ? fromTable(el, getOpt()) : fromResult(el, getOpt());
         const how = await deliver(blobPromise, (getOpt().filename || '한택스_계산결과') + '.png');
         if (how === 'copy') toast('이미지를 복사했습니다. 카카오톡 대화창에 붙여넣기 하세요');
         else if (how === 'download') toast('이미지를 저장했습니다');
@@ -238,5 +384,5 @@ window.HantaxImage = (function () {
     });
   }
 
-  return { fromTable, deliver, toast, attach };
+  return { fromTable, fromResult, deliver, toast, attach };
 })();
