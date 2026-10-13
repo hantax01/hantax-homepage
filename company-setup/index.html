@@ -35,6 +35,12 @@
 .cs h2{font-family:var(--sans);font-size:22px;font-weight:800;letter-spacing:-.01em;margin:56px 0 10px}
 .cs h2:first-child{margin-top:0}
 .cs .sub{color:var(--mute);font-size:14.5px;margin:0 0 20px}
+.more{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.more a{display:block;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff;text-decoration:none;transition:border-color .15s}
+.more a:hover{border-color:var(--blue-line)}
+.more span{display:block;font-size:12.5px;font-weight:700;color:var(--mute);margin-bottom:6px}
+.more b{display:block;font-size:16px;color:var(--ink);line-height:1.5}
+.more em{display:block;font-style:normal;font-size:13.5px;color:var(--blue);font-weight:700;margin-top:8px}
 .feats{margin:22px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:900px}
 .feats li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:14px;color:var(--mute);line-height:1.7}
 .feats b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
@@ -58,7 +64,7 @@
 .cs .faq h2{margin:16px 0 4px}
 .cs a.in{color:var(--blue);font-weight:700}
 @media(max-width:720px){
-.feats{grid-template-columns:1fr}
+.feats,.more{grid-template-columns:1fr}
 .cs h2{font-size:20px;margin-top:44px}
 }
 </style>
@@ -98,6 +104,11 @@
 <section class="sec" style="padding-top:44px">
   <div class="wrap">
   <div class="cs">
+
+    <div class="more">
+      <a href="../column/company-setup-check.html"><span>세무 칼럼</span><b>법인 등기 전에 세무사가 먼저 봐야 하는 5가지</b><em>실제로 많이 보는 실수와 손해 보기</em></a>
+      <a href="../tools/company-setup.html"><span>세금계산기</span><b>법인설립 수수료와 세금 계산하기</b><em>자본금과 지역을 넣으면 바로 계산</em></a>
+    </div>
 
     <h2>진행 절차</h2>
     <p class="sub">신청서를 보내 주신 뒤 사업자등록증을 받기까지 <b>영업일 기준 7~10일</b> 걸립니다. 급한 경우 업종을 단순하게 정해 3~4일 안에 진행할 수도 있습니다.</p>
