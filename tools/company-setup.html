@@ -91,6 +91,13 @@
   body>*:not(#print-area){display:none!important}
   #print-area{display:block!important;padding:13mm 15mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+.addr{display:flex;gap:8px}
+.addr input{flex:1;min-width:0}
+.addr .btn{white-space:nowrap;justify-content:center;padding:11px 18px}
+.addr-pop{margin-top:10px;border:1px solid var(--line);border-radius:10px;height:460px;overflow:hidden;background:#fff}
+.addr-judge{margin:8px 0 0;font-size:13.5px;line-height:1.7;color:var(--char);background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 13px}
+.addr-judge b{color:var(--ink)}
+.addr-judge.warn{border-color:var(--seal-soft);color:var(--seal)}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:34px}
 .reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
@@ -253,6 +260,12 @@
     <div class="sim">
       <div class="sim-in">
         <div class="divider"><b>설립할 법인</b><span>주식회사 발기설립 기준입니다</span></div>
+        <div class="wide">
+          <label for="i-addr">본점 주소 <small>검색하면 과밀억제권역인지 판단합니다</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주소를 고르면 수도권정비계획법에 따라 과밀억제권역인지 판단해 아래 본점 지역을 채웁니다. 인천경제자유구역(송도·청라·영종), 남동국가산업단지, 남양주·시흥처럼 동마다 다른 곳도 따집니다. 산업단지 안인지는 주소만으로 알 수 없어 따로 확인해 주세요.">?</button></label>
+          <div class="addr"><input type="text" id="i-addr" readonly placeholder="주소 검색을 눌러 주세요"><button type="button" class="btn btn-primary" id="addr-btn">주소 검색</button></div>
+          <div class="addr-pop" id="addr-pop" hidden></div>
+          <p class="addr-judge" id="addr-judge" hidden></p>
+        </div>
         <div>
           <label for="i-cap">자본금 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주주들이 처음 넣는 돈입니다. 등록면허세는 자본금의 0.4%인데 최저 112,500원이라, 자본금 2,812만 5천 원까지는 세금이 같습니다. 업종 인허가에 자본금 요건이 있으면 그 금액 이상이어야 합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-cap" inputmode="numeric"><span>원</span></div>
@@ -353,6 +366,7 @@
 
       <p class="disc">
         · 계산 결과는 참고용입니다. 주식회사를 발기설립하고 등기를 전자신청하는 경우를 기준으로 했습니다.<br>
+        · 과밀억제권역은 수도권정비계획법 시행령 별표1을 기준으로 주소의 시·군·구와 법정동으로 판단했습니다. 경제자유구역·산업단지처럼 동 안에서 경계가 갈리는 곳은 정확한 위치를 확인해야 합니다.<br>
         · 등록면허세는 자본금의 0.4%(최저 112,500원), 과밀억제권역 중과 시 3배, 지방교육세는 등록면허세의 20%로 계산했습니다. 2026년 기준입니다.<br>
         · 등기신청 수수료 20,000원, 등기부등본·제증명 5,000원, 인감증명 5,000원, 법인 전자증명서 4,000원을 넣었습니다.<br>
         · 법무사 보수는 한택스 연계 법무법인 기준이며, 자본금 규모와 임원·주주 수, 업종 인허가 여부에 따라 달라질 수 있습니다.
@@ -414,6 +428,37 @@ function calcSetup(c){
   return {heavy,reg,edu,fees,pub,feeVat,dcVat,pro,total:pub+pro,heavyExtra,tax:reg+edu};
 }
 
+// 과밀억제권역 판단: 주소 검색 결과(시도·시군구·법정동)로 봅니다 (수도권정비계획법 시행령 별표1)
+// 결과: area(metro·other), check(동 단위 경계라 확인 필요), hint(산업단지일 수 있음)
+const IC_WEST_OUT=['대곡동','불로동','마전동','금곡동','오류동','왕길동','당하동','원당동'];
+const IC_YEONGJONG=['운서동','중산동','운남동','운북동','덕교동','을왕동','남북동','무의동'];
+const GG_METRO=['의정부시','구리시','하남시','고양시','수원시','성남시','안양시','부천시','광명시','과천시','의왕시','군포시'];
+const NYJ_METRO=['호평동','평내동','금곡동','일패동','이패동','삼패동','가운동','수석동','지금동','도농동'];
+function judgeArea(a){
+  const sd=a.sido||'', sg=a.sigungu||'', b=a.bname||'', city=sg.split(' ')[0];
+  const M=(why,x)=>Object.assign({area:'metro',why},x), O=(why,x)=>Object.assign({area:'other',why},x);
+  if(/^서울/.test(sd)){
+    const g=(sg==='구로구'&&b==='구로동')||(sg==='금천구'&&b==='가산동');
+    return M('서울 전역은 과밀억제권역이라 등록면허세가 3배입니다.',g?{hint:'서울디지털산업단지(구로·가산디지털단지) 안이면 중과에서 빠집니다. 건물이 산업단지 안인지 확인한 뒤 아래 체크를 해 주세요.'}:{});
+  }
+  if(/^인천/.test(sd)){
+    if(/강화군|옹진군/.test(sg)) return O('강화군·옹진군은 과밀억제권역이 아닙니다.');
+    if(sg==='서구'&&IC_WEST_OUT.includes(b)) return O('인천 서구 검단 일대 8개 동은 과밀억제권역에서 빠집니다.');
+    if((sg==='서구'&&b==='청라동')||(sg==='연수구'&&b==='송도동')||(sg==='중구'&&IC_YEONGJONG.includes(b)))
+      return O('인천경제자유구역(송도·청라·영종)은 과밀억제권역에서 빠집니다.');
+    if(sg==='서구'&&['경서동','원창동','연희동'].includes(b)) return M('과밀억제권역이지만, 청라 인천경제자유구역 안이면 중과에서 빠집니다.',{check:1});
+    if(sg==='남동구'&&['고잔동','남촌동','논현동'].includes(b)) return M('과밀억제권역이지만, 남동국가산업단지 안이면 중과에서 빠집니다.',{check:1});
+    return M('인천의 이 지역은 과밀억제권역이라 등록면허세가 3배입니다.');
+  }
+  if(/^경기/.test(sd)){
+    if(GG_METRO.includes(city)) return M(city+' 전역은 과밀억제권역이라 등록면허세가 3배입니다.');
+    if(city==='남양주시') return NYJ_METRO.includes(b)?M('남양주시 '+b+'은 과밀억제권역이라 등록면허세가 3배입니다.'):O('남양주시는 호평·평내·도농 등 10개 동만 과밀억제권역이고, 이 지역은 아닙니다.');
+    if(city==='시흥시') return b==='정왕동'?O('시흥시 정왕동 일대는 반월특수지역이라 과밀억제권역에서 빠집니다.',{check:1}):M('시흥시는 반월특수지역을 빼면 과밀억제권역이라 등록면허세가 3배입니다.');
+    return O('경기 '+city+'는 과밀억제권역이 아닙니다.');
+  }
+  return O('수도권 과밀억제권역 밖이라 중과가 없습니다.');
+}
+
 /* ── 입력 ─────────────────────────────────── */
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
@@ -427,6 +472,37 @@ const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 function syncArea(){ const on=$('i-area').value==='metro'; $('ex-row').hidden=!on; if(!on) $('i-exempt').checked=false; }
 $('i-area').addEventListener('change',syncArea);
 syncArea();
+
+let pcReady=null;
+function loadPostcode(){
+  if(window.daum&&daum.Postcode) return Promise.resolve();
+  if(pcReady) return pcReady;
+  pcReady=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    sc.onload=res; sc.onerror=()=>{ pcReady=null; rej(); }; document.head.appendChild(sc); });
+  return pcReady;
+}
+$('addr-btn').addEventListener('click',async()=>{
+  const pop=$('addr-pop');
+  if(!pop.hidden){ pop.hidden=true; return; }
+  try{ await loadPostcode(); }catch(e){ alert('주소 검색을 불러오지 못했습니다. 아래 본점 지역을 직접 골라 주세요.'); return; }
+  pop.hidden=false; pop.innerHTML='';
+  new daum.Postcode({oncomplete:onAddr,width:'100%',height:'100%'}).embed(pop);
+});
+let autoPlace='';
+function onAddr(d){
+  $('addr-pop').hidden=true;
+  $('i-addr').value=(d.roadAddress||d.address)+(d.buildingName?' ('+d.buildingName+')':'');
+  const j=judgeArea(d);
+  $('i-area').value=j.area; syncArea();
+  const jd=$('addr-judge');
+  jd.hidden=false; jd.className='addr-judge'+(j.check||j.hint?' warn':'');
+  jd.innerHTML='<b>'+(j.area==='metro'?'과밀억제권역':'과밀억제권역 밖')+'</b> · '+j.why+(j.check?' 정확한 위치는 확인이 필요합니다.':'')+(j.hint?' '+j.hint:'');
+  // 견적서 지역 칸도 채웁니다 (직접 고친 값은 그대로 둡니다)
+  const place=(d.sido==='서울'?'서울시':d.sido)+' '+d.sigungu;
+  if(!$('q-place').value||$('q-place').value===autoPlace){ $('q-place').value=place; autoPlace=place; }
+  if(shown()&&read().capital) render();
+}
+$('i-area').addEventListener('change',()=>{ $('addr-judge').hidden=true; });
 
 function read(){
   return {capital:num($('i-cap').value),metro:$('i-area').value==='metro',exempt:$('i-exempt').checked,
