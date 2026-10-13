@@ -266,7 +266,7 @@
       <div class="sim-in">
         <div class="divider"><b>설립할 법인</b><span>주식회사 발기설립 기준입니다</span></div>
         <div class="wide">
-          <label for="i-addr">본점 주소 <small>검색하면 과밀억제권역인지 판단합니다</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주소를 고르면 수도권정비계획법에 따라 과밀억제권역인지 판단해 아래 본점 지역을 채웁니다. 인천경제자유구역(송도·청라·영종), 남동국가산업단지, 남양주·시흥처럼 동마다 다른 곳도 따집니다. 산업단지 안인지는 주소만으로 알 수 없어 따로 확인해 주세요.">?</button></label>
+          <label for="i-addr">본점 주소 <small>검색하면 과밀억제권역인지 판단합니다</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주소를 고르면 수도권정비계획법에 따라 과밀억제권역인지 판단합니다. 인천경제자유구역(송도·청라·영종), 남동국가산업단지, 남양주·시흥처럼 동마다 다른 곳도 따집니다. 산업단지 안인지는 주소만으로 알 수 없어 따로 확인해 주세요.">?</button></label>
           <div class="addr"><input type="text" id="i-addr" readonly placeholder="주소 검색을 눌러 주세요"><button type="button" class="btn btn-primary" id="addr-btn">주소 검색</button></div>
           <div class="addr-pop" id="addr-pop" hidden></div>
           <p class="addr-judge" id="addr-judge" hidden></p>
@@ -275,7 +275,7 @@
           <label for="i-cap">자본금 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="주주들이 처음 넣는 돈입니다. 등록면허세는 자본금의 0.4%인데 최저 112,500원이라, 자본금 2,812만 5천 원까지는 세금이 같습니다. 업종 인허가에 자본금 요건이 있으면 그 금액 이상이어야 합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-cap" inputmode="numeric"><span>원</span></div>
         </div>
-        <div>
+        <div id="area-row" hidden>
           <label for="i-area">본점 지역 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="수도권 과밀억제권역은 서울 전역과 인천·경기 일부(의정부, 구리, 하남, 고양, 수원, 성남, 안양, 부천, 광명, 과천, 의왕, 군포, 시흥 일부 등)입니다. 이곳에 법인을 세우면 등록면허세가 3배가 됩니다.">?</button></label>
           <select id="i-area"><option value="metro">과밀억제권역 (서울 전역, 인천·경기 일부)</option><option value="other">과밀억제권역 밖</option></select>
         </div>
@@ -492,7 +492,9 @@ $('q-reset').addEventListener('click',()=>{ OV.forEach(([id])=>{ delete $(id).da
 ['i-cap','q-fee','q-dc','q-notary','q-stamp','q-reg','q-edu','q-f0','q-f1','q-f2','q-f3'].forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{ const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):(/0/.test(el.value)?'0':''); });
 });
-function syncArea(){ const on=$('i-area').value==='metro'; $('ex-row').hidden=!on; if(!on) $('i-exempt').checked=false; }
+// 주소를 고르기 전(또는 직접 고르기 전)에는 중과 제외 체크를 감춥니다
+const areaKnown=()=>!!$('i-addr').value||!$('area-row').hidden;
+function syncArea(){ const on=areaKnown()&&$('i-area').value==='metro'; $('ex-row').hidden=!on; if(!on) $('i-exempt').checked=false; }
 $('i-area').addEventListener('change',syncArea);
 syncArea();
 
@@ -507,7 +509,7 @@ function loadPostcode(){
 $('addr-btn').addEventListener('click',async()=>{
   const pop=$('addr-pop');
   if(!pop.hidden){ pop.hidden=true; return; }
-  try{ await loadPostcode(); }catch(e){ alert('주소 검색을 불러오지 못했습니다. 아래 본점 지역을 직접 골라 주세요.'); return; }
+  try{ await loadPostcode(); }catch(e){ $('area-row').hidden=false; syncArea(); alert('주소 검색을 불러오지 못했습니다. 아래 본점 지역을 직접 골라 주세요.'); return; }
   pop.hidden=false; pop.innerHTML='';
   new daum.Postcode({oncomplete:onAddr,width:'100%',height:'100%'}).embed(pop);
 });
@@ -582,6 +584,7 @@ function render(){
 }
 
 $('calc').addEventListener('click',()=>{
+  if(!areaKnown()){ alert('본점 주소를 검색해 주세요. 주소로 과밀억제권역인지 판단합니다.'); $('addr-btn').focus(); return; }
   if(!read().capital){ alert('자본금을 넣어 주세요.'); $('i-cap').focus(); return; }
   render();
   $('res').scrollIntoView({behavior:'smooth',block:'start'});
