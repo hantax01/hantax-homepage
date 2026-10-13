@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>법인설립 신청서 | 한택스</title>
+<meta name="description" content="한택스 법인설립 신청서. 상호와 자본금, 본점 주소, 주주와 임원, 목적사업을 남겨 주시면 담당자가 확인 후 견적과 함께 연락드립니다.">
+<link rel="canonical" href="https://www.hantax47.com/company-setup/apply.html">
+<meta property="og:title" content="법인설립 신청서 | 한택스">
+<meta property="og:description" content="신청서를 남겨 주시면 제휴 법무법인과 함께 법인설립과 사업자등록을 진행합니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/company-setup/apply.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og.png?v=3">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.cform{max-width:720px;margin:0 auto}
+.cform .grp{font-size:13px;font-weight:800;letter-spacing:.12em;color:var(--blue);margin:44px 0 18px;padding-top:22px;border-top:1px solid var(--line)}
+.cform .grp:first-child{margin-top:0;padding-top:0;border-top:0}
+.cform .fld{margin-bottom:24px}
+.cform .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cform label.lb,.cform .lb{display:block;font-weight:700;font-size:15.5px;color:var(--ink);margin-bottom:8px}
+.cform .lb small{font-weight:400;color:var(--mute);font-size:13px;margin-left:6px}
+.cform .req{color:var(--seal)}
+.cform .hint{font-size:13px;color:var(--mute);margin:-4px 0 8px;line-height:1.6}
+.cform input[type=text],.cform input[type=tel],.cform input[type=date],.cform textarea,.cform select{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
+.cform input:focus,.cform textarea:focus,.cform select:focus{outline:none;border-color:var(--blue)}
+.cform textarea{min-height:110px;resize:vertical}
+.cform .unit{position:relative}
+.cform .unit span{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--mute);font-size:14.5px}
+.cform .unit input{padding-right:40px}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opts label{display:flex;align-items:center;gap:9px;font-weight:500;font-size:14.5px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;margin:0;background:#fff}
+.opts label:has(input:checked){border-color:var(--blue);background:var(--blue-soft)}
+.opts input{width:17px;height:17px;accent-color:var(--blue);flex:none}
+.certrow{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;margin-bottom:10px}
+.certrow b{font-size:14.5px;color:var(--char)}
+.person{border:1px solid var(--line);border-radius:14px;padding:18px 18px 6px;margin-bottom:14px;background:#fff}
+.person .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.person .ph b{font-size:15px;color:var(--ink)}
+.person .del{border:0;background:none;color:var(--mute);font:inherit;font-size:13.5px;cursor:pointer;text-decoration:underline}
+.person .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.person .roles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.person .roles label{display:flex;align-items:center;gap:7px;font-size:14px;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;margin:0}
+.person .roles label:has(input:checked){border-color:var(--blue);background:var(--blue-soft);color:var(--blue);font-weight:700}
+.person .roles input{accent-color:var(--blue)}
+.person .share{display:none;margin-bottom:12px}
+.person.is-holder .share{display:block}
+.addp{width:100%;border:1px dashed var(--blue-line);background:var(--blue-soft);color:var(--blue);border-radius:12px;padding:14px;font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+.sum{font-size:14px;color:var(--char);margin:12px 0 0}
+.sum b.bad{color:var(--seal)}
+.tip{background:var(--soft);border-radius:10px;padding:12px 15px;font-size:13.5px;color:var(--char);line-height:1.7;margin-top:10px}
+.agree{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--char);background:var(--soft);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;line-height:1.65}
+.agree input{width:17px;height:17px;margin-top:3px;accent-color:var(--blue);flex:none}
+.agree a{color:var(--blue);text-decoration:underline}
+.agree small{display:block;color:var(--mute);font-size:13px;margin-top:4px}
+.csubmit{width:100%;justify-content:center;margin-top:18px;font-size:16px;padding:17px}
+.cnote{margin-top:22px;font-size:13.5px;color:var(--mute);line-height:1.7;text-align:center}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+.done{display:none;text-align:center;padding:50px 0;max-width:640px;margin:0 auto}
+.done h2{margin-bottom:12px}
+.done p{color:var(--char);font-size:15.5px;line-height:1.8;margin-bottom:22px}
+.done ol{text-align:left;font-size:15px;color:var(--char);line-height:1.9;margin:0 auto 26px;max-width:460px}
+.err{display:none;background:var(--seal-soft);color:var(--seal);border-radius:10px;padding:13px 16px;font-size:14px;margin-top:16px;text-align:center}
+@media(max-width:560px){.cform .row2{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.opts.two{grid-template-columns:1fr}.person .row{grid-template-columns:1fr}.certrow{grid-template-columns:1fr}}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="./">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">법인설립</span>
+    <h1>법인설립 신청서</h1>
+    <p class="lead">남겨 주시면 담당자가 사업자등록 가능 여부와 창업감면 요건을 확인한 뒤 견적과 함께 연락드립니다. 정할 것이 헷갈리시면 <a href="./" style="color:var(--blue);font-weight:700">법인설립 안내</a>를 먼저 읽어 보세요.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:36px">
+  <div class="wrap">
+    <form class="cform" id="sform" novalidate>
+      <div class="grp">신청하시는 분</div>
+      <div class="row2">
+        <div class="fld">
+          <label class="lb" for="f-name">성함 <span class="req">*</span></label>
+          <input type="text" id="f-name" maxlength="100" autocomplete="name">
+        </div>
+        <div class="fld">
+          <label class="lb" for="f-phone">연락처 <span class="req">*</span></label>
+          <input type="tel" id="f-phone" maxlength="50" autocomplete="tel" inputmode="tel" placeholder="010-0000-0000">
+        </div>
+      </div>
+
+      <div class="grp">법인 기본 정보</div>
+      <div class="fld">
+        <label class="lb" for="f-names">원하시는 상호 2~3개 <span class="req">*</span></label>
+        <p class="hint">같은 지역에 비슷한 업종의 같은 상호가 있으면 거부될 수 있습니다. 한글 상호 뒤에 영문을 함께 적으셔도 됩니다. 예: 한택스(HANTAX) 주식회사</p>
+        <textarea id="f-names" maxlength="300" style="min-height:84px"></textarea>
+      </div>
+      <div class="fld">
+        <label class="lb" for="f-addr">본점 주소 <span class="req">*</span></label>
+        <p class="hint">층·호수까지 적어 주세요. 아직 정하지 않으셨으면 ○○시 ○○구처럼 지역만 적으셔도 됩니다.</p>
+        <input type="text" id="f-addr" maxlength="200">
+      </div>
+      <div class="fld">
+        <label class="lb" for="f-capital">자본금 <span class="req">*</span></label>
+        <p class="hint">보통 2천만~3천만 원으로 설립합니다. 1천만 원 미만이면 은행에 따라 법인계좌 개설이 어려울 수 있습니다.</p>
+        <div class="unit"><input type="text" id="f-capital" inputmode="numeric" maxlength="20"><span>원</span></div>
+      </div>
+      <div class="fld">
+        <label class="lb" for="f-purpose">목적사업(업종) <span class="req">*</span></label>
+        <p class="hint">하시려는 사업을 적어 주세요. 비슷한 회사의 홈페이지 주소를 남겨 주시면 참고해서 정리해 드립니다.</p>
+        <textarea id="f-purpose" maxlength="2000"></textarea>
+      </div>
+
+      <div class="grp">주주와 임원</div>
+      <p class="hint" style="margin:0 0 14px">주주, 대표이사, 이사, 감사를 한 사람씩 넣어 주세요. 한 사람이 주주이면서 대표이사인 경우 역할을 함께 체크하시면 됩니다. 주민등록번호와 주소는 등기 신청서에 꼭 적어야 하는 정보입니다.</p>
+      <div id="people"></div>
+      <button type="button" class="addp" id="addp">+ 사람 추가</button>
+      <p class="sum" id="sum"></p>
+      <div class="tip" id="tips" hidden></div>
+
+      <div class="grp">진행 방식</div>
+      <div class="fld" id="ceo-fld" hidden>
+        <span class="lb">대표이사가 2명 이상인 경우 운영 방식 <span class="req">*</span></span>
+        <div class="opts two">
+          <label><input type="radio" name="ceoMode" value="각자대표">각자대표 (한 명만 계약해도 효력)</label>
+          <label><input type="radio" name="ceoMode" value="공동대표">공동대표 (모두 계약해야 효력)</label>
+        </div>
+      </div>
+      <div class="fld">
+        <span class="lb">공동인증서(또는 금융인증서) 보유 <span class="req">*</span></span>
+        <p class="hint">임원과 주주 모두 인증서가 있으면 인감 서류 없이 전자서명으로 진행합니다.</p>
+        <div class="certrow"><b>임원 전원</b><div class="opts">
+          <label><input type="radio" name="certE" value="보유">보유</label>
+          <label><input type="radio" name="certE" value="일부 없음">일부 없음</label>
+          <label><input type="radio" name="certE" value="모름">모름</label></div></div>
+        <div class="certrow"><b>주주 전원</b><div class="opts">
+          <label><input type="radio" name="certS" value="보유">보유</label>
+          <label><input type="radio" name="certS" value="일부 없음">일부 없음</label>
+          <label><input type="radio" name="certS" value="모름">모름</label></div></div>
+      </div>
+      <div class="fld">
+        <span class="lb">사용인감 신청 <small>선택 · 직원이 쓰는 법인도장, 3만 원 추가</small></span>
+        <div class="opts two">
+          <label><input type="radio" name="seal" value="신청">신청</label>
+          <label><input type="radio" name="seal" value="미신청">미신청</label>
+        </div>
+      </div>
+      <div class="fld">
+        <span class="lb">창업중소기업 세액감면을 받으실 계획인가요? <small>선택</small></span>
+        <div class="opts">
+          <label><input type="radio" name="startup" value="예">예</label>
+          <label><input type="radio" name="startup" value="아니오">아니오</label>
+          <label><input type="radio" name="startup" value="모르겠음">모르겠음</label>
+        </div>
+      </div>
+      <div class="fld">
+        <label class="lb" for="f-due">사업자등록을 마쳐야 하는 날 <small>선택</small></label>
+        <p class="hint">보통 7~10일 걸리고, 급하면 업종을 단순하게 정해 3~4일 안에 진행할 수도 있습니다.</p>
+        <input type="date" id="f-due">
+      </div>
+      <div class="fld">
+        <label class="lb" for="f-detail">요청하실 내용 <small>선택</small></label>
+        <textarea id="f-detail" maxlength="2000" style="min-height:90px"></textarea>
+      </div>
+
+      <div class="hp" aria-hidden="true"><label>웹사이트<input type="text" id="f-website" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="grp">동의</div>
+      <label class="agree"><input type="checkbox" class="ag"><span>(필수) 개인정보 수집·이용에 동의합니다.<small>신청인 성함·연락처와 주주·임원의 성명, 주민등록상 주소, 대표자와의 관계, 지분율을 법인설립 등기와 사업자등록 진행에 사용하고, 등기와 사업자등록이 끝난 날부터 3개월 안에 파기합니다.</small></span></label>
+      <label class="agree"><input type="checkbox" class="ag"><span>(필수) 주민등록번호 처리에 동의합니다.<small>주민등록번호는 상업등기 법령에 따라 등기 신청서에 적어야 하는 정보로, 등기 신청에만 사용합니다.</small></span></label>
+      <label class="agree"><input type="checkbox" class="ag"><span>(필수) 제휴 법무법인에 제공하는 것에 동의합니다.<small>위 정보를 법인설립 등기 신청을 위해 상업등기를 맡는 제휴 법무법인에 제공하며, 법무법인은 등기 업무와 관련 법령이 정한 기간 동안만 보관합니다.</small></span></label>
+      <label class="agree"><input type="checkbox" class="ag"><span>(필수) 다른 주주·임원의 정보를 입력한 경우, 그분들께 위 내용에 대한 동의를 받았습니다.</span></label>
+      <p class="hint" style="margin-top:8px">자세한 내용은 <a href="../privacy/" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">개인정보처리방침</a>에서 보실 수 있습니다.</p>
+
+      <button type="submit" class="btn btn-primary csubmit" id="f-submit">법인설립 신청하기</button>
+      <div class="err" id="f-err">전송에 실패했습니다. 잠시 후 다시 시도해 주시거나, 카카오톡·전화로 연락 주세요.</div>
+      <p class="cnote">신청서는 실시간 확인이 어려워 답변이 늦을 수 있습니다.<br>급한 경우 전화 0507-1361-6622 또는 카카오톡(@한택스)으로 연락 주시면 빠르게 도와드리겠습니다.</p>
+    </form>
+
+    <div class="done" id="sdone">
+      <h2>법인설립 신청이 접수되었습니다</h2>
+      <p>담당자가 내용을 확인한 뒤 영업일 기준 1일 안에 연락드립니다. 다음 순서로 진행됩니다.</p>
+      <ol>
+        <li>견적서 확인 후 법무법인 계좌로 입금</li>
+        <li>자본금 잔액증명서 발급(스캔본이나 PDF)</li>
+        <li>주주·임원 주소 확인 서류 전달</li>
+        <li>법무법인 서류가 준비되면 전자서명</li>
+      </ol>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡으로 문의하기</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="./">법인설립</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const GAS_URL='https://script.google.com/macros/s/AKfycbzbudLmwG-B1iOHNLoTlxPrmMK5bIKoRZ_gdTRMvVXOCvGpwdKO-FeJpBrbAAUtbCQQhg/exec';
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);mb.setAttribute("aria-label",open?"메뉴 닫기":"메뉴 열기");});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+const $=id=>document.getElementById(id), box=$('people');
+const ROLES=['주주','대표이사','이사','감사'];
+const digits=s=>s.replace(/\D/g,'');
+
+/* 주주·임원 한 사람 */
+function addPerson(first){
+  const d=document.createElement('div'); d.className='person';
+  d.innerHTML='<div class="ph"><b></b><button type="button" class="del">삭제</button></div>'
+    +'<div class="row"><input type="text" class="p-name" maxlength="50" placeholder="성함"><input type="text" class="p-rrn" maxlength="14" inputmode="numeric" autocomplete="off" placeholder="주민등록번호 13자리"></div>'
+    +'<div class="row" style="grid-template-columns:1fr"><input type="text" class="p-addr" maxlength="200" placeholder="주민등록상 주소 (동·호수까지)"></div>'
+    +'<div class="row"><input type="text" class="p-rel" maxlength="30" list="rels" placeholder="대표자와 관계 (본인, 배우자 등)"><div class="share unit"><input type="text" class="p-share" inputmode="decimal" maxlength="6" placeholder="지분율"><span>%</span></div></div>'
+    +'<div class="roles">'+ROLES.map(r=>'<label><input type="checkbox" value="'+r+'">'+r+'</label>').join('')+'</div>';
+  if(first){ d.querySelector('.p-rel').value='본인'; d.querySelectorAll('.roles input')[0].checked=true; d.querySelectorAll('.roles input')[1].checked=true; d.querySelector('.p-share').value='100'; }
+  d.querySelector('.del').onclick=()=>{ if(box.children.length>1){ d.remove(); refresh(); } };
+  d.querySelector('.p-rrn').addEventListener('input',e=>{ const v=digits(e.target.value).slice(0,13); e.target.value=v.length>6?v.slice(0,6)+'-'+v.slice(6):v; });
+  d.addEventListener('change',refresh); d.addEventListener('input',e=>{ if(e.target.classList.contains('p-share')) refresh(); });
+  box.appendChild(d); refresh();
+}
+function people(){
+  return [...box.children].map(d=>({el:d,name:d.querySelector('.p-name').value.trim(),rrn:d.querySelector('.p-rrn').value.trim(),
+    addr:d.querySelector('.p-addr').value.trim(),rel:d.querySelector('.p-rel').value.trim(),
+    roles:[...d.querySelectorAll('.roles input:checked')].map(c=>c.value),share:d.querySelector('.p-share').value.trim()}));
+}
+/* 역할에 따라 지분 칸·안내 갱신 */
+function refresh(){
+  const ps=people();
+  ps.forEach((p,i)=>{ p.el.querySelector('.ph b').textContent=(i+1)+'번째 분'; p.el.classList.toggle('is-holder',p.roles.includes('주주')); p.el.querySelector('.del').hidden=ps.length<2; });
+  const holders=ps.filter(p=>p.roles.includes('주주')), sum=holders.reduce((s,p)=>s+(parseFloat(p.share)||0),0);
+  const ceos=ps.filter(p=>p.roles.includes('대표이사')), dirs=ps.filter(p=>p.roles.includes('대표이사')||p.roles.includes('이사'));
+  const officers=ps.filter(p=>p.roles.some(r=>r!=='주주'));
+  $('sum').innerHTML='주주 '+holders.length+'명 · 지분 합계 <b class="'+(holders.length&&Math.abs(sum-100)>0.01?'bad':'')+'">'+(Math.round(sum*100)/100)+'%</b> · 대표이사 '+ceos.length+'명 · 이사 '+(dirs.length-ceos.length)+'명';
+  $('ceo-fld').hidden=ceos.length<2;
+  const tips=[];
+  if(officers.length&&officers.every(p=>p.roles.includes('주주'))) tips.push('임원이 모두 주주이면 설립 경과를 공증인이 조사하는 절차가 추가되어 비용이 100만 원 이상 늘어납니다. 지분이 없는 이사를 1명 두시면 피할 수 있습니다.');
+  if(dirs.length>=3) tips.push('이사가 3명 이상이면 이후 주소 변경 같은 등기 때마다 인감 서류가 필요합니다. 꼭 필요한 경우가 아니면 2명 이하를 권합니다.');
+  if(ps.some(p=>p.roles.includes('감사'))) tips.push('자본금 10억 원 미만이면 감사를 두지 않아도 됩니다. 감사는 임기가 달라 연장 등기 때마다 수수료가 듭니다.');
+  $('tips').hidden=!tips.length; $('tips').innerHTML=tips.map(t=>'※ '+t).join('<br>');
+}
+$('addp').onclick=()=>addPerson(false);
+addPerson(true);
+$('f-capital').addEventListener('input',e=>{ const v=digits(e.target.value); e.target.value=v?Number(v).toLocaleString('ko-KR'):''; });
+
+const form=$('sform'), err=$('f-err'), btn=$('f-submit');
+const radio=n=>(form.querySelector('input[name='+n+']:checked')||{}).value||'';
+function fail(msg,el){ alert(msg); if(el){ el.focus(); el.scrollIntoView({block:'center',behavior:'smooth'}); } }
+form.addEventListener('submit',async e=>{
+  e.preventDefault(); err.style.display='none';
+  const need=[['f-name','성함'],['f-phone','연락처'],['f-names','원하시는 상호'],['f-addr','본점 주소'],['f-capital','자본금'],['f-purpose','목적사업']];
+  for(const [id,label] of need) if(!$(id).value.trim()) return fail(label+'을(를) 입력해 주세요.',$(id));
+  const ps=people();
+  for(const [i,p] of ps.entries()){
+    const n=(i+1)+'번째 분의 ';
+    if(!p.name) return fail(n+'성함을 입력해 주세요.',p.el.querySelector('.p-name'));
+    if(digits(p.rrn).length!==13) return fail(n+'주민등록번호 13자리를 입력해 주세요.',p.el.querySelector('.p-rrn'));
+    if(!p.addr) return fail(n+'주민등록상 주소를 입력해 주세요.',p.el.querySelector('.p-addr'));
+    if(!p.roles.length) return fail(n+'역할(주주, 대표이사, 이사, 감사)을 하나 이상 골라 주세요.',p.el.querySelector('.roles input'));
+    if(p.roles.includes('주주')&&!(parseFloat(p.share)>0)) return fail(n+'지분율을 입력해 주세요.',p.el.querySelector('.p-share'));
+  }
+  const holders=ps.filter(p=>p.roles.includes('주주')), ceos=ps.filter(p=>p.roles.includes('대표이사'));
+  if(!holders.length) return fail('주주를 한 분 이상 넣어 주세요.');
+  if(Math.abs(holders.reduce((s,p)=>s+parseFloat(p.share),0)-100)>0.01) return fail('주주 지분율의 합이 100%가 되도록 맞춰 주세요.',$('sum'));
+  if(!ceos.length) return fail('대표이사를 한 분 이상 정해 주세요.');
+  if(ceos.length>1&&!radio('ceoMode')) return fail('대표이사가 2명 이상이면 운영 방식을 골라 주세요.',$('ceo-fld'));
+  if(!radio('certE')||!radio('certS')) return fail('인증서 보유 여부를 골라 주세요.',form.querySelector('input[name=certE]'));
+  if([...form.querySelectorAll('.ag')].some(c=>!c.checked)) return fail('필수 동의 항목에 모두 동의해 주세요.',form.querySelector('.ag:not(:checked)'));
+  btn.disabled=true; btn.textContent='전송 중...';
+  const body={type:'setup',name:$('f-name').value.trim(),phone:$('f-phone').value.trim(),names:$('f-names').value.trim(),addr:$('f-addr').value.trim(),
+    capital:$('f-capital').value.trim()+'원',purpose:$('f-purpose').value.trim(),
+    people:ps.map(p=>({name:p.name,rrn:p.rrn,addr:p.addr,rel:p.rel,share:p.roles.includes('주주')?p.share:'',roles:p.roles.join('·')})),
+    ceoMode:ceos.length>1?radio('ceoMode'):'단독대표',cert:'임원 '+radio('certE')+' / 주주 '+radio('certS'),seal:radio('seal'),
+    due:$('f-due').value,startup:radio('startup'),detail:$('f-detail').value.trim(),website:$('f-website').value};
+  try{
+    const res=await fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)});
+    const out=await res.json();
+    if(!out.ok) throw new Error('fail');
+    form.reset(); box.innerHTML=''; form.style.display='none'; $('sdone').style.display='block';
+    if(window.gtag) gtag('event','generate_lead',{form:'company_setup'});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(ex){ err.style.display='block'; btn.disabled=false; btn.textContent='법인설립 신청하기'; }
+});
+</script>
+<datalist id="rels"><option value="본인"><option value="배우자"><option value="자녀"><option value="부모"><option value="형제자매"><option value="친족"><option value="직원"><option value="지인"></datalist>
+</body>
+</html>
