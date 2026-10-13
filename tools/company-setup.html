@@ -80,14 +80,14 @@
 .pst-tbl.two td.n{width:26%}
 .pst-tbl tr.tot th,.pst-tbl tr.tot td{background:#E9EFFA;font-weight:800;color:#1B4A9B}
 .qt-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #0B1E3F;padding-bottom:10px;margin-bottom:10px}
-.qt-head h1{font-family:var(--serif);font-size:30px;font-weight:900;letter-spacing:.06em;margin:0;color:#0B1E3F}
+.qt-head h1{font-family:var(--sans);font-size:28px;font-weight:800;letter-spacing:-.01em;margin:0;color:#0B1E3F}
 .qt-head img{height:44px}
 .qt-meta{border-collapse:collapse;font-size:13px;margin-bottom:8px}
 .qt-meta th{text-align:left;color:#5C6572;font-weight:600;padding:2px 14px 2px 0;white-space:nowrap}
 .qt-meta td{padding:2px 0;font-weight:700}
 .qt-contact{font-size:11.5px;color:#5C6572;border-top:1px solid #DCE2EB;border-bottom:1px solid #DCE2EB;padding:7px 0;margin:6px 0 12px}
 .qt-intro{font-size:13px;line-height:1.75;margin:0 0 4px}
-.qt-sign{text-align:center;font-family:var(--serif);font-size:22px;font-weight:900;color:#0B1E3F;margin-top:22px;letter-spacing:.08em}
+.qt-sign{text-align:center;font-family:var(--sans);font-size:21px;font-weight:800;color:#0B1E3F;margin-top:24px;letter-spacing:.02em}
 .pst-note{font-size:10.5px;color:#5C6572;margin-top:16px;line-height:1.6;border-top:1px solid #DCE2EB;padding-top:10px}
 .pst-foot{font-size:10px;color:#aaaaaa;text-align:center;margin-top:6px}
 @media print{
@@ -638,7 +638,7 @@ function quoteHtml(){
   body+='<tr class="tot"><th>공과금 소계 ①</th><td class="n">'+w(r.pub)+'</td><th>보수 소계 ②</th><td class="n">'+w(r.pro)+'</td></tr>';
   return '<section class="pst">'
     +'<div class="qt-head"><h1>법인설립 견적서</h1><img src="../assets/logo.png?v=2" alt="HanTax Story"></div>'
-    +'<table class="qt-meta"><tr><th>수신</th><td>'+(to?esc(to)+' 대표님':'')+'</td></tr><tr><th>발신</th><td>한택스</td></tr><tr><th>일자</th><td>'+ymd+'</td></tr></table>'
+    +'<table class="qt-meta"><tr><th>수신</th><td>'+(to?esc(to.replace(/s*(대표님|대표|님)$/,''))+' 대표님':'')+'</td></tr><tr><th>발신</th><td>한택스</td></tr><tr><th>일자</th><td>'+ymd+'</td></tr></table>'
     +'<p class="qt-contact">☎ 02-2068-6622 · 서울특별시 영등포구 63로 32(여의도동), 1211호 라이프콤비빌딩</p>'
     +'<p class="qt-intro">법인설립을 위해 아래와 같이 견적서를 보내드리니, 법무법인 계좌로 수수료를 입금하신 뒤 연락 주시기 바랍니다.</p>'
     +'<h2>1. 기초사항</h2><table class="pst-tbl qt"><tr><th class="c">지역</th><th class="c">자본금</th><th class="c">등록면허세 기준</th></tr>'
@@ -648,7 +648,6 @@ function quoteHtml(){
     +'<tr><td class="c big">'+w(r.total)+'원</td><td class="c">'+esc(ACCT.bank)+' / '+esc(ACCT.account)+' / '+esc(ACCT.holder)+'</td></tr></table>'
     +'<p class="pst-note">등록면허세는 자본금의 0.4%(최저 112,500원)이고, 과밀억제권역에 설립하면 3배가 됩니다(산업단지·중과 제외 업종 제외). 지방교육세는 등록면허세의 20%입니다. 등기는 전자신청 기준이며, 자본금이나 임원 구성이 바뀌면 금액이 달라질 수 있습니다.</p>'
     +'<div class="qt-sign">나이스원세무법인</div>'
-    +'<p class="pst-foot">한택스는 나이스원세무법인 스마트지점의 브랜드명입니다 · hantax47.com</p>'
     +'</section>';
 }
 $('r-pdf').addEventListener('click',()=>{
