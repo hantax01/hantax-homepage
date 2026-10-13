@@ -23,6 +23,7 @@
 .cform .grp:first-child{margin-top:0;padding-top:0;border-top:0}
 .cform .fld{margin-bottom:24px}
 .cform .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cform .names{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .cform label.lb,.cform .lb{display:block;font-weight:700;font-size:15.5px;color:var(--ink);margin-bottom:8px}
 .cform .lb small{font-weight:400;color:var(--mute);font-size:13px;margin-left:6px}
 .cform .req{color:var(--seal)}
@@ -75,7 +76,7 @@
 .done p{color:var(--char);font-size:15.5px;line-height:1.8;margin-bottom:22px}
 .done ol{text-align:left;font-size:15px;color:var(--char);line-height:1.9;margin:0 auto 26px;max-width:460px}
 .err{display:none;background:var(--seal-soft);color:var(--seal);border-radius:10px;padding:13px 16px;font-size:14px;margin-top:16px;text-align:center}
-@media(max-width:560px){.cform .row2{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.opts.two{grid-template-columns:1fr}.person .row{grid-template-columns:1fr}.certrow{grid-template-columns:1fr}}
+@media(max-width:560px){.cform .row2,.cform .names{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.opts.two{grid-template-columns:1fr}.person .row{grid-template-columns:1fr}.certrow{grid-template-columns:1fr}}
 </style>
 <script src="../assets/ga.js?v=1" async></script>
 </head>
@@ -122,13 +123,17 @@
 
       <div class="grp">법인 기본 정보</div>
       <div class="fld">
-        <label class="lb" for="f-names">원하시는 상호 2~3개 <span class="req">*</span></label>
-        <p class="hint">같은 지역에 비슷한 업종의 같은 상호가 있으면 거부될 수 있습니다. 한글 상호 뒤에 영문을 함께 적으셔도 됩니다. 예: 한택스(HANTAX) 주식회사</p>
-        <textarea id="f-names" maxlength="300" style="min-height:84px"></textarea>
+        <label class="lb" for="f-names1">원하시는 상호 <span class="req">*</span><small>1순위는 필수, 2·3순위는 선택</small></label>
+        <p class="hint">같은 지역에 비슷한 업종의 같은 상호가 있으면 거부될 수 있어, 1순위가 안 되면 다음 순위로 진행합니다. 한글 상호 뒤에 영문을 함께 적으셔도 됩니다. 예: 한택스(HANTAX) 주식회사</p>
+        <div class="names">
+          <input type="text" id="f-names1" maxlength="100" placeholder="1순위">
+          <input type="text" id="f-names2" maxlength="100" placeholder="2순위">
+          <input type="text" id="f-names3" maxlength="100" placeholder="3순위">
+        </div>
       </div>
       <div class="fld">
         <label class="lb" for="f-addr">본점 주소 <span class="req">*</span></label>
-        <p class="hint">층·호수까지 적어 주세요. 아직 정하지 않으셨으면 ○○시 ○○구처럼 지역만 적으셔도 됩니다.</p>
+        <p class="hint">층·호수까지 적어 주세요. 아직 정하지 않으셨으면 ○○시 ○○구처럼 지역만 적어 주셔도 신청할 수 있고, 정확한 주소는 등기 서류를 최종 접수하기 전까지만 알려 주시면 됩니다.</p>
         <input type="text" id="f-addr" maxlength="200">
       </div>
       <div class="fld">
@@ -138,8 +143,12 @@
       </div>
       <div class="fld">
         <label class="lb" for="f-purpose">목적사업(업종) <span class="req">*</span></label>
-        <p class="hint">하시려는 사업을 적어 주세요. 비슷한 회사의 홈페이지 주소를 남겨 주시면 참고해서 정리해 드립니다.</p>
-        <textarea id="f-purpose" maxlength="2000"></textarea>
+        <p class="hint">하시려는 사업을 적어 주세요. 정확한 업종 이름이 아니어도 담당자가 등기에 맞게 정리해 드립니다.</p>
+        <textarea id="f-purpose" maxlength="2000" rows="3" style="min-height:0" placeholder="예: 온라인 쇼핑몰, 소프트웨어 개발"></textarea>
+      </div>
+      <div class="fld">
+        <label class="lb" for="f-ref">참고할 회사 홈페이지 <small>선택 · 비슷한 사업을 하는 회사가 있으면 적어 주세요</small></label>
+        <input type="text" id="f-ref" maxlength="300" inputmode="url" placeholder="https://">
       </div>
 
       <div class="grp">주주와 임원</div>
@@ -303,7 +312,7 @@ const radio=n=>(form.querySelector('input[name='+n+']:checked')||{}).value||'';
 function fail(msg,el){ alert(msg); if(el){ el.focus(); el.scrollIntoView({block:'center',behavior:'smooth'}); } }
 form.addEventListener('submit',async e=>{
   e.preventDefault(); err.style.display='none';
-  const need=[['f-name','성함'],['f-phone','연락처'],['f-names','원하시는 상호'],['f-addr','본점 주소'],['f-capital','자본금'],['f-purpose','목적사업']];
+  const need=[['f-name','성함'],['f-phone','연락처'],['f-names1','1순위 상호'],['f-addr','본점 주소'],['f-capital','자본금'],['f-purpose','목적사업']];
   for(const [id,label] of need) if(!$(id).value.trim()) return fail(label+'을(를) 입력해 주세요.',$(id));
   const ps=people();
   for(const [i,p] of ps.entries()){
@@ -325,8 +334,8 @@ form.addEventListener('submit',async e=>{
   if(!radio('certE')||!radio('certS')) return fail('인증서 보유 여부를 골라 주세요.',form.querySelector('input[name=certE]'));
   if([...form.querySelectorAll('.ag')].some(c=>!c.checked)) return fail('필수 동의 항목에 모두 동의해 주세요.',form.querySelector('.ag:not(:checked)'));
   btn.disabled=true; btn.textContent='전송 중...';
-  const body={type:'setup',name:$('f-name').value.trim(),phone:$('f-phone').value.trim(),names:$('f-names').value.trim(),addr:$('f-addr').value.trim(),
-    capital:$('f-capital').value.trim()+'원',purpose:$('f-purpose').value.trim(),
+  const body={type:'setup',name:$('f-name').value.trim(),phone:$('f-phone').value.trim(),names:[1,2,3].map(i=>$('f-names'+i).value.trim()).map((v,i)=>v?(i+1)+'순위 '+v:'').filter(Boolean).join(' / '),addr:$('f-addr').value.trim(),
+    capital:$('f-capital').value.trim()+'원',purpose:$('f-purpose').value.trim()+($('f-ref').value.trim()?'\n참고 홈페이지: '+$('f-ref').value.trim():''),
     people:ps.map(p=>({name:p.name,rrn:p.rrn1+'-'+p.rrn2,addr:p.addr,rel:p.rel,share:p.roles.includes('주주')?p.share:'',roles:p.roles.join('·')})),
     ceoMode:ceos.length>1?radio('ceoMode'):'단독대표',cert:'임원 '+radio('certE')+' / 주주 '+radio('certS'),seal:radio('seal'),
     due:$('f-due').value,startup:radio('startup'),detail:$('f-detail').value.trim(),website:$('f-website').value};
