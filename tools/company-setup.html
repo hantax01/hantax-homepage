@@ -60,6 +60,11 @@
 .qform{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
 .qform label{display:block;font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:6px}
 .qform label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.qsec{grid-column:1/-1;font-size:14px;font-weight:800;color:var(--ink);border-top:1px solid var(--line);padding-top:12px;margin-top:2px}
+.qsec:first-child{border-top:0;padding-top:0;margin-top:0}
+.qsec small{font-weight:400;color:var(--mute);font-size:12px;margin-left:6px}
+.qform input.edited{border-color:var(--blue);background:var(--blue-soft)}
+.qreset{margin-top:10px;border:0;background:none;color:var(--blue);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:4px 0}
 .qacct{grid-column:1/-1;font-size:13.5px;color:var(--char);background:var(--soft);border-radius:10px;padding:11px 14px}
 .qacct b{color:var(--ink)}
 #print-area{display:none;color:#1a1f2b}
@@ -314,15 +319,26 @@
           </div>
           <div id="rpt-body" hidden>
             <div class="qform">
-              <div><label for="q-to">받는 분</label><input type="text" id="q-to" placeholder="예: 홍길동 (대표님은 자동으로 붙습니다)"></div>
+              <div class="qsec">받는 분</div>
+              <div><label for="q-to">수신 <small>성함 뒤에 대표님이 붙습니다</small></label><input type="text" id="q-to" placeholder="예: 홍길동"></div>
               <div><label for="q-place">지역 표시</label><input type="text" id="q-place" placeholder="예: 서울시 구로구"></div>
               <div><label for="q-date">견적 일자</label><input type="date" id="q-date"></div>
-              <div><label for="q-fee">법무사 보수 <small>부가세 별도</small></label><div class="unit"><input type="text" id="q-fee" inputmode="numeric" value="250,000"><span>원</span></div></div>
-              <div><label for="q-dc">할인 <small>부가세 별도</small></label><div class="unit"><input type="text" id="q-dc" inputmode="numeric" value="100,000"><span>원</span></div></div>
-              <div><label for="q-notary">공증료</label><div class="unit"><input type="text" id="q-notary" inputmode="numeric" value="0"><span>원</span></div></div>
+              <div></div>
+              <div class="qsec">공과금 <small>자동 계산한 금액이 들어 있고, 고치면 그 금액으로 견적서를 만듭니다</small></div>
+              <div><label for="q-reg">등록면허세</label><div class="unit"><input type="text" id="q-reg" inputmode="numeric" value=""><span>원</span></div></div>
+              <div><label for="q-edu">지방교육세 <small>고치지 않으면 등록면허세의 20%</small></label><div class="unit"><input type="text" id="q-edu" inputmode="numeric" value=""><span>원</span></div></div>
+              <div><label for="q-f0">등기신청 수수료</label><div class="unit"><input type="text" id="q-f0" inputmode="numeric" value=""><span>원</span></div></div>
+              <div><label for="q-f1">등기부등본·제증명</label><div class="unit"><input type="text" id="q-f1" inputmode="numeric" value=""><span>원</span></div></div>
+              <div><label for="q-f2">인감증명</label><div class="unit"><input type="text" id="q-f2" inputmode="numeric" value=""><span>원</span></div></div>
+              <div><label for="q-f3">법인 전자증명서</label><div class="unit"><input type="text" id="q-f3" inputmode="numeric" value=""><span>원</span></div></div>
+              <div><label for="q-notary">정관 공증료</label><div class="unit"><input type="text" id="q-notary" inputmode="numeric" value="0"><span>원</span></div></div>
               <div><label for="q-stamp">법인도장 제작</label><div class="unit"><input type="text" id="q-stamp" inputmode="numeric" value="0"><span>원</span></div></div>
+              <div class="qsec">법무사 보수 <small>부가세는 10%로 자동 계산합니다</small></div>
+              <div><label for="q-fee">보수 <small>부가세 별도</small></label><div class="unit"><input type="text" id="q-fee" inputmode="numeric" value="250,000"><span>원</span></div></div>
+              <div><label for="q-dc">할인 <small>부가세 별도</small></label><div class="unit"><input type="text" id="q-dc" inputmode="numeric" value="100,000"><span>원</span></div></div>
               <div class="qacct" id="q-acct"></div>
             </div>
+            <button type="button" class="qreset" id="q-reset">공과금을 자동 계산 금액으로 되돌리기</button>
             <button type="button" class="btn btn-primary" id="r-pdf" style="margin-top:14px;width:100%;justify-content:center">견적서 PDF 만들기</button>
           </div>
         </div>
@@ -415,17 +431,20 @@ const VAT=0.1;
 const f10=x=>Math.floor(x/10+1e-9)*10;
 
 function calcSetup(c){
+  const ov=c.ov||{}, has=k=>ov[k]!=null;             // 견적서에서 직접 고친 금액
   const heavy=c.metro&&!c.exempt;
   const base=Math.max(f10(c.capital*REG_RATE),REG_MIN);
-  const reg=base*(heavy?HEAVY:1);                    // 등록면허세
-  const edu=f10(reg*EDU);                            // 지방교육세
-  const fees=FEES.reduce((s,f)=>s+f[2],0);
+  const regAuto=base*(heavy?HEAVY:1);
+  const reg=has('reg')?ov.reg:regAuto;               // 등록면허세
+  const edu=has('edu')?ov.edu:f10(reg*EDU);          // 지방교육세 (고치지 않으면 등록면허세의 20%)
+  const feeVals=FEES.map((f,i)=>has('f'+i)?ov['f'+i]:f[2]);
+  const fees=feeVals.reduce((a,b)=>a+b,0);
   const pub=reg+edu+fees+c.notary+c.stamp;           // 공과금 소계 ①
   const feeVat=f10(c.fee*VAT), dcVat=f10(c.dc*VAT);
   const pro=c.fee+feeVat-c.dc-dcVat;                 // 법무사 보수 소계 ②
   const plain=Math.max(f10(c.capital*REG_RATE),REG_MIN);
-  const heavyExtra=heavy?(reg-plain)+(edu-f10(plain*EDU)):0;   // 중과로 더 내는 세금
-  return {heavy,reg,edu,fees,pub,feeVat,dcVat,pro,total:pub+pro,heavyExtra,tax:reg+edu};
+  const heavyExtra=heavy?(regAuto-plain)+(f10(regAuto*EDU)-f10(plain*EDU)):0;   // 중과로 더 내는 세금
+  return {heavy,regAuto,reg,edu,feeVals,ov,fees,pub,feeVat,dcVat,pro,total:pub+pro,heavyExtra,tax:reg+edu};
 }
 
 // 과밀억제권역 판단: 주소 검색 결과(시도·시군구·법정동)로 봅니다 (수도권정비계획법 시행령 별표1)
@@ -466,7 +485,11 @@ const r4=v=>Math.round(v/1e4)*1e4;
 const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
   return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
-['i-cap','q-fee','q-dc','q-notary','q-stamp'].forEach(id=>{
+const OV=[['q-reg','reg'],['q-edu','edu'],['q-f0','f0'],['q-f1','f1'],['q-f2','f2'],['q-f3','f3']];
+// 직접 고친 칸은 표시해 두고, 자본금이나 지역이 바뀌어도 그 금액을 지킵니다
+OV.forEach(([id])=>$(id).addEventListener('input',()=>{ $(id).dataset.edited='1'; $(id).classList.add('edited'); }));
+$('q-reset').addEventListener('click',()=>{ OV.forEach(([id])=>{ delete $(id).dataset.edited; $(id).classList.remove('edited'); }); if(shown()&&read().capital) render(); });
+['i-cap','q-fee','q-dc','q-notary','q-stamp','q-reg','q-edu','q-f0','q-f1','q-f2','q-f3'].forEach(id=>{
   const el=$(id); el.addEventListener('input',()=>{ const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):(/0/.test(el.value)?'0':''); });
 });
 function syncArea(){ const on=$('i-area').value==='metro'; $('ex-row').hidden=!on; if(!on) $('i-exempt').checked=false; }
@@ -507,7 +530,15 @@ $('i-area').addEventListener('change',()=>{ $('addr-judge').hidden=true; });
 function read(){
   return {capital:num($('i-cap').value),metro:$('i-area').value==='metro',exempt:$('i-exempt').checked,
     notaryNeed:$('i-notary-need').checked,
-    fee:num($('q-fee').value),dc:num($('q-dc').value),notary:num($('q-notary').value),stamp:num($('q-stamp').value)};
+    fee:num($('q-fee').value),dc:num($('q-dc').value),notary:num($('q-notary').value),stamp:num($('q-stamp').value),
+    ov:readOv()};
+}
+// 견적서가 열렸을 때만 직접 고친 금액을 씁니다
+function readOv(){
+  const ov={};
+  if(typeof ACCT==='undefined'||!ACCT) return ov;
+  for(const [id,k] of OV) if($(id).dataset.edited) ov[k]=num($(id).value);
+  return ov;
 }
 const shown=()=>$('res').style.display==='block';
 
@@ -518,9 +549,9 @@ function render(){
   const sec=l=>'<tr class="sec"><td>'+l+'</td><td></td></tr>';
   $('rt-body').innerHTML=
       sec('세금과 공과금')
-    +row('등록면허세',r.heavy?'자본금의 0.4% × 3배 (과밀억제권역 중과) · 최저 337,500원':'자본금의 0.4% · 최저 112,500원',won(r.reg)+'원')
-    +row('지방교육세','등록면허세의 20%',won(r.edu)+'원')
-    +FEES.map(f=>row(f[0],f[1],won(f[2])+'원')).join('')
+    +row('등록면허세',r.ov.reg!=null?'직접 입력한 금액':r.heavy?'자본금의 0.4% × 3배 (과밀억제권역 중과) · 최저 337,500원':'자본금의 0.4% · 최저 112,500원',won(r.reg)+'원')
+    +row('지방교육세',r.ov.edu!=null?'직접 입력한 금액':'등록면허세의 20%',won(r.edu)+'원')
+    +FEES.map((f,i)=>row(f[0],r.ov['f'+i]!=null?'직접 입력한 금액':f[1],won(r.feeVals[i])+'원')).join('')
     +(c.notary||c.notaryNeed?row('정관 공증료',c.notary?'':'공증 사무소 수수료 별도',c.notary?won(c.notary)+'원':'별도'):'')
     +(c.stamp?row('법인도장 제작','',won(c.stamp)+'원'):'')
     +row('세금과 공과금 소계','',won(r.pub)+'원','sum')
@@ -541,6 +572,9 @@ function render(){
   if(c.capital&&c.capital<=28125000) notes.push({t:'자본금 2,812만 5천 원까지는 최저세액이 적용되어 등록면허세가 같습니다.'});
   if(c.notaryNeed&&!c.notary) notes.push({t:'자본금 10억 원 이상이거나 모집설립이면 정관 공증을 받아야 해서 공증 수수료가 따로 듭니다.'});
   $('verdict').innerHTML='법인설립 비용은 모두 <b>'+manwon(r.total)+'</b>입니다.'+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+  // 견적서 칸 가운데 고치지 않은 칸은 자동 계산 금액으로 맞춰 둡니다
+  const auto={reg:r.regAuto,edu:f10(r.reg*EDU),f0:FEES[0][2],f1:FEES[1][2],f2:FEES[2][2],f3:FEES[3][2]};
+  OV.forEach(([id,k])=>{ if(!$(id).dataset.edited) $(id).value=auto[k].toLocaleString('ko-KR'); });
   $('res').style.display='block';
 }
 
@@ -567,7 +601,7 @@ async function unseal(pw){
   return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(SEALED.i)},key,b64(SEALED.c))));
 }
 function openQuote(){
-  $('rpt-lock').hidden=true; $('rpt-lock-msg').textContent='받는 분과 보수를 확인한 뒤 견적서를 만드세요. 법무사 보수와 할인을 바꾸면 위 계산에도 바로 반영됩니다.';
+  $('rpt-lock').hidden=true; $('rpt-lock-msg').textContent='수신과 견적 항목을 확인한 뒤 견적서를 만드세요. 금액을 고치면 위 계산표와 견적서에 바로 반영되고, 고친 칸은 파랗게 표시됩니다.';
   $('rpt-body').hidden=false;
   $('q-acct').innerHTML='입금 계좌 <b>'+esc(ACCT.bank)+' '+esc(ACCT.account)+'</b> · 예금주 <b>'+esc(ACCT.holder)+'</b>';
   if(!$('q-date').value){ const t=new Date(); $('q-date').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
@@ -589,7 +623,7 @@ function quoteHtml(){
   const to=$('q-to').value.trim(), place=$('q-place').value.trim();
   const d=$('q-date').value?new Date($('q-date').value+'T00:00:00'):new Date();
   const ymd=d.getFullYear()+'. '+String(d.getMonth()+1).padStart(2,'0')+'. '+String(d.getDate()).padStart(2,'0')+'.';
-  const L=[['등록면허세',r.reg],['지방교육세',r.edu]].concat(FEES.map(f=>[f[0],f[2]])).concat([['정관 공증료',c.notary],['법인도장 제작',c.stamp]]);
+  const L=[['등록면허세',r.reg],['지방교육세',r.edu]].concat(FEES.map((f,i)=>[f[0],r.feeVals[i]])).concat([['정관 공증료',c.notary],['법인도장 제작',c.stamp]]);
   const R=[['보수',c.fee],['부가가치세',r.feeVat]].concat(c.dc?[['할인',-c.dc],['부가가치세',-r.dcVat]]:[]);
   const rows=Math.max(L.length,R.length);
   let body='';
