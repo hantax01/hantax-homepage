@@ -479,7 +479,7 @@ $('rpt-body').addEventListener('input',()=>{ if(shown()&&read().capital) render(
 /* ── 견적서 (직원용) ───────────────────────── */
 // 법무법인 계좌는 견적서 비밀번호로 암호화해 두고, 비밀번호가 맞을 때만 풀립니다. 비밀번호는 코드에 없습니다
 // ponytail: 정적 페이지라 비밀번호 확인은 브라우저에서 합니다. 직원별 권한·발행 기록이 필요해지면 포털로 옮깁니다
-const SEALED={s:'jusvAfczf9jyE8Rd1cOdKg==',i:'HI/BzE+dvxi9yQxm',c:'BFOanvbN0L5wrgnfQl6czWumAiX72zGKrbswSg5dn2tVgsSMZ07e0IDRRYSw7X5gkB/X8e0XdDLHDNri2mM/J8ykwSY62MdOevyWcLVbAw4Z40c/JWm8QbZ20CSchOz0'};
+const SEALED={s:'b1yfadMkKNltrEvcAR8+Fg==',i:'K7q41wnsf5iXXbM6',c:'wMIkDbcB4wR7OEEitGIPZXKKZxH4AfB2BO126AwO6kNpxbFYdNaMOtq+rlZL+azBmzG7HPxE/YgMawis3wLnoYqA5YrEJqrdqtaoWbRQh0BG8PIZtOYsOrmz8TtKJACE'};
 const ACCT_KEY='hx_setup_acct';
 let ACCT=null;
 try{ ACCT=JSON.parse(localStorage.getItem(ACCT_KEY)||'null'); }catch(e){}
