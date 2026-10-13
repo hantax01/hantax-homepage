@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>법인설립 비용 계산기 2026, 등록면허세·등기 수수료·법무사 보수 | 한택스</title>
-<meta name="description" content="자본금과 본점 지역으로 법인설립 등록면허세와 지방교육세, 등기신청 수수료, 법무사 보수까지 한 번에 계산합니다. 서울 등 과밀억제권역 3배 중과와 산업단지·중과 제외 업종 예외도 반영합니다.">
+<title>법인설립 비용 계산기 2026, 등록면허세·지방교육세·등기 수수료 | 한택스</title>
+<meta name="description" content="자본금과 본점 지역으로 법인설립 등록면허세와 지방교육세, 등기신청 수수료까지 한 번에 계산합니다. 서울 등 과밀억제권역 3배 중과와 산업단지·중과 제외 업종 예외도 반영합니다.">
 <link rel="canonical" href="https://www.hantax47.com/tools/company-setup.html">
 <meta property="og:title" content="법인설립, 비용이 얼마나 들까요?">
-<meta property="og:description" content="등록면허세·등기 수수료·법무사 보수까지 법인설립 비용을 한 번에 계산합니다">
+<meta property="og:description" content="등록면허세·지방교육세·등기 수수료까지 법인설립 비용을 한 번에 계산합니다">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.hantax47.com/tools/company-setup.html">
 <meta property="og:image" content="https://www.hantax47.com/assets/og/tool-company-setup.png">
@@ -256,7 +256,7 @@
   <div class="wrap">
     <span class="eyebrow">법인설립</span>
     <h1>법인설립,<br>비용이 얼마나 들까요?</h1>
-    <p class="lead">자본금과 본점 지역만 넣으면 등록면허세와 지방교육세, 등기 수수료, 법무사 보수까지 법인설립에 드는 돈을 한 번에 계산합니다. 서울처럼 과밀억제권역에 세우면 세금이 3배가 되는지도 함께 확인합니다.</p>
+    <p class="lead">자본금과 본점 지역만 넣으면 등록면허세와 지방교육세, 등기 수수료까지 법인설립에 드는 세금과 공과금을 한 번에 계산합니다. 서울처럼 과밀억제권역에 세우면 세금이 3배가 되는지도 함께 확인합니다.</p>
   </div>
 </section>
 
@@ -385,7 +385,7 @@
         · 과밀억제권역은 수도권정비계획법 시행령 별표1을 기준으로 주소의 시·군·구와 법정동으로 판단했습니다. 경제자유구역·산업단지처럼 동 안에서 경계가 갈리는 곳은 정확한 위치를 확인해야 합니다.<br>
         · 등록면허세는 자본금의 0.4%(최저 112,500원), 과밀억제권역 중과 시 3배, 지방교육세는 등록면허세의 20%로 계산했습니다. 2026년 기준입니다.<br>
         · 등기신청 수수료 20,000원, 등기부등본·제증명 5,000원, 인감증명 5,000원, 법인 전자증명서 4,000원을 넣었습니다.<br>
-        · 법무사 보수는 한택스 연계 법무법인 기준이며, 자본금 규모와 임원·주주 수, 업종 인허가 여부에 따라 달라질 수 있습니다.
+        · 법무사 보수는 넣지 않았습니다. 자본금 규모와 임원·주주 수, 업종 인허가 여부에 따라 달라져 상담으로 견적을 안내드립니다.
       </p>
 
       <div class="morelinks">
@@ -545,6 +545,7 @@ const shown=()=>$('res').style.display==='block';
 /* ── 화면 ─────────────────────────────────── */
 function render(){
   const c=read(), r=calcSetup(c);
+  const staff=!!ACCT, sum=staff?r.total:r.pub;       // 법무사 보수는 견적서 비밀번호를 넣은 직원 화면에서만 보입니다
   const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
   const sec=l=>'<tr class="sec"><td>'+l+'</td><td></td></tr>';
   $('rt-body').innerHTML=
@@ -554,24 +555,26 @@ function render(){
     +FEES.map((f,i)=>row(f[0],r.ov['f'+i]!=null?'직접 입력한 금액':f[1],won(r.feeVals[i])+'원')).join('')
     +(c.notary||c.notaryNeed?row('정관 공증료',c.notary?'':'공증 사무소 수수료 별도',c.notary?won(c.notary)+'원':'별도'):'')
     +(c.stamp?row('법인도장 제작','',won(c.stamp)+'원'):'')
-    +row('세금과 공과금 소계','',won(r.pub)+'원','sum')
+    +(staff?row('세금과 공과금 소계','',won(r.pub)+'원','sum')
     +sec('법무사 보수')
     +row('보수','',won(c.fee)+'원')
     +row('부가가치세','보수의 10%',won(r.feeVat)+'원')
     +(c.dc?row('할인','',(c.dc?'−&nbsp;':'')+won(c.dc)+'원','minus')+row('부가가치세','할인액의 10%','−&nbsp;'+won(r.dcVat)+'원','minus'):'')
     +row('법무사 보수 소계','',won(r.pro)+'원','sum')
-    +'<tr class="tot"><td>설립 비용 합계</td><td>'+won(r.total)+'원</td></tr>';
+    +'<tr class="tot"><td>설립 비용 합계</td><td>'+won(r.total)+'원</td></tr>'
+    :'<tr class="tot"><td>세금과 공과금 합계<small>법무사 보수는 별도입니다</small></td><td>'+won(r.pub)+'원</td></tr>');
 
   $('res-sub').textContent='자본금 '+won(c.capital)+'원 · '+(c.metro?(c.exempt?'과밀억제권역 (중과 제외)':'과밀억제권역'):'과밀억제권역 밖');
-  $('call').innerHTML='<div class="lbl">법인설립에 드는 돈</div><div class="val">'+manwon(r.total).replace(/ ?원$/,'')+'<small>원</small></div>'
-    +'<div class="sub">세금 '+manwon(r.tax)+', 등기 수수료와 증명서 '+manwon(r.pub-r.tax)+', 법무사 보수 '+manwon(r.pro)+'(부가세 포함)입니다.</div>';
+  $('call').innerHTML='<div class="lbl">'+(staff?'법인설립에 드는 돈':'법인설립에 드는 세금과 공과금')+'</div><div class="val">'+manwon(sum).replace(/ ?원$/,'')+'<small>원</small></div>'
+    +'<div class="sub">세금 '+manwon(r.tax)+', 등기 수수료와 증명서 '+manwon(r.pub-r.tax)
+    +(staff?', 법무사 보수 '+manwon(r.pro)+'(부가세 포함)입니다.':'입니다. 법무사 보수는 별도입니다.')+'</div>';
 
   const notes=[];
   if(r.heavy) notes.push({warn:1,t:'과밀억제권역이라 등록면허세가 <b>3배</b>입니다. 같은 자본금이라도 산업단지 안이나 과밀억제권역 밖에 세우면 세금이 '+manwon(r.heavyExtra)+' 줄어듭니다. 설립 후 5년 안에 자본금을 늘릴 때도 3배가 붙습니다.'});
   if(c.metro) notes.push({t:'과밀억제권역 안에서 설립 등기를 하면 창업중소기업 세액감면율이 크게 낮아지고, 청년이 아니면 감면을 받지 못합니다. 본점 주소를 정하기 전에 <a href="startup-tax-credit.html">창업감면 자가진단</a>으로 확인해 보세요.'});
   if(c.capital&&c.capital<=28125000) notes.push({t:'자본금 2,812만 5천 원까지는 최저세액이 적용되어 등록면허세가 같습니다.'});
   if(c.notaryNeed&&!c.notary) notes.push({t:'자본금 10억 원 이상이거나 모집설립이면 정관 공증을 받아야 해서 공증 수수료가 따로 듭니다.'});
-  $('verdict').innerHTML='법인설립 비용은 모두 <b>'+manwon(r.total)+'</b>입니다.'+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+  $('verdict').innerHTML=(staff?'법인설립 비용은 모두 <b>'+manwon(r.total)+'</b>입니다.':'법인설립에 드는 세금과 공과금은 <b>'+manwon(r.pub)+'</b>입니다. 법무사 보수는 상담으로 견적을 안내드립니다.')+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
   // 견적서 칸 가운데 고치지 않은 칸은 자동 계산 금액으로 맞춰 둡니다
   const auto={reg:r.regAuto,edu:f10(r.reg*EDU),f0:FEES[0][2],f1:FEES[1][2],f2:FEES[2][2],f3:FEES[3][2]};
   OV.forEach(([id,k])=>{ if(!$(id).dataset.edited) $(id).value=auto[k].toLocaleString('ko-KR'); });
@@ -604,6 +607,7 @@ function openQuote(){
   $('rpt-lock').hidden=true; $('rpt-lock-msg').textContent='수신과 견적 항목을 확인한 뒤 견적서를 만드세요. 금액을 고치면 위 계산표와 견적서에 바로 반영되고, 고친 칸은 파랗게 표시됩니다.';
   $('rpt-body').hidden=false;
   $('q-acct').innerHTML='입금 계좌 <b>'+esc(ACCT.bank)+' '+esc(ACCT.account)+'</b> · 예금주 <b>'+esc(ACCT.holder)+'</b>';
+  if(shown()&&read().capital) render();
   if(!$('q-date').value){ const t=new Date(); $('q-date').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
 }
 const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
