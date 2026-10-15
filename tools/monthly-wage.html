@@ -60,6 +60,7 @@
 .pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 12px}
 .pgrid label{font-size:13px}
 .pgrid input{padding:9px 11px;font-size:14px}
+.p-hint{font-size:12px;color:var(--mute);margin:5px 2px 0}
 .sim input.bad{border-color:var(--seal);background:var(--seal-soft)}
 .resbtns{display:flex;gap:8px;flex-wrap:wrap}
 .rtable.wide-t th,.rtable.wide-t td{padding:11px 9px;white-space:nowrap}
@@ -328,7 +329,7 @@
 
       <p class="disc">
         · 계산 결과는 참고용입니다. 실제 지급액은 근로계약서와 취업규칙, 통상임금에 들어가는 수당의 범위에 따라 달라집니다.<br>
-        · 통상시급은 넣으신 월급을 월 소정근로시간(기본 209시간)으로 나눠 구했고, 수당은 사람별로 원 단위 미만을 버렸습니다.<br>
+        · 통상시급은 넣으신 월급을 월 소정근로시간으로 나눠 구했습니다. 월 소정근로시간은 (주 근무시간 + 주휴시간) × 365 ÷ 7 ÷ 12로, 주 40시간이면 209시간입니다. 수당은 사람별로 원 단위 미만을 버렸습니다.<br>
         · 연장 1.5배, 야간 가산 0.5배, 휴일 8시간까지 1.5배·넘는 시간 2배로 계산했습니다. 5인 미만 사업장을 고르면 가산 없이 1배로 계산합니다.<br>
         · 2026년 최저임금은 시급 10,320원(월 209시간 기준 2,156,880원)입니다. 통상시급이 이보다 낮으면 결과에 표시합니다.<br>
         · 세전 금액입니다. 4대보험과 소득세를 뗀 실수령액은 급여 실수령액 계산기에서 확인하세요.
@@ -370,6 +371,12 @@ nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classLi
 /* ── 월급 일할·수당 ─────────────────────────── */
 const MIN_WAGE=10320;            // 2026년 최저시급
 const BASE_HOURS=209;            // 주 40시간 + 주휴 8시간을 한 달로 본 소정근로시간
+// 주 소정근로시간 → 월 소정근로시간: (주 시간 + 주휴시간) × 365 ÷ 7 ÷ 12, 주 15시간 미만은 주휴시간 없음, 주 40시간까지만
+function monthlyHours(week){
+  const w=Math.min(Math.max(week||0,0),40);
+  const rest=w>=15?w/40*8:0;
+  return Math.round((w+rest)*365/7/12);
+}
 
 // 근무시간 글자를 시간으로 바꿉니다: 12:30, 12시간 30분, 2시간, 45분, 1.5
 function parseTime(s){
@@ -418,7 +425,7 @@ function personHtml(){
   return '<div class="ptop"><span class="pno"></span><input type="text" class="p-name" placeholder="직원 이름" aria-label="직원 이름"><button type="button" class="xbtn" aria-label="이 직원 빼기">×</button></div>'
     +'<div class="pgrid">'
     +'<div><label>월급 <small>통상임금</small>'+H('기본급과 매달 정해진 금액으로 주는 고정수당을 더한 한 달 금액입니다. 연장수당의 기준이 되는 통상시급을 이 금액으로 구하고, 중간 입사·퇴사면 이 금액을 일할합니다.')+'</label><div class="unit"><input type="text" class="p-pay" inputmode="numeric" aria-label="월급"><span>원</span></div></div>'
-    +'<div class="m-ot"><label>월 소정근로시간'+H('주 40시간이면 209시간입니다. 단시간 근로자는 (주 소정근로시간 + 주휴시간) × 4.345로 구합니다. 예를 들어 주 20시간이면 (20 + 4) × 4.345 = 104시간입니다.')+'</label><div class="unit"><input type="text" class="p-hrs" inputmode="numeric" value="209" aria-label="월 소정근로시간"><span>시간</span></div></div>'
+    +'<div class="m-ot"><label>주 근무시간 <small>근로계약서</small>'+H('근로계약서에 정한 한 주 근무시간입니다(연장근로 빼고). 주 40시간이면 주휴시간 8시간을 더해 월 209시간으로 계산합니다. 주 15시간 이상이면 주휴시간(주 근무시간 ÷ 40 × 8)을 더하고, 15시간 미만이면 더하지 않습니다.')+'</label><div class="unit"><input type="text" class="p-week" inputmode="decimal" value="40" aria-label="주 근무시간"><span>시간</span></div><p class="p-hint">월 209시간 (주휴 포함)</p></div>'
     +'<div class="m-pro"><label>입사일 <small>이번 달 입사</small></label><input type="date" class="p-join" aria-label="입사일"></div>'
     +'<div class="m-pro"><label>퇴사일 <small>이번 달 퇴사</small></label><input type="date" class="p-leave" aria-label="퇴사일"></div>'
     +'<div class="m-ot"><label>연장근로'+H('하루 8시간, 주 40시간을 넘겨 일한 시간을 이번 달 합계로 넣어 주세요. 12:30(12시간 30분), 2시간 15분, 45분처럼 분 단위까지 넣을 수 있습니다.')+'</label><input type="text" class="p-ot t" placeholder="예: 12:30" aria-label="연장근로 시간"></div>'
@@ -450,7 +457,11 @@ $('people').addEventListener('click',e=>{
   x.closest('.person').remove(); renumber(); if(shown()) render();
 });
 $('people').addEventListener('input',e=>{
-  if(e.target.classList.contains('p-pay')||e.target.classList.contains('p-hrs')){ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }
+  if(e.target.classList.contains('p-pay')){ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }
+  if(e.target.classList.contains('p-week')){
+    const w=parseFloat(e.target.value)||0, h=monthlyHours(w);
+    e.target.closest('div').parentElement.querySelector('.p-hint').textContent=w?'월 '+h+'시간'+(w>=15?' (주휴 포함)':' (주 15시간 미만이라 주휴 없음)')+(w>40?' · 주 40시간까지만 봅니다':''):'주 근무시간을 넣어 주세요';
+  }
 });
 // 시간 칸은 다 넣고 나면 12:30 모양으로 정리합니다
 $('people').addEventListener('focusout',e=>{
@@ -477,7 +488,7 @@ function readAll(){
   const mode=MODE, g={y,m,method:$('g-method').value,small:$('g-small').checked};
   const people=[...document.querySelectorAll('.person')].map((d,i)=>{
     const q=c=>d.querySelector(c);
-    return {el:d,name:q('.p-name').value.trim()||'직원 '+(i+1),pay:num(q('.p-pay').value),hours:num(q('.p-hrs').value)||BASE_HOURS,
+    return {el:d,name:q('.p-name').value.trim()||'직원 '+(i+1),pay:num(q('.p-pay').value),week:parseFloat(q('.p-week').value)||40,hours:monthlyHours(parseFloat(q('.p-week').value)||40),
       join:mode==='ot'?'':q('.p-join').value,leave:mode==='ot'?'':q('.p-leave').value,
       ot:mode==='pro'?0:parseTime(q('.p-ot').value),night:mode==='pro'?0:parseTime(q('.p-night').value),
       hol:mode==='pro'?0:parseTime(q('.p-hol').value),hol2:mode==='pro'?0:parseTime(q('.p-hol2').value)};
@@ -549,7 +560,8 @@ function render(){
   const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
   $('steps').innerHTML=rows.map(({p,r})=>'<table class="stable"><tr><td colspan="3" class="who">'+esc(p.name)+'</td></tr>'
     +(mode!=='ot'?srow('일할 월급',r.days>=r.dim?'한 달을 모두 근무해 월급 전액':won(p.pay)+' × '+r.days+'일 ÷ '+r.den+'일',won(r.base)+'원'):'')
-    +(mode!=='pro'?srow('통상시급',won(p.pay)+' ÷ '+(p.hours||BASE_HOURS)+'시간',r.rate.toLocaleString('ko-KR',{maximumFractionDigits:2})+'원'):'')
+    +(mode!=='pro'?srow('월 소정근로시간','(주 '+Math.min(p.week,40)+'시간'+(p.week>=15?' + 주휴 '+(Math.min(p.week,40)/40*8).toLocaleString('ko-KR',{maximumFractionDigits:1})+'시간':'')+') × 365 ÷ 7 ÷ 12',p.hours+'시간'):'')
+    +(mode!=='pro'?srow('통상시급',won(p.pay)+' ÷ '+p.hours+'시간',r.rate.toLocaleString('ko-KR',{maximumFractionDigits:2})+'원'):'')
     +(p.ot?srow('연장수당','통상시급 × '+r.k.ot+'배 × '+hmWords(p.ot),won(r.ot)+'원'):'')
     +(p.night?srow('야간수당','통상시급 × '+r.k.night+'배 × '+hmWords(p.night),won(r.night)+'원'):'')
     +(p.hol?srow('휴일수당 (8시간까지)','통상시급 × '+r.k.hol+'배 × '+hmWords(p.hol),won(r.hol1)+'원'):'')
