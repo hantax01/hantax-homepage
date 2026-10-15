@@ -411,8 +411,8 @@ function parseTime(s){
   return NaN;
 }
 // 근무 종류: [이름, 어느 수당으로 나뉘는지]. 연장+야간은 연장 1.5배 + 야간 가산 0.5배처럼 나눠 계산합니다
-const KINDS={ot:['연장',{ot:1}],otn:['연장 + 야간',{ot:1,night:1}],hol:['휴일',{hol:1}],hol2:['휴일 8시간 초과',{hol2:1}],
-  holn:['휴일 + 야간',{hol:1,night:1}],hol2n:['휴일 8시간 초과 + 야간',{hol2:1,night:1}],night:['야간 (정해진 근무시간 중)',{night:1}]};
+const KINDS={ot:['연장',{ot:1}],otn:['연장 + 야간',{ot:1,night:1}],hol:['휴일',{hol:1}],hol2:['휴일 + 8시간 초과',{hol2:1}],
+  holn:['휴일 + 야간',{hol:1,night:1}],hol2n:['휴일 + 8시간 초과 + 야간',{hol2:1,night:1}],night:['야간 + 정해진 근무시간',{night:1}]};
 const PART={ot:[1.5,1],night:[0.5,0],hol:[1.5,1],hol2:[2,1]};   // [5인 이상, 5인 미만] 배율
 const kindRate=(k,small)=>Object.keys(KINDS[k][1]).reduce((a,c)=>a+PART[c][small?1:0],0);
 function sumWork(list){
@@ -461,7 +461,7 @@ function personHtml(){
     +'<div class="m-pro p-evw"><label>이번 달 입사·퇴사</label><select class="p-ev" aria-label="이번 달 입사·퇴사"><option value="">한 달 모두 근무</option><option value="join">이번 달 입사</option><option value="leave">이번 달 퇴사</option><option value="both">이번 달 입사하고 퇴사</option></select></div>'
     +'<div class="m-pro p-d1w" hidden><label class="p-d1l">입사일</label><input type="date" class="p-d1" aria-label="날짜"></div>'
     +'<div class="m-pro p-d2w" hidden><label>퇴사일</label><input type="date" class="p-d2" aria-label="퇴사일"></div>'
-    +'<div class="m-ot works"><label>추가 근무 <small>종류를 고르고 이번 달 시간을 넣으세요</small>'+H('연장근로가 밤 10시~새벽 6시에 걸치면 연장 + 야간, 휴일에 일했으면 휴일을 고릅니다. 휴일은 주휴일(보통 일요일)·공휴일·약정휴일이고, 쉬는 토요일(휴무일)에 일한 것은 휴일이 아니라 연장입니다. 휴일에 하루 8시간을 넘긴 시간은 휴일 8시간 초과로 따로 넣습니다. 같은 시간을 두 줄에 겹쳐 넣지 마세요. 시간은 12:30, 2시간 15분, 45분처럼 분 단위까지 넣을 수 있습니다.')+'</label><div class="wlist"></div><button type="button" class="wadd">+ 근무 종류 추가</button></div>'
+    +'<div class="m-ot works"><label>추가 근무 <small>종류를 고르고 이번 달 시간을 넣으세요</small>'+H('연장근로가 밤 10시~새벽 6시에 걸치면 연장 + 야간, 휴일에 일했으면 휴일을 고릅니다. 휴일은 주휴일(보통 일요일)·공휴일·약정휴일이고, 쉬는 토요일(휴무일)에 일한 것은 휴일이 아니라 연장입니다. 휴일에 하루 8시간을 넘긴 시간은 휴일 + 8시간 초과로 따로 넣습니다. 야간 + 정해진 근무시간은 원래 근무시간 안에 밤 10시~새벽 6시가 들어 있을 때 고릅니다. 같은 시간을 두 줄에 겹쳐 넣지 마세요. 시간은 12:30, 2시간 15분, 45분처럼 분 단위까지 넣을 수 있습니다.')+'</label><div class="wlist"></div><button type="button" class="wadd">+ 근무 종류 추가</button></div>'
     +'</div>';
 }
 function syncEv(card){
@@ -477,7 +477,7 @@ function setRange(card){
 }
 function kindOptions(sel){
   const small=$('g-small').checked;
-  return Object.keys(KINDS).map(k=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+KINDS[k][0]+'  × '+kindRate(k,small)+'배</option>').join('');
+  return Object.keys(KINDS).map(k=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+KINDS[k][0]+' ('+kindRate(k,small)+'배)</option>').join('');
 }
 function addWork(card,kind,time){
   const r=document.createElement('div'); r.className='wrow';
@@ -635,7 +635,7 @@ function render(){
   const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
   $('steps').innerHTML=rows.map(({p,r})=>'<table class="stable"><tr><td colspan="3" class="who">'+esc(p.name)+'</td></tr>'
     +(mode!=='ot'?srow('일할 월급',r.days>=r.dim?'한 달을 모두 근무해 월급 전액':won(p.pay)+' × '+r.days+'일 ÷ '+r.den+'일',won(r.base)+'원'):'')
-    +(mode!=='pro'&&p.works.some(w=>w.h)?srow('넣은 근무',p.works.filter(w=>w.h).map(w=>KINDS[w.kind][0]+' '+hmWords(w.h)+' (× '+kindRate(w.kind,g.small)+'배)').join(', '),''):'')
+    +(mode!=='pro'&&p.works.some(w=>w.h)?srow('넣은 근무',p.works.filter(w=>w.h).map(w=>KINDS[w.kind][0]+' '+hmWords(w.h)+' ('+kindRate(w.kind,g.small)+'배)').join(', '),''):'')
     +(mode!=='pro'?srow('월 소정근로시간','(주 '+Math.min(p.week,40)+'시간'+(p.week>=15?' + 주휴 '+(Math.min(p.week,40)/40*8).toLocaleString('ko-KR',{maximumFractionDigits:1})+'시간':'')+') × 365 ÷ 7 ÷ 12',p.hours+'시간'):'')
     +(mode!=='pro'?srow('통상시급',won(p.pay)+' ÷ '+p.hours+'시간',r.rate.toLocaleString('ko-KR',{maximumFractionDigits:2})+'원'):'')
     +(p.ot?srow('연장수당','통상시급 × '+r.k.ot+'배 × '+hmWords(p.ot),won(r.ot)+'원'):'')
