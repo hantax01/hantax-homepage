@@ -65,6 +65,12 @@
 .rtable.wide-t th,.rtable.wide-t td{padding:11px 9px;white-space:nowrap}
 .stable+.stable{margin-top:14px}
 .stable td.who{font-weight:800;color:var(--ink);background:var(--soft);white-space:normal}
+.tabs{display:flex;gap:6px;background:var(--soft);border-radius:12px;padding:5px;margin-bottom:12px}
+.tabs button{flex:1;border:0;background:none;border-radius:9px;padding:12px 6px;font-family:inherit;font-size:14.5px;font-weight:700;color:var(--mute);cursor:pointer;line-height:1.3}
+.tabs button:hover{color:var(--blue)}
+.tabs button[aria-selected=true]{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(11,30,63,.1)}
+.tabhelp{font-size:13.5px;color:var(--mute);margin:0 2px 14px;line-height:1.7}
+.sim[data-mode=pro] .m-ot,.sim[data-mode=ot] .m-pro{display:none!important}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:34px}
 .reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
@@ -222,24 +228,30 @@
   <div class="wrap">
     <span class="eyebrow">급여 계산</span>
     <h1>직원 월급,<br>이번 달 얼마를 줘야 할까요?</h1>
-    <p class="lead">중간에 입사하거나 퇴사한 직원의 일할 월급과 연장·야간·휴일 수당을 여러 명 한 번에 계산합니다. 근무시간은 12:30처럼 분 단위까지 넣을 수 있습니다.</p>
+    <p class="lead">중간에 입사하거나 퇴사한 직원의 일할 월급과 연장·야간·휴일 수당을 여러 명 한 번에 계산합니다. 근무시간은 12:30처럼 분 단위까지 넣을 수 있고, 필요한 계산만 탭으로 골라 쓰면 됩니다.</p>
   </div>
 </section>
 
 <section class="sec" style="padding-top:40px">
   <div class="wrap">
-    <div class="sim">
+    <div class="sim" data-mode="pro">
+      <div class="tabs" role="tablist" aria-label="계산 종류">
+        <button type="button" role="tab" data-mode="pro" aria-selected="true">일할 계산</button>
+        <button type="button" role="tab" data-mode="ot" aria-selected="false">수당 계산</button>
+        <button type="button" role="tab" data-mode="both" aria-selected="false">일할 + 수당</button>
+      </div>
+      <p class="tabhelp" id="tabhelp"></p>
       <div class="sim-in">
         <div class="divider"><b>계산 기준</b><span>모든 직원에게 똑같이 적용합니다</span></div>
-        <div>
+        <div class="m-pro">
           <label for="g-month">지급할 달</label>
           <input type="month" id="g-month">
         </div>
-        <div>
+        <div class="m-pro">
           <label for="g-method">일할 방식 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법에 정해진 방식은 없고 회사 규정이나 근로계약서를 따릅니다. 가장 많이 쓰는 것은 그 달 날짜 수로 나누는 방식입니다(10월이면 31일). 30일로 나누는 회사도 있습니다. 한 달을 다 채우면 어느 방식이든 월급 전액입니다.">?</button></label>
           <select id="g-method"><option value="cal">그 달 날짜 수로 나누기 (달력 기준)</option><option value="30">30일로 나누기</option></select>
         </div>
-        <div class="chks">
+        <div class="chks m-ot">
           <div>
             <label class="ichk"><input type="checkbox" id="g-small"><span>상시 근로자 5명 미만 사업장입니다</span>
               <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="5명 미만 사업장은 연장·야간·휴일근로 가산수당(50%) 규정이 적용되지 않습니다. 체크하면 연장·휴일근로는 일한 시간만큼의 통상임금(1배)만, 야간 가산은 빼고 계산합니다. 최저임금과 주휴수당은 똑같이 지켜야 합니다.">?</button>
@@ -259,7 +271,7 @@
 
       <div class="res" id="res">
         <div class="reshead">
-          <div><h2>이번 달 지급할 세전 금액</h2><p class="sub" id="res-sub"></p></div>
+          <div><h2 id="res-title">이번 달 지급할 세전 금액</h2><p class="sub" id="res-sub"></p></div>
           <div class="resbtns">
             <button type="button" class="savebtn" id="copy-xls">엑셀로 복사</button>
             <button type="button" class="savebtn" id="save-img">이미지 저장</button>
@@ -268,7 +280,7 @@
         <div class="call" id="call"></div>
         <div style="overflow-x:auto">
           <table class="rtable wide-t" id="rt">
-            <thead><tr><th>이름</th><th>근무일</th><th>일할 월급</th><th>연장</th><th>야간</th><th>휴일</th><th>세전 합계</th></tr></thead>
+            <thead id="rt-head"></thead>
             <tbody id="rt-body"></tbody>
           </table>
         </div>
@@ -387,7 +399,7 @@ function calcPerson(p,g){
   const k=g.small?{ot:1,night:0,hol:1,hol2:1}:{ot:1.5,night:0.5,hol:1.5,hol2:2};
   const ot=Math.floor(rate*k.ot*p.ot), night=Math.floor(rate*k.night*p.night);
   const hol1=Math.floor(rate*k.hol*p.hol), hol2=Math.floor(rate*k.hol2*p.hol2);
-  return {days,dim,den,base,rate,k,ot,night,hol1,hol2,hol:hol1+hol2,total:base+ot+night+hol1+hol2,low:rate<MIN_WAGE};
+  return {days,dim,den,base,rate,k,ot,night,hol1,hol2,hol:hol1+hol2,extra:ot+night+hol1+hol2,total:base+ot+night+hol1+hol2,low:rate<MIN_WAGE};
 }
 
 /* ── 입력 ─────────────────────────────────── */
@@ -406,13 +418,13 @@ function personHtml(){
   return '<div class="ptop"><span class="pno"></span><input type="text" class="p-name" placeholder="직원 이름" aria-label="직원 이름"><button type="button" class="xbtn" aria-label="이 직원 빼기">×</button></div>'
     +'<div class="pgrid">'
     +'<div><label>월급 <small>통상임금</small>'+H('기본급과 매달 정해진 금액으로 주는 고정수당을 더한 한 달 금액입니다. 연장수당의 기준이 되는 통상시급을 이 금액으로 구하고, 중간 입사·퇴사면 이 금액을 일할합니다.')+'</label><div class="unit"><input type="text" class="p-pay" inputmode="numeric" aria-label="월급"><span>원</span></div></div>'
-    +'<div><label>월 소정근로시간'+H('주 40시간이면 209시간입니다. 단시간 근로자는 (주 소정근로시간 + 주휴시간) × 4.345로 구합니다. 예를 들어 주 20시간이면 (20 + 4) × 4.345 = 104시간입니다.')+'</label><div class="unit"><input type="text" class="p-hrs" inputmode="numeric" value="209" aria-label="월 소정근로시간"><span>시간</span></div></div>'
-    +'<div><label>입사일 <small>이번 달 입사</small></label><input type="date" class="p-join" aria-label="입사일"></div>'
-    +'<div><label>퇴사일 <small>이번 달 퇴사</small></label><input type="date" class="p-leave" aria-label="퇴사일"></div>'
-    +'<div><label>연장근로'+H('하루 8시간, 주 40시간을 넘겨 일한 시간을 이번 달 합계로 넣어 주세요. 12:30(12시간 30분), 2시간 15분, 45분처럼 분 단위까지 넣을 수 있습니다.')+'</label><input type="text" class="p-ot t" placeholder="예: 12:30" aria-label="연장근로 시간"></div>'
-    +'<div><label>야간근로 <small>밤 10시~새벽 6시</small>'+H('밤 10시부터 새벽 6시 사이에 일한 시간입니다. 0.5배 가산분만 따로 계산하므로, 그 시간이 연장근로이기도 하면 연장근로 칸에도 함께 넣어 주세요.')+'</label><input type="text" class="p-night t" placeholder="예: 3:00" aria-label="야간근로 시간"></div>'
-    +'<div><label>휴일근로 <small>하루 8시간까지</small>'+H('주휴일 등 휴일에 일한 시간 가운데 하루 8시간까지의 합계입니다. 8시간을 넘긴 시간은 옆 칸에 넣어 주세요.')+'</label><input type="text" class="p-hol t" placeholder="예: 8:00" aria-label="휴일근로 8시간까지"></div>'
-    +'<div><label>휴일근로 <small>8시간 넘긴 시간</small></label><input type="text" class="p-hol2 t" placeholder="예: 1:30" aria-label="휴일근로 8시간 넘긴 시간"></div>'
+    +'<div class="m-ot"><label>월 소정근로시간'+H('주 40시간이면 209시간입니다. 단시간 근로자는 (주 소정근로시간 + 주휴시간) × 4.345로 구합니다. 예를 들어 주 20시간이면 (20 + 4) × 4.345 = 104시간입니다.')+'</label><div class="unit"><input type="text" class="p-hrs" inputmode="numeric" value="209" aria-label="월 소정근로시간"><span>시간</span></div></div>'
+    +'<div class="m-pro"><label>입사일 <small>이번 달 입사</small></label><input type="date" class="p-join" aria-label="입사일"></div>'
+    +'<div class="m-pro"><label>퇴사일 <small>이번 달 퇴사</small></label><input type="date" class="p-leave" aria-label="퇴사일"></div>'
+    +'<div class="m-ot"><label>연장근로'+H('하루 8시간, 주 40시간을 넘겨 일한 시간을 이번 달 합계로 넣어 주세요. 12:30(12시간 30분), 2시간 15분, 45분처럼 분 단위까지 넣을 수 있습니다.')+'</label><input type="text" class="p-ot t" placeholder="예: 12:30" aria-label="연장근로 시간"></div>'
+    +'<div class="m-ot"><label>야간근로 <small>밤 10시~새벽 6시</small>'+H('밤 10시부터 새벽 6시 사이에 일한 시간입니다. 0.5배 가산분만 따로 계산하므로, 그 시간이 연장근로이기도 하면 연장근로 칸에도 함께 넣어 주세요.')+'</label><input type="text" class="p-night t" placeholder="예: 3:00" aria-label="야간근로 시간"></div>'
+    +'<div class="m-ot"><label>휴일근로 <small>하루 8시간까지</small>'+H('주휴일 등 휴일에 일한 시간 가운데 하루 8시간까지의 합계입니다. 8시간을 넘긴 시간은 옆 칸에 넣어 주세요.')+'</label><input type="text" class="p-hol t" placeholder="예: 8:00" aria-label="휴일근로 8시간까지"></div>'
+    +'<div class="m-ot"><label>휴일근로 <small>8시간 넘긴 시간</small></label><input type="text" class="p-hol2 t" placeholder="예: 1:30" aria-label="휴일근로 8시간 넘긴 시간"></div>'
     +'</div>';
 }
 function renumber(){
@@ -462,59 +474,87 @@ addPerson();
 
 function readAll(){
   const [y,m]=($('g-month').value||'').split('-').map(Number);
-  const g={y,m,method:$('g-method').value,small:$('g-small').checked};
+  const mode=MODE, g={y,m,method:$('g-method').value,small:$('g-small').checked};
   const people=[...document.querySelectorAll('.person')].map((d,i)=>{
     const q=c=>d.querySelector(c);
     return {el:d,name:q('.p-name').value.trim()||'직원 '+(i+1),pay:num(q('.p-pay').value),hours:num(q('.p-hrs').value)||BASE_HOURS,
-      join:q('.p-join').value,leave:q('.p-leave').value,
-      ot:parseTime(q('.p-ot').value),night:parseTime(q('.p-night').value),hol:parseTime(q('.p-hol').value),hol2:parseTime(q('.p-hol2').value)};
+      join:mode==='ot'?'':q('.p-join').value,leave:mode==='ot'?'':q('.p-leave').value,
+      ot:mode==='pro'?0:parseTime(q('.p-ot').value),night:mode==='pro'?0:parseTime(q('.p-night').value),
+      hol:mode==='pro'?0:parseTime(q('.p-hol').value),hol2:mode==='pro'?0:parseTime(q('.p-hol2').value)};
   });
-  return {g,people};
+  return {mode,g,people};
 }
 function check(a){
-  if(!a.g.y) return ['지급할 달을 골라 주세요.',$('g-month')];
+  if(!a.g.y&&a.mode!=='ot') return ['지급할 달을 골라 주세요.',$('g-month')];
+  if(!a.g.y){ const t=new Date(); a.g.y=t.getFullYear(); a.g.m=t.getMonth()+1; }
   for(const p of a.people) for(const [k,c] of [['ot','.p-ot'],['night','.p-night'],['hol','.p-hol'],['hol2','.p-hol2']])
     if(isNaN(p[k])) return [p.name+'의 근무시간을 읽지 못했습니다. 12:30이나 2시간 15분처럼 넣어 주세요.',p.el.querySelector(c)];
   if(!a.people.some(p=>p.pay)) return ['월급을 넣어 주세요.',a.people[0].el.querySelector('.p-pay')];
   return null;
 }
 const shown=()=>$('res').style.display==='block';
-let LAST=null;
+let LAST=null, MODE='pro';
 
 /* ── 화면 ─────────────────────────────────── */
 function render(){
-  const a=readAll(), g=a.g;
+  const a=readAll(), g=a.g, mode=a.mode;
+  if(!g.y){ const t=new Date(); g.y=t.getFullYear(); g.m=t.getMonth()+1; }
   const rows=a.people.filter(p=>p.pay).map(p=>({p,r:calcPerson(p,g)}));
-  LAST={g,rows};
   const S=k=>rows.reduce((s,x)=>s+x.r[k],0);
   const cell=v=>v?won(v):'-';
-  $('rt-body').innerHTML=rows.map(({p,r})=>'<tr><td>'+esc(p.name)+'<small>월급 '+won(p.pay)+' · 시급 '+won(r.rate)+'</small></td>'
-      +'<td>'+(r.days>=r.dim?'한 달':r.days+'일')+'</td><td>'+won(r.base)+'</td><td>'+cell(r.ot)+'</td><td>'+cell(r.night)+'</td><td>'+cell(r.hol)+'</td><td>'+won(r.total)+'</td></tr>').join('')
-    +(rows.length>1?'<tr class="tot"><td>합계<small>'+rows.length+'명</small></td><td></td><td>'+won(S('base'))+'</td><td>'+cell(S('ot'))+'</td><td>'+cell(S('night'))+'</td><td>'+cell(S('hol'))+'</td><td>'+won(S('total'))+'</td></tr>':'');
+  const dayTxt=r=>r.days>=r.dim?'한 달':r.days+'일';
+  // [머리글, 칸 내용, 합계에 쓸 값, 엑셀에 넣을 값]
+  const COLS={
+    pro:[['근무일',(p,r)=>dayTxt(r),null,(p,r)=>r.days],['월급',p=>won(p.pay),null,p=>p.pay],['일할 월급',(p,r)=>won(r.base),'base',(p,r)=>r.base]],
+    ot:[['통상시급',(p,r)=>won(r.rate),null,(p,r)=>Math.round(r.rate)],['연장',(p,r)=>cell(r.ot),'ot',(p,r)=>r.ot],['야간',(p,r)=>cell(r.night),'night',(p,r)=>r.night],
+        ['휴일',(p,r)=>cell(r.hol),'hol',(p,r)=>r.hol],['수당 합계',(p,r)=>won(r.extra),'extra',(p,r)=>r.extra]],
+    both:[['근무일',(p,r)=>dayTxt(r),null,(p,r)=>r.days],['일할 월급',(p,r)=>won(r.base),'base',(p,r)=>r.base],['연장',(p,r)=>cell(r.ot),'ot',(p,r)=>r.ot],
+        ['야간',(p,r)=>cell(r.night),'night',(p,r)=>r.night],['휴일',(p,r)=>cell(r.hol),'hol',(p,r)=>r.hol],['세전 합계',(p,r)=>won(r.total),'total',(p,r)=>r.total]]
+  }[mode];
+  LAST={g,rows,cols:COLS};
+  $('rt-head').innerHTML='<tr><th>이름</th>'+COLS.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>';
+  $('rt-body').innerHTML=rows.map(({p,r})=>'<tr><td>'+esc(p.name)+'<small>월급 '+won(p.pay)+'</small></td>'+COLS.map(c=>'<td>'+c[1](p,r)+'</td>').join('')+'</tr>').join('')
+    +(rows.length>1?'<tr class="tot"><td>합계<small>'+rows.length+'명</small></td>'+COLS.map(c=>'<td>'+(c[2]?won(S(c[2])):'')+'</td>').join('')+'</tr>':'');
 
-  const extra=S('ot')+S('night')+S('hol');
-  $('res-sub').textContent=g.y+'년 '+g.m+'월 · '+(g.method==='30'?'30일 기준 일할':'달력 기준 일할')+' · '+(g.small?'5인 미만 (가산수당 없음)':'5인 이상 (가산수당 적용)')+' · 단위 원';
-  $('call').innerHTML='<div class="lbl">직원 '+rows.length+'명에게 이번 달 지급할 세전 금액</div><div class="val">'+manwon(S('total')).replace(/ ?원$/,'')+'<small>원</small></div>'
-    +'<div class="sub">월급(일할 포함) '+manwon(S('base'))+(extra?', 연장·야간·휴일 수당 '+manwon(extra):'')+'입니다. 4대보험과 소득세를 떼기 전 금액입니다.</div>';
+  const n=rows.length, part=rows.filter(x=>x.r.days&&x.r.days<x.r.dim);
+  const smallTxt=g.small?'5인 미만 (가산수당 없음)':'5인 이상 (가산수당 적용)', dayRule=g.method==='30'?'30일 기준 일할':'달력 기준 일할';
+  $('res-sub').textContent=(mode==='ot'?smallTxt:g.y+'년 '+g.m+'월 · '+dayRule+(mode==='both'?' · '+smallTxt:''))+' · 단위 원';
+  const big=v=>manwon(v).replace(/ ?원$/,'')+'<small>원</small>';
+  let head;
+  if(mode==='pro'){
+    $('call').innerHTML='<div class="lbl">직원 '+n+'명의 '+g.m+'월 일할 월급</div><div class="val">'+big(S('base'))+'</div>'
+      +'<div class="sub">'+(part.length?'중간에 입사·퇴사한 '+part.length+'명은 근무한 날만큼 나눠 계산했고, 나머지는 월급 전액입니다.':'모두 한 달을 근무해 월급 전액입니다.')+'</div>';
+    head='이번 달 일할 월급은 모두 <b>'+manwon(S('base'))+'</b>입니다.';
+  }else if(mode==='ot'){
+    $('call').innerHTML='<div class="lbl">직원 '+n+'명에게 이번 달 더 줄 수당</div><div class="val">'+big(S('extra'))+'</div>'
+      +'<div class="sub">연장 '+manwon(S('ot'))+', 야간 '+manwon(S('night'))+', 휴일 '+manwon(S('hol'))+'입니다. 월급에 더해 줄 금액입니다.</div>';
+    head='이번 달 수당은 모두 <b>'+manwon(S('extra'))+'</b>입니다.';
+  }else{
+    $('call').innerHTML='<div class="lbl">직원 '+n+'명에게 이번 달 지급할 세전 금액</div><div class="val">'+big(S('total'))+'</div>'
+      +'<div class="sub">월급(일할 포함) '+manwon(S('base'))+(S('extra')?', 연장·야간·휴일 수당 '+manwon(S('extra')):'')+'입니다. 4대보험과 소득세를 떼기 전 금액입니다.</div>';
+    head='이번 달 지급할 세전 금액은 모두 <b>'+manwon(S('total'))+'</b>입니다.';
+  }
 
   const notes=[];
-  rows.filter(x=>x.r.low).forEach(({p,r})=>notes.push({warn:1,t:'<b>'+esc(p.name)+'</b>의 통상시급 '+won(r.rate)+'원이 2026년 최저임금 '+won(MIN_WAGE)+'원보다 낮습니다. 월급이나 소정근로시간을 확인해 주세요.'}));
-  rows.filter(x=>!x.r.days).forEach(({p})=>notes.push({warn:1,t:'<b>'+esc(p.name)+'</b>: 입사일·퇴사일로 보면 '+g.m+'월에 근무한 날이 없습니다. 날짜를 확인해 주세요.'}));
-  const part=rows.filter(x=>x.r.days&&x.r.days<x.r.dim);
-  if(part.length) notes.push({t:'일할 계산: '+part.map(({p,r})=>esc(p.name)+' '+r.days+'일').join(', ')+' (월급 × 근무일 ÷ '+(g.method==='30'?'30일':g.m+'월 '+daysIn(g.y,g.m)+'일')+')'});
-  if(g.small) notes.push({t:'5인 미만 사업장이라 연장·휴일근로는 일한 시간만큼(1배)만, 야간 가산은 빼고 계산했습니다. 최저임금과 주휴수당은 똑같이 지켜야 합니다.'});
+  if(mode!=='pro') rows.filter(x=>x.r.low).forEach(({p,r})=>notes.push({warn:1,t:'<b>'+esc(p.name)+'</b>의 통상시급 '+won(r.rate)+'원이 2026년 최저임금 '+won(MIN_WAGE)+'원보다 낮습니다. 월급이나 소정근로시간을 확인해 주세요.'}));
+  if(mode!=='ot'){
+    rows.filter(x=>!x.r.days).forEach(({p})=>notes.push({warn:1,t:'<b>'+esc(p.name)+'</b>: 입사일·퇴사일로 보면 '+g.m+'월에 근무한 날이 없습니다. 날짜를 확인해 주세요.'}));
+    if(part.length) notes.push({t:'일할 계산: '+part.map(({p,r})=>esc(p.name)+' '+r.days+'일').join(', ')+' (월급 × 근무일 ÷ '+(g.method==='30'?'30일':g.m+'월 '+daysIn(g.y,g.m)+'일')+')'});
+  }
+  if(mode!=='pro'&&g.small) notes.push({t:'5인 미만 사업장이라 연장·휴일근로는 일한 시간만큼(1배)만, 야간 가산은 빼고 계산했습니다. 최저임금과 주휴수당은 똑같이 지켜야 합니다.'});
+  if(mode==='ot') notes.push({t:'수당은 월급(통상임금) ÷ 월 소정근로시간으로 구한 통상시급에 배율과 근무시간을 곱해 계산했습니다.'});
   notes.push({t:'세전 금액입니다. 4대보험과 소득세를 뗀 실수령액은 <a href="take-home-pay.html">급여 실수령액 계산기</a>에서 확인하세요.'});
-  $('verdict').innerHTML='이번 달 지급할 세전 금액은 모두 <b>'+manwon(S('total'))+'</b>입니다.'+notes.map(n=>'<span class="note'+(n.warn?' warn':'')+'">'+n.t+'</span>').join('');
+  $('verdict').innerHTML=head+notes.map(x=>'<span class="note'+(x.warn?' warn':'')+'">'+x.t+'</span>').join('');
 
   const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
   $('steps').innerHTML=rows.map(({p,r})=>'<table class="stable"><tr><td colspan="3" class="who">'+esc(p.name)+'</td></tr>'
-    +srow('일할 월급',r.days>=r.dim?'한 달을 모두 근무해 월급 전액':won(p.pay)+' × '+r.days+'일 ÷ '+r.den+'일',won(r.base)+'원')
-    +srow('통상시급',won(p.pay)+' ÷ '+(p.hours||BASE_HOURS)+'시간',r.rate.toLocaleString('ko-KR',{maximumFractionDigits:2})+'원')
+    +(mode!=='ot'?srow('일할 월급',r.days>=r.dim?'한 달을 모두 근무해 월급 전액':won(p.pay)+' × '+r.days+'일 ÷ '+r.den+'일',won(r.base)+'원'):'')
+    +(mode!=='pro'?srow('통상시급',won(p.pay)+' ÷ '+(p.hours||BASE_HOURS)+'시간',r.rate.toLocaleString('ko-KR',{maximumFractionDigits:2})+'원'):'')
     +(p.ot?srow('연장수당','통상시급 × '+r.k.ot+'배 × '+hmWords(p.ot),won(r.ot)+'원'):'')
     +(p.night?srow('야간수당','통상시급 × '+r.k.night+'배 × '+hmWords(p.night),won(r.night)+'원'):'')
     +(p.hol?srow('휴일수당 (8시간까지)','통상시급 × '+r.k.hol+'배 × '+hmWords(p.hol),won(r.hol1)+'원'):'')
     +(p.hol2?srow('휴일수당 (8시간 넘게)','통상시급 × '+r.k.hol2+'배 × '+hmWords(p.hol2),won(r.hol2)+'원'):'')
-    +srow('세전 합계','',won(r.total)+'원')+'</table>').join('');
+    +(mode==='ot'?srow('수당 합계','',won(r.extra)+'원'):mode==='both'?srow('세전 합계','',won(r.total)+'원'):'')+'</table>').join('');
   $('res').style.display='block';
 }
 
@@ -527,16 +567,31 @@ $('calc').addEventListener('click',()=>{
 document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&!check(readAll())) render(); });
 document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!check(readAll())) render(); });
 
+const MODES={
+  pro:{btn:'일할 월급 계산하기',title:'이번 달 일할 월급',help:'중간에 입사하거나 퇴사한 직원의 그 달 월급을 근무한 날만큼 나눠 계산합니다.'},
+  ot:{btn:'수당 계산하기',title:'이번 달 연장·야간·휴일 수당',help:'통상시급으로 연장·야간·휴일근로 수당을 계산합니다. 근무시간은 12:30처럼 분 단위로 넣을 수 있습니다.'},
+  both:{btn:'이번 달 월급 계산하기',title:'이번 달 지급할 세전 금액',help:'일할 월급과 수당을 한 번에 계산합니다. 다른 탭에서 넣은 직원과 금액이 그대로 이어집니다.'}};
+const HASH={prorate:'pro',overtime:'ot',both:'both'};
+function setMode(m,init){
+  MODE=m; document.querySelector('.sim').dataset.mode=m;
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));
+  $('calc').textContent=MODES[m].btn; $('res-title').textContent=MODES[m].title; $('tabhelp').textContent=MODES[m].help;
+  if(!init){ try{ history.replaceState(null,'','#'+Object.keys(HASH).find(k=>HASH[k]===m)); }catch(e){} }
+  if(shown()&&!check(readAll())) render();
+}
+document.querySelector('.tabs').addEventListener('click',e=>{ const b=e.target.closest('button[data-mode]'); if(b) setMode(b.dataset.mode); });
+
 // 결과를 엑셀에 바로 붙여 넣을 수 있게 탭으로 나눠 복사합니다
 $('copy-xls').addEventListener('click',async()=>{
   if(!LAST) return;
-  const lines=[['이름','근무일','일할 월급','연장수당','야간수당','휴일수당','세전 합계'].join('\t')]
-    .concat(LAST.rows.map(({p,r})=>[p.name,r.days,r.base,r.ot,r.night,r.hol,r.total].join('\t')));
+  const lines=[['이름'].concat(LAST.cols.map(c=>c[0])).join('\t')]
+    .concat(LAST.rows.map(({p,r})=>[p.name].concat(LAST.cols.map(c=>c[3](p,r))).join('\t')));
   const text=lines.join('\n');
   try{ await navigator.clipboard.writeText(text); }
   catch(e){ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
   if(window.HantaxImage) HantaxImage.toast('복사했습니다. 엑셀에 붙여 넣으세요');
 });
+setMode(HASH[location.hash.slice(1)]||'pro',true);
 </script>
 <script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
@@ -544,7 +599,7 @@ $('copy-xls').addEventListener('click',async()=>{
 HantaxImage.attach(
   document.getElementById('save-img'),
   ()=>document.getElementById('rt'),
-  ()=>({ title:'이번 달 지급할 세전 금액', sub:document.getElementById('res-sub').textContent, filename:'한택스_월급일할수당' })
+  ()=>({ title:document.getElementById('res-title').textContent, sub:document.getElementById('res-sub').textContent, filename:'한택스_월급일할수당' })
 );
 </script>
 </body>
