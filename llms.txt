@@ -1,0 +1,57 @@
+# 한택스 (나이스원세무법인 스마트지점)
+
+> 한택스는 서울 여의도에 있는 나이스원세무법인 스마트지점의 브랜드입니다. 법인과 개인사업자의 세무기장, 부가가치세·종합소득세·법인세 신고 대리, 세무조사 대응, 법인설립과 법인전환을 맡고, 세무리포트로 낼 세금을 미리 안내합니다.
+
+## 기본 정보
+- 상호: 나이스원세무법인 스마트지점 (브랜드명 한택스)
+- 대표: 한진식 세무사 (2010년 제47회 세무사시험 합격)
+- 주소: 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩
+- 전화: 0507-1361-6622
+- 규모: 세무사 2명, 직원 10명, 함께하는 회사 500여 곳
+- 상담: 카카오톡 채널 http://pf.kakao.com/_xmsaxmV , 상담 신청 https://www.hantax47.com/consult/
+- 네이버 플레이스: https://map.naver.com/p/entry/place/36779408
+
+## 주요 페이지
+- [홈](https://www.hantax47.com/): 서비스 소개(세무리포트, 사전알림, 고객 기록)
+- [대표 세무사 소개](https://www.hantax47.com/about/)
+- [법인설립](https://www.hantax47.com/company-setup/): 제휴 법무법인과 전자서명으로 사업자등록까지 진행
+- [자주 묻는 질문](https://www.hantax47.com/faq/)
+- [세무 칼럼 목록](https://www.hantax47.com/column/)
+- [세금 계산기 목록](https://www.hantax47.com/tools/)
+
+## 세무 칼럼
+- [부가세 신고 때 카드로 쓴 돈, 어디까지 공제되나요?](https://www.hantax47.com/column/vat-card-credit.html)
+- [법인 등기 전에 세무사가 먼저 봐야 하는 이유는?](https://www.hantax47.com/column/company-setup-check.html)
+- [사업 포괄양수도, 직원은 어떻게 넘기나요?](https://www.hantax47.com/column/business-transfer-staff.html)
+- [부가세 예정고지서가 나왔는데, 그대로 내면 되나요?](https://www.hantax47.com/column/vat-preliminary-notice.html)
+- [집 살 때 자금출처, 얼마까지 소명해야 하나요?](https://www.hantax47.com/column/fund-source.html)
+- [직원이 퇴사하면 퇴직금을 얼마나 줘야 하나요?](https://www.hantax47.com/column/severance-pay.html)
+- [명절 상품권, 법인카드로 사면 그냥 비용 처리되나요?](https://www.hantax47.com/column/holiday-gift-card.html)
+- [직원이 다쳤을 때, 산재처리 vs 공상처리 무엇이 유리할까요?](https://www.hantax47.com/column/workplace-injury.html)
+- [성실신고확인대상, 우리 사업장도 해당되나요?](https://www.hantax47.com/column/sincere-filing.html)
+- [통합고용세액공제, 2026년에 무엇이 바뀌나요?](https://www.hantax47.com/column/tonghap-goyong-2026.html)
+- [노란우산공제, 가입하면 세금이 얼마나 줄어드나요?](https://www.hantax47.com/column/noran-usan-gongje.html)
+
+## 세금 계산기
+- [부가가치세, 이번에 얼마나 나올까요?](https://www.hantax47.com/tools/vat.html)
+- [법인세, 올해 얼마나 나올까요?](https://www.hantax47.com/tools/corporate-tax.html)
+- [종합소득세, 올해 얼마나 나올까요?](https://www.hantax47.com/tools/income-tax.html)
+- [직원 한 명 뽑으면, 얼마나 들까요?](https://www.hantax47.com/tools/hiring-cost.html)
+- [월급, 세금 떼고 얼마 받을까요?](https://www.hantax47.com/tools/take-home-pay.html)
+- [연말정산, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/year-end-tax.html)
+- [퇴직금과 퇴직소득세, 얼마일까요?](https://www.hantax47.com/tools/severance-pay.html)
+- [임원 퇴직금, 얼마까지 인정되나요?](https://www.hantax47.com/tools/executive-severance.html)
+- [대표 연봉, 얼마가 적당할까요?](https://www.hantax47.com/tools/income-transfer.html)
+- [연봉과 배당, 어떻게 나눌까요?](https://www.hantax47.com/tools/pay-mix.html)
+- [법인전환, 세금이 얼마나 달라질까요?](https://www.hantax47.com/tools/incorporation.html)
+- [법인설립, 비용이 얼마나 들까요?](https://www.hantax47.com/tools/company-setup.html)
+- [우리 사업의 영업권, 얼마로 평가될까요?](https://www.hantax47.com/tools/goodwill.html)
+- [사업 포괄양수도, 놓친 것은 없을까요?](https://www.hantax47.com/tools/business-transfer.html)
+- [업무용 자동차, 실제 비용은 얼마일까요?](https://www.hantax47.com/tools/business-car.html)
+- [업무용 자동차, 어떻게 사는 게 맞을까요?](https://www.hantax47.com/tools/car-choice.html)
+- [창업 세액감면, 우리도 받을 수 있나요?](https://www.hantax47.com/tools/startup-tax-credit.html)
+- [사무실, 월세로 쓸까요 살까요?](https://www.hantax47.com/tools/office-buy.html)
+- [집 살 돈, 설명할 수 있나요?](https://www.hantax47.com/tools/fund-source.html)
+- [증여, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/gift-tax.html)
+- [주식을 팔면, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/stock-transfer.html)
+- [비상장주식, 우리 회사 주식은 대략 얼마일까요?](https://www.hantax47.com/tools/stock-value.html)
