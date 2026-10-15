@@ -38,6 +38,7 @@
 - [종합소득세, 올해 얼마나 나올까요?](https://www.hantax47.com/tools/income-tax.html)
 - [직원 한 명 뽑으면, 얼마나 들까요?](https://www.hantax47.com/tools/hiring-cost.html)
 - [월급, 세금 떼고 얼마 받을까요?](https://www.hantax47.com/tools/take-home-pay.html)
+- [직원 월급, 이번 달 얼마를 줘야 할까요?](https://www.hantax47.com/tools/monthly-wage.html)
 - [연말정산, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/year-end-tax.html)
 - [퇴직금과 퇴직소득세, 얼마일까요?](https://www.hantax47.com/tools/severance-pay.html)
 - [임원 퇴직금, 얼마까지 인정되나요?](https://www.hantax47.com/tools/executive-severance.html)
