@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연차 계산기 2026, 입사일 기준·회계연도 기준 비교 | 한택스</title>
+<meta name="description" content="입사일만 넣으면 직원 연차가 며칠인지 입사일 기준과 회계연도(1월 1일) 기준으로 나란히 계산합니다. 1년 미만은 매달 개근한 것으로 보고 월 1일씩, 회계연도 첫해 비례 연차와 근속 가산 연차까지 연도별로 보여 줍니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/annual-leave.html">
+<meta property="og:title" content="직원 연차, 며칠을 줘야 할까요?">
+<meta property="og:description" content="입사일만 넣으면 입사일 기준과 회계연도 기준 연차를 연도별로 나란히 계산합니다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/annual-leave.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-annual-leave.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus{outline:none;border-color:var(--blue)}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.calls{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:24px 24px;text-align:center}
+.call .kind{display:inline-block;font-size:12.5px;font-weight:800;background:rgba(255,255,255,.14);border-radius:999px;padding:4px 12px;margin-bottom:10px}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:6px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:13.5px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.rtable td:first-child{color:var(--char);white-space:nowrap}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td{font-weight:700;color:var(--ink)}
+.rtable td small{display:block;font-size:12px;font-weight:400;color:var(--mute);margin-top:3px;line-height:1.6}
+.rtable tr.now td{background:var(--blue-soft)}
+.rtable tr.now td:first-child{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict a{color:var(--blue);font-weight:700}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.calls{grid-template-columns:1fr}
+.call{padding:20px 16px}.call .val{font-size:26px}
+.rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "입사 1년 미만 직원은 연차가 며칠인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "한 달을 개근할 때마다 1일씩 생겨 1년 동안 최대 11일입니다. 7월 1일 입사자라면 8월 1일에 첫 1일이 생기고, 다음 해 6월 1일까지 11일이 됩니다. 이 연차는 입사 1년이 되는 날까지 써야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "1년이 되면 생기는 15일에서 그동안 쓴 연차를 빼나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "빼지 않습니다. 1년 미만에 매달 생긴 연차와 1년이 되면 생기는 15일은 따로 계산해서, 처음 2년 동안 최대 26일을 쓸 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "회계연도 기준으로 연차를 줘도 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "취업규칙 등으로 정해 1월 1일에 모든 직원에게 한꺼번에 주는 것도 가능합니다. 연도 중에 입사한 직원은 다음 해 1월 1일에 15일 × 입사한 해 근무일수 ÷ 365를 주고, 그다음 해부터 15일을 줍니다. 다만 퇴사할 때 입사일 기준으로 다시 계산해 덜 준 연차가 있으면 연차수당으로 정산해야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "오래 일하면 연차가 얼마나 늘어나나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "근속 3년이 되면 16일이 되고, 그 뒤로 2년마다 1일씩 늘어납니다. 5년 17일, 7년 18일처럼 늘어나 근속 21년부터는 최대 25일입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "딱 1년 일하고 퇴사하면 15일도 생기나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "생기지 않습니다. 1년이 되면 생기는 15일은 1년 근무를 마친 다음 날에도 재직 중이어야 생기므로, 1년 계약직이 계약 기간만 채우고 나가면 매달 생긴 최대 11일만 남습니다. 쓰지 못한 연차는 연차수당으로 정산합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "아르바이트생이나 단시간 근로자도 연차가 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "주 15시간 이상 일하면 있습니다. 근무시간에 비례해 시간 단위로 계산해서, 주 20시간 근무자라면 15일 × 20 ÷ 40 × 8시간 = 60시간입니다. 주 15시간 미만이면 연차가 없습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "5인 미만 사업장도 연차를 줘야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "법으로 정한 연차는 상시 근로자 5명 미만 사업장에는 적용되지 않습니다. 다만 근로계약서나 취업규칙에 연차를 주기로 정해 두었다면 그대로 줘야 합니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"직원 연차, 며칠을 줘야 할까요?","url":"https://www.hantax47.com/tools/annual-leave.html","description":"입사일만 넣으면 직원 연차가 며칠인지 입사일 기준과 회계연도(1월 1일) 기준으로 나란히 계산합니다. 1년 미만은 매달 개근한 것으로 보고 월 1일씩, 회계연도 첫해 비례 연차와 근속 가산 연차까지 연도별로 보여 줍니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">연차 계산</span>
+    <h1>직원 연차,<br>며칠을 줘야 할까요?</h1>
+    <p class="lead">입사일만 넣으면 연차가 며칠인지 입사일 기준과 회계연도(1월 1일) 기준으로 나란히 계산합니다. 1년 미만 직원은 매달 개근한 것으로 보고, 근속 가산 연차까지 연도별로 보여 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div>
+          <label for="hire">입사일</label>
+          <input type="date" id="hire">
+        </div>
+        <div>
+          <label for="asof">기준일 <small>처음에는 오늘</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="이 날짜를 기준으로 지금 쓰는 연차와 올해 연차를 보여 줍니다. 내년 계획을 세울 때는 내년 날짜로 바꿔 보세요.">?</button></label>
+          <input type="date" id="asof">
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">연차 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2 id="res-title">연차 일수</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="calls" id="calls"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>연도</th><th>입사일 기준</th><th>회계연도 기준</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <div class="ask">
+          <p><b>연차는 퇴사할 때 정산에서 자주 다툼이 생깁니다.</b><br>회계연도 기준으로 줘 왔다면 퇴사자의 입사일 기준 정산과 연차수당까지 함께 점검해 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>입사 1년 미만 직원은 연차가 며칠인가요?</summary>
+          <div class="a">한 달을 개근할 때마다 1일씩 생겨 1년 동안 최대 11일입니다. 7월 1일 입사자라면 8월 1일에 첫 1일이 생기고, 다음 해 6월 1일까지 11일이 됩니다. 이 연차는 입사 1년이 되는 날까지 써야 합니다.</div>
+        </details>
+        <details>
+          <summary>1년이 되면 생기는 15일에서 그동안 쓴 연차를 빼나요?</summary>
+          <div class="a">빼지 않습니다. 1년 미만에 매달 생긴 연차와 1년이 되면 생기는 15일은 따로 계산해서, 처음 2년 동안 최대 26일을 쓸 수 있습니다.</div>
+        </details>
+        <details>
+          <summary>회계연도 기준으로 연차를 줘도 되나요?</summary>
+          <div class="a">취업규칙 등으로 정해 1월 1일에 모든 직원에게 한꺼번에 주는 것도 가능합니다. 연도 중에 입사한 직원은 다음 해 1월 1일에 15일 × 입사한 해 근무일수 ÷ 365를 주고, 그다음 해부터 15일을 줍니다. 다만 퇴사할 때 입사일 기준으로 다시 계산해 덜 준 연차가 있으면 연차수당으로 정산해야 합니다.</div>
+        </details>
+        <details>
+          <summary>오래 일하면 연차가 얼마나 늘어나나요?</summary>
+          <div class="a">근속 3년이 되면 16일이 되고, 그 뒤로 2년마다 1일씩 늘어납니다. 5년 17일, 7년 18일처럼 늘어나 근속 21년부터는 최대 25일입니다.</div>
+        </details>
+        <details>
+          <summary>딱 1년 일하고 퇴사하면 15일도 생기나요?</summary>
+          <div class="a">생기지 않습니다. 1년이 되면 생기는 15일은 1년 근무를 마친 다음 날에도 재직 중이어야 생기므로, 1년 계약직이 계약 기간만 채우고 나가면 매달 생긴 최대 11일만 남습니다. 쓰지 못한 연차는 연차수당으로 정산합니다.</div>
+        </details>
+        <details>
+          <summary>아르바이트생이나 단시간 근로자도 연차가 있나요?</summary>
+          <div class="a">주 15시간 이상 일하면 있습니다. 근무시간에 비례해 시간 단위로 계산해서, 주 20시간 근무자라면 15일 × 20 ÷ 40 × 8시간 = 60시간입니다. 주 15시간 미만이면 연차가 없습니다.</div>
+        </details>
+        <details>
+          <summary>5인 미만 사업장도 연차를 줘야 하나요?</summary>
+          <div class="a">법으로 정한 연차는 상시 근로자 5명 미만 사업장에는 적용되지 않습니다. 다만 근로계약서나 취업규칙에 연차를 주기로 정해 두었다면 그대로 줘야 합니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용입니다. 1년 미만은 매달 개근하고, 1년이 지난 뒤에는 매년 80% 이상 출근했다고 보고 계산했습니다.<br>
+        · 입사일 기준: 1년 미만은 한 달 개근마다 1일(최대 11일), 1년이 되는 날 15일, 근속 3년부터 2년마다 1일을 더해 최대 25일입니다.<br>
+        · 회계연도 기준: 입사한 해에는 매달 1일, 다음 해 1월 1일에 15일 × 입사한 해 근무일수 ÷ 365(소수점 둘째 자리까지 표시), 그다음 해부터 1월 1일에 15일을 주고, 1월 1일까지 꽉 채운 회계연도 수로 가산 연차를 셉니다. 입사 1년까지 매달 생기는 연차는 입사일 기준과 같습니다.<br>
+        · 주 40시간 근무 기준입니다. 상시 근로자 5명 미만 사업장은 법정 연차가 적용되지 않습니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="monthly-wage.html">직원 월급 계산기</a>
+        <a href="severance-pay.html">퇴직금 계산기</a>
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 연차 계산 ─────────────────────────────── */
+// 날짜는 [년, 월, 일] 숫자로 다룹니다 (시간대 영향 없음)
+const ymd=s=>s.split('-').map(Number);
+const dnum=([y,m,d])=>Date.UTC(y,m-1,d)/864e5;
+const fromNum=n=>{ const t=new Date(n*864e5); return [t.getUTCFullYear(),t.getUTCMonth()+1,t.getUTCDate()]; };
+const cmp=(a,b)=>dnum(a)-dnum(b);
+const daysIn=(y,m)=>new Date(Date.UTC(y,m,0)).getUTCDate();
+// 입사일에서 n개월(1년은 12개월) 근무를 마친 다음 날 = 연차가 생기는 날.
+// 그 달에 같은 날짜가 없으면(1월 31일 입사의 2월) 그 달 말일에 기간이 끝나 다음 달 1일에 생깁니다
+function after([y,m,d],n){
+  const t=m-1+n, ty=y+Math.floor(t/12), tm=t%12+1;
+  return d<=daysIn(ty,tm)?[ty,tm,d]:tm===12?[ty+1,1,1]:[ty,tm+1,1];
+}
+const grant=k=>Math.min(25,15+Math.floor((k-1)/2));   // 근속 k년이 되는 날 생기는 연차 (3년 16일, 5년 17일 … 최대 25일)
+function plan(H){
+  const monthly=[]; for(let n=1;n<=11;n++) monthly.push(after(H,n));   // 1년 미만: 한 달 개근마다 1일
+  const jan1=H[1]===1&&H[2]===1;
+  const firstDays=dnum([H[0],12,31])-dnum(H)+1;                       // 입사한 해 근무일수
+  const anniv=k=>({date:after(H,12*k),days:grant(k),k});
+  // 회계연도 기준: Y년 1월 1일에 생기는 연차. 입사 다음 해는 비례, 그 뒤는 1월 1일까지 꽉 채운 회계연도 수로 가산
+  const fiscal=Y=>{
+    if(Y<=H[0]) return null;
+    if(Y===H[0]+1) return {date:[Y,1,1],days:Math.min(15,15*firstDays/365),prorate:!jan1};
+    const n=Y-H[0]-(jan1?0:1);
+    return {date:[Y,1,1],days:grant(n),n};
+  };
+  return {H,monthly,anniv,fiscal,jan1,firstDays};
+}
+// 기준일 D에 지금 쓰는 연차
+function nowAnniv(P,D){
+  let k=D[0]-P.H[0]; while(k>0&&cmp(after(P.H,12*k),D)>0) k--;
+  if(k<=0){
+    return {k:0,days:11,got:P.monthly.filter(d=>cmp(d,D)<=0).length,from:P.H,to:fromNum(dnum(after(P.H,12))-1),next:P.anniv(1)};
+  }
+  return {k,days:grant(k),from:after(P.H,12*k),to:fromNum(dnum(after(P.H,12*(k+1)))-1),next:P.anniv(k+1)};
+}
+function yearFiscal(P,Y,D){
+  const f=P.fiscal(Y), mon=P.monthly.filter(d=>d[0]===Y);
+  const days=(f?f.days:0)+mon.length;
+  const got=(f&&cmp(f.date,D)<=0?f.days:0)+mon.filter(d=>cmp(d,D)<=0).length;
+  return {Y,f,mon,days,got,next:P.fiscal(Y+1)};
+}
+
+/* ── 화면 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const fd=([y,m,d])=>y+'.'+m+'.'+d;
+const fmd=([,m,d])=>m+'.'+d;
+const dd=v=>v.toLocaleString('ko-KR',{maximumFractionDigits:2})+'일';
+const big=v=>v.toLocaleString('ko-KR',{maximumFractionDigits:2})+'<small>일</small>';
+const monTxt=mon=>mon.length?(mon.length>1?fmd(mon[0])+'~'+fmd(mon[mon.length-1])+' 매달 1일씩 ':fmd(mon[0])+'에 ')+mon.length+'일':'';
+const shown=()=>$('res').style.display==='block';
+
+function read(){
+  const h=$('hire').value, a=$('asof').value;
+  if(!h) return ['입사일을 골라 주세요.',$('hire')];
+  if(!a) return ['기준일을 골라 주세요.',$('asof')];
+  if(a<h) return ['기준일이 입사일보다 빠릅니다. 입사일 이후 날짜를 골라 주세요.',$('asof')];
+  return {H:ymd(h),D:ymd(a)};
+}
+function render(){
+  const {H,D}=read(), P=plan(H);
+  const A=nowAnniv(P,D), F=yearFiscal(P,D[0],D);
+
+  // 위 카드 두 장
+  const aSub=A.k===0
+    ? '매달 개근하면 1일씩 생기고 기준일까지 '+A.got+'일 생겼습니다. '+fd(A.to)+'까지 써야 하고, 1년이 되는 '+fd(A.next.date)+'에 15일이 따로 생깁니다.'
+    : '근속 '+A.k+'년 연차입니다. 다음 '+fd(A.next.date)+'에 '+A.next.days+'일이 생깁니다.';
+  const fParts=[]; if(F.f) fParts.push('1월 1일 '+dd(F.f.days)+(F.f.prorate?' (입사한 해 '+P.firstDays+'일 비례)':''));
+  if(F.mon.length) fParts.push((F.mon.length>1?'매달 1일씩 ':'')+F.mon.length+'일');
+  const fSub=fParts.join(' + ')+(F.got<F.days?', 기준일까지 '+dd(F.got)+' 생겼습니다':'')+'. 다음 '+fd(F.next.date)+'에 '+dd(F.next.days)+'이 생깁니다.';
+  $('calls').innerHTML=
+    '<div class="call"><span class="kind">입사일 기준</span><div class="lbl">'+(A.k===0?'입사 1년까지 생기는 연차':'지금 쓰는 연차')+' ('+fd(A.from)+' ~ '+fd(A.to)+')</div><div class="val">'+big(A.days)+'</div><div class="sub">'+aSub+'</div></div>'
+   +'<div class="call"><span class="kind">회계연도 기준</span><div class="lbl">'+D[0]+'년 연차 ('+D[0]+'.1.1 ~ '+D[0]+'.12.31)</div><div class="val">'+big(F.days)+'</div><div class="sub">'+fSub+'</div></div>';
+
+  // 연도별 표: 기준일 앞 3년 ~ 뒤 2년 (입사 초기는 최소 5년)
+  const y0=Math.max(H[0],D[0]-3), y1=Math.max(D[0]+2,H[0]+4);
+  let rows='';
+  for(let Y=y0;Y<=y1;Y++){
+    const mon=P.monthly.filter(d=>d[0]===Y), k=Y-H[0], a=k>=1?P.anniv(k):null;
+    const aDays=mon.length+(a?a.days:0);
+    const aTxt=[monTxt(mon),a?fmd(a.date)+'에 '+a.days+'일 (근속 '+k+'년)':''].filter(Boolean).join(' · ');
+    const f=P.fiscal(Y), fDays=mon.length+(f?f.days:0);
+    const fTxt=[f?'1.1에 '+dd(f.days)+(f.prorate?' (전년도 '+P.firstDays+'일 비례)':''):'',monTxt(mon)].filter(Boolean).join(' · ');
+    rows+='<tr'+(Y===D[0]?' class="now"':'')+'><td>'+Y+'년'+(Y===D[0]?'<small>기준일</small>':'')+'</td><td>'+dd(aDays)+'<small>'+aTxt+'</small></td><td>'+dd(fDays)+'<small>'+fTxt+'</small></td></tr>';
+  }
+  $('rt-body').innerHTML=rows;
+  $('res-sub').textContent='입사 '+fd(H)+' · 기준일 '+fd(D)+' · 매달 개근, 매년 80% 이상 출근 가정';
+
+  // 정리
+  const notes=[];
+  notes.push('표의 일수는 그해에 새로 생기는 연차입니다. 연차는 <b>입사일 기준이 원칙</b>이고, 회계연도 기준은 취업규칙 등으로 정해 1월 1일에 한꺼번에 주는 방식입니다. 회계연도 기준으로 줬더라도 <b>퇴사할 때 입사일 기준으로 다시 계산</b>해 덜 준 만큼은 연차수당으로 정산해야 합니다.');
+  if(cmp(D,after(H,24))<0) notes.push('1년 미만에 매달 생기는 연차(최대 11일)는 1년이 되면 생기는 15일과 따로 계산해, 처음 2년 동안 최대 26일입니다. 매달 생긴 연차는 입사 1년이 되기 전날('+fd(fromNum(dnum(after(H,12))-1))+')까지 써야 합니다.');
+  if(P.jan1) notes.push('1월 1일에 입사해 두 방식의 연차가 같습니다.');
+  else if(D[0]<=H[0]+2) notes.push('회계연도 기준 첫 1월 1일 연차는 15일 × 입사한 해 근무일수('+P.firstDays+'일) ÷ 365 = '+dd(15*P.firstDays/365)+'입니다. 소수점 아래는 취업규칙에 따라 반일 단위로 올려 주거나 수당으로 정산합니다.');
+  notes.push('상시 근로자 5명 미만 사업장은 법정 연차가 적용되지 않고, 주 40시간보다 짧게 일하는 직원은 근무시간에 비례해 줄어듭니다(주 15시간 미만은 연차 없음).');
+  $('verdict').innerHTML='입사일 기준으로는 '+(A.k===0?'입사 1년까지 <b>'+dd(A.days)+'</b>':'지금 <b>'+dd(A.days)+'</b>')+', 회계연도 기준으로는 '+D[0]+'년 <b>'+dd(F.days)+'</b>입니다.'
+    +notes.map(t=>'<span class="note">'+t+'</span>').join('');
+  $('res').style.display='block';
+}
+
+$('calc').addEventListener('click',()=>{
+  const bad=read();
+  if(Array.isArray(bad)){ alert(bad[0]); bad[1].focus(); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!Array.isArray(read())) render(); });
+{ const t=new Date(); $('asof').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'연차 일수 (입사일 기준 · 회계연도 기준)', sub:document.getElementById('res-sub').textContent, filename:'한택스_연차' })
+);
+</script>
+</body>
+</html>
