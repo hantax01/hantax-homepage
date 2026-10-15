@@ -426,13 +426,25 @@ function personHtml(){
     +'<div class="pgrid">'
     +'<div><label>월급 <small>통상임금</small>'+H('기본급과 매달 정해진 금액으로 주는 고정수당을 더한 한 달 금액입니다. 연장수당의 기준이 되는 통상시급을 이 금액으로 구하고, 중간 입사·퇴사면 이 금액을 일할합니다.')+'</label><div class="unit"><input type="text" class="p-pay" inputmode="numeric" aria-label="월급"><span>원</span></div></div>'
     +'<div class="m-ot"><label>주 근무시간 <small>근로계약서</small>'+H('근로계약서에 정한 한 주 근무시간입니다(연장근로 빼고). 주 40시간이면 주휴시간 8시간을 더해 월 209시간으로 계산합니다. 주 15시간 이상이면 주휴시간(주 근무시간 ÷ 40 × 8)을 더하고, 15시간 미만이면 더하지 않습니다.')+'</label><div class="unit"><input type="text" class="p-week" inputmode="decimal" value="40" aria-label="주 근무시간"><span>시간</span></div><p class="p-hint">월 209시간 (주휴 포함)</p></div>'
-    +'<div class="m-pro"><label>입사일 <small>이번 달 입사</small></label><input type="date" class="p-join" aria-label="입사일"></div>'
-    +'<div class="m-pro"><label>퇴사일 <small>이번 달 퇴사</small></label><input type="date" class="p-leave" aria-label="퇴사일"></div>'
+    +'<div class="m-pro"><label>이번 달 입사·퇴사</label><select class="p-ev" aria-label="이번 달 입사·퇴사"><option value="">한 달 모두 근무</option><option value="join">이번 달 입사</option><option value="leave">이번 달 퇴사</option><option value="both">이번 달 입사하고 퇴사</option></select></div>'
+    +'<div class="m-pro p-d1w" hidden><label class="p-d1l">입사일</label><input type="date" class="p-d1" aria-label="날짜"></div>'
+    +'<div class="m-pro p-d2w" hidden><label>퇴사일</label><input type="date" class="p-d2" aria-label="퇴사일"></div>'
     +'<div class="m-ot"><label>연장근로'+H('하루 8시간, 주 40시간을 넘겨 일한 시간을 이번 달 합계로 넣어 주세요. 12:30(12시간 30분), 2시간 15분, 45분처럼 분 단위까지 넣을 수 있습니다.')+'</label><input type="text" class="p-ot t" placeholder="예: 12:30" aria-label="연장근로 시간"></div>'
     +'<div class="m-ot"><label>야간근로 <small>밤 10시~새벽 6시</small>'+H('밤 10시부터 새벽 6시 사이에 일한 시간입니다. 0.5배 가산분만 따로 계산하므로, 그 시간이 연장근로이기도 하면 연장근로 칸에도 함께 넣어 주세요.')+'</label><input type="text" class="p-night t" placeholder="예: 3:00" aria-label="야간근로 시간"></div>'
     +'<div class="m-ot"><label>휴일근로 <small>하루 8시간까지</small>'+H('주휴일 등 휴일에 일한 시간 가운데 하루 8시간까지의 합계입니다. 8시간을 넘긴 시간은 옆 칸에 넣어 주세요.')+'</label><input type="text" class="p-hol t" placeholder="예: 8:00" aria-label="휴일근로 8시간까지"></div>'
     +'<div class="m-ot"><label>휴일근로 <small>8시간 넘긴 시간</small></label><input type="text" class="p-hol2 t" placeholder="예: 1:30" aria-label="휴일근로 8시간 넘긴 시간"></div>'
     +'</div>';
+}
+function syncEv(card){
+  const ev=card.querySelector('.p-ev').value;
+  card.querySelector('.p-d1w').hidden=!ev;
+  card.querySelector('.p-d1l').textContent=ev==='leave'?'퇴사일':'입사일';
+  card.querySelector('.p-d2w').hidden=ev!=='both';
+}
+function setRange(card){
+  const v=$('g-month').value; if(!v) return;
+  const [y,m]=v.split('-').map(Number), lo=v+'-01', hi=v+'-'+String(daysIn(y,m)).padStart(2,'0');
+  card.querySelectorAll('.p-d1,.p-d2').forEach(d=>{ d.min=lo; d.max=hi; });
 }
 function renumber(){
   const ps=[...document.querySelectorAll('.person')];
@@ -444,14 +456,19 @@ function fill(card,cells){
   const q=c=>card.querySelector(c), v=i=>(cells[i]||'').trim();
   q('.p-name').value=v(0);
   if(v(1)) q('.p-pay').value=num(v(1))?num(v(1)).toLocaleString('ko-KR'):'';
-  q('.p-join').value=toDate(v(2)); q('.p-leave').value=toDate(v(3));
+  const j=toDate(v(2)), l=toDate(v(3));
+  q('.p-ev').value=j&&l?'both':j?'join':l?'leave':'';
+  q('.p-d1').value=j||l; q('.p-d2').value=j&&l?l:'';
+  syncEv(card);
   ['.p-ot','.p-night','.p-hol','.p-hol2'].forEach((c,i)=>{ q(c).value=v(4+i); });
 }
 function addPerson(){
   const d=document.createElement('div'); d.className='person'; d.innerHTML=personHtml();
-  $('people').appendChild(d); renumber(); return d;
+  $('people').appendChild(d); setRange(d); renumber(); return d;
 }
 $('add-person').addEventListener('click',()=>{ addPerson().querySelector('.p-name').focus(); });
+$('people').addEventListener('change',e=>{ if(e.target.classList.contains('p-ev')) syncEv(e.target.closest('.person')); });
+$('g-month').addEventListener('change',()=>document.querySelectorAll('.person').forEach(setRange));
 $('people').addEventListener('click',e=>{
   const x=e.target.closest('.xbtn'); if(!x) return;
   x.closest('.person').remove(); renumber(); if(shown()) render();
@@ -489,15 +506,27 @@ function readAll(){
   const people=[...document.querySelectorAll('.person')].map((d,i)=>{
     const q=c=>d.querySelector(c);
     return {el:d,name:q('.p-name').value.trim()||'직원 '+(i+1),pay:num(q('.p-pay').value),week:parseFloat(q('.p-week').value)||40,hours:monthlyHours(parseFloat(q('.p-week').value)||40),
-      join:mode==='ot'?'':q('.p-join').value,leave:mode==='ot'?'':q('.p-leave').value,
+      ev:q('.p-ev').value,d1:q('.p-d1').value,d2:q('.p-d2').value,
       ot:mode==='pro'?0:parseTime(q('.p-ot').value),night:mode==='pro'?0:parseTime(q('.p-night').value),
       hol:mode==='pro'?0:parseTime(q('.p-hol').value),hol2:mode==='pro'?0:parseTime(q('.p-hol2').value)};
+  });
+  // 수당 탭에서는 입사·퇴사를 보지 않습니다
+  people.forEach(p=>{
+    const ev=mode==='ot'?'':p.ev;
+    p.join=ev==='join'||ev==='both'?p.d1:'';
+    p.leave=ev==='leave'?p.d1:ev==='both'?p.d2:'';
   });
   return {mode,g,people};
 }
 function check(a){
   if(!a.g.y&&a.mode!=='ot') return ['지급할 달을 골라 주세요.',$('g-month')];
   if(!a.g.y){ const t=new Date(); a.g.y=t.getFullYear(); a.g.m=t.getMonth()+1; }
+  if(a.mode!=='ot') for(const p of a.people){
+    if(!p.pay) continue;
+    if(p.ev&&!p.d1) return [p.name+'의 '+(p.ev==='leave'?'퇴사일':'입사일')+'을 골라 주세요.',p.el.querySelector('.p-d1')];
+    if(p.ev==='both'&&!p.d2) return [p.name+'의 퇴사일을 골라 주세요.',p.el.querySelector('.p-d2')];
+    if(p.ev==='both'&&p.d2<p.d1) return [p.name+'의 퇴사일이 입사일보다 빠릅니다. 날짜를 확인해 주세요.',p.el.querySelector('.p-d2')];
+  }
   for(const p of a.people) for(const [k,c] of [['ot','.p-ot'],['night','.p-night'],['hol','.p-hol'],['hol2','.p-hol2']])
     if(isNaN(p[k])) return [p.name+'의 근무시간을 읽지 못했습니다. 12:30이나 2시간 15분처럼 넣어 주세요.',p.el.querySelector(c)];
   if(!a.people.some(p=>p.pay)) return ['월급을 넣어 주세요.',a.people[0].el.querySelector('.p-pay')];
