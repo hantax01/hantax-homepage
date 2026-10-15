@@ -361,15 +361,18 @@ function render(){
   const A=nowAnniv(P,D), F=yearFiscal(P,D[0],D);
 
   // 위 카드 두 장
+  // 1년 미만이라 매달 생기는 연차가 남아 있으면 기준일까지 생긴 만큼을 크게 보여 줍니다
+  const nextMon=P.monthly.find(d=>cmp(d,D)>0);
   const aSub=A.k===0
-    ? '매달 개근하면 1일씩 생기고 기준일까지 '+A.got+'일 생겼습니다. '+fd(A.to)+'까지 써야 하고, 1년이 되는 '+fd(A.next.date)+'에 15일이 따로 생깁니다.'
+    ? '매달 개근하면 1일씩 생겨 입사 1년까지 최대 11일입니다.'+(nextMon?' 다음 1일은 '+fd(nextMon)+'에 생깁니다.':'')+' '+fd(A.to)+'까지 써야 하고, 1년이 되는 '+fd(A.next.date)+'에 15일이 따로 생깁니다.'
     : '근속 '+A.k+'년 연차입니다. 다음 '+fd(A.next.date)+'에 '+A.next.days+'일이 생깁니다.';
   const fParts=[]; if(F.f) fParts.push('1월 1일 '+dd(F.f.days)+(F.f.prorate?' (입사한 해 '+P.firstDays+'일 비례)':''));
   if(F.mon.length) fParts.push((F.mon.length>1?'매달 1일씩 ':'')+F.mon.length+'일');
-  const fSub=fParts.join(' + ')+(F.got<F.days?', 기준일까지 '+dd(F.got)+' 생겼습니다':'')+'. 다음 '+fd(F.next.date)+'에 '+dd(F.next.days)+'이 생깁니다.';
+  const part=F.got<F.days;
+  const fSub=(!fParts.length?'올해는 생기는 연차가 없습니다':part?'올해 모두 '+dd(F.days)+'('+fParts.join(' + ')+')이 생깁니다':fParts.join(' + '))+'. 다음 '+fd(F.next.date)+'에 '+dd(F.next.days)+'이 생깁니다.';
   $('calls').innerHTML=
-    '<div class="call"><span class="kind">입사일 기준</span><div class="lbl">'+(A.k===0?'입사 1년까지 생기는 연차':'지금 쓰는 연차')+' ('+fd(A.from)+' ~ '+fd(A.to)+')</div><div class="val">'+big(A.days)+'</div><div class="sub">'+aSub+'</div></div>'
-   +'<div class="call"><span class="kind">회계연도 기준</span><div class="lbl">'+D[0]+'년 연차 ('+D[0]+'.1.1 ~ '+D[0]+'.12.31)</div><div class="val">'+big(F.days)+'</div><div class="sub">'+fSub+'</div></div>';
+    '<div class="call"><span class="kind">입사일 기준</span><div class="lbl">'+(A.k===0?'기준일까지 생긴 연차 (입사 1년 미만)':'지금 쓰는 연차 ('+fd(A.from)+' ~ '+fd(A.to)+')')+'</div><div class="val">'+big(A.k===0?A.got:A.days)+'</div><div class="sub">'+aSub+'</div></div>'
+   +'<div class="call"><span class="kind">회계연도 기준</span><div class="lbl">'+(part?D[0]+'년 기준일까지 생긴 연차':D[0]+'년 연차 ('+D[0]+'.1.1 ~ '+D[0]+'.12.31)')+'</div><div class="val">'+big(F.got)+'</div><div class="sub">'+fSub+'</div></div>';
 
   // 연도별 표: 기준일 앞 3년 ~ 뒤 2년 (입사 초기는 최소 5년)
   const y0=Math.max(H[0],D[0]-3), y1=Math.max(D[0]+2,H[0]+4);
@@ -392,7 +395,7 @@ function render(){
   if(P.jan1) notes.push('1월 1일에 입사해 두 방식의 연차가 같습니다.');
   else if(D[0]<=H[0]+2) notes.push('회계연도 기준 첫 1월 1일 연차는 15일 × 입사한 해 근무일수('+P.firstDays+'일) ÷ 365 = '+dd(15*P.firstDays/365)+'입니다. 소수점 아래는 취업규칙에 따라 반일 단위로 올려 주거나 수당으로 정산합니다.');
   notes.push('상시 근로자 5명 미만 사업장은 법정 연차가 적용되지 않고, 주 40시간보다 짧게 일하는 직원은 근무시간에 비례해 줄어듭니다(주 15시간 미만은 연차 없음).');
-  $('verdict').innerHTML='입사일 기준으로는 '+(A.k===0?'입사 1년까지 <b>'+dd(A.days)+'</b>':'지금 <b>'+dd(A.days)+'</b>')+', 회계연도 기준으로는 '+D[0]+'년 <b>'+dd(F.days)+'</b>입니다.'
+  $('verdict').innerHTML='입사일 기준으로는 '+(A.k===0?'기준일까지 <b>'+dd(A.got)+'</b>':'지금 <b>'+dd(A.days)+'</b>')+', 회계연도 기준으로는 '+D[0]+'년 '+(part?'기준일까지 ':'')+'<b>'+dd(F.got)+'</b>입니다.'
     +notes.map(t=>'<span class="note">'+t+'</span>').join('');
   $('res').style.display='block';
 }
