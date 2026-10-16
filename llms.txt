@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [가업상속공제, 병원도 받을 수 있나요?](https://www.hantax47.com/column/family-business-inheritance.html)
 - [연장·야간·휴일수당, 겹치면 몇 배를 줘야 하나요?](https://www.hantax47.com/column/overtime-pay.html)
 - [부가세 신고 때 카드로 쓴 돈, 어디까지 공제되나요?](https://www.hantax47.com/column/vat-card-credit.html)
 - [법인 등기 전에 세무사가 먼저 봐야 하는 이유는?](https://www.hantax47.com/column/company-setup-check.html)
