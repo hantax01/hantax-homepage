@@ -57,7 +57,7 @@
 .xbtn{position:absolute;top:8px;right:8px;width:28px;height:28px;border:1px solid var(--line);background:#fff;border-radius:8px;color:var(--mute);font-size:16px;cursor:pointer;line-height:1;z-index:1}
 .xbtn:hover{color:var(--seal);border-color:var(--seal)}
 .pgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 12px}
-.sim[data-mode=ot] .pgrid,.sim[data-mode=ot] .wrow{grid-template-columns:repeat(3,minmax(0,1fr))}
+.sim[data-mode=pro] .pgrid,.sim[data-mode=ot] .pgrid,.sim[data-mode=ot] .wrow{grid-template-columns:repeat(3,minmax(0,1fr))}
 .pgrid label{font-size:13px}
 .pgrid input,.pgrid select{padding:9px 11px;font-size:14px}
 .works{grid-column:1/-1}
@@ -146,7 +146,7 @@
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .call{padding:22px 16px}.call .val{font-size:24px}
-.pgrid{grid-template-columns:1fr 1fr}.person{padding:12px 42px 12px 12px}.p-evw{grid-column:1/-1}.pgrid .unit input{padding-right:28px}.pgrid .unit span{right:9px}
+.pgrid{grid-template-columns:1fr 1fr}.person{padding:12px 42px 12px 12px}.p-evw{grid-column:1/-1}.pgrid .unit input{padding-right:28px}.pgrid .unit span{right:9px}.pgrid input[type=date]{padding:9px 6px 9px 9px;font-size:13.5px}
 .sim[data-mode] .pgrid,.sim[data-mode] .wrow{grid-template-columns:repeat(2,minmax(0,1fr))}.wrow select{grid-column:1/-1}.wrow .w-x{right:-34px}.wrow+.wrow{margin-top:6px;padding-top:10px;border-top:1px dashed var(--line)}
 .rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
 .stable td:first-child{width:auto}
