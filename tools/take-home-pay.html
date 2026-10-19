@@ -269,19 +269,6 @@
           <select id="i-child"></select>
         </div>
 
-        <div class="divider"><b>명세서에 표시할 정보</b><span>없으면 비워 두세요</span></div>
-        <div>
-          <label for="i-co">회사명</label>
-          <input type="text" id="i-co" maxlength="40" autocomplete="organization">
-        </div>
-        <div>
-          <label for="i-name">이름</label>
-          <input type="text" id="i-name" maxlength="20" autocomplete="off">
-        </div>
-        <div>
-          <label for="i-month">지급 연월</label>
-          <input type="month" id="i-month" min="2000-01" max="2099-12">
-        </div>
       </div>
 
       <div class="res" id="res">
@@ -292,6 +279,7 @@
             <button type="button" class="savebtn" id="save-pdf">PDF 저장</button>
           </div>
         </div>
+        <div class="docinfo" data-co="i-co" data-who="i-name" data-who-label="이름" data-month="i-month"></div>
         <div class="slip" id="slip"></div>
         <details class="steps">
           <summary>계산 근거 자세히 보기</summary>
@@ -373,6 +361,7 @@
 <div id="img-area" aria-hidden="true"></div>
 
 <script src="ganise-2026.js?v=1"></script>
+<script src="../assets/doc-info.js?v=1"></script>
 <script>
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
 mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});

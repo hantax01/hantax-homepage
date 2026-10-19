@@ -208,6 +208,7 @@
           <div><h2 id="res-title">연차 일수</h2><p class="sub" id="res-sub"></p></div>
           <button type="button" class="savebtn" id="save-img">이미지 저장</button>
         </div>
+        <div class="docinfo" data-co="doc-co" data-who="doc-who"></div>
         <div class="calls" id="calls"></div>
         <div style="overflow-x:auto">
           <table class="rtable" id="rt">
@@ -292,6 +293,7 @@
   <div class="copy">© 2026 HanTax</div>
 </footer>
 
+<script src="../assets/doc-info.js?v=1"></script>
 <script>
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
 mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
@@ -386,7 +388,9 @@ function render(){
     rows+='<tr'+(Y===D[0]?' class="now"':'')+'><td>'+Y+'년'+(Y===D[0]?'<small>기준일</small>':'')+'</td><td>'+dd(aDays)+'<small>'+aTxt+'</small></td><td>'+dd(fDays)+'<small>'+fTxt+'</small></td></tr>';
   }
   $('rt-body').innerHTML=rows;
-  $('res-sub').textContent='입사 '+fd(H)+' · 기준일 '+fd(D)+' · 매달 개근, 매년 80% 이상 출근 가정';
+  const co=$('doc-co').value.trim(), who=$('doc-who').value.trim();
+  $('res-title').textContent=(who?who+' 님 ':'')+'연차 일수';
+  $('res-sub').textContent=(co?co+' · ':'')+'입사 '+fd(H)+' · 기준일 '+fd(D)+' · 매달 개근, 매년 80% 이상 출근 가정';
 
   // 정리
   const notes=[];
@@ -407,6 +411,7 @@ $('calc').addEventListener('click',()=>{
   $('res').scrollIntoView({behavior:'smooth',block:'start'});
 });
 document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!Array.isArray(read())) render(); });
+['doc-co','doc-who'].forEach(id=>$(id).addEventListener('input',()=>{ if(shown()&&!Array.isArray(read())) render(); }));
 { const t=new Date(); $('asof').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
 </script>
 <script src="../assets/help.js?v=1"></script>
@@ -415,7 +420,7 @@ document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!A
 HantaxImage.attach(
   document.getElementById('save-img'),
   ()=>document.getElementById('rt'),
-  ()=>({ title:'연차 일수 (입사일 기준 · 회계연도 기준)', sub:document.getElementById('res-sub').textContent, filename:'한택스_연차' })
+  ()=>({ title:document.getElementById('res-title').textContent+' (입사일 기준 · 회계연도 기준)', sub:document.getElementById('res-sub').textContent, filename:'한택스_연차' })
 );
 </script>
 </body>

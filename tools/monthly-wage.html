@@ -305,6 +305,7 @@
             <button type="button" class="savebtn" id="save-img">이미지 저장</button>
           </div>
         </div>
+        <div class="docinfo" data-co="doc-co"></div>
         <div class="call" id="call"></div>
         <div style="overflow-x:auto">
           <table class="rtable wide-t" id="rt">
@@ -394,6 +395,7 @@
   <div class="copy">© 2026 HanTax</div>
 </footer>
 
+<script src="../assets/doc-info.js?v=1"></script>
 <script>
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
 mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
@@ -621,6 +623,7 @@ const shown=()=>$('res').style.display==='block';
 let LAST=null, MODE='pro';
 
 /* ── 화면 ─────────────────────────────────── */
+const coPre=()=>{ const c=$('doc-co').value.trim(); return c?c+' · ':''; };   // 결과 부제목 앞에 회사명
 function render(){
   const a=readAll(), g=a.g, mode=a.mode;
   if(!g.y){ const t=new Date(); g.y=t.getFullYear(); g.m=t.getMonth()+1; }
@@ -643,7 +646,7 @@ function render(){
 
   const n=rows.length, part=rows.filter(x=>x.r.days&&x.r.days<x.r.dim);
   const smallTxt=g.small?'5인 미만 (가산수당 없음)':'5인 이상 (가산수당 적용)', dayRule=g.method==='30'?'30일 기준 일할':'달력 기준 일할';
-  $('res-sub').textContent=(mode==='ot'?smallTxt:g.y+'년 '+g.m+'월 · '+dayRule+(mode==='both'?' · '+smallTxt:''))+' · 단위 원';
+  $('res-sub').textContent=coPre()+(mode==='ot'?smallTxt:g.y+'년 '+g.m+'월 · '+dayRule+(mode==='both'?' · '+smallTxt:''))+' · 단위 원';
   const big=v=>manwon(v).replace(/ ?원$/,'')+'<small>원</small>';
   let head;
   if(mode==='pro'){
@@ -694,6 +697,7 @@ $('calc').addEventListener('click',()=>{
 });
 document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&!check(readAll())) render(); });
 document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&!check(readAll())) render(); });
+$('doc-co').addEventListener('input',()=>{ if(shown()&&!check(readAll())) render(); });
 
 const MODES={
   pro:{btn:'일할 월급 계산하기',title:'이번 달 일할 월급',help:'중간에 입사하거나 퇴사한 직원의 그 달 월급을 근무한 날만큼 나눠 계산합니다.'},

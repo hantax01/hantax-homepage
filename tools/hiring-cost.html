@@ -345,6 +345,7 @@
           <div><h2>직원 한 명을 뽑을 때</h2><p class="sub" id="res-sub"></p></div>
           <button type="button" class="savebtn" id="save-img">이미지 저장</button>
         </div>
+        <div class="docinfo" data-co="doc-co"></div>
         <div class="call" id="call"></div>
         <div style="overflow-x:auto">
           <table class="rtable" id="rt">
@@ -471,6 +472,7 @@
   <div class="copy">© 2026 HanTax</div>
 </footer>
 
+<script src="../assets/doc-info.js?v=1"></script>
 <script>
 const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
 mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
@@ -633,6 +635,7 @@ function creditWords(c,r){
 }
 
 /* ── 화면 ─────────────────────────────────── */
+const coPre=()=>{ const c=$('doc-co').value.trim(); return c?c+' · ':''; };   // 결과 부제목 앞에 회사명
 function render(){
   const c=read(), r=calcHire(c);
   const row=(l,sm,m,y,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+m+'</td><td>'+y+'</td></tr>';
@@ -655,7 +658,7 @@ function render(){
     +yrow('실제 부담','',r.net.map(v=>won(v)+'원'),'sum');
   $('ycap').textContent='통합고용세액공제는 고용을 이어 갈수록 커집니다. 3년 동안 받는 공제를 모두 더하면 '+won(r.credits[0]+r.credits[1]+r.credits[2])+'원입니다.';
 
-  $('res-sub').textContent='월 급여 '+won(c.wage)+'원'+(c.meal?' · 식대 '+won(c.meal)+'원':'')+' · '+(c.area==='metro'?'수도권':'비수도권')+(c.youth?' · 우대 대상':'')+(r.duru.corp?' · 두루누리':'');
+  $('res-sub').textContent=coPre()+'월 급여 '+won(c.wage)+'원'+(c.meal?' · 식대 '+won(c.meal)+'원':'')+' · '+(c.area==='metro'?'수도권':'비수도권')+(c.youth?' · 우대 대상':'')+(r.duru.corp?' · 두루누리':'');
 
   const addRate=c.wage?((r.monthly-c.wage)/c.wage*100).toFixed(1):0;
   $('call').innerHTML='<div class="lbl">급여 '+won(c.wage)+'원인 직원 한 명에게</div>'
@@ -738,6 +741,7 @@ $('calc').addEventListener('click',()=>{
 });
 document.querySelector('.sim-in').addEventListener('input',()=>{ if(shown()&&ready()) render(); });
 document.querySelector('.sim-in').addEventListener('change',()=>{ if(shown()&&ready()) render(); });
+$('doc-co').addEventListener('input',()=>{ if(shown()&&ready()) render(); });
 </script>
 <script src="ganise-2026.js?v=1"></script>
 <script src="../assets/help.js?v=1"></script>
