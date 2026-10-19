@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>알바 월급 계산기 2026, 달력에 근무시간 넣고 주휴수당까지 | 한택스</title>
+<meta name="description" content="시급 직원의 한 달 월급을 계산합니다. 요일이나 날짜를 골라 근무시간을 넣으면 근무 급여에 주휴수당과 연장 가산까지 더해 주고, 회사명과 직원 이름을 넣어 이미지나 PDF로 저장할 수 있습니다. 2026년 최저시급 10,320원 기준입니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/hourly-wage.html">
+<meta property="og:title" content="시급 직원 월급, 이번 달 얼마일까요?">
+<meta property="og:description" content="달력에 근무시간을 넣으면 주휴수당까지 더한 한 달 월급을 계산하고 PDF로 저장합니다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/hourly-wage.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-hourly-wage.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=32">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.quick button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;cursor:pointer}
+.quick button:hover{background:var(--blue-soft)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal .wd{border:0;background:none;border-radius:8px;padding:7px 0;font-family:inherit;font-size:13.5px;font-weight:800;color:var(--char);cursor:pointer}
+.cal .wd:hover{background:var(--blue-soft);color:var(--blue)}
+.cal .wd.sun{color:var(--seal)}
+.cal .d{min-height:60px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 7px;font-family:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}
+.cal .d:hover{border-color:var(--blue-line)}
+.cal .d .n{font-size:12.5px;font-weight:700;color:var(--mute)}
+.cal .d .h{font-size:14.5px;font-weight:800;color:var(--blue);text-align:right;font-variant-numeric:tabular-nums}
+.cal .d.sel{background:var(--blue-soft);border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.cal .blank{visibility:hidden}
+.edit{display:flex;gap:8px 10px;align-items:center;flex-wrap:wrap;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.edit .cnt{font-size:14px;font-weight:700;color:var(--ink);margin-right:4px}
+.edit .unit{width:96px}
+.edit .unit input{padding:9px 38px 9px 10px;font-size:14px}
+.edit button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;font-size:13.5px;font-weight:700;padding:9px 13px;border-radius:9px;cursor:pointer}
+.edit button.main{background:var(--blue);border-color:var(--blue);color:#fff}
+.edit button:disabled{opacity:.45;cursor:default}
+.edit.off .unit input{background:var(--soft)}
+.calsum{margin-top:10px;font-size:13.5px;color:var(--mute)}
+.calsum b{color:var(--ink)}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.resbtns{display:flex;gap:8px;flex-wrap:wrap}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td+td{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict .note.warn b{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:"펼쳐 보기";float:right;font-weight:400;font-size:13px;color:var(--blue)}
+.steps[open] summary::after{content:"접기"}
+.steps .body{padding:14px 18px;overflow-x:auto}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+/* PDF */
+#print-area{display:none;color:#1a1f2b}
+.pst h2{font-family:var(--sans);font-size:13.5px;font-weight:800;letter-spacing:0;margin:14px 0 6px;color:#0B1E3F}
+.pst-tbl{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.pst-tbl th{background:#F3F5F9;color:#3d4450;font-weight:700;text-align:left;padding:5px 10px;border:1px solid #DCE2EB}
+.pst-tbl td{padding:5px 10px;border:1px solid #DCE2EB}
+.pst-tbl td.n{text-align:right;font-weight:700;white-space:nowrap}
+.pst-tbl tr.tot th,.pst-tbl tr.tot td{background:#E9EFFA;font-weight:800;color:#1B4A9B}
+.pst-cal{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px;font-variant-numeric:tabular-nums}
+.pst-cal th{background:#F3F5F9;color:#3d4450;font-weight:700;padding:4px;border:1px solid #DCE2EB;text-align:center}
+.pst-cal td{height:38px;padding:3px 6px;border:1px solid #DCE2EB;vertical-align:top;color:#8a93a0}
+.pst-cal td b{display:block;text-align:right;color:#1B4A9B;font-size:12.5px;margin-top:2px}
+.pst-cal td.x{background:#FAFBFC}
+.qt-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #0B1E3F;padding-bottom:10px;margin-bottom:10px}
+.qt-head h1{font-family:var(--sans);font-size:26px;font-weight:800;letter-spacing:-.01em;margin:0;color:#0B1E3F}
+.qt-head .co{font-size:15px;font-weight:800;color:#0B1E3F}
+.qt-meta{border-collapse:collapse;font-size:13px;margin-bottom:4px}
+.qt-meta th{text-align:left;color:#5C6572;font-weight:600;padding:2px 14px 2px 0;white-space:nowrap}
+.qt-meta td{padding:2px 0;font-weight:700}
+.pst-note{font-size:10.5px;color:#5C6572;margin-top:14px;line-height:1.6;border-top:1px solid #DCE2EB;padding-top:10px}
+.pst-foot{font-size:10px;color:#aaaaaa;text-align:center;margin-top:8px}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff!important;margin:0}
+  body>*:not(#print-area){display:none!important}
+  #print-area{display:block!important;padding:12mm 15mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.cal{gap:3px}
+.cal .d{min-height:52px;padding:4px 4px}
+.cal .d .h{font-size:12.5px}
+.edit{padding:10px}
+.edit .cnt{width:100%}
+.rtable{font-size:13px}.rtable th,.rtable td{padding:10px 6px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "주휴수당은 누가 받을 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "한 주 근무시간이 15시간 이상이고, 그 주에 일하기로 한 날을 모두 나온 직원이 받습니다. 아르바이트생도 같고, 상시 근로자 5명 미만 사업장도 줘야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "주휴수당은 어떻게 계산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "한 주 근무시간 ÷ 40 × 8시간에 시급을 곱합니다. 주 40시간 이상이면 8시간분, 주 20시간이면 4시간분입니다. 2026년 최저시급 10,320원으로 주 20시간 일하면 한 주 주휴수당은 41,280원입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "달이 바뀌는 주의 주휴수당은 어느 달에 주나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "이 계산기는 월요일부터 일요일까지를 한 주로 보고, 그 주가 끝나는 일요일이 속한 달의 월급에 주휴수당을 넣습니다. 앞 달 날짜는 같은 요일 근무시간으로 보고 한 주 시간을 셉니다. 회사가 정한 지급 방식이 있으면 그것을 따르면 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "하루 8시간을 넘게 일하면 시급을 더 줘야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "상시 근로자 5명 이상 사업장이면 하루 8시간이나 한 주 40시간을 넘긴 시간에 시급의 0.5배를 더 줘 1.5배가 됩니다. 5명 미만 사업장은 일한 시간만큼만 주면 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "쉬는 시간도 근무시간에 넣나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "넣지 않습니다. 4시간 일하면 30분, 8시간 일하면 1시간 이상 쉬는 시간을 줘야 하고, 이 시간은 임금을 주지 않는 시간입니다. 9시부터 18시까지 일하고 점심 1시간을 쉬면 근무시간은 8시간입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "2026년 최저시급은 얼마인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "2026년 최저시급은 10,320원입니다. 주 40시간 일하는 직원의 한 달 최저임금은 주휴시간을 더한 209시간 기준 2,156,880원입니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"시급 직원 월급, 이번 달 얼마일까요?","url":"https://www.hantax47.com/tools/hourly-wage.html","description":"시급 직원의 한 달 월급을 계산합니다. 요일이나 날짜를 골라 근무시간을 넣으면 근무 급여에 주휴수당과 연장 가산까지 더해 주고, 회사명과 직원 이름을 넣어 이미지나 PDF로 저장할 수 있습니다. 2026년 최저시급 10,320원 기준입니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">급여 계산</span>
+    <h1>시급 직원 월급,<br>이번 달 얼마일까요?</h1>
+    <p class="lead">요일이나 날짜를 골라 근무시간을 넣으면 근무 급여에 주휴수당과 연장 가산까지 더해 한 달 월급을 계산합니다. 회사명과 직원 이름을 넣어 이미지나 PDF로 저장할 수 있습니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>기본 정보</b><span>이미지와 PDF에 들어갑니다</span></div>
+        <div>
+          <label for="co">회사명</label>
+          <input type="text" id="co" placeholder="회사 이름">
+        </div>
+        <div>
+          <label for="who">직원 이름</label>
+          <input type="text" id="who" placeholder="직원 이름">
+        </div>
+        <div>
+          <label for="month">지급할 달</label>
+          <input type="month" id="month">
+        </div>
+        <div>
+          <label for="wage">시급 <small>2026년 최저 10,320원</small></label>
+          <div class="unit"><input type="text" id="wage" inputmode="numeric" value="10,320"><span>원</span></div>
+        </div>
+        <div class="wide">
+          <label class="ichk"><input type="checkbox" id="small"><span>상시 근로자 5명 미만 사업장입니다</span>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="5명 미만 사업장은 하루 8시간·주 40시간을 넘긴 연장근로에 0.5배를 더 주는 규정이 적용되지 않아 일한 시간만큼(1배)만 계산합니다. 최저임금과 주휴수당은 똑같이 줘야 합니다.">?</button>
+          </label>
+        </div>
+
+        <div class="divider"><b>근무시간</b><span>요일 이름을 누르면 그 요일이 모두 선택됩니다</span></div>
+        <div class="wide">
+          <div class="quick">
+            <button type="button" data-q="wk">월~금 선택</button>
+            <button type="button" data-q="all">모두 선택</button>
+            <button type="button" data-q="none">선택 해제</button>
+          </div>
+          <div class="cal" id="cal"></div>
+          <div class="edit off" id="edit">
+            <span class="cnt" id="ed-cnt">요일이나 날짜를 눌러 고르세요</span>
+            <div class="unit"><input type="text" id="ed-h" inputmode="numeric" aria-label="근무시간 (시간)"><span>시간</span></div>
+            <div class="unit"><input type="text" id="ed-m" inputmode="numeric" aria-label="근무시간 (분)"><span>분</span></div>
+            <button type="button" class="main" id="ed-set">근무시간 넣기</button>
+            <button type="button" id="ed-off">쉬는 날로</button>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="쉬는 시간(휴게시간)을 뺀 실제 근무시간을 넣습니다. 9시부터 18시까지 일하고 점심 1시간을 쉬면 8시간입니다. 요일 이름을 누르면 그 달의 같은 요일이 모두 선택되고, 날짜를 누르면 하루씩 고르거나 뺄 수 있습니다.">?</button>
+          </div>
+          <p class="calsum" id="calsum"></p>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">월급 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2 id="res-title">이번 달 월급</h2><p class="sub" id="res-sub"></p></div>
+          <div class="resbtns">
+            <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+            <button type="button" class="savebtn" id="save-pdf">PDF 저장</button>
+          </div>
+        </div>
+        <div class="call" id="call"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>항목</th><th>계산</th><th>금액</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <details class="steps">
+          <summary>주별 계산 자세히 보기</summary>
+          <div class="body">
+            <table class="rtable" id="wt">
+              <thead><tr><th>주 (월~일)</th><th>이번 달 근무</th><th>연장</th><th>주휴</th></tr></thead>
+              <tbody id="wt-body"></tbody>
+            </table>
+          </div>
+        </details>
+        <div class="ask">
+          <p><b>시급 직원도 근로계약서와 임금명세서가 필요합니다.</b><br>주휴수당, 4대보험 가입, 급여 신고까지 급여 업무를 함께 맡아 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>주휴수당은 누가 받을 수 있나요?</summary>
+          <div class="a">한 주 근무시간이 15시간 이상이고, 그 주에 일하기로 한 날을 모두 나온 직원이 받습니다. 아르바이트생도 같고, 상시 근로자 5명 미만 사업장도 줘야 합니다.</div>
+        </details>
+        <details>
+          <summary>주휴수당은 어떻게 계산하나요?</summary>
+          <div class="a">한 주 근무시간 ÷ 40 × 8시간에 시급을 곱합니다. 주 40시간 이상이면 8시간분, 주 20시간이면 4시간분입니다. 2026년 최저시급 10,320원으로 주 20시간 일하면 한 주 주휴수당은 41,280원입니다.</div>
+        </details>
+        <details>
+          <summary>달이 바뀌는 주의 주휴수당은 어느 달에 주나요?</summary>
+          <div class="a">이 계산기는 월요일부터 일요일까지를 한 주로 보고, 그 주가 끝나는 일요일이 속한 달의 월급에 주휴수당을 넣습니다. 앞 달 날짜는 같은 요일 근무시간으로 보고 한 주 시간을 셉니다. 회사가 정한 지급 방식이 있으면 그것을 따르면 됩니다.</div>
+        </details>
+        <details>
+          <summary>하루 8시간을 넘게 일하면 시급을 더 줘야 하나요?</summary>
+          <div class="a">상시 근로자 5명 이상 사업장이면 하루 8시간이나 한 주 40시간을 넘긴 시간에 시급의 0.5배를 더 줘 1.5배가 됩니다. 5명 미만 사업장은 일한 시간만큼만 주면 됩니다.</div>
+        </details>
+        <details>
+          <summary>쉬는 시간도 근무시간에 넣나요?</summary>
+          <div class="a">넣지 않습니다. 4시간 일하면 30분, 8시간 일하면 1시간 이상 쉬는 시간을 줘야 하고, 이 시간은 임금을 주지 않는 시간입니다. 9시부터 18시까지 일하고 점심 1시간을 쉬면 근무시간은 8시간입니다.</div>
+        </details>
+        <details>
+          <summary>2026년 최저시급은 얼마인가요?</summary>
+          <div class="a">2026년 최저시급은 10,320원입니다. 주 40시간 일하는 직원의 한 달 최저임금은 주휴시간을 더한 209시간 기준 2,156,880원입니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용이며 4대보험과 세금을 떼기 전 금액입니다. 실수령액은 <a href="take-home-pay.html">급여 실수령액 계산기</a>에서 확인하세요.<br>
+        · 일하기로 한 날을 모두 나왔다고 보고 주휴수당을 넣었습니다. 한 주는 월요일부터 일요일까지이고, 그 주가 끝나는 일요일이 속한 달에 주휴수당을 넣습니다.<br>
+        · 연장은 하루 8시간이나 한 주 40시간을 넘긴 시간만 봅니다. 밤 10시~새벽 6시 근무, 휴일 근무, 계약한 시간보다 더 일한 단시간 근로자의 가산은 넣지 않았습니다. 이런 수당은 <a href="monthly-wage.html#overtime">직원 월급 계산기</a>에서 계산할 수 있습니다.<br>
+        · 넣은 회사명과 이름, 근무시간은 이 화면에서만 쓰고 어디에도 저장하지 않습니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="monthly-wage.html">직원 월급 계산기</a>
+        <a href="annual-leave.html">연차 계산기</a>
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+<div id="print-area"></div>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 시급 월급 계산 ───────────────────────── */
+const MIN_WAGE=10320;   // 2026년 최저시급
+const daysIn=(y,m)=>new Date(Date.UTC(y,m,0)).getUTCDate();
+const dow=(y,m,d)=>(new Date(Date.UTC(y,m-1,d)).getUTCDay()+6)%7;   // 월=0 … 일=6
+// hrs: {날짜: 근무시간}. 한 주는 월~일, 앞뒤 달 날짜는 같은 요일 근무시간으로 봅니다
+function calcMonth(y,m,hrs,wage,small){
+  const n=daysIn(y,m);
+  const H=d=>{ while(d<1) d+=7; while(d>n) d-=7; return hrs[d]||0; };
+  const weeks=[]; let work=0, ot=0, rest=0, days=0;
+  for(let s=1-dow(y,m,1); s<=n; s+=7){
+    const w={from:s,to:s+6,work:0,ot:0,rest:0,week:0,paid:s+6<=n};
+    let cum=0;   // 하루 8시간 안쪽 시간 누계 (주 40시간 넘는지 보려고)
+    for(let d=s; d<s+7; d++){
+      const h=H(d), within=Math.min(h,8);
+      const o=Math.max(0,h-8)+Math.max(0,cum+within-40)-Math.max(0,cum-40);   // 하루 8시간 초과 + 주 40시간 초과
+      cum+=within; w.week+=h;
+      if(d>=1&&d<=n){ w.work+=h; w.ot+=o; if(h) days++; }
+    }
+    // 주휴: 한 주 근무시간(하루 8시간·주 40시간 안)이 15시간 이상이면 ÷ 40 × 8시간, 그 주가 끝나는 달에 넣습니다
+    const R=Math.min(40,cum);
+    if(w.paid&&R>=15) w.rest=R/40*8;
+    work+=w.work; ot+=w.ot; rest+=w.rest; weeks.push(w);
+  }
+  const base=Math.floor(work*wage), otPay=small?0:Math.floor(ot*wage*0.5), restPay=Math.floor(rest*wage);
+  return {weeks,work,ot,rest,days,base,otPay,restPay,total:base+otPay+restPay,low:wage<MIN_WAGE};
+}
+
+/* ── 화면 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const hm=h=>{ const t=Math.round(h*60); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); };
+const hw=h=>{ const t=Math.round(h*60), a=Math.floor(t/60), b=t%60; return (a?a+'시간':'')+(a&&b?' ':'')+(b?b+'분':'')||'0시간'; };
+const WD=['월','화','수','목','금','토','일'];
+let Y, M, HRS={}, SEL=new Set();
+
+function ym(){ const v=$('month').value; if(!v) return null; const [y,m]=v.split('-').map(Number); return [y,m]; }
+function drawCal(){
+  const n=daysIn(Y,M), lead=dow(Y,M,1);
+  let h=WD.map((w,i)=>'<button type="button" class="wd'+(i===6?' sun':'')+'" data-w="'+i+'" aria-label="'+w+'요일 모두 선택">'+w+'</button>').join('');
+  for(let i=0;i<lead;i++) h+='<span class="blank"></span>';
+  for(let d=1;d<=n;d++) h+='<button type="button" class="d'+(SEL.has(d)?' sel':'')+'" data-d="'+d+'" aria-pressed="'+SEL.has(d)+'"><span class="n">'+d+'</span><span class="h">'+(HRS[d]?hm(HRS[d]):'')+'</span></button>';
+  $('cal').innerHTML=h;
+  const c=SEL.size;
+  $('ed-cnt').textContent=c?'고른 날 '+c+'일':'요일이나 날짜를 눌러 고르세요';
+  $('edit').classList.toggle('off',!c);
+  ['ed-set','ed-off'].forEach(id=>$(id).disabled=!c);
+  const ds=Object.keys(HRS).length, tot=Object.values(HRS).reduce((a,b)=>a+b,0);
+  $('calsum').innerHTML=ds?'이번 달 근무 <b>'+ds+'일 · '+hw(tot)+'</b>':'아직 넣은 근무시간이 없습니다.';
+}
+function pick(days,on){ days.forEach(d=>on?SEL.add(d):SEL.delete(d)); drawCal(); }
+const allDays=()=>Array.from({length:daysIn(Y,M)},(_,i)=>i+1);
+$('cal').addEventListener('click',e=>{
+  const w=e.target.closest('.wd');
+  if(w){ const ds=allDays().filter(d=>dow(Y,M,d)===+w.dataset.w); pick(ds,!ds.every(d=>SEL.has(d))); $('ed-h').focus(); return; }
+  const b=e.target.closest('.d'); if(!b) return;
+  const d=+b.dataset.d; pick([d],!SEL.has(d));
+});
+document.querySelector('.quick').addEventListener('click',e=>{
+  const q=e.target.dataset.q; if(!q) return;
+  if(q==='none'){ SEL.clear(); drawCal(); return; }
+  pick(allDays().filter(d=>q==='all'||dow(Y,M,d)<5),true); $('ed-h').focus();
+});
+$('ed-set').addEventListener('click',()=>{
+  const a=$('ed-h').value.trim(), b=$('ed-m').value.trim(), ok=x=>/^\d*$/.test(x);
+  if(!ok(a)||!ok(b)){ alert('시간 칸과 분 칸에 숫자만 넣어 주세요.'); $('ed-h').focus(); return; }
+  const h=(+a||0)+(+b||0)/60;
+  if(!h){ alert('근무시간을 넣어 주세요. 쉬는 날이면 쉬는 날로를 누르세요.'); $('ed-h').focus(); return; }
+  if(h>24){ alert('하루 근무시간은 24시간을 넘을 수 없습니다.'); $('ed-h').focus(); return; }
+  SEL.forEach(d=>{ HRS[d]=h; }); SEL.clear(); drawCal(); update();
+});
+$('ed-off').addEventListener('click',()=>{ SEL.forEach(d=>{ delete HRS[d]; }); SEL.clear(); drawCal(); update(); });
+$('month').addEventListener('change',()=>{
+  const v=ym(); if(!v) return; [Y,M]=v; HRS={}; SEL.clear(); drawCal(); $('res').style.display='none';
+});
+$('wage').addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; update(); });
+['co','who','small'].forEach(id=>$(id).addEventListener(id==='small'?'change':'input',update));
+
+const fdate=d=>{ const t=new Date(Date.UTC(Y,M-1,d)); return (t.getUTCMonth()+1)+'.'+t.getUTCDate(); };
+function check(){
+  if(!num($('wage').value)) return ['시급을 넣어 주세요.',$('wage')];
+  if(!Object.keys(HRS).length) return ['달력에서 근무한 날을 고르고 근무시간을 넣어 주세요.',$('ed-h')];
+  return null;
+}
+const shown=()=>$('res').style.display==='block';
+function update(){ if(shown()&&!check()) render(); }
+function render(){
+  const wage=num($('wage').value), small=$('small').checked, r=calcMonth(Y,M,HRS,wage,small);
+  const co=$('co').value.trim(), who=$('who').value.trim();
+  const title=(who?who+' 님 ':'')+M+'월 월급';
+  $('res-title').textContent=title;
+  $('res-sub').textContent=[co,Y+'년 '+M+'월','시급 '+won(wage)+'원'].filter(Boolean).join(' · ');
+  $('call').innerHTML='<div class="lbl">'+esc(title)+' (세전)</div><div class="val">'+won(r.total)+'<small>원</small></div>'
+    +'<div class="sub">근무 '+r.days+'일 · '+hw(r.work)+' 근무에 주휴수당'+(r.ot&&!small?'과 연장 가산':'')+'을 더한 금액입니다.</div>';
+  const paidWeeks=r.weeks.filter(w=>w.rest).length;
+  $('rt-body').innerHTML=
+    '<tr><td>근무 급여</td><td>'+hw(r.work)+' × '+won(wage)+'원</td><td>'+won(r.base)+'</td></tr>'
+   +'<tr><td>주휴수당<small>'+paidWeeks+'주</small></td><td>'+hw(r.rest)+' × '+won(wage)+'원</td><td>'+won(r.restPay)+'</td></tr>'
+   +(r.ot?'<tr><td>연장 가산<small>하루 8시간·주 40시간 초과</small></td><td>'+hw(r.ot)+' × '+won(wage)+'원 × '+(small?'0 (5인 미만)':'0.5')+'</td><td>'+won(r.otPay)+'</td></tr>':'')
+   +'<tr class="tot"><td>합계 (세전)</td><td></td><td>'+won(r.total)+'</td></tr>';
+  $('wt-body').innerHTML=r.weeks.map(w=>'<tr><td>'+fdate(w.from)+' ~ '+fdate(w.to)+(w.from<1||w.to>daysIn(Y,M)?'<small>한 주 '+hw(w.week)+' (다른 달은 같은 요일 시간)</small>':'')+'</td><td>'+(w.work?hw(w.work):'-')+'</td><td>'+(w.ot?hw(w.ot):'-')+'</td><td>'+(w.rest?hw(w.rest):w.paid?'-<small>주 15시간 미만</small>':'-<small>'+(M%12+1)+'월 월급에</small>')+'</td></tr>').join('');
+
+  const notes=[];
+  if(r.low) notes.push({warn:1,t:'시급 '+won(wage)+'원이 2026년 최저시급 '+won(MIN_WAGE)+'원보다 낮습니다. 시급을 확인해 주세요.'});
+  notes.push({t:'주휴수당은 한 주(월~일) 근무시간이 15시간 이상인 주마다 주 근무시간 ÷ 40 × 8시간으로 넣었습니다. 일하기로 한 날을 모두 나왔다고 본 금액입니다.'});
+  const last=r.weeks[r.weeks.length-1];
+  if(!last.paid) notes.push({t:fdate(last.from)+' ~ '+fdate(last.to)+' 주는 그 주가 끝나는 '+(M%12+1)+'월 월급에 주휴수당을 넣습니다.'});
+  if(r.ot) notes.push({t:'하루 8시간이나 한 주 40시간을 넘긴 '+hw(r.ot)+'은 연장근로입니다. '+(small?'5인 미만 사업장이라 가산 없이 일한 시간만큼만 계산했습니다.':'시급의 0.5배를 더해 1.5배로 계산했습니다.')});
+  notes.push({t:'4대보험과 세금을 떼기 전 금액입니다. 실수령액은 <a href="take-home-pay.html">급여 실수령액 계산기</a>에서 확인하세요.'});
+  $('verdict').innerHTML='이번 달 월급은 <b>'+won(r.total)+'원</b>입니다.'+notes.map(x=>'<span class="note'+(x.warn?' warn':'')+'">'+x.t+'</span>').join('');
+  $('res').style.display='block';
+  return r;
+}
+$('calc').addEventListener('click',()=>{
+  const bad=check();
+  if(bad){ alert(bad[0]); bad[1].focus(); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+// PDF: 회사명·이름·달력·계산을 A4 한 장으로
+function sheetHtml(r){
+  const wage=num($('wage').value), co=$('co').value.trim(), who=$('who').value.trim(), n=daysIn(Y,M), lead=dow(Y,M,1);
+  let cal='<tr>'+WD.map(w=>'<th>'+w+'</th>').join('')+'</tr><tr>';
+  for(let i=0;i<lead;i++) cal+='<td class="x"></td>';
+  for(let d=1;d<=n;d++){ cal+='<td>'+d+(HRS[d]?'<b>'+hm(HRS[d])+'</b>':'')+'</td>'; if((lead+d)%7===0&&d<n) cal+='</tr><tr>'; }
+  for(let i=(lead+n)%7;i&&i<7;i++) cal+='<td class="x"></td>';
+  cal+='</tr>';
+  const rows=[['근무 급여',hw(r.work)+' × '+won(wage)+'원',r.base],['주휴수당',hw(r.rest)+' × '+won(wage)+'원',r.restPay]]
+    .concat(r.ot?[['연장 가산',hw(r.ot)+' × '+won(wage)+'원 × '+($('small').checked?'0 (5인 미만)':'0.5'),r.otPay]]:[]);
+  return '<section class="pst">'
+    +'<div class="qt-head"><h1>월급 계산표</h1><div class="co">'+esc(co)+'</div></div>'
+    +'<table class="qt-meta"><tr><th>직원</th><td>'+esc(who||'-')+'</td></tr><tr><th>지급할 달</th><td>'+Y+'년 '+M+'월</td></tr><tr><th>시급</th><td>'+won(wage)+'원</td></tr><tr><th>근무</th><td>'+r.days+'일 · '+hw(r.work)+'</td></tr></table>'
+    +'<h2>1. 근무 달력 (근무시간, 시간:분)</h2><table class="pst-cal">'+cal+'</table>'
+    +'<h2>2. 월급 계산</h2><table class="pst-tbl"><tr><th>항목</th><th>계산</th><th style="text-align:right">금액</th></tr>'
+    +rows.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td class="n">'+won(x[2])+'원</td></tr>').join('')
+    +'<tr class="tot"><th colspan="2">합계 (세전)</th><td class="n">'+won(r.total)+'원</td></tr></table>'
+    +'<h2>3. 주별 근무시간</h2><table class="pst-tbl"><tr><th>주 (월~일)</th><th style="text-align:right">이번 달 근무</th><th style="text-align:right">연장</th><th style="text-align:right">주휴</th></tr>'
+    +r.weeks.map(w=>'<tr><td>'+fdate(w.from)+' ~ '+fdate(w.to)+'</td><td class="n">'+(w.work?hw(w.work):'-')+'</td><td class="n">'+(w.ot?hw(w.ot):'-')+'</td><td class="n">'+(w.rest?hw(w.rest):w.paid?'-':(M%12+1)+'월에')+'</td></tr>').join('')+'</table>'
+    +'<p class="pst-note">주휴수당은 한 주(월~일) 근무시간이 15시간 이상인 주마다 주 근무시간 ÷ 40 × 8시간으로 계산했고, 그 주가 끝나는 일요일이 속한 달에 넣었습니다. 일하기로 한 날을 모두 나왔다고 본 금액입니다. 연장은 하루 8시간·주 40시간을 넘긴 시간이며, 4대보험과 세금을 떼기 전 금액입니다.</p>'
+    +'<p class="pst-foot">한택스 · hantax47.com 월급 계산기로 계산한 참고 자료입니다</p>'
+    +'</section>';
+}
+$('save-pdf').addEventListener('click',()=>{
+  const bad=check(); if(bad){ alert(bad[0]); bad[1].focus(); return; }
+  if(/KAKAOTALK/i.test(navigator.userAgent)){ alert('카카오톡 안에서는 PDF로 저장할 수 없습니다. 다른 브라우저로 열어 주세요.'); return; }
+  $('print-area').innerHTML=sheetHtml(render());
+  if(window.gtag) gtag('event','hourly_wage_pdf');
+  const old=document.title;
+  document.title='월급계산표_'+($('who').value.trim()||'직원')+'_'+Y+'년'+M+'월';
+  const back=()=>{ document.title=old; window.removeEventListener('afterprint',back); };
+  window.addEventListener('afterprint',back);
+  window.print();
+});
+
+{ const t=new Date(); $('month').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0'); [Y,M]=ym(); drawCal(); }
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:document.getElementById('res-title').textContent, sub:document.getElementById('res-sub').textContent, filename:'한택스_월급계산' })
+);
+</script>
+</body>
+</html>
