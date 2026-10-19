@@ -44,6 +44,13 @@
 .wide{grid-column:1/-1}
 .ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
 .ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.mtabs{display:flex;gap:6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:12px}
+.mtabs button{flex:1;border:0;background:none;border-radius:9px;padding:10px 6px;font-family:inherit;font-size:14px;font-weight:700;color:var(--mute);cursor:pointer;line-height:1.35}
+.mtabs button:hover{color:var(--blue)}
+.mtabs button[aria-selected=true]{background:var(--blue-soft);color:var(--blue)}
+.cal.wk .d{min-height:66px}
+.cal.wk .d .n{font-size:14px;font-weight:800;color:var(--char)}
+.cal.wk .d.sun .n{color:var(--seal)}
 .quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .quick button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;cursor:pointer}
 .quick button:hover{background:var(--blue-soft)}
@@ -245,7 +252,7 @@
   <div class="wrap">
     <span class="eyebrow">급여 계산</span>
     <h1>시급 직원 월급,<br>이번 달 얼마일까요?</h1>
-    <p class="lead">요일이나 날짜를 골라 근무시간을 넣으면 근무 급여에 주휴수당과 연장 가산까지 더해 한 달 월급을 계산합니다. 회사명과 직원 이름을 넣어 이미지나 PDF로 저장할 수 있습니다.</p>
+    <p class="lead">매주 같은 시간을 일하면 월~일 한 주만 넣어 월급으로 환산하고, 날짜마다 다르면 이번 달 달력에 넣어 계산합니다. 주휴수당과 연장 가산까지 더합니다. 회사명과 직원 이름을 넣어 이미지나 PDF로 저장할 수 있습니다.</p>
   </div>
 </section>
 
@@ -262,7 +269,7 @@
           <label for="who">직원 이름</label>
           <input type="text" id="who" placeholder="직원 이름">
         </div>
-        <div>
+        <div id="month-w">
           <label for="month">지급할 달</label>
           <input type="month" id="month">
         </div>
@@ -276,8 +283,12 @@
           </label>
         </div>
 
-        <div class="divider"><b>근무시간</b><span>요일 이름을 누르면 그 요일이 모두 선택됩니다</span></div>
+        <div class="divider"><b>근무시간</b><span id="cal-tip"></span></div>
         <div class="wide">
+          <div class="mtabs" role="tablist" aria-label="입력 방식">
+            <button type="button" role="tab" data-mode="week" aria-selected="true">매주 같은 시간<br><small>월~일 한 주로 월 환산</small></button>
+            <button type="button" role="tab" data-mode="month" aria-selected="false">날짜별<br><small>이번 달 달력</small></button>
+          </div>
           <div class="quick">
             <button type="button" data-q="wk">월~금 선택</button>
             <button type="button" data-q="all">모두 선택</button>
@@ -314,7 +325,7 @@
           </table>
         </div>
         <div class="verdict" id="verdict"></div>
-        <details class="steps">
+        <details class="steps" id="steps">
           <summary>주별 계산 자세히 보기</summary>
           <div class="body">
             <table class="rtable" id="wt">
@@ -362,7 +373,8 @@
 
       <p class="disc">
         · 계산 결과는 참고용이며 4대보험과 세금을 떼기 전 금액입니다. 실수령액은 <a href="take-home-pay.html">급여 실수령액 계산기</a>에서 확인하세요.<br>
-        · 일하기로 한 날을 모두 나왔다고 보고 주휴수당을 넣었습니다. 한 주는 월요일부터 일요일까지이고, 그 주가 끝나는 일요일이 속한 달에 주휴수당을 넣습니다.<br>
+        · 매주 같은 시간 탭은 한 달을 평균 365 ÷ 7 ÷ 12 = 약 4.345주로 보고 환산합니다(주 40시간이면 주휴 포함 월 209시간).<br>
+        · 일하기로 한 날을 모두 나왔다고 보고 주휴수당을 넣었습니다. 날짜별 탭에서 한 주는 월요일부터 일요일까지이고, 그 주가 끝나는 일요일이 속한 달에 주휴수당을 넣습니다.<br>
         · 연장은 하루 8시간이나 한 주 40시간을 넘긴 시간만 봅니다. 밤 10시~새벽 6시 근무, 휴일 근무, 계약한 시간보다 더 일한 단시간 근로자의 가산은 넣지 않았습니다. 이런 수당은 <a href="monthly-wage.html#overtime">직원 월급 계산기</a>에서 계산할 수 있습니다.<br>
         · 넣은 회사명과 이름, 근무시간은 이 화면에서만 쓰고 어디에도 저장하지 않습니다.
       </p>
@@ -428,6 +440,21 @@ function calcMonth(y,m,hrs,wage,small){
   return {weeks,work,ot,rest,days,base,otPay,restPay,total:base+otPay+restPay,low:wage<MIN_WAGE};
 }
 
+// 매주 같은 시간: 한 주(월~일) 근무시간을 한 달 평균(365 ÷ 7 ÷ 12주)으로 환산합니다
+const WEEKS=365/7/12;
+function calcWeek(h,wage,small){
+  let cum=0, ot=0, work=0, days=0;
+  for(let i=0;i<7;i++){
+    const x=h[i]||0, within=Math.min(x,8);
+    ot+=Math.max(0,x-8)+Math.max(0,cum+within-40)-Math.max(0,cum-40);
+    cum+=within; work+=x; if(x) days++;
+  }
+  const R=Math.min(40,cum), rest=R>=15?R/40*8:0;
+  const mh=Math.round((R+rest)*WEEKS), om=ot*WEEKS;   // 월 소정근로시간(주휴 포함, 주 40시간이면 209시간), 월 연장시간
+  const base=mh*wage, otPay=Math.floor(om*wage*(small?1:1.5));
+  return {work,ot,R,rest,days,mh,om,base,otPay,total:base+otPay,low:wage<MIN_WAGE};
+}
+
 /* ── 화면 ─────────────────────────────────── */
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
@@ -436,24 +463,32 @@ const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const hm=h=>{ const t=Math.round(h*60); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); };
 const hw=h=>{ const t=Math.round(h*60), a=Math.floor(t/60), b=t%60; return (a?a+'시간':'')+(a&&b?' ':'')+(b?b+'분':'')||'0시간'; };
 const WD=['월','화','수','목','금','토','일'];
-let Y, M, HRS={}, SEL=new Set();
+let Y, M, HRS={}, WK={}, SEL=new Set(), MODE='week';
+const store=()=>MODE==='week'?WK:HRS;
 
 function ym(){ const v=$('month').value; if(!v) return null; const [y,m]=v.split('-').map(Number); return [y,m]; }
 function drawCal(){
+  $('cal').classList.toggle('wk',MODE==='week');
+  if(MODE==='week'){
+    $('cal').innerHTML=WD.map((w,i)=>'<button type="button" class="d'+(i===6?' sun':'')+(SEL.has(i)?' sel':'')+'" data-d="'+i+'" aria-pressed="'+SEL.has(i)+'"><span class="n">'+w+'</span><span class="h">'+(WK[i]?hm(WK[i]):'')+'</span></button>').join('');
+  }else drawMonth();
+  const c=SEL.size;
+  $('ed-cnt').textContent=c?(MODE==='week'?'고른 요일 '+c+'개':'고른 날 '+c+'일'):(MODE==='week'?'요일을 눌러 고르세요':'요일이나 날짜를 눌러 고르세요');
+  $('edit').classList.toggle('off',!c);
+  ['ed-set','ed-off'].forEach(id=>$(id).disabled=!c);
+  const st=store(), ds=Object.keys(st).length, tot=Object.values(st).reduce((a,b)=>a+b,0);
+  $('calsum').innerHTML=ds?(MODE==='week'?'한 주 근무 ':'이번 달 근무 ')+'<b>'+ds+'일 · '+hw(tot)+'</b>':'아직 넣은 근무시간이 없습니다.';
+}
+function drawMonth(){
   const n=daysIn(Y,M), lead=dow(Y,M,1);
   let h=WD.map((w,i)=>'<button type="button" class="wd'+(i===6?' sun':'')+'" data-w="'+i+'" aria-label="'+w+'요일 모두 선택">'+w+'</button>').join('');
   for(let i=0;i<lead;i++) h+='<span class="blank"></span>';
   for(let d=1;d<=n;d++) h+='<button type="button" class="d'+(SEL.has(d)?' sel':'')+'" data-d="'+d+'" aria-pressed="'+SEL.has(d)+'"><span class="n">'+d+'</span><span class="h">'+(HRS[d]?hm(HRS[d]):'')+'</span></button>';
   $('cal').innerHTML=h;
-  const c=SEL.size;
-  $('ed-cnt').textContent=c?'고른 날 '+c+'일':'요일이나 날짜를 눌러 고르세요';
-  $('edit').classList.toggle('off',!c);
-  ['ed-set','ed-off'].forEach(id=>$(id).disabled=!c);
-  const ds=Object.keys(HRS).length, tot=Object.values(HRS).reduce((a,b)=>a+b,0);
-  $('calsum').innerHTML=ds?'이번 달 근무 <b>'+ds+'일 · '+hw(tot)+'</b>':'아직 넣은 근무시간이 없습니다.';
 }
 function pick(days,on){ days.forEach(d=>on?SEL.add(d):SEL.delete(d)); drawCal(); }
-const allDays=()=>Array.from({length:daysIn(Y,M)},(_,i)=>i+1);
+const allDays=()=>MODE==='week'?[0,1,2,3,4,5,6]:Array.from({length:daysIn(Y,M)},(_,i)=>i+1);
+const wdOf=d=>MODE==='week'?d:dow(Y,M,d);
 $('cal').addEventListener('click',e=>{
   const w=e.target.closest('.wd');
   if(w){ const ds=allDays().filter(d=>dow(Y,M,d)===+w.dataset.w); pick(ds,!ds.every(d=>SEL.has(d))); $('ed-h').focus(); return; }
@@ -463,7 +498,7 @@ $('cal').addEventListener('click',e=>{
 document.querySelector('.quick').addEventListener('click',e=>{
   const q=e.target.dataset.q; if(!q) return;
   if(q==='none'){ SEL.clear(); drawCal(); return; }
-  pick(allDays().filter(d=>q==='all'||dow(Y,M,d)<5),true); $('ed-h').focus();
+  pick(allDays().filter(d=>q==='all'||wdOf(d)<5),true); $('ed-h').focus();
 });
 $('ed-set').addEventListener('click',()=>{
   const a=$('ed-h').value.trim(), b=$('ed-m').value.trim(), ok=x=>/^\d*$/.test(x);
@@ -471,24 +506,34 @@ $('ed-set').addEventListener('click',()=>{
   const h=(+a||0)+(+b||0)/60;
   if(!h){ alert('근무시간을 넣어 주세요. 쉬는 날이면 쉬는 날로를 누르세요.'); $('ed-h').focus(); return; }
   if(h>24){ alert('하루 근무시간은 24시간을 넘을 수 없습니다.'); $('ed-h').focus(); return; }
-  SEL.forEach(d=>{ HRS[d]=h; }); SEL.clear(); drawCal(); update();
+  const st=store(); SEL.forEach(d=>{ st[d]=h; }); SEL.clear(); drawCal(); update();
 });
-$('ed-off').addEventListener('click',()=>{ SEL.forEach(d=>{ delete HRS[d]; }); SEL.clear(); drawCal(); update(); });
+$('ed-off').addEventListener('click',()=>{ const st=store(); SEL.forEach(d=>{ delete st[d]; }); SEL.clear(); drawCal(); update(); });
 $('month').addEventListener('change',()=>{
   const v=ym(); if(!v) return; [Y,M]=v; HRS={}; SEL.clear(); drawCal(); $('res').style.display='none';
 });
 $('wage').addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; update(); });
 ['co','who','small'].forEach(id=>$(id).addEventListener(id==='small'?'change':'input',update));
 
+const TIPS={week:'요일을 눌러 고르고 근무시간을 넣으세요',month:'요일 이름을 누르면 그 요일이 모두 선택됩니다'};
+function setMode(m,init){
+  MODE=m; SEL.clear();
+  document.querySelectorAll('.mtabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));
+  $('month-w').hidden=m==='week'; $('steps').hidden=m==='week'; $('cal-tip').textContent=TIPS[m];
+  if(!init){ try{ history.replaceState(null,'','#'+m); }catch(e){} }
+  drawCal(); if(shown()) check()?($('res').style.display='none'):render();
+}
+document.querySelector('.mtabs').addEventListener('click',e=>{ const b=e.target.closest('button[data-mode]'); if(b) setMode(b.dataset.mode); });
 const fdate=d=>{ const t=new Date(Date.UTC(Y,M-1,d)); return (t.getUTCMonth()+1)+'.'+t.getUTCDate(); };
 function check(){
   if(!num($('wage').value)) return ['시급을 넣어 주세요.',$('wage')];
-  if(!Object.keys(HRS).length) return ['달력에서 근무한 날을 고르고 근무시간을 넣어 주세요.',$('ed-h')];
+  if(!Object.keys(store()).length) return [MODE==='week'?'근무하는 요일을 고르고 근무시간을 넣어 주세요.':'달력에서 근무한 날을 고르고 근무시간을 넣어 주세요.',$('ed-h')];
   return null;
 }
 const shown=()=>$('res').style.display==='block';
 function update(){ if(shown()&&!check()) render(); }
 function render(){
+  if(MODE==='week') return renderWeek();
   const wage=num($('wage').value), small=$('small').checked, r=calcMonth(Y,M,HRS,wage,small);
   const co=$('co').value.trim(), who=$('who').value.trim();
   const title=(who?who+' 님 ':'')+M+'월 월급';
@@ -515,6 +560,28 @@ function render(){
   $('res').style.display='block';
   return r;
 }
+function renderWeek(){
+  const wage=num($('wage').value), small=$('small').checked, r=calcWeek(WK,wage,small);
+  const co=$('co').value.trim(), who=$('who').value.trim(), F='365 ÷ 7 ÷ 12';
+  const title=(who?who+' 님 ':'')+'월급 (월 환산)';
+  $('res-title').textContent=title;
+  $('res-sub').textContent=[co,'주 '+hw(r.work)+' 근무','시급 '+won(wage)+'원'].filter(Boolean).join(' · ');
+  $('call').innerHTML='<div class="lbl">'+esc(title)+', 세전</div><div class="val">'+won(r.total)+'<small>원</small></div>'
+    +'<div class="sub">주 '+r.days+'일 · '+hw(r.work)+' 근무를 한 달 평균으로 환산했습니다'+(r.rest?' (주휴수당 포함)':'')+'.</div>';
+  $('rt-body').innerHTML=
+    '<tr><td>기본 월급<small>'+(r.rest?'주휴수당 포함':'주 15시간 미만, 주휴 없음')+'</small></td><td>(주 '+hw(r.R)+(r.rest?' + 주휴 '+hw(r.rest):'')+') × '+F+' = 월 '+r.mh+'시간 × '+won(wage)+'원</td><td>'+won(r.base)+'</td></tr>'
+   +(r.ot?'<tr><td>연장수당<small>하루 8시간·주 40시간 초과</small></td><td>주 '+hw(r.ot)+' × '+F+' = 월 '+hw(r.om)+' × '+won(wage)+'원 × '+(small?'1 (5인 미만)':'1.5')+'</td><td>'+won(r.otPay)+'</td></tr>':'')
+   +'<tr class="tot"><td>합계 (세전)</td><td></td><td>'+won(r.total)+'</td></tr>';
+  const notes=[];
+  if(r.low) notes.push({warn:1,t:'시급 '+won(wage)+'원이 2026년 최저시급 '+won(MIN_WAGE)+'원보다 낮습니다. 시급을 확인해 주세요.'});
+  notes.push({t:'한 달을 평균 '+F+' = 약 4.345주로 보고 환산한 월급입니다. 주 40시간이면 주휴 8시간을 더해 월 209시간입니다. 달마다 날짜 수가 달라 실제 그 달 금액은 조금씩 다르니, 특정 달은 날짜별 탭에서 계산해 보세요.'});
+  notes.push({t:r.rest?'주 근무시간이 15시간 이상이라 주휴 '+hw(r.rest)+'(주 근무시간 ÷ 40 × 8)을 더했습니다. 일하기로 한 날을 모두 나왔다고 본 금액입니다.':'주 근무시간이 15시간 미만이라 주휴수당이 없습니다.'});
+  if(r.ot) notes.push({t:'하루 8시간이나 한 주 40시간을 넘긴 주 '+hw(r.ot)+'은 연장근로입니다. '+(small?'5인 미만 사업장이라 가산 없이 일한 시간만큼만 계산했습니다.':'시급의 1.5배로 계산했습니다.')});
+  notes.push({t:'4대보험과 세금을 떼기 전 금액입니다. 실수령액은 <a href="take-home-pay.html">급여 실수령액 계산기</a>에서 확인하세요.'});
+  $('verdict').innerHTML='월 환산 월급은 <b>'+won(r.total)+'원</b>입니다.'+notes.map(x=>'<span class="note'+(x.warn?' warn':'')+'">'+x.t+'</span>').join('');
+  $('res').style.display='block';
+  return r;
+}
 $('calc').addEventListener('click',()=>{
   const bad=check();
   if(bad){ alert(bad[0]); bad[1].focus(); return; }
@@ -523,7 +590,23 @@ $('calc').addEventListener('click',()=>{
 });
 
 // PDF: 회사명·이름·달력·계산을 A4 한 장으로
+function sheetWeek(r){
+  const wage=num($('wage').value), co=$('co').value.trim(), who=$('who').value.trim(), F='365 ÷ 7 ÷ 12';
+  const rows=[['기본 월급'+(r.rest?' (주휴 포함)':''),'(주 '+hw(r.R)+(r.rest?' + 주휴 '+hw(r.rest):'')+') × '+F+' = 월 '+r.mh+'시간 × '+won(wage)+'원',r.base]]
+    .concat(r.ot?[['연장수당','주 '+hw(r.ot)+' × '+F+' = 월 '+hw(r.om)+' × '+won(wage)+'원 × '+($('small').checked?'1 (5인 미만)':'1.5'),r.otPay]]:[]);
+  return '<section class="pst">'
+    +'<div class="qt-head"><h1>월급 계산표</h1><div class="co">'+esc(co)+'</div></div>'
+    +'<table class="qt-meta"><tr><th>직원</th><td>'+esc(who||'-')+'</td></tr><tr><th>시급</th><td>'+won(wage)+'원</td></tr><tr><th>근무</th><td>주 '+r.days+'일 · '+hw(r.work)+'</td></tr></table>'
+    +'<h2>1. 한 주 근무시간 (시간:분)</h2><table class="pst-cal"><tr>'+WD.map(w=>'<th>'+w+'</th>').join('')+'</tr><tr>'+WD.map((w,i)=>'<td>'+(WK[i]?'<b>'+hm(WK[i])+'</b>':'<b style="color:#aaaaaa">쉼</b>')+'</td>').join('')+'</tr></table>'
+    +'<h2>2. 월급 계산 (월 환산)</h2><table class="pst-tbl"><tr><th>항목</th><th>계산</th><th style="text-align:right">금액</th></tr>'
+    +rows.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td class="n">'+won(x[2])+'원</td></tr>').join('')
+    +'<tr class="tot"><th colspan="2">합계 (세전)</th><td class="n">'+won(r.total)+'원</td></tr></table>'
+    +'<p class="pst-note">한 달을 평균 '+F+' = 약 4.345주로 보고 환산한 월급입니다. 주 근무시간이 15시간 이상이면 주휴시간(주 근무시간 ÷ 40 × 8)을 더하며, 일하기로 한 날을 모두 나왔다고 본 금액입니다. 연장은 하루 8시간·주 40시간을 넘긴 시간이며, 4대보험과 세금을 떼기 전 금액입니다.</p>'
+    +'<p class="pst-foot">한택스 · hantax47.com 월급 계산기로 계산한 참고 자료입니다</p>'
+    +'</section>';
+}
 function sheetHtml(r){
+  if(MODE==='week') return sheetWeek(r);
   const wage=num($('wage').value), co=$('co').value.trim(), who=$('who').value.trim(), n=daysIn(Y,M), lead=dow(Y,M,1);
   let cal='<tr>'+WD.map(w=>'<th>'+w+'</th>').join('')+'</tr><tr>';
   for(let i=0;i<lead;i++) cal+='<td class="x"></td>';
@@ -551,13 +634,13 @@ $('save-pdf').addEventListener('click',()=>{
   $('print-area').innerHTML=sheetHtml(render());
   if(window.gtag) gtag('event','hourly_wage_pdf');
   const old=document.title;
-  document.title='월급계산표_'+($('who').value.trim()||'직원')+'_'+Y+'년'+M+'월';
+  document.title='월급계산표_'+($('who').value.trim()||'직원')+(MODE==='week'?'_월환산':'_'+Y+'년'+M+'월');
   const back=()=>{ document.title=old; window.removeEventListener('afterprint',back); };
   window.addEventListener('afterprint',back);
   window.print();
 });
 
-{ const t=new Date(); $('month').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0'); [Y,M]=ym(); drawCal(); }
+{ const t=new Date(); $('month').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0'); [Y,M]=ym(); setMode(location.hash==='#month'?'month':'week',true); }
 </script>
 <script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
