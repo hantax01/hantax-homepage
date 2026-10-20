@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>실업급여 계산기 2026, 하루 얼마·며칠 받을까 | 한택스</title>
+<meta name="description" content="퇴사 전 월급과 입사일·퇴사일을 넣으면 실업급여(구직급여) 하루 금액과 받는 기간, 총액을 계산합니다. 2026년 하루 상한 68,100원·하한 66,048원, 가입기간과 나이에 따른 120~270일 기준이며 퇴사 사유로 받을 수 있는지도 함께 봅니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/unemployment-benefit.html">
+<meta property="og:title" content="실업급여, 얼마나 받을 수 있을까요?">
+<meta property="og:description" content="퇴사 전 월급과 가입기간으로 실업급여 하루 금액·받는 기간·총액을 계산합니다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/unemployment-benefit.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-unemployment-benefit.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=33">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call.no{background:var(--seal)}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td+td{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict .note.warn b{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "실업급여는 하루에 얼마를 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "퇴사 전 3개월 평균임금의 60%를 받습니다. 2026년에는 하루 최대 68,100원, 최소 66,048원(하루 8시간 근무 기준)이라 대부분 이 사이에서 정해집니다. 4주마다 28일분씩 받으므로 한 번에 약 185만~191만 원입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "실업급여는 며칠 동안 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "고용보험 가입기간과 퇴사일 당시 나이로 정해집니다. 50세 미만은 1년 미만 120일, 1~3년 150일, 3~5년 180일, 5~10년 210일, 10년 이상 240일이고, 50세 이상이거나 장애인은 1년 미만 120일, 1~3년 180일, 3~5년 210일, 5~10년 240일, 10년 이상 270일입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "자진퇴사해도 실업급여를 받을 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "개인 사정으로 그만두면 받을 수 없습니다. 다만 임금을 2개월 이상 받지 못했거나, 최저임금보다 적게 받았거나, 회사가 이사해 출퇴근에 왕복 3시간 이상 걸리게 됐거나, 질병·직장 내 괴롭힘처럼 정당한 사유가 있으면 자진퇴사여도 받을 수 있습니다. 이때는 그 사유를 증명할 자료가 필요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "실업급여를 받으려면 얼마나 일해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "퇴사 전 18개월 동안 고용보험에 가입해 임금을 받은 날(피보험단위기간)이 180일 이상이어야 합니다. 주 5일 근무하고 토요일이 무급이면 대략 7개월 이상 일해야 180일이 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "실업급여는 언제까지 신청해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "퇴사 다음 날부터 12개월 안에 받을 날수를 모두 받아야 합니다. 늦게 신청하면 12개월이 지난 뒤의 남은 날수는 사라지므로, 퇴사하면 바로 고용24에서 구직 등록을 하고 고용센터에 신청하는 것이 좋습니다. 처음 7일은 대기기간이라 지급하지 않습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "권고사직으로 처리하면 회사에 불이익이 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "권고사직 같은 감원 이력이 있으면 일부 고용 지원금이 일정 기간 제한될 수 있으니 지원금을 받고 있다면 미리 확인해야 합니다. 실제로는 자진퇴사인데 권고사직으로 꾸미면 직원은 부정수급이 되고, 회사도 함께 처벌받을 수 있습니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"실업급여, 얼마나 받을 수 있을까요?","url":"https://www.hantax47.com/tools/unemployment-benefit.html","description":"퇴사 전 월급과 입사일·퇴사일을 넣으면 실업급여(구직급여) 하루 금액과 받는 기간, 총액을 계산합니다. 2026년 하루 상한 68,100원·하한 66,048원, 가입기간과 나이에 따른 120~270일 기준이며 퇴사 사유로 받을 수 있는지도 함께 봅니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">실업급여 계산</span>
+    <h1>실업급여,<br>얼마나 받을 수 있을까요?</h1>
+    <p class="lead">퇴사 전 월급과 입사일·퇴사일을 넣으면 실업급여(구직급여) 하루 금액과 받는 기간, 총액을 계산합니다. 퇴사 사유로 받을 수 있는지도 함께 확인해 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>근무 기간</b><span>고용보험에 가입한 기간입니다</span></div>
+        <div>
+          <label for="join">입사일 <small>고용보험 가입일</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="이 회사에서 고용보험에 가입한 날입니다. 전 직장에서 실업급여를 받지 않았고 그만둔 뒤 3년 안에 다시 가입했다면 전 직장 가입기간을 합칠 수 있으니, 그만큼 입사일을 앞당겨 넣으세요.">?</button></label>
+          <input type="date" id="join">
+        </div>
+        <div>
+          <label for="leave">퇴사일 <small>마지막 근무일</small></label>
+          <input type="date" id="leave">
+        </div>
+        <div class="wide">
+          <label class="ichk"><input type="checkbox" id="senior"><span>퇴사일에 만 50세 이상이거나 장애인입니다</span>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴사일 당시 나이로 봅니다. 만 50세 이상이거나 장애인이면 가입기간 1년부터 받는 기간이 30일씩 깁니다.">?</button>
+          </label>
+        </div>
+
+        <div class="divider"><b>퇴사 전 임금</b><span>세전 금액으로 넣으세요</span></div>
+        <div>
+          <label for="pay">퇴사 전 3개월 월평균 임금 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴사 전 3개월 동안 받은 기본급, 수당, 식대, 연장수당 등을 모두 더한 세전 금액의 한 달 평균입니다. 4대보험과 세금을 떼기 전 금액입니다.">?</button></label>
+          <div class="unit"><input type="text" id="pay" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="bonus">1년 동안 받은 상여금·연차수당 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴사 전 1년 동안 받은 상여금과 연차수당이 있으면 넣으세요. 그중 3개월분(12분의 3)을 평균임금에 더합니다. 퇴사하면서 받는 남은 연차수당은 넣지 않습니다.">?</button></label>
+          <div class="unit"><input type="text" id="bonus" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="hours">하루 근무시간 <small>근로계약서</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="실업급여 하루 최저 금액은 최저임금 × 하루 근무시간(8시간까지) × 80%입니다. 하루 4시간 일하는 단시간 근로자는 최저 금액도 절반이 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="hours" inputmode="decimal" value="8"><span>시간</span></div>
+        </div>
+        <div>
+          <label for="reason">퇴사 사유</label>
+          <select id="reason">
+            <option value="fired">권고사직·해고·계약만료·폐업</option>
+            <option value="just">정당한 사유가 있는 자진퇴사</option>
+            <option value="self">개인 사정으로 자진퇴사</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">실업급여 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2 id="res-title">실업급여 예상액</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="docinfo" data-co="doc-co" data-who="doc-who"></div>
+        <div class="call" id="call"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>항목</th><th>계산</th><th>금액</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <div class="ask">
+          <p><b>퇴사 처리 방식에 따라 직원의 실업급여와 회사의 지원금이 달라집니다.</b><br>권고사직·계약만료 처리와 상실 신고, 퇴직금 정산까지 함께 확인해 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>실업급여는 하루에 얼마를 받나요?</summary>
+          <div class="a">퇴사 전 3개월 평균임금의 60%를 받습니다. 2026년에는 하루 최대 68,100원, 최소 66,048원(하루 8시간 근무 기준)이라 대부분 이 사이에서 정해집니다. 4주마다 28일분씩 받으므로 한 번에 약 185만~191만 원입니다.</div>
+        </details>
+        <details>
+          <summary>실업급여는 며칠 동안 받나요?</summary>
+          <div class="a">고용보험 가입기간과 퇴사일 당시 나이로 정해집니다. 50세 미만은 1년 미만 120일, 1~3년 150일, 3~5년 180일, 5~10년 210일, 10년 이상 240일이고, 50세 이상이거나 장애인은 1년 미만 120일, 1~3년 180일, 3~5년 210일, 5~10년 240일, 10년 이상 270일입니다.</div>
+        </details>
+        <details>
+          <summary>자진퇴사해도 실업급여를 받을 수 있나요?</summary>
+          <div class="a">개인 사정으로 그만두면 받을 수 없습니다. 다만 임금을 2개월 이상 받지 못했거나, 최저임금보다 적게 받았거나, 회사가 이사해 출퇴근에 왕복 3시간 이상 걸리게 됐거나, 질병·직장 내 괴롭힘처럼 정당한 사유가 있으면 자진퇴사여도 받을 수 있습니다. 이때는 그 사유를 증명할 자료가 필요합니다.</div>
+        </details>
+        <details>
+          <summary>실업급여를 받으려면 얼마나 일해야 하나요?</summary>
+          <div class="a">퇴사 전 18개월 동안 고용보험에 가입해 임금을 받은 날(피보험단위기간)이 180일 이상이어야 합니다. 주 5일 근무하고 토요일이 무급이면 대략 7개월 이상 일해야 180일이 됩니다.</div>
+        </details>
+        <details>
+          <summary>실업급여는 언제까지 신청해야 하나요?</summary>
+          <div class="a">퇴사 다음 날부터 12개월 안에 받을 날수를 모두 받아야 합니다. 늦게 신청하면 12개월이 지난 뒤의 남은 날수는 사라지므로, 퇴사하면 바로 고용24에서 구직 등록을 하고 고용센터에 신청하는 것이 좋습니다. 처음 7일은 대기기간이라 지급하지 않습니다.</div>
+        </details>
+        <details>
+          <summary>권고사직으로 처리하면 회사에 불이익이 있나요?</summary>
+          <div class="a">권고사직 같은 감원 이력이 있으면 일부 고용 지원금이 일정 기간 제한될 수 있으니 지원금을 받고 있다면 미리 확인해야 합니다. 실제로는 자진퇴사인데 권고사직으로 꾸미면 직원은 부정수급이 되고, 회사도 함께 처벌받을 수 있습니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용이며 실제 금액은 고용센터에서 정합니다. 고용24의 모의계산으로도 확인할 수 있습니다.<br>
+        · 2026년 1월 1일 이후 퇴사한 분 기준입니다. 하루 상한 68,100원, 하한은 최저임금 10,320원 × 하루 근무시간(8시간까지) × 80%입니다.<br>
+        · 평균임금은 퇴사일 다음 날 전 3개월 동안의 임금(1년치 상여금·연차수당의 12분의 3 포함)을 그 기간 날수로 나눠 구했습니다.<br>
+        · 가입기간은 입사일부터 퇴사일까지로 셌습니다. 받을 수 있는지(피보험단위기간 180일, 퇴사 사유)는 고용센터가 최종 판단합니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="severance-pay.html">퇴직금 계산기</a>
+        <a href="annual-leave.html">연차 계산기</a>
+        <a href="take-home-pay.html">급여 실수령액 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script src="../assets/doc-info.js?v=1"></script>
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 실업급여(구직급여) 계산 ───────────────── */
+const MAX_DAY=68100;   // 2026년 하루 상한
+const MIN_WAGE=10320;  // 2026년 최저시급 (하한 = 최저시급 × 하루 근무시간(8시간까지) × 80%)
+const dnum=([y,m,d])=>Date.UTC(y,m-1,d)/864e5;
+const fromNum=n=>{ const t=new Date(n*864e5); return [t.getUTCFullYear(),t.getUTCMonth()+1,t.getUTCDate()]; };
+const daysIn=(y,m)=>new Date(Date.UTC(y,m,0)).getUTCDate();
+// n개월 전 같은 날 (없는 날짜면 그 달 말일 다음 날)
+function monthsBefore([y,m,d],n){ const t=m-1-n, ty=y+Math.floor(t/12), tm=((t%12)+12)%12+1; return d<=daysIn(ty,tm)?[ty,tm,d]:tm===12?[ty+1,1,1]:[ty,tm+1,1]; }
+// 받는 날수: 고용보험 가입기간(개월)과 50세 이상·장애인 여부 (고용보험법 별표 1)
+function benefitDays(months,senior){
+  const t=senior?[120,180,210,240,270]:[120,150,180,210,240];
+  return months<12?t[0]:months<36?t[1]:months<60?t[2]:months<120?t[3]:t[4];
+}
+// 입사일~퇴사일 꽉 채운 개월 수
+function fullMonths(J,L){
+  const E=fromNum(dnum(L)+1);   // 퇴사일 다음 날
+  let n=(E[0]-J[0])*12+(E[1]-J[1]); if(E[2]<J[2]) n--;
+  return Math.max(0,n);
+}
+function calcBenefit(o){
+  const E=fromNum(dnum(o.leave)+1), S=monthsBefore(E,3);
+  const span=dnum(E)-dnum(S);                                  // 퇴사일 다음 날 전 3개월 날수 (89~92일)
+  const wage3=o.pay*3+Math.floor(o.bonus*3/12);
+  const avg=wage3/span;                                        // 평균임금(하루)
+  const raw=Math.floor(avg*0.6);
+  const minDay=Math.floor(MIN_WAGE*Math.min(8,o.hours||8)*0.8);
+  const day=Math.min(MAX_DAY,Math.max(minDay,raw));
+  const months=fullMonths(o.join,o.leave), days=benefitDays(months,o.senior);
+  const worked=dnum(o.leave)-dnum(o.join)+1;
+  return {span,wage3,avg,raw,minDay,day,capped:raw>MAX_DAY,floored:raw<minDay,months,days,total:day*days,per28:day*28,worked};
+}
+
+/* ── 화면 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const ymd=s=>s.split('-').map(Number);
+const fd=([y,m,d])=>y+'.'+m+'.'+d;
+const ym=m=>(m>=12?Math.floor(m/12)+'년':'')+(m>=12&&m%12?' ':'')+(m%12?m%12+'개월':'')||'1개월 미만';
+const REASON={fired:'권고사직·해고·계약만료·폐업',just:'정당한 사유가 있는 자진퇴사',self:'개인 사정으로 자진퇴사'};
+['pay','bonus'].forEach(id=>$(id).addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }));
+
+function read(){
+  const j=$('join').value, l=$('leave').value, pay=num($('pay').value);
+  if(!j) return ['입사일을 골라 주세요.',$('join')];
+  if(!l) return ['퇴사일을 골라 주세요.',$('leave')];
+  if(l<j) return ['퇴사일이 입사일보다 빠릅니다. 날짜를 확인해 주세요.',$('leave')];
+  if(!pay) return ['퇴사 전 3개월 월평균 임금을 넣어 주세요.',$('pay')];
+  const h=parseFloat($('hours').value);
+  if(!(h>0)) return ['하루 근무시간을 숫자로 넣어 주세요.',$('hours')];
+  return {join:ymd(j),leave:ymd(l),pay,bonus:num($('bonus').value),hours:h,senior:$('senior').checked,reason:$('reason').value};
+}
+const shown=()=>$('res').style.display==='block';
+function render(){
+  const o=read(), r=calcBenefit(o), co=$('doc-co').value.trim(), who=$('doc-who').value.trim();
+  const no=o.reason==='self', short=r.worked<180;
+  $('res-title').textContent=(who?who+' 님 ':'')+'실업급여 예상액';
+  $('res-sub').textContent=[co,'근무 '+fd(o.join)+' ~ '+fd(o.leave),REASON[o.reason]].filter(Boolean).join(' · ');
+  $('call').className='call'+(no?' no':'');
+  $('call').innerHTML=no
+    ?'<div class="lbl">개인 사정으로 자진퇴사하면</div><div class="val">받기 어렵습니다</div><div class="sub">정당한 사유가 있다면 하루 '+won(r.day)+'원 × '+r.days+'일 = '+won(r.total)+'원을 받을 수 있습니다.</div>'
+    :'<div class="lbl">하루 '+won(r.day)+'원 × '+r.days+'일</div><div class="val">'+won(r.total)+'<small>원</small></div>'
+      +'<div class="sub">4주마다 28일분 '+won(r.per28)+'원씩 받습니다. 처음 7일은 대기기간이라 지급하지 않습니다.</div>';
+  $('rt-body').innerHTML=
+    '<tr><td>평균임금 (하루)<small>퇴사 전 3개월 '+r.span+'일</small></td><td>'+won(r.wage3)+'원 ÷ '+r.span+'일</td><td>'+won(Math.floor(r.avg))+'</td></tr>'
+   +'<tr><td>평균임금의 60%</td><td>'+won(Math.floor(r.avg))+'원 × 60%</td><td>'+won(r.raw)+'</td></tr>'
+   +'<tr><td>하루 받는 금액<small>'+(r.capped?'상한 적용':r.floored?'하한 적용':'상한·하한 안')+'</small></td><td>하한 '+won(r.minDay)+' ~ 상한 '+won(MAX_DAY)+'</td><td>'+won(r.day)+'</td></tr>'
+   +'<tr><td>받는 날수<small>가입기간 '+ym(r.months)+(o.senior?' · 50세 이상·장애인':'')+'</small></td><td>고용보험법 별표 1</td><td>'+r.days+'일</td></tr>'
+   +'<tr class="tot"><td>실업급여 총액</td><td>'+won(r.day)+'원 × '+r.days+'일</td><td>'+won(r.total)+'</td></tr>';
+  const notes=[];
+  if(no) notes.push({warn:1,t:'<b>개인 사정으로 자진퇴사하면 실업급여를 받을 수 없습니다.</b> 임금 체불, 최저임금 미달, 회사 이사로 출퇴근 왕복 3시간 이상, 질병, 직장 내 괴롭힘처럼 정당한 사유가 있으면 증빙을 갖춰 신청할 수 있습니다.'});
+  if(o.reason==='just') notes.push({t:'정당한 사유가 있는 자진퇴사는 그 사유를 증명할 자료(임금 체불 확인서, 진단서 등)가 있어야 받을 수 있습니다.'});
+  if(short) notes.push({warn:1,t:'근무 기간이 '+r.worked+'일로 180일보다 짧습니다. 퇴사 전 18개월 동안 임금을 받은 날(피보험단위기간)이 180일 이상이어야 받을 수 있어, 전 직장 기간을 합치지 않으면 받기 어렵습니다.'});
+  else if(r.worked<220) notes.push({t:'피보험단위기간은 임금을 받은 날만 세므로, 주 5일 근무하고 토요일이 무급이면 대략 7개월 이상 일해야 180일이 됩니다. 근무 기간이 짧으면 고용센터에서 확인해 보세요.'});
+  if(r.floored) notes.push({t:'평균임금의 60%가 하한보다 적어 하한 '+won(r.minDay)+'원(최저시급 × '+Math.min(8,o.hours)+'시간 × 80%)을 적용했습니다.'});
+  if(r.capped) notes.push({t:'평균임금의 60%가 상한보다 많아 2026년 하루 상한 '+won(MAX_DAY)+'원을 적용했습니다.'});
+  notes.push({t:'퇴사 다음 날부터 12개월 안에 다 받아야 하므로, 퇴사하면 바로 고용24에서 구직 등록을 하고 신청하세요. 실업급여를 받는 동안 일하거나 소득이 생기면 반드시 신고해야 합니다.'});
+  $('verdict').innerHTML=(no?'개인 사정 자진퇴사는 <b>받기 어렵습니다.</b>':'실업급여는 하루 <b>'+won(r.day)+'원</b>씩 <b>'+r.days+'일</b>, 모두 <b>'+won(r.total)+'원</b>입니다.')
+    +notes.map(x=>'<span class="note'+(x.warn?' warn':'')+'">'+x.t+'</span>').join('');
+  $('res').style.display='block';
+}
+$('calc').addEventListener('click',()=>{
+  const bad=read();
+  if(Array.isArray(bad)){ alert(bad[0]); bad[1].focus(); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+const upd=()=>{ if(shown()&&!Array.isArray(read())) render(); };
+document.querySelector('.sim-in').addEventListener('input',upd);
+document.querySelector('.sim-in').addEventListener('change',upd);
+['doc-co','doc-who'].forEach(id=>$(id).addEventListener('input',upd));
+{ const t=new Date(); $('leave').value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:document.getElementById('res-title').textContent, sub:document.getElementById('res-sub').textContent, filename:'한택스_실업급여' })
+);
+</script>
+</body>
+</html>

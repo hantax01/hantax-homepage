@@ -44,6 +44,7 @@
 - [월급, 세금 떼고 얼마 받을까요?](https://www.hantax47.com/tools/take-home-pay.html)
 - [직원 월급, 이번 달 얼마를 줘야 할까요?](https://www.hantax47.com/tools/monthly-wage.html)
 - [시급 직원 월급, 이번 달 얼마일까요?](https://www.hantax47.com/tools/hourly-wage.html)
+- [실업급여, 얼마나 받을 수 있을까요?](https://www.hantax47.com/tools/unemployment-benefit.html)
 - [직원 연차, 며칠을 줘야 할까요?](https://www.hantax47.com/tools/annual-leave.html)
 - [연말정산, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/year-end-tax.html)
 - [퇴직금과 퇴직소득세, 얼마일까요?](https://www.hantax47.com/tools/severance-pay.html)
