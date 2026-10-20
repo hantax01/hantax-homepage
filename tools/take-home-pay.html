@@ -58,6 +58,20 @@
 .savebtn:hover{background:var(--blue-soft)}
 .savebtn:disabled{opacity:.55;cursor:default}
 .slip{border:1px solid var(--line);border-radius:12px;padding:24px 24px 20px;background:#fff}
+/* 회사 부담: 명세서 밖이라 직원에게 보내는 이미지·PDF에는 들어가지 않습니다 */
+.corp{margin-top:18px;border:1px dashed var(--blue-line);border-radius:12px;padding:16px 20px 14px;background:var(--soft)}
+.corp .ch{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 10px;margin-bottom:6px}
+.corp .ch b{font-size:15.5px;color:var(--ink)}
+.corp .ch span{font-size:12px;color:var(--mute)}
+.corp table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.corp td{padding:8px 0;border-bottom:1px solid var(--line);color:var(--char)}
+.corp td small{font-size:12px;color:var(--mute);margin-left:6px}
+.corp td:last-child{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+.corp tr.sum td{font-weight:800;color:var(--ink)}
+.corp tr.big td{font-weight:800;color:var(--blue);border-bottom:0}
+.corp tr.big td:last-child{color:var(--blue);font-size:15.5px}
+.corp p{font-size:12.5px;color:var(--mute);margin:8px 0 0;line-height:1.7}
+.corp p a{color:var(--blue);font-weight:700}
 .steps{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .steps summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);list-style:none}
 .steps summary::-webkit-details-marker{display:none}
@@ -107,6 +121,7 @@
   #print-area .pst{padding:13mm 14mm}
 }
 @media(max-width:660px){
+.corp{padding:14px 14px 12px}.corp td small{display:block;margin:2px 0 0}
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .pay{grid-template-columns:1fr}
 .pay .arrow{display:none}
@@ -281,6 +296,7 @@
         </div>
         <div class="docinfo" data-co="i-co" data-who="i-name" data-who-label="이름" data-month="i-month"></div>
         <div class="slip" id="slip"></div>
+        <div class="corp" id="corp"></div>
         <details class="steps">
           <summary>계산 근거 자세히 보기</summary>
           <div class="body" id="basis"></div>
@@ -372,6 +388,8 @@ const NP_RATE=0.0475, NP_MIN=410000, NP_MAX=6590000;   // 국민연금 기준소
 const HI_RATE=0.03595, HI_MIN=10080, HI_MAX=4591740;   // 건강보험 근로자 몫과 월 보험료 하한·상한
 const LTC_OF_HI=0.9448/7.19;                            // 장기요양보험료 = 건강보험료 × 0.9448% ÷ 7.19%
 const EI_RATE=0.009;                                    // 고용보험
+// 회사 부담: 국민연금·건강·장기요양은 직원과 같은 금액, 고용보험은 0.9% + 고용안정·직업능력개발 0.25%(150인 미만), 산재는 업종 평균 1.5% (채용 비용 계산기와 같은 요율)
+const EI_CO_RATE=0.0115, INJ_RATE=0.015;
 const f10=x=>Math.floor(x/10+1e-9)*10;                  // 10원 미만 버림 (3,000,000×0.009가 26,999.999…로 계산되는 소수 오차를 막습니다)
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
@@ -515,6 +533,28 @@ function slipHtml(r,forPrint){
     +'</div>';
 }
 
+// 회사가 함께 내는 4대보험과 한 달 인건비 (사장님 확인용, 명세서에는 넣지 않습니다)
+function corpCost(r){
+  const ei=f10(r.taxable*EI_CO_RATE), inj=f10(r.taxable*INJ_RATE);
+  const ins=r.np+r.hi+r.ltc+ei+inj, retire=f10(r.gross/12);
+  return {ei,inj,ins,retire,month:r.gross+ins,withRetire:r.gross+ins+retire};
+}
+function corpHtml(r){
+  const c=corpCost(r), row=(l,s,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(s?'<small>'+s+'</small>':'')+'</td><td>'+won(v)+'</td></tr>';
+  return '<div class="ch"><b>회사가 함께 내는 돈</b><span>직원 명세서·이미지·PDF에는 들어가지 않습니다</span></div>'
+    +'<table>'
+    +row('국민연금','4.75%',r.np)
+    +row('건강보험','3.595%',r.hi)
+    +row('장기요양보험','건강보험료의 13.14%',r.ltc)
+    +row('고용보험','실업급여 0.9% + 고용안정 0.25%',c.ei)
+    +row('산재보험','업종 평균 1.5%',c.inj)
+    +row('4대보험 회사 부담 합계','',c.ins,'sum')
+    +row('이 직원 한 달 인건비','지급 합계 '+won(r.gross)+' + 회사 부담',c.month,'big')
+    +row('퇴직금 적립까지 더하면','지급 합계 ÷ 12 = '+won(c.retire),c.withRetire,'big')
+    +'</table>'
+    +'<p>산재보험 요율은 업종에 따라 0.6%~18%로 다르고, 고용안정 요율은 150인 이상 사업장이면 높아집니다. 두루누리 지원과 세액공제까지 보려면 <a href="hiring-cost.html">채용 비용 계산기</a>에서 확인하세요.</p>';
+}
+
 function basisTable(r){
   const row=(label,mid,val)=>'<tr><td>'+label+'</td><td class="mid">'+mid+'</td><td>'+val+'</td></tr>';
   const it=r.it;
@@ -545,6 +585,7 @@ function render(r){
   const sub=subText();
   $('res-sub').textContent=(sub?sub+' · ':'')+'실수령액 '+won(r.net)+'원 · 공제 '+won(r.ded)+'원';
   $('slip').innerHTML=slipHtml(r,false);
+  $('corp').innerHTML=corpHtml(r);
   $('basis').innerHTML=basisTable(r);
   $('res').style.display='block';
   countRun(r.net+'|'+r.ded);
