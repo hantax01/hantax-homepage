@@ -496,6 +496,9 @@ $('calc').addEventListener('click',()=>{
   render();
   $('res').scrollIntoView({behavior:'smooth',block:'start'});
 });
+// 재산 금액이나 가족이 바뀌면 배우자 몫을 비워 법정상속분으로 다시 계산합니다 (게이지로 정한 옛 금액이 남지 않게)
+['estate','fin','debt','funeral','pre','pretax'].forEach(id=>$(id).addEventListener('input',()=>{ $('sget').value=''; }));
+['kids','spouse'].forEach(id=>$(id).addEventListener('change',()=>{ $('sget').value=''; }));
 const upd=()=>{ if(shown()&&!Array.isArray(read())) render(); };
 document.querySelector('.sim-in').addEventListener('input',upd);
 document.querySelector('.sim-in').addEventListener('change',upd);
