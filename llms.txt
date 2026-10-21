@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [법인카드·사업용 카드, 헬스장·피부과도 비용 처리되나요?](https://www.hantax47.com/column/business-card-use.html)
 - [부가세 절세 방법, 사장님이 놓치기 쉬운 공제는?](https://www.hantax47.com/column/vat-saving-tips.html)
 - [과점주주 간주취득세, 주식만 샀는데 취득세를 내나요?](https://www.hantax47.com/column/deemed-acquisition-tax.html)
 - [외국인 직원에게 현금으로 준 월급, 늦게 신고하면 얼마를 내나요?](https://www.hantax47.com/column/cash-wage-report.html)
