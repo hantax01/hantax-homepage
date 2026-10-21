@@ -76,6 +76,27 @@
 .verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
 .verdict .note.warn{color:var(--seal)}
 .verdict a{color:var(--blue);font-weight:700}
+.cmp{margin-top:22px;border:1px solid var(--line);border-radius:14px;padding:20px 22px;background:#fff}
+.cmp-h b{font-size:16.5px;color:var(--ink)}
+.cmp-h span{display:block;font-size:13px;color:var(--mute);margin-top:3px;line-height:1.6}
+.cmp .own{max-width:340px;margin:16px 0 4px}
+.slrow{margin:16px 0 4px}
+.slv{display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;font-size:14px;color:var(--char);margin-bottom:8px}
+.slv b{font-size:19px;color:var(--blue);margin-left:4px}
+.slv small{display:block;font-size:12px;color:var(--mute)}
+.sim .slrow input[type=range]{width:100%;padding:0;border:0;background:transparent;accent-color:var(--blue);height:26px}
+.bestbtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;font-size:13.5px;font-weight:700;padding:9px 14px;border-radius:8px;cursor:pointer}
+.bestbtn:hover{background:var(--blue-soft)}
+.cmp3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 10px}
+.cmp3 div{background:var(--soft);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--mute)}
+.cmp3 b{display:block;font-size:17px;color:var(--ink);margin-top:4px;font-variant-numeric:tabular-nums}
+.cmp3 .t{background:var(--blue-soft)}
+.cmp3 .t b{color:var(--blue)}
+.cmp svg{width:100%;height:auto;display:block}
+.cmp .lg{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:12.5px;color:var(--mute);margin:4px 0 2px}
+.cmp .lg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.cmp .axis{font-size:12px;color:var(--mute);margin:4px 0 0}
+.cmp-note{font-size:12.5px;color:var(--mute);line-height:1.75;margin-top:10px}
 .ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
 .ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
 .ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
@@ -104,6 +125,7 @@
 .call{padding:22px 16px}.call .val{font-size:24px}
 .rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
 .rtable tr.sub td:first-child{padding-left:14px}
+.cmp{padding:16px 14px}.cmp3{gap:6px}.cmp3 div{padding:10px 7px;font-size:11.5px}.cmp3 b{font-size:13px;white-space:nowrap;letter-spacing:-.3px}
 }
 </style>
 <script src="../assets/ga.js?v=1" async></script>
@@ -252,6 +274,19 @@
           </table>
         </div>
         <div class="verdict" id="verdict"></div>
+        <div class="cmp" id="cmp">
+          <div class="cmp-h"><b>배우자 몫에 따른 세금 비교</b><span>배우자가 많이 받으면 이번 세금은 줄지만, 나중에 배우자 재산을 자녀가 상속받을 때(2차 상속) 세금이 늘어납니다. 두 번을 합친 세금으로 비교해 보세요.</span></div>
+          <div class="own"><label for="own">배우자 본인 재산 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="배우자가 원래 가지고 있던 집·예금 등입니다. 나중에 자녀가 상속받을 때 이번에 받은 재산과 함께 상속세가 매겨지므로, 많을수록 배우자 몫을 줄이는 쪽이 유리해집니다.">?</button></label><div class="unit"><input type="text" id="own" inputmode="numeric"><span>원</span></div></div>
+          <div class="slrow">
+            <div class="slv"><span>배우자가 받는 금액 <b id="slv"></b><small id="sll"></small></span><button type="button" class="bestbtn" id="best">합계가 가장 적은 금액으로 맞추기</button></div>
+            <input type="range" id="sl" min="0" step="1000000" aria-label="배우자가 받는 금액">
+          </div>
+          <div class="cmp3"><div>이번 상속세<b id="c1"></b></div><div>나중 상속세 (예상)<b id="c2"></b></div><div class="t">두 번 합계<b id="c3"></b></div></div>
+          <div class="lg"><span><i style="background:#1B4A9B"></i>두 번 합계</span><span><i style="background:#8FB3E8"></i>이번 상속세</span><span><i style="background:#B9C0CA"></i>나중 상속세</span><span>● 합계가 가장 적은 곳</span></div>
+          <svg id="chart" viewBox="0 0 600 160" role="img" aria-label="배우자 몫에 따른 상속세 그래프"></svg>
+          <p class="axis" id="axis"></p>
+          <p class="cmp-note">· 나중 상속세는 배우자가 받은 재산에서 이번 상속세 중 배우자 몫(받은 비율만큼)을 빼고 배우자 본인 재산을 더해, 자녀가 상속받는다고 보고 일괄공제 5억 원과 신고세액공제 3%만 반영했습니다. 그 사이 재산이 늘거나 쓰이는 것은 반영하지 않았습니다.<br>· 배우자가 법정상속분보다 많이 받으면 이번 세금은 그대로이고 나중 세금만 늘어납니다. 10년 안에 다시 상속되면 이번에 낸 상속세 일부를 빼 주는 단기재상속 세액공제가 있습니다.<br>· 배우자가 자녀 몫의 상속세까지 대신 내도 증여로 보지 않아(연대납부), 배우자 몫을 늘리고 그 돈으로 상속세를 내면 나중 상속 재산을 줄일 수 있습니다.</p>
+        </div>
         <div class="ask">
           <p><b>상속세는 재산을 어떻게 평가하고 어떻게 나누느냐에 따라 크게 달라집니다.</b><br>감정평가, 배우자 몫 나누기, 사전증여 계획과 신고까지 함께 살펴 드립니다.</p>
           <div class="btns">
@@ -346,7 +381,7 @@ function calcInherit(o){
   // 배우자공제: 실제 받는 금액(비우면 법정상속분), 법정상속분·30억 원 한도, 적어도 5억 원
   const share=o.spouse?(o.kids?1.5/(1.5+o.kids):1):0;
   const legal=Math.floor(taxable*share);
-  const got=o.spouse?(o.sget>0?o.sget:legal):0;
+  const got=o.spouse?(o.sget>0||o.sgetSet?o.sget:legal):0;
   const spouseDed=o.spouse?Math.max(5e8,Math.min(got,legal,30e8)):0;
   const fin=finDed(o.fin);
   const sum=personal+spouseDed+fin;
@@ -358,6 +393,22 @@ function calcInherit(o){
   const report=Math.floor((calc-giftCr)*0.03);                      // 신고세액공제 3%
   const pay=calc-giftCr-report;
   return {funeral,gross,net,taxable,sole,basic,lump,personal,share,legal,got,spouseDed,fin,sum,limit,ded,limited:sum>limit,base,calc,giftCr,report,pay};
+}
+
+// 2차 상속: 배우자가 받은 재산 − 이번 상속세 중 배우자 몫(받은 비율) + 배우자 본인 재산을 자녀가 상속, 일괄공제 5억 원·신고공제 3%
+function secondTax(g,t1,net,own){
+  const paid=net>0?Math.floor(t1*Math.min(g,net)/net):0;
+  const c=taxOf(Math.max(0,g-paid+own-5e8));
+  return c-Math.floor(c*0.03);
+}
+// 배우자 몫 0원 ~ 상속재산 전체를 훑어 이번·나중·합계 세금 곡선을 만듭니다 (법정상속분·5억 원 지점은 꼭 넣음)
+function spouseCurve(o){
+  const base=calcInherit(Object.assign({},o,{sget:0,sgetSet:false})), net=base.net, legal=Math.min(base.legal,net);
+  const gs=new Set([0,net,legal]); if(5e8<net) gs.add(5e8);
+  for(let i=1;i<160;i++) gs.add(Math.round(net*i/160/1e6)*1e6);
+  const pts=[...gs].sort((a,b)=>a-b).map(g=>{ const t1=calcInherit(Object.assign({},o,{sget:g,sgetSet:true})).pay, t2=secondTax(g,t1,net,o.own||0); return {g,t1,t2,t:t1+t2}; });
+  const best=pts.reduce((b,p)=>p.t<b.t||(p.t===b.t&&p.g>b.g)?p:b,pts[0]);   // 같으면 배우자가 더 받는 쪽
+  return {net,legal,pts,best};
 }
 
 /* ── 화면 ─────────────────────────────────── */
@@ -373,6 +424,8 @@ $('spouse').addEventListener('change',syncSpouse); syncSpouse();
 function read(){
   const o={spouse:$('spouse').checked,kids:+$('kids').value};
   MONEY.forEach(id=>o[id]=num($(id).value));
+  o.sgetSet=$('sget').value.trim()!=='';
+  o.own=num($('own').value);
   if(!o.estate&&!o.fin) return ['물려받을 재산(부동산 등이나 금융재산)을 넣어 주세요.',$('estate')];
   return o;
 }
@@ -407,8 +460,36 @@ function render(){
   notes.push({t:'돌아가신 날이 속한 달의 마지막 날부터 6개월 안에 신고·납부해야 신고세액공제 3%를 받습니다. 아파트는 비슷한 아파트의 최근 거래가로, 단독주택·토지는 공시가격이나 감정가로 평가해 세금이 크게 달라질 수 있습니다.'});
   $('verdict').innerHTML=(r.pay>0?'상속세는 <b>'+won(r.pay)+'원</b>입니다. 상속공제는 모두 <b>'+man(r.ded)+'</b>입니다.':'받을 수 있는 상속공제 <b>'+man(r.sum)+'</b>이 과세가액보다 커서 <b>상속세가 없습니다.</b>')
     +notes.map(x=>'<span class="note'+(x.warn?' warn':'')+'">'+x.t+'</span>').join('');
+  renderCmp(o,r);
   $('res').style.display='block';
 }
+let CUR=null;
+function renderCmp(o,r){
+  const box=$('cmp'); box.hidden=!o.spouse||!o.kids;
+  if(box.hidden) return;
+  const c=spouseCurve(o); CUR=c;
+  const g=Math.min(r.got,c.net);
+  const t1=r.pay, t2=secondTax(g,t1,c.net,o.own||0);
+  $('sl').max=c.net; $('sl').step=Math.max(1e6,Math.round(c.net/400/1e6)*1e6); $('sl').value=g;
+  $('slv').textContent=man(g);
+  $('sll').textContent=g>c.legal+1e6?'법정상속분('+man(c.legal)+')보다 많아 이번 세금은 더 줄지 않습니다':Math.abs(g-c.legal)<=1e6?'법정상속분만큼':'법정상속분 '+man(c.legal)+'까지 받을 수 있습니다';
+  $('c1').textContent=man(t1); $('c2').textContent=man(t2); $('c3').textContent=man(t1+t2);
+  $('best').textContent=Math.abs(c.best.g-g)<=1e6?'지금이 합계가 가장 적습니다':'합계가 가장 적은 '+man(c.best.g)+'으로 맞추기';
+  $('best').disabled=Math.abs(c.best.g-g)<=1e6;
+  // 그래프: 가로 = 배우자 몫, 세로 = 세금
+  const L=10,R=590,T=10,B=150, max=Math.max(1,...c.pts.map(p=>p.t));
+  const X=v=>L+(c.net?v/c.net:0)*(R-L), Y=v=>B-v/max*(B-T);
+  const line=(k,col,w)=>'<polyline fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linejoin="round" points="'+c.pts.map(p=>X(p.g).toFixed(1)+','+Y(p[k]).toFixed(1)).join(' ')+'"/>';
+  $('chart').innerHTML='<line x1="'+L+'" y1="'+B+'" x2="'+R+'" y2="'+B+'" stroke="#DCE2EB"/>'
+    +'<line x1="'+X(c.legal)+'" y1="'+T+'" x2="'+X(c.legal)+'" y2="'+B+'" stroke="#DCE2EB" stroke-dasharray="3 3"/>'
+    +line('t2','#B9C0CA',2)+line('t1','#8FB3E8',2)+line('t','#1B4A9B',3)
+    +'<line x1="'+X(g)+'" y1="'+T+'" x2="'+X(g)+'" y2="'+B+'" stroke="#1B4A9B" stroke-width="1.5"/>'
+    +'<circle cx="'+X(c.best.g)+'" cy="'+Y(c.best.t)+'" r="5.5" fill="#1B4A9B" stroke="#fff" stroke-width="2"/>';
+  $('axis').textContent='가로: 배우자가 받는 금액 0원 ~ '+man(c.net)+' · 점선: 법정상속분 '+man(c.legal)+' · 세로 선: 지금 고른 금액';
+}
+$('sl').addEventListener('input',e=>{ const g=+e.target.value; $('sget').value=g.toLocaleString('ko-KR'); render(); });
+$('best').addEventListener('click',()=>{ if(!CUR) return; $('sget').value=CUR.best.g.toLocaleString('ko-KR'); render(); });
+$('own').addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; if(shown()) render(); });
 $('calc').addEventListener('click',()=>{
   const bad=read();
   if(Array.isArray(bad)){ alert(bad[0]); bad[1].focus(); return; }
