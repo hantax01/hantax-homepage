@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사업자 건강보험료 계산기 2026, 6월 정산·11월 변경 | 한택스</title>
+<meta name="description" content="개인사업자 건강보험료를 계산합니다. 직원이 있는 대표자(직장가입자)는 6월 정산 금액과 6월부터 낼 보험료를, 직원이 없는 사업자(지역가입자)는 소득과 재산으로 11월부터 낼 보험료를 계산합니다. 2026년 보험료율 7.19%, 장기요양 13.14%, 재산 점수당 211.5원 기준입니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/health-insurance.html">
+<meta property="og:title" content="사업자 건강보험료, 6월·11월에 얼마나 바뀔까요?">
+<meta property="og:description" content="직원 있는 대표자의 6월 정산, 지역가입자의 11월 변경 보험료를 계산합니다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/health-insurance.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-health-insurance.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=33">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+[hidden]{display:none!important}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.sim .ichk{display:inline-flex}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.tabs{display:flex;gap:6px;background:var(--soft);border-radius:12px;padding:5px;margin-bottom:12px}
+.tabs button{flex:1;border:0;background:none;border-radius:9px;padding:12px 6px;font-family:inherit;font-size:14.5px;font-weight:700;color:var(--mute);cursor:pointer;line-height:1.35}
+.tabs button small{display:block;font-size:12px;font-weight:600;margin-top:2px}
+.tabs button:hover{color:var(--blue)}
+.tabs button[aria-selected=true]{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(11,30,63,.1)}
+.tabhelp{font-size:13.5px;color:var(--mute);margin:0 2px 14px;line-height:1.7}
+.sim[data-mode=job] .m-area,.sim[data-mode=area] .m-job{display:none!important}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.calls{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:24px 22px;text-align:center}
+.call.lt{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:28px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:17px;font-weight:700;opacity:.9}
+.call .sub{font-size:13.5px;opacity:.88;line-height:1.7}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable td+td{white-space:nowrap}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px;white-space:normal}
+.rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td+td{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict a{color:var(--blue);font-weight:700}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.calls{grid-template-columns:1fr}
+.call{padding:20px 16px}.call .val{font-size:24px}
+.rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "개인사업자 건강보험료는 언제 바뀌나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "직원이 있는 대표자(직장가입자)는 5월에 신고한 작년 소득으로 6월부터 보험료가 바뀌고, 작년 보험료 정산 금액도 6월분에 함께 나옵니다(성실신고확인 대상은 7월). 직원이 없는 사업자(지역가입자)는 작년 소득과 6월 1일 재산을 기준으로 11월부터 다음 해 10월까지 새 보험료를 냅니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "6월에 건강보험료가 왜 많이 나오나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "직원이 있는 대표자는 그동안 전년도 소득을 기준으로 보험료를 먼저 내고, 5월에 작년 소득이 확정되면 작년 1~12월 보험료를 다시 계산해 이미 낸 금액과의 차이를 6월분에 더하기 때문입니다. 작년 소득이 그 전보다 많이 늘었으면 정산 금액과 6월부터의 보험료가 함께 올라갑니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "대표자 건강보험료는 어떻게 계산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "작년 사업소득금액을 12로 나눈 보수월액에 2026년 보험료율 7.19%를 곱하고, 장기요양보험료(건강보험료의 13.14%)를 더합니다. 직원은 회사와 반씩 내지만 대표자는 7.19%를 모두 냅니다. 보수월액이 직원 중 가장 높은 월급보다 낮으면 그 월급을 기준으로 냅니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "지역가입자 건강보험료는 어떻게 계산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "소득 보험료와 재산 보험료를 더합니다. 소득 보험료는 연 소득을 12로 나눈 금액에 7.19%를 곱하고(최저 월 20,160원), 재산 보험료는 재산세 과세표준과 전월세 보증금의 30%를 더한 금액에서 1억 원을 뺀 뒤 60개 등급의 점수에 211.5원을 곱합니다. 여기에 장기요양보험료 13.14%가 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "소득이 줄었는데 건강보험료를 줄일 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "지역가입자는 폐업·휴업을 했거나 소득이 크게 줄었으면 공단에 보험료 조정을 신청할 수 있고, 나중에 확정 소득으로 정산합니다. 직원이 있는 대표자도 사업 소득이 줄었다는 자료로 보수월액 변경을 신청할 수 있으니 공단에 확인해 보세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "직원을 뽑으면 건강보험료가 어떻게 달라지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "직원을 한 명이라도 고용보험·건강보험에 가입시키면 대표자도 직장가입자가 되어 재산은 보지 않고 사업소득만으로 보험료를 냅니다. 대신 직원 보험료의 절반을 회사가 부담하고, 대표자 보험료는 직원 중 가장 높은 월급보다 낮을 수 없습니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"사업자 건강보험료, 6월·11월에 얼마나 바뀔까요?","url":"https://www.hantax47.com/tools/health-insurance.html","description":"개인사업자 건강보험료를 계산합니다. 직원이 있는 대표자(직장가입자)는 6월 정산 금액과 6월부터 낼 보험료를, 직원이 없는 사업자(지역가입자)는 소득과 재산으로 11월부터 낼 보험료를 계산합니다. 2026년 보험료율 7.19%, 장기요양 13.14%, 재산 점수당 211.5원 기준입니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">건강보험료 계산</span>
+    <h1>사업자 건강보험료,<br>6월·11월에 얼마나 바뀔까요?</h1>
+    <p class="lead">5월에 종합소득세를 신고하면 건강보험료가 바뀝니다. 직원이 있는 대표자는 6월에 작년 보험료를 정산하고, 직원이 없는 사업자는 11월부터 새 보험료를 냅니다. 작년 소득을 넣어 미리 계산해 보세요.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim" data-mode="job">
+      <div class="tabs" role="tablist" aria-label="가입 형태">
+        <button type="button" role="tab" data-mode="job" aria-selected="true">직원이 있어요<small>직장가입자 · 6월 정산</small></button>
+        <button type="button" role="tab" data-mode="area" aria-selected="false">직원이 없어요<small>지역가입자 · 11월 변경</small></button>
+      </div>
+      <p class="tabhelp" id="tabhelp"></p>
+      <div class="sim-in">
+        <!-- 직원 있는 대표자 -->
+        <div class="divider m-job"><b>사업소득금액</b><span>종합소득세 신고서의 소득금액(수입 − 필요경비)</span></div>
+        <div class="m-job">
+          <label for="j25">2025년 사업소득금액 <small>올해 5월 신고</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="올해 5월에 신고한 작년(2025년) 종합소득세 신고서의 사업소득금액입니다. 매출이 아니라 필요경비를 뺀 금액입니다. 이 금액을 12로 나눈 것이 대표자의 보수월액이 되어 작년 보험료를 다시 계산하고, 6월부터 낼 보험료도 정합니다.">?</button></label>
+          <div class="unit"><input type="text" id="j25" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="m-job">
+          <label for="j24">2024년 사업소득금액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년 6월부터 올해 5월까지 낸 보험료의 기준이 된 소득입니다. 작년 6~12월에 실제로 낸 보험료를 계산하는 데 씁니다. 모르면 비워 두세요(2025년과 같다고 봅니다).">?</button></label>
+          <div class="unit"><input type="text" id="j24" inputmode="numeric" placeholder="비우면 2025년과 같게"><span>원</span></div>
+        </div>
+        <div class="m-job">
+          <label for="j23">2023년 사업소득금액 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년 1~5월에 낸 보험료의 기준이 된 소득입니다. 모르면 비워 두세요(2024년과 같다고 봅니다).">?</button></label>
+          <div class="unit"><input type="text" id="j23" inputmode="numeric" placeholder="비우면 2024년과 같게"><span>원</span></div>
+        </div>
+        <div class="m-job">
+          <label for="jmax">직원 중 가장 높은 월급 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="대표자의 보수월액은 직원 중 가장 높은 보수월액보다 낮을 수 없습니다. 사업소득금액 ÷ 12가 이 금액보다 적거나 적자면 이 금액으로 보험료를 냅니다. 비과세 수당을 뺀 세전 월급을 넣으세요.">?</button></label>
+          <div class="unit"><input type="text" id="jmax" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="wide m-job">
+          <label class="ichk"><input type="checkbox" id="jsincere"><span>성실신고확인 대상입니다 (6월 말 신고)</span></label>
+        </div>
+
+        <!-- 직원 없는 사업자 -->
+        <div class="divider m-area"><b>작년(2025년) 소득</b><span>종합소득세 신고서 기준</span></div>
+        <div class="m-area">
+          <label for="abiz">사업소득금액 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="올해 5월에 신고한 작년 종합소득세 신고서의 사업소득금액(수입 − 필요경비)입니다. 부동산 임대소득도 여기에 더하세요.">?</button></label>
+          <div class="unit"><input type="text" id="abiz" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="m-area">
+          <label for="aint">이자·배당소득 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="이자와 배당을 합쳐 1년에 1천만 원 이하면 보험료에 반영하지 않고, 넘으면 전액 반영합니다.">?</button></label>
+          <div class="unit"><input type="text" id="aint" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="m-area">
+          <label for="awage">근로·연금소득 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="지역가입자는 근로소득과 연금소득을 절반(50%)만 반영합니다. 공적연금은 연금 총액이 아니라 연금소득 금액 기준입니다.">?</button></label>
+          <div class="unit"><input type="text" id="awage" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="m-area">
+          <label for="aetc">기타소득 <small>선택</small></label>
+          <div class="unit"><input type="text" id="aetc" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="divider m-area"><b>재산</b><span>올해 6월 1일 기준 (세대 합계)</span></div>
+        <div class="m-area">
+          <label for="aprop">주택·건물·토지 재산세 과세표준 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="재산세 고지서에 적힌 과세표준 합계입니다. 주택은 공시가격의 60%(1세대 1주택은 43~45%), 건물·토지는 70%쯤입니다. 세대 전체 재산을 더해 넣으세요.">?</button></label>
+          <div class="unit"><input type="text" id="aprop" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="m-area">
+          <label for="adep">전월세 보증금 <small>세 들어 살면</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="세 들어 사는 집의 보증금과 월세는 (보증금 + 월세 × 40)의 30%를 재산으로 봅니다.">?</button></label>
+          <div class="unit"><input type="text" id="adep" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="m-area">
+          <label for="arent">월세 <small>선택</small></label>
+          <div class="unit"><input type="text" id="arent" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div class="m-area">
+          <label for="anow">지금 내는 월 보험료 <small>선택 · 비교용</small></label>
+          <div class="unit"><input type="text" id="anow" inputmode="numeric"><span>원</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">건강보험료 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2 id="res-title"></h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="calls" id="calls"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>항목</th><th>건강보험</th><th>장기요양</th><th>합계</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <div class="ask">
+          <p><b>사업소득을 어떻게 신고하느냐에 따라 건강보험료가 함께 달라집니다.</b><br>종합소득세 신고와 4대보험, 직원 채용 시점까지 함께 살펴 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>개인사업자 건강보험료는 언제 바뀌나요?</summary>
+          <div class="a">직원이 있는 대표자(직장가입자)는 5월에 신고한 작년 소득으로 6월부터 보험료가 바뀌고, 작년 보험료 정산 금액도 6월분에 함께 나옵니다(성실신고확인 대상은 7월). 직원이 없는 사업자(지역가입자)는 작년 소득과 6월 1일 재산을 기준으로 11월부터 다음 해 10월까지 새 보험료를 냅니다.</div>
+        </details>
+        <details>
+          <summary>6월에 건강보험료가 왜 많이 나오나요?</summary>
+          <div class="a">직원이 있는 대표자는 그동안 전년도 소득을 기준으로 보험료를 먼저 내고, 5월에 작년 소득이 확정되면 작년 1~12월 보험료를 다시 계산해 이미 낸 금액과의 차이를 6월분에 더하기 때문입니다. 작년 소득이 그 전보다 많이 늘었으면 정산 금액과 6월부터의 보험료가 함께 올라갑니다.</div>
+        </details>
+        <details>
+          <summary>대표자 건강보험료는 어떻게 계산하나요?</summary>
+          <div class="a">작년 사업소득금액을 12로 나눈 보수월액에 2026년 보험료율 7.19%를 곱하고, 장기요양보험료(건강보험료의 13.14%)를 더합니다. 직원은 회사와 반씩 내지만 대표자는 7.19%를 모두 냅니다. 보수월액이 직원 중 가장 높은 월급보다 낮으면 그 월급을 기준으로 냅니다.</div>
+        </details>
+        <details>
+          <summary>지역가입자 건강보험료는 어떻게 계산하나요?</summary>
+          <div class="a">소득 보험료와 재산 보험료를 더합니다. 소득 보험료는 연 소득을 12로 나눈 금액에 7.19%를 곱하고(최저 월 20,160원), 재산 보험료는 재산세 과세표준과 전월세 보증금의 30%를 더한 금액에서 1억 원을 뺀 뒤 60개 등급의 점수에 211.5원을 곱합니다. 여기에 장기요양보험료 13.14%가 붙습니다.</div>
+        </details>
+        <details>
+          <summary>소득이 줄었는데 건강보험료를 줄일 수 있나요?</summary>
+          <div class="a">지역가입자는 폐업·휴업을 했거나 소득이 크게 줄었으면 공단에 보험료 조정을 신청할 수 있고, 나중에 확정 소득으로 정산합니다. 직원이 있는 대표자도 사업 소득이 줄었다는 자료로 보수월액 변경을 신청할 수 있으니 공단에 확인해 보세요.</div>
+        </details>
+        <details>
+          <summary>직원을 뽑으면 건강보험료가 어떻게 달라지나요?</summary>
+          <div class="a">직원을 한 명이라도 고용보험·건강보험에 가입시키면 대표자도 직장가입자가 되어 재산은 보지 않고 사업소득만으로 보험료를 냅니다. 대신 직원 보험료의 절반을 회사가 부담하고, 대표자 보험료는 직원 중 가장 높은 월급보다 낮을 수 없습니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용이며 실제 금액은 국민건강보험공단 고지서로 확인하세요. 원 단위는 10원 미만을 버렸습니다.<br>
+        · 2026년 건강보험료율 7.19%, 장기요양보험료(건강보험료의 13.14%), 재산 점수당 211.5원, 지역 최저 월 20,160원·최고 월 4,591,740원 기준입니다. 작년(2025년) 보험료 정산에는 2025년 요율 7.09%, 장기요양 12.95%를 썼습니다.<br>
+        · 직장가입자 대표자는 사업소득금액만 반영했습니다. 사업소득 외 다른 소득이 연 2천만 원을 넘으면 11월부터 소득월액보험료가 따로 붙습니다.<br>
+        · 지역가입자 재산은 재산세 과세표준과 전월세(보증금 + 월세 × 40의 30%)만 반영했고, 실거주 주택 대출 공제와 피부양자·세대원 소득은 넣지 않았습니다. 재산 점수는 국민건강보험법 시행령 별표 4(2024. 5. 7. 개정) 기준입니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="income-tax.html">종합소득세 계산기</a>
+        <a href="hiring-cost.html">채용 비용 계산기</a>
+        <a href="incorporation.html">법인전환 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 건강보험료 계산 ───────────────────────── */
+// 연도별 요율: 건강보험료율, 장기요양(건강보험료 대비), 직장 대표자 월 보험료 상한
+const RATE={2025:{hi:0.0709,ltc:0.9182/7.09,cap:9008340},2026:{hi:0.0719,ltc:0.9448/7.19,cap:9183480}};
+const f10=x=>Math.floor(x/10+1e-9)*10;   // 10원 미만 버림
+// 직장가입자 대표자: 보수월액 = 사업소득금액 ÷ 12, 직원 중 가장 높은 보수월액보다 낮을 수 없음
+const bosu=(inc,maxw)=>Math.max(inc>0?Math.floor(inc/12):0,maxw||0);
+function jobMonth(bm,y){ const R=RATE[y], hi=Math.min(R.cap,f10(bm*R.hi)); return {hi,ltc:f10(hi*R.ltc),bm}; }
+function calcJob(o){
+  const b25=bosu(o.j25,o.jmax), b24=bosu(o.j24,o.jmax), b23=bosu(o.j23,o.jmax);
+  const due=jobMonth(b25,2025), p1=jobMonth(b23,2025), p2=jobMonth(b24,2025);   // 작년(2025) 확정분, 1~5월분, 6~12월분
+  const sHi=due.hi*12-(p1.hi*5+p2.hi*7), sLtc=due.ltc*12-(p1.ltc*5+p2.ltc*7);   // 6월 정산 (+ 더 냄, − 돌려받음)
+  const now=jobMonth(b24,2026), next=jobMonth(b25,2026);                           // 올해 1~5월 / 6월부터
+  return {b25,b24,b23,due,p1,p2,sHi,sLtc,settle:sHi+sLtc,now,next};
+}
+// 지역가입자 재산 등급별 점수 (국민건강보험법 시행령 별표 4, 재산금액 만원 이하 기준)
+const PROP=[[450,22],[900,44],[1350,66],[1800,97],[2250,122],[2700,146],[3150,171],[3600,195],[4050,219],[4500,244],
+  [5020,268],[5590,294],[6220,320],[6930,344],[7710,365],[8590,386],[9570,412],[10700,439],[11900,465],[13300,490],
+  [14800,516],[16400,535],[18300,559],[20400,586],[22700,611],[25300,637],[28100,659],[31300,681],[34900,706],[38800,731],
+  [43200,757],[48100,785],[53600,812],[59700,841],[66500,881],[74000,921],[82400,961],[91800,1001],[103000,1041],[114000,1091],
+  [127000,1141],[142000,1191],[158000,1241],[176000,1291],[196000,1341],[218000,1391],[242000,1451],[270000,1511],[300000,1571],[330000,1641],
+  [363000,1711],[399300,1781],[439230,1851],[483153,1921],[531468,1991],[584615,2061],[643077,2131],[707385,2201],[778124,2271],[Infinity,2341]];
+const POINT=211.5, AREA_MIN=20160, AREA_MAX=4591740;
+function propGrade(net){   // net: 1억 원을 뺀 재산 금액(원)
+  if(net<=0) return {grade:0,point:0};
+  const man=net/1e4; const i=PROP.findIndex(x=>man<=x[0]);
+  return {grade:i+1,point:PROP[i][1]};
+}
+function calcArea(o){
+  const intDiv=o.aint>1e7?o.aint:0;                                   // 이자·배당 합 1천만 원 이하는 반영 안 함
+  const income=o.abiz+intDiv+Math.floor(o.awage*0.5)+o.aetc;          // 근로·연금소득은 50%
+  const monthly=Math.floor(Math.max(0,income)/12);
+  const hiInc=Math.max(AREA_MIN,f10(monthly*RATE[2026].hi));
+  const rentVal=Math.floor((o.adep+o.arent*40)*0.3);                  // 전월세 = (보증금 + 월세 × 40)의 30%
+  const prop=o.aprop+rentVal, net=Math.max(0,prop-1e8);
+  const g=propGrade(net), hiProp=f10(g.point*POINT);
+  const hi=Math.min(AREA_MAX,hiInc+hiProp), ltc=f10(hi*RATE[2026].ltc);
+  return {intDiv,income,monthly,hiInc,rentVal,prop,net,grade:g.grade,point:g.point,hiProp,hi,ltc,total:hi+ltc};
+}
+
+/* ── 화면 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const sgn=n=>(n>0?'+ ':n<0?'− ':'')+won(Math.abs(n));
+const IDS=['j25','j24','j23','jmax','abiz','aint','awage','aetc','aprop','adep','arent','anow'];
+IDS.forEach(id=>$(id).addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }));
+let MODE='job';
+const MODES={
+  job:{help:'직원이 한 명이라도 있으면 대표자도 직장가입자입니다. 5월에 신고한 작년 사업소득으로 작년 보험료를 정산하고 6월부터 새 보험료를 냅니다.'},
+  area:{help:'직원 없이 혼자 사업하면 지역가입자입니다. 5월에 신고한 작년 소득과 6월 1일 기준 재산으로 11월부터 다음 해 10월까지의 보험료가 정해집니다.'}};
+function setMode(m,init){
+  MODE=m; document.querySelector('.sim').dataset.mode=m;
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));
+  $('tabhelp').textContent=MODES[m].help;
+  if(!init){ try{ history.replaceState(null,'','#'+m); }catch(e){} }
+  if(shown()) Array.isArray(read())?($('res').style.display='none'):render();
+}
+document.querySelector('.tabs').addEventListener('click',e=>{ const b=e.target.closest('button[data-mode]'); if(b) setMode(b.dataset.mode); });
+
+function read(){
+  const o={}; IDS.forEach(id=>o[id]=num($(id).value));
+  o.jsincere=$('jsincere').checked;
+  if(MODE==='job'){
+    if(!o.j25&&!o.jmax) return ['2025년 사업소득금액을 넣어 주세요.',$('j25')];
+    if(!$('j24').value.trim()) o.j24=o.j25;
+    if(!$('j23').value.trim()) o.j23=o.j24;
+  }else{
+    if(!o.abiz&&!o.aint&&!o.awage&&!o.aetc&&!o.aprop&&!o.adep) return ['작년 소득이나 재산을 넣어 주세요.',$('abiz')];
+  }
+  return o;
+}
+const shown=()=>$('res').style.display==='block';
+// 숫자는 원 단위로, 건강·장기요양이 다 있을 때만 합계
+const fm=v=>typeof v==='number'?won(v):v;
+const row=(l,a,b,cls,s)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(s?'<small>'+s+'</small>':'')+'</td><td>'+fm(a)+'</td><td>'+fm(b)+'</td><td>'+(typeof a==='number'&&typeof b==='number'?won(a+b):'')+'</td></tr>';
+function render(){
+  const o=read(); MODE==='job'?renderJob(o):renderArea(o);
+  $('res').style.display='block';
+}
+function renderJob(o){
+  const r=calcJob(o), mon=o.jsincere?'7월':'6월';
+  $('res-title').textContent='직원 있는 대표자 건강보험료';
+  $('res-sub').textContent='2025년 사업소득금액 '+won(o.j25)+'원 · 보수월액 '+won(r.b25)+'원';
+  const s=r.settle, nT=r.next.hi+r.next.ltc, cT=r.now.hi+r.now.ltc;
+  $('calls').innerHTML=
+    '<div class="call"><div class="lbl">'+mon+' 정산 (작년 1~12월분)</div><div class="val">'+(s>=0?won(s):'돌려받음 '+won(-s))+'<small>원</small></div><div class="sub">'+(s>0?mon+'분 보험료에 더해 냅니다.':s<0?'더 낸 보험료라 돌려받거나 다음 보험료에서 뺍니다.':'작년 소득이 그대로라 정산할 금액이 없습니다.')+'</div></div>'
+   +'<div class="call lt"><div class="lbl">'+mon+'부터 매달 낼 보험료</div><div class="val">'+won(nT)+'<small>원</small></div><div class="sub">지금 '+won(cT)+'원에서 '+(nT===cT?'그대로입니다':(nT>cT?won(nT-cT)+'원 오릅니다':won(cT-nT)+'원 내립니다'))+' (다음 해 '+(o.jsincere?'6월':'5월')+'까지)</div></div>';
+  $('rt-body').innerHTML=
+    row('작년 확정 보험료 (월)',r.due.hi,r.due.ltc,'','2025년 사업소득금액 ÷ 12 = '+won(r.b25)+'원 × 7.09%')
+   +row('작년 확정 보험료 (12개월)',r.due.hi*12,r.due.ltc*12,'sum')
+   +row('작년 1~5월에 낸 보험료',r.p1.hi*5,r.p1.ltc*5,'','2023년 소득 기준 보수월액 '+won(r.b23)+'원 × 5개월')
+   +row('작년 6~12월에 낸 보험료',r.p2.hi*7,r.p2.ltc*7,'','2024년 소득 기준 보수월액 '+won(r.b24)+'원 × 7개월')
+   +'<tr class="tot"><td>'+mon+' 정산 금액<small>확정 보험료 − 낸 보험료</small></td><td>'+sgn(r.sHi)+'</td><td>'+sgn(r.sLtc)+'</td><td>'+sgn(s)+'</td></tr>'
+   +row('올해 1~5월 월 보험료',r.now.hi,r.now.ltc,'','2024년 소득 기준 · 2026년 요율 7.19%')
+   +row(mon+'부터 월 보험료',r.next.hi,r.next.ltc,'tot','2025년 소득 기준 보수월액 '+won(r.b25)+'원 × 7.19%');
+  const notes=[];
+  if(o.jmax&&r.b25===o.jmax&&o.j25/12<o.jmax) notes.push('사업소득금액 ÷ 12가 직원 중 가장 높은 월급보다 적어 그 월급('+won(o.jmax)+'원)으로 계산했습니다.');
+  notes.push('대표자는 직원과 달리 보험료율 7.19%를 모두 본인이 냅니다. 장기요양보험료는 건강보험료의 13.14%(작년분은 12.95%)입니다.');
+  if(o.jsincere) notes.push('성실신고확인 대상은 6월 30일까지 신고하므로 7월분부터 반영됩니다.');
+  notes.push('사업소득 외 다른 소득(임대·이자·배당 등)이 연 2천만 원을 넘으면 11월부터 소득월액보험료가 따로 붙습니다.');
+  $('verdict').innerHTML=(s>0?mon+' 정산으로 <b>'+won(s)+'원</b>을 더 내고, ':s<0?mon+' 정산으로 <b>'+won(-s)+'원</b>을 돌려받고, ':'')+mon+'부터는 매달 <b>'+won(nT)+'원</b>을 냅니다.'
+    +notes.map(t=>'<span class="note">'+t+'</span>').join('');
+}
+function renderArea(o){
+  const r=calcArea(o), T=r.total;
+  $('res-title').textContent='지역가입자 건강보험료';
+  $('res-sub').textContent='작년 소득 '+won(r.income)+'원 · 재산 '+won(r.prop)+'원';
+  $('calls').innerHTML=
+    '<div class="call"><div class="lbl">11월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원 · 다음 해 10월까지</div></div>'
+   +(o.anow?'<div class="call lt"><div class="lbl">지금 내는 보험료와 비교</div><div class="val">'+(T===o.anow?'그대로':(T>o.anow?'+ ':'− ')+won(Math.abs(T-o.anow))+'<small>원</small>')+'</div><div class="sub">지금 '+won(o.anow)+'원 → 11월부터 '+won(T)+'원 (1년이면 '+(T>=o.anow?'':'− ')+won(Math.abs(T-o.anow)*12)+'원)</div></div>'
+     :'<div class="call lt"><div class="lbl">1년(11월~다음 해 10월) 합계</div><div class="val">'+won(T*12)+'<small>원</small></div><div class="sub">지금 내는 보험료를 넣으면 얼마나 바뀌는지 비교해 드립니다.</div></div>');
+  $('rt-body').innerHTML=
+    row('소득 보험료',r.hiInc,'','','반영 소득 '+won(r.income)+'원 ÷ 12 = '+won(r.monthly)+'원 × 7.19%'+(r.hiInc===AREA_MIN&&f10(r.monthly*RATE[2026].hi)<AREA_MIN?' · 최저 보험료':''))
+   +row('재산 보험료',r.hiProp,'','',r.grade?'재산 '+won(r.prop)+'원 − 1억 → '+r.grade+'등급 '+r.point+'점 × 211.5원':'재산이 1억 원 이하라 재산 보험료 없음')
+   +row('월 보험료',r.hi,r.ltc,'tot',r.hi===AREA_MAX?'월 상한 적용':'장기요양 = 건강보험료 × 13.14%');
+  const notes=[];
+  if(r.intDiv===0&&o.aint) notes.push('이자·배당소득이 1천만 원 이하라 보험료에 반영하지 않았습니다.');
+  if(o.awage) notes.push('근로·연금소득 '+won(o.awage)+'원은 절반만 반영했습니다.');
+  if(r.rentVal) notes.push('전월세는 (보증금 + 월세 × 40)의 30%인 '+won(r.rentVal)+'원을 재산으로 봤습니다.');
+  notes.push('폐업·휴업했거나 소득이 크게 줄었으면 공단에 보험료 조정을 신청할 수 있습니다. 직원을 뽑으면 직장가입자가 되어 재산은 보지 않고 사업소득으로만 보험료를 냅니다.');
+  $('verdict').innerHTML='11월부터 매달 <b>'+won(T)+'원</b>을 냅니다(소득 '+won(r.hiInc)+'원 + 재산 '+won(r.hiProp)+'원 + 장기요양 '+won(r.ltc)+'원).'
+    +notes.map(t=>'<span class="note">'+t+'</span>').join('');
+}
+$('calc').addEventListener('click',()=>{
+  const bad=read();
+  if(Array.isArray(bad)){ alert(bad[0]); bad[1].focus(); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+const upd=()=>{ if(shown()&&!Array.isArray(read())) render(); };
+document.querySelector('.sim-in').addEventListener('input',upd);
+document.querySelector('.sim-in').addEventListener('change',upd);
+setMode(location.hash==='#area'?'area':'job',true);
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:document.getElementById('res-title').textContent, sub:document.getElementById('res-sub').textContent, filename:'한택스_건강보험료' })
+);
+</script>
+</body>
+</html>
