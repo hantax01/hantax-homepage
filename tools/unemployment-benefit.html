@@ -43,6 +43,7 @@
 .divider span{font-size:12.5px;color:var(--mute)}
 .wide{grid-column:1/-1}
 .ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.sim .inl{display:inline-flex;vertical-align:middle;margin:3px 0}
 .ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
 .prow{position:relative;display:grid;grid-template-columns:1fr 1fr auto;gap:10px 14px;align-items:end;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 46px 12px 14px;margin-bottom:16px}
 #prev{counter-reset:pj;padding-top:6px}
@@ -110,6 +111,7 @@
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .call{padding:22px 16px}.call .val{font-size:24px}
 .rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
+.sim .inl{display:flex;margin:4px 0!important}
 .prow{grid-template-columns:1fr 1fr;padding:12px 42px 12px 12px}.prow .pg{grid-column:1/-1;padding-bottom:0}
 }
 </style>
@@ -222,8 +224,11 @@
           <input type="date" id="leave">
         </div>
         <div class="wide">
-          <label class="ichk"><input type="checkbox" id="senior"><span>퇴사일에 만 50세 이상이거나 장애인입니다</span>
+          <label class="ichk inl" style="margin-right:28px"><input type="checkbox" id="senior"><span>퇴사일에 만 50세 이상이거나 장애인입니다</span>
             <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴사일 당시 나이로 봅니다. 만 50세 이상이거나 장애인이면 가입기간 1년부터 받는 기간이 30일씩 깁니다.">?</button>
+          </label>
+          <label class="ichk inl"><input type="checkbox" id="six"><span>주 6일 근무합니다</span>
+            <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="실업급여는 퇴사 전 18개월 동안 임금 받은 날이 180일 이상이어야 하고, 임금 받은 날은 일한 날과 유급 주휴일을 셉니다. 주 5일 근무(토요일 무급)는 한 주 7일 중 6일, 토요일에도 일하는 주 6일 근무는 7일 모두입니다.">?</button>
           </label>
         </div>
 
@@ -318,7 +323,7 @@
         · 계산 결과는 참고용이며 실제 금액은 고용센터에서 정합니다. 고용24의 모의계산으로도 확인할 수 있습니다.<br>
         · 2026년 1월 1일 이후 퇴사한 분 기준입니다. 하루 상한 68,100원, 하한은 최저임금 10,320원 × 하루 근무시간(8시간까지) × 80%입니다.<br>
         · 평균임금은 퇴사일 다음 날 전 3개월 동안의 임금(1년치 상여금·연차수당의 12분의 3 포함)을 그 기간 날수로 나눠 구했습니다.<br>
-        · 임금 받은 날(피보험단위기간)은 주 5일 근무·토요일 무급 기준으로 달력 날수의 7분의 6으로 추정했습니다. 이전 직장은 퇴사 전 18개월 안의 기간을 임금 받은 날에, 그만두고 3년 안에 다시 취업한 경우 가입기간에 합쳤습니다(실업급여를 받은 직장과 그 이전은 제외).<br>
+        · 임금 받은 날(피보험단위기간)은 주 5일 근무(토요일 무급)면 달력 날수의 7분의 6, 주 6일 근무면 달력 날수 그대로로 추정했습니다. 이전 직장은 퇴사 전 18개월 안의 기간을 임금 받은 날에, 그만두고 3년 안에 다시 취업한 경우 가입기간에 합쳤습니다(실업급여를 받은 직장과 그 이전은 제외).<br>
         · 받을 수 있는지(임금 받은 날 180일, 마지막 퇴사 사유)는 고용센터가 최종 판단합니다.
       </p>
 
@@ -387,10 +392,10 @@ function calcBenefit(o){
   const prev=(o.jobs||[]).map((p,i)=>({i,a:dnum(p.join),b:dnum(p.leave),got:p.got})).sort((x,y)=>y.b-x.b);   // 최근에 그만둔 곳부터
   // 실업급여를 받은 직장이 있으면 그 퇴사일까지의 기간은 어디에도 합치지 않습니다
   const cut=prev.filter(p=>p.got).reduce((m,p)=>Math.max(m,p.b),-Infinity);
-  // 1) 받을 자격: 퇴사 전 18개월 안에 임금 받은 날 180일 이상 (주 5일·토요일 무급이면 달력 날수의 7분의 6)
+  // 1) 받을 자격: 퇴사 전 18개월 안에 임금 받은 날 180일 이상 (주 5일·토요일 무급이면 달력 날수의 7분의 6, 주 6일이면 그대로)
   const W0=dnum(monthsBefore(E,18));
   const winDays=unionDays([[J,L]].concat(prev.filter(p=>p.b>cut).map(p=>[p.a,p.b])).map(([a,b])=>[Math.max(a,W0),Math.min(b,L)]));
-  const units=Math.floor(winDays*6/7);
+  const units=Math.floor(winDays*(o.six?1:6/7));
   // 2) 가입기간: 전 직장을 그만두고 3년 안에 다시 취업했으면 합칩니다 (실업급여 받은 직장과 그 이전은 제외)
   const used=[[J,L]], status={}; let next=J, stop='';
   for(const p of prev){
@@ -440,7 +445,7 @@ function read(){
     if(b>=l) return ['이전 직장 '+(i+1)+'의 퇴사일은 마지막 회사 퇴사일보다 빨라야 합니다.',row.querySelector('.pl')];
     jobs.push({join:ymd(a),leave:ymd(b),got:row.querySelector('.pr').checked,no:i+1});
   }
-  return {join:ymd(j),leave:ymd(l),pay,bonus:num($('bonus').value),hours:h,senior:$('senior').checked,reason:$('reason').value,jobs};
+  return {join:ymd(j),leave:ymd(l),pay,bonus:num($('bonus').value),hours:h,senior:$('senior').checked,six:$('six').checked,reason:$('reason').value,jobs};
 }
 const shown=()=>$('res').style.display==='block';
 function render(){
@@ -459,11 +464,11 @@ function render(){
     '<tr><td>평균임금 (하루)<small>퇴사 전 3개월 '+r.span+'일</small></td><td>'+won(r.wage3)+'원 ÷ '+r.span+'일</td><td>'+won(Math.floor(r.avg))+'</td></tr>'
    +'<tr><td>평균임금의 60%</td><td>'+won(Math.floor(r.avg))+'원 × 60%</td><td>'+won(r.raw)+'</td></tr>'
    +'<tr><td>하루 받는 금액<small>'+(r.capped?'상한 적용':r.floored?'하한 적용':'상한·하한 안')+'</small></td><td>하한 '+won(r.minDay)+' ~ 상한 '+won(MAX_DAY)+'</td><td>'+won(r.day)+'</td></tr>'
-   +'<tr><td>임금 받은 날<small>퇴사 전 18개월 · 180일 이상이어야 함</small></td><td>달력 '+r.winDays+'일 × 6/7 (주 5일 근무)</td><td>약 '+r.units+'일</td></tr>'
+   +'<tr><td>임금 받은 날<small>퇴사 전 18개월 · 180일 이상이어야 함</small></td><td>'+(o.six?'달력 '+r.winDays+'일 (주 6일 근무, 7일 모두 유급)':'달력 '+r.winDays+'일 × 6/7 (주 5일 근무)')+'</td><td>약 '+r.units+'일</td></tr>'
    +'<tr><td>받는 날수<small>가입기간 '+dy(r.insured)+(nOk?' · 이전 직장 '+nOk+'곳 합산':'')+(o.senior?' · 50세 이상·장애인':'')+'</small></td><td>고용보험법 별표 1</td><td>'+r.days+'일</td></tr>'
    +'<tr class="tot"><td>'+(no?'받을 수 있다면 총액':'실업급여 총액')+'</td><td>'+won(r.day)+'원 × '+r.days+'일</td><td>'+won(r.total)+'</td></tr>';
   const notes=[];
-  if(short) notes.push({warn:1,t:'<b>퇴사 전 18개월 동안 임금 받은 날이 약 '+r.units+'일로 180일에 못 미쳐 실업급여 대상이 아닙니다.</b> 주 5일 근무(토요일 무급) 기준으로 달력 날수의 7분의 6으로 셌습니다. 다른 회사에서 일한 기간이 있으면 이전 직장에 넣으면 합쳐집니다.'});
+  if(short) notes.push({warn:1,t:'<b>퇴사 전 18개월 동안 임금 받은 날이 약 '+r.units+'일로 180일에 못 미쳐 실업급여 대상이 아닙니다.</b> '+(o.six?'주 6일 근무라 달력 날수를 그대로 셌습니다.':'주 5일 근무(토요일 무급) 기준으로 달력 날수의 7분의 6으로 셌습니다. 토요일에도 일했다면 주 6일 근무를 체크하세요.')+' 다른 회사에서 일한 기간이 있으면 이전 직장에 넣으면 합쳐집니다.'});
   if(self) notes.push({warn:1,t:'<b>개인 사정으로 자진퇴사하면 실업급여를 받을 수 없습니다.</b> 임금 체불, 최저임금 미달, 회사 이사로 출퇴근 왕복 3시간 이상, 질병, 직장 내 괴롭힘처럼 정당한 사유가 있으면 증빙을 갖춰 신청할 수 있습니다.'});
   if(o.reason==='just') notes.push({t:'정당한 사유가 있는 자진퇴사는 그 사유를 증명할 자료(임금 체불 확인서, 진단서 등)가 있어야 받을 수 있습니다.'});
   if(!short&&r.units<210) notes.push({t:'임금 받은 날이 180일을 조금 넘습니다. 토요일 무급·무급휴직 같은 날은 빠지므로 고용24에서 피보험단위기간을 확인해 보세요.'});
