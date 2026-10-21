@@ -327,7 +327,7 @@
             <div class="eg"><label class="el" for="ed-nh">야간근무 시간 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="총 근무시간 중 밤 10시부터 새벽 6시 사이에 일한 시간입니다. 상시 5명 이상 사업장은 이 시간에 시급의 0.5배를 더 주고, 연장근로와 겹치면 연장 1.5배에 더해 2배가 됩니다. 5명 미만 사업장은 더하지 않습니다.">?</button></label><div class="unit"><input type="text" id="ed-nh" inputmode="numeric" aria-label="야간근무 시간 (시간)"><span>시간</span></div><div class="unit"><input type="text" id="ed-nm" inputmode="numeric" aria-label="야간근무 시간 (분)"><span>분</span></div></div>
             <div class="eg"><label class="el" for="ed-xh">수당·주휴 제외 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="총 근무시간 중 연장 가산(1.5배) 없이 시급만 주고, 주휴수당 계산에서도 빼고 싶은 시간입니다. 야간 가산까지 빼려면 야간근무 시간은 비워 두세요. 상시 5명 이상 사업장에서 하루 8시간·주 40시간을 넘긴 시간을 이렇게 빼면 임금체불이 될 수 있습니다.">?</button></label><div class="unit"><input type="text" id="ed-xh" inputmode="numeric" aria-label="수당·주휴 제외 시간 (시간)"><span>시간</span></div><div class="unit"><input type="text" id="ed-xm" inputmode="numeric" aria-label="수당·주휴 제외 시간 (분)"><span>분</span></div></div>
             <div class="eg"><button type="button" class="main" id="ed-set">근무시간 넣기</button>
-            <button type="button" id="ed-off">쉬는 날로</button> <button type="button" class="help" aria-label="쉬는 날로 설명 보기" aria-expanded="false" data-help="고른 날(요일)에 넣은 근무시간을 지워 일하지 않는 날로 만듭니다. 원래 쉬는 날이거나 시간을 잘못 넣었을 때 씁니다. 일하기로 한 날 나오지 않았다면 쉬는 날이 아니라 결근을 누르세요.">?</button>
+            <button type="button" id="ed-off">삭제</button> <button type="button" class="help" aria-label="삭제 설명 보기" aria-expanded="false" data-help="고른 날(요일)에 넣은 근무시간을 지웁니다. 원래 쉬는 날은 따로 넣지 않아도 됩니다. 일하기로 한 날 나오지 않았다면 삭제가 아니라 결근을 누르세요.">?</button>
             <button type="button" id="ed-abs">결근</button>
             <button type="button" class="help" id="ed-abs-help" aria-label="결근 설명 보기" aria-expanded="false" data-help="결근은 일하기로 한 날 나오지 않은 날입니다. 결근한 날은 근무시간이 0이 되고, 결근이 있는 주는 주휴수당이 없습니다. 지각이나 조퇴는 결근이 아니라 주휴수당이 생깁니다.">?</button></div>
             <p class="ehint">야간: 밤 10시~새벽 6시에 일한 시간(0.5배 더) · 수당·주휴 제외: 연장 가산 없이 시급만 주고 주휴수당 계산에서도 빼는 시간</p>
@@ -554,7 +554,7 @@ $('ed-set').addEventListener('click',()=>{
   if(![a,b,na,nb,xa,xb].every(ok)){ alert('시간 칸과 분 칸에 숫자만 넣어 주세요.'); $('ed-h').focus(); return; }
   const nv=(+na||0)+(+nb||0)/60, xv=(+xa||0)+(+xb||0)/60;
   const h=(+a||0)+(+b||0)/60;
-  if(!h){ alert('근무시간을 넣어 주세요. 쉬는 날이면 쉬는 날로를 누르세요.'); $('ed-h').focus(); return; }
+  if(!h){ alert('근무시간을 넣어 주세요. 넣은 시간을 지우려면 삭제를 누르세요.'); $('ed-h').focus(); return; }
   if(h>24){ alert('하루 근무시간은 24시간을 넘을 수 없습니다.'); $('ed-h').focus(); return; }
   if(nv>h){ alert('야간근무 시간은 총 근무시간보다 길 수 없습니다. 근무시간 중 밤 10시~새벽 6시에 일한 시간만 넣어 주세요.'); $('ed-nh').focus(); return; }
   if(xv>h){ alert('수당·주휴 제외 시간은 총 근무시간보다 길 수 없습니다.'); $('ed-xh').focus(); return; }
