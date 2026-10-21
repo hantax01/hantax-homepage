@@ -44,6 +44,17 @@
 .wide{grid-column:1/-1}
 .ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
 .ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.prow{position:relative;display:grid;grid-template-columns:1fr 1fr auto;gap:10px 14px;align-items:end;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 46px 12px 14px;margin-bottom:16px}
+#prev{counter-reset:pj;padding-top:6px}
+.prow{counter-increment:pj}
+.prow::before{content:"이전 직장 " counter(pj);position:absolute;top:-9px;left:12px;background:#fff;padding:0 6px;font-size:12px;font-weight:800;color:var(--blue)}
+.prow label{font-size:13px}
+.prow input[type=date]{padding:9px 11px;font-size:14px}
+.prow .pg{padding-bottom:10px;font-size:13.5px}
+.prow .px{position:absolute;top:8px;right:8px;width:28px;height:28px;border:1px solid var(--line);background:#fff;border-radius:8px;color:var(--mute);font-size:16px;line-height:1;cursor:pointer}
+.prow .px:hover{color:var(--seal);border-color:var(--seal)}
+.addbtn{border:1px dashed var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;font-size:14px;font-weight:700;padding:11px 18px;border-radius:10px;cursor:pointer;margin-right:6px}
+.addbtn:hover{background:var(--blue-soft)}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:34px}
 .reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
@@ -99,6 +110,7 @@
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .call{padding:22px 16px}.call .val{font-size:24px}
 .rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
+.prow{grid-template-columns:1fr 1fr;padding:12px 42px 12px 12px}.prow .pg{grid-column:1/-1;padding-bottom:0}
 }
 </style>
 <script src="../assets/ga.js?v=1" async></script>
@@ -137,6 +149,14 @@
    "acceptedAnswer": {
     "@type": "Answer",
     "text": "퇴사 전 18개월 동안 고용보험에 가입해 임금을 받은 날(피보험단위기간)이 180일 이상이어야 합니다. 주 5일 근무하고 토요일이 무급이면 대략 7개월 이상 일해야 180일이 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "이전 직장에서 일한 기간도 합쳐지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "퇴사 전 18개월 안에 다른 회사에서 일한 기간은 임금 받은 날 180일 요건에 합쳐집니다. 전 직장을 그만두고 3년 안에 다시 취업했다면 받는 날수를 정하는 가입기간에도 합쳐집니다. 다만 전 직장을 그만두고 실업급여를 받았다면 그 기간은 합치지 않고, 받을 수 있는지는 마지막 퇴사 사유로 판단합니다."
    }
   },
   {
@@ -194,7 +214,7 @@
       <div class="sim-in">
         <div class="divider"><b>근무 기간</b><span>고용보험에 가입한 기간입니다</span></div>
         <div>
-          <label for="join">입사일 <small>고용보험 가입일</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="이 회사에서 고용보험에 가입한 날입니다. 전 직장에서 실업급여를 받지 않았고 그만둔 뒤 3년 안에 다시 가입했다면 전 직장 가입기간을 합칠 수 있으니, 그만큼 입사일을 앞당겨 넣으세요.">?</button></label>
+          <label for="join">입사일 <small>고용보험 가입일</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="마지막으로 다닌(퇴사하는) 회사에서 고용보험에 가입한 날입니다. 그 전에 다닌 곳은 아래 이전 직장에 넣으면 기간을 합쳐 계산합니다.">?</button></label>
           <input type="date" id="join">
         </div>
         <div>
@@ -205,6 +225,13 @@
           <label class="ichk"><input type="checkbox" id="senior"><span>퇴사일에 만 50세 이상이거나 장애인입니다</span>
             <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴사일 당시 나이로 봅니다. 만 50세 이상이거나 장애인이면 가입기간 1년부터 받는 기간이 30일씩 깁니다.">?</button>
           </label>
+        </div>
+
+        <div class="divider"><b>이전 직장</b><span>선택 · 이번 회사 전에 다닌 곳</span></div>
+        <div class="wide" id="prev"></div>
+        <div class="wide">
+          <button type="button" class="addbtn" id="add-prev">+ 이전 직장 추가</button>
+          <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="퇴사 전 18개월 안에 다른 회사에서 일한 기간은 임금 받은 날 180일 요건에 합쳐집니다. 전 직장을 그만두고 3년 안에 다시 취업했다면 받는 날수를 정하는 가입기간에도 합쳐집니다. 전 직장을 그만두고 실업급여를 받았다면 그 직장과 그 이전 기간은 합치지 않습니다. 받을 수 있는지는 마지막 퇴사 사유로 판단합니다.">?</button>
         </div>
 
         <div class="divider"><b>퇴사 전 임금</b><span>세전 금액으로 넣으세요</span></div>
@@ -274,6 +301,10 @@
           <div class="a">퇴사 전 18개월 동안 고용보험에 가입해 임금을 받은 날(피보험단위기간)이 180일 이상이어야 합니다. 주 5일 근무하고 토요일이 무급이면 대략 7개월 이상 일해야 180일이 됩니다.</div>
         </details>
         <details>
+          <summary>이전 직장에서 일한 기간도 합쳐지나요?</summary>
+          <div class="a">퇴사 전 18개월 안에 다른 회사에서 일한 기간은 임금 받은 날 180일 요건에 합쳐집니다. 전 직장을 그만두고 3년 안에 다시 취업했다면 받는 날수를 정하는 가입기간에도 합쳐집니다. 다만 전 직장을 그만두고 실업급여를 받았다면 그 기간은 합치지 않고, 받을 수 있는지는 마지막 퇴사 사유로 판단합니다.</div>
+        </details>
+        <details>
           <summary>실업급여는 언제까지 신청해야 하나요?</summary>
           <div class="a">퇴사 다음 날부터 12개월 안에 받을 날수를 모두 받아야 합니다. 늦게 신청하면 12개월이 지난 뒤의 남은 날수는 사라지므로, 퇴사하면 바로 고용24에서 구직 등록을 하고 고용센터에 신청하는 것이 좋습니다. 처음 7일은 대기기간이라 지급하지 않습니다.</div>
         </details>
@@ -287,7 +318,8 @@
         · 계산 결과는 참고용이며 실제 금액은 고용센터에서 정합니다. 고용24의 모의계산으로도 확인할 수 있습니다.<br>
         · 2026년 1월 1일 이후 퇴사한 분 기준입니다. 하루 상한 68,100원, 하한은 최저임금 10,320원 × 하루 근무시간(8시간까지) × 80%입니다.<br>
         · 평균임금은 퇴사일 다음 날 전 3개월 동안의 임금(1년치 상여금·연차수당의 12분의 3 포함)을 그 기간 날수로 나눠 구했습니다.<br>
-        · 가입기간은 입사일부터 퇴사일까지로 셌습니다. 받을 수 있는지(피보험단위기간 180일, 퇴사 사유)는 고용센터가 최종 판단합니다.
+        · 임금 받은 날(피보험단위기간)은 주 5일 근무·토요일 무급 기준으로 달력 날수의 7분의 6으로 추정했습니다. 이전 직장은 퇴사 전 18개월 안의 기간을 임금 받은 날에, 그만두고 3년 안에 다시 취업한 경우 가입기간에 합쳤습니다(실업급여를 받은 직장과 그 이전은 제외).<br>
+        · 받을 수 있는지(임금 받은 날 180일, 마지막 퇴사 사유)는 고용센터가 최종 판단합니다.
       </p>
 
       <div class="morelinks">
@@ -332,28 +364,43 @@ const fromNum=n=>{ const t=new Date(n*864e5); return [t.getUTCFullYear(),t.getUT
 const daysIn=(y,m)=>new Date(Date.UTC(y,m,0)).getUTCDate();
 // n개월 전 같은 날 (없는 날짜면 그 달 말일 다음 날)
 function monthsBefore([y,m,d],n){ const t=m-1-n, ty=y+Math.floor(t/12), tm=((t%12)+12)%12+1; return d<=daysIn(ty,tm)?[ty,tm,d]:tm===12?[ty+1,1,1]:[ty,tm+1,1]; }
-// 받는 날수: 고용보험 가입기간(개월)과 50세 이상·장애인 여부 (고용보험법 별표 1)
-function benefitDays(months,senior){
+// 날짜 구간을 합칩니다 (겹치는 기간은 한 번만, 양 끝 날 포함)
+function unionDays(list){
+  const v=list.filter(x=>x[1]>=x[0]).sort((p,q)=>p[0]-q[0]); let tot=0, a=null, b=null;
+  for(const [x,y] of v){ if(a===null||x>b+1){ if(a!==null) tot+=b-a+1; a=x; b=y; } else b=Math.max(b,y); }
+  return a===null?tot:tot+b-a+1;
+}
+// 받는 날수: 고용보험 가입기간(날수)과 50세 이상·장애인 여부 (고용보험법 별표 1)
+function benefitDays(days,senior){
   const t=senior?[120,180,210,240,270]:[120,150,180,210,240];
-  return months<12?t[0]:months<36?t[1]:months<60?t[2]:months<120?t[3]:t[4];
+  return days<365?t[0]:days<1095?t[1]:days<1825?t[2]:days<3650?t[3]:t[4];
 }
-// 입사일~퇴사일 꽉 채운 개월 수
-function fullMonths(J,L){
-  const E=fromNum(dnum(L)+1);   // 퇴사일 다음 날
-  let n=(E[0]-J[0])*12+(E[1]-J[1]); if(E[2]<J[2]) n--;
-  return Math.max(0,n);
-}
+// o.jobs: 이전 직장 [{join,leave,got(그 직장을 그만두고 실업급여를 받음)}]
 function calcBenefit(o){
-  const E=fromNum(dnum(o.leave)+1), S=monthsBefore(E,3);
+  const L=dnum(o.leave), J=dnum(o.join), E=fromNum(L+1), S=monthsBefore(E,3);
   const span=dnum(E)-dnum(S);                                  // 퇴사일 다음 날 전 3개월 날수 (89~92일)
   const wage3=o.pay*3+Math.floor(o.bonus*3/12);
   const avg=wage3/span;                                        // 평균임금(하루)
   const raw=Math.floor(avg*0.6);
   const minDay=Math.floor(MIN_WAGE*Math.min(8,o.hours||8)*0.8);
   const day=Math.min(MAX_DAY,Math.max(minDay,raw));
-  const months=fullMonths(o.join,o.leave), days=benefitDays(months,o.senior);
-  const worked=dnum(o.leave)-dnum(o.join)+1;
-  return {span,wage3,avg,raw,minDay,day,capped:raw>MAX_DAY,floored:raw<minDay,months,days,total:day*days,per28:day*28,worked};
+  const prev=(o.jobs||[]).map((p,i)=>({i,a:dnum(p.join),b:dnum(p.leave),got:p.got})).sort((x,y)=>y.b-x.b);   // 최근에 그만둔 곳부터
+  // 실업급여를 받은 직장이 있으면 그 퇴사일까지의 기간은 어디에도 합치지 않습니다
+  const cut=prev.filter(p=>p.got).reduce((m,p)=>Math.max(m,p.b),-Infinity);
+  // 1) 받을 자격: 퇴사 전 18개월 안에 임금 받은 날 180일 이상 (주 5일·토요일 무급이면 달력 날수의 7분의 6)
+  const W0=dnum(monthsBefore(E,18));
+  const winDays=unionDays([[J,L]].concat(prev.filter(p=>p.b>cut).map(p=>[p.a,p.b])).map(([a,b])=>[Math.max(a,W0),Math.min(b,L)]));
+  const units=Math.floor(winDays*6/7);
+  // 2) 가입기간: 전 직장을 그만두고 3년 안에 다시 취업했으면 합칩니다 (실업급여 받은 직장과 그 이전은 제외)
+  const used=[[J,L]], status={}; let next=J, stop='';
+  for(const p of prev){
+    if(stop){ status[p.i]=stop; continue; }
+    if(p.got){ status[p.i]='got'; stop='before'; continue; }
+    if(next>dnum(monthsBefore(fromNum(p.b+1),-36))){ status[p.i]='gap'; stop='before'; continue; }
+    used.push([p.a,p.b]); status[p.i]='ok'; next=Math.min(next,p.a);
+  }
+  const insured=unionDays(used), days=benefitDays(insured,o.senior);
+  return {span,wage3,avg,raw,minDay,day,capped:raw>MAX_DAY,floored:raw<minDay,winDays,units,ok:units>=180,insured,status,days,total:day*days,per28:day*28};
 }
 
 /* ── 화면 ─────────────────────────────────── */
@@ -362,10 +409,20 @@ const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const ymd=s=>s.split('-').map(Number);
 const fd=([y,m,d])=>y+'.'+m+'.'+d;
-const ym=m=>(m>=12?Math.floor(m/12)+'년':'')+(m>=12&&m%12?' ':'')+(m%12?m%12+'개월':'')||'1개월 미만';
+const dy=d=>{ const y=Math.floor(d/365), m=Math.floor(d%365/30.42); return '약 '+((y?y+'년':'')+(y&&m?' ':'')+(m?m+'개월':'')||'1개월 미만'); };   // 날수 → 약 ○년 ○개월
 const REASON={fired:'권고사직·해고·계약만료·폐업',just:'정당한 사유가 있는 자진퇴사',self:'개인 사정으로 자진퇴사'};
 ['pay','bonus'].forEach(id=>$(id).addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }));
 
+function addPrev(){
+  const d=document.createElement('div'); d.className='prow';
+  d.innerHTML='<div><label>입사일</label><input type="date" class="pj" aria-label="이전 직장 입사일"></div>'
+    +'<div><label>퇴사일</label><input type="date" class="pl" aria-label="이전 직장 퇴사일"></div>'
+    +'<label class="ichk pg"><input type="checkbox" class="pr"><span>그만두고 실업급여를 받았어요</span></label>'
+    +'<button type="button" class="px" aria-label="이 직장 빼기">×</button>';
+  $('prev').appendChild(d); return d;
+}
+$('add-prev').addEventListener('click',()=>addPrev().querySelector('.pj').focus());
+$('prev').addEventListener('click',e=>{ const x=e.target.closest('.px'); if(x){ x.closest('.prow').remove(); upd(); } });
 function read(){
   const j=$('join').value, l=$('leave').value, pay=num($('pay').value);
   if(!j) return ['입사일을 골라 주세요.',$('join')];
@@ -374,16 +431,27 @@ function read(){
   if(!pay) return ['퇴사 전 3개월 월평균 임금을 넣어 주세요.',$('pay')];
   const h=parseFloat($('hours').value);
   if(!(h>0)) return ['하루 근무시간을 숫자로 넣어 주세요.',$('hours')];
-  return {join:ymd(j),leave:ymd(l),pay,bonus:num($('bonus').value),hours:h,senior:$('senior').checked,reason:$('reason').value};
+  const jobs=[];
+  for(const [i,row] of [...document.querySelectorAll('.prow')].entries()){
+    const a=row.querySelector('.pj').value, b=row.querySelector('.pl').value;
+    if(!a&&!b) continue;
+    if(!a||!b) return ['이전 직장 '+(i+1)+'의 '+(a?'퇴사일':'입사일')+'을 골라 주세요.',row.querySelector(a?'.pl':'.pj')];
+    if(b<a) return ['이전 직장 '+(i+1)+'의 퇴사일이 입사일보다 빠릅니다.',row.querySelector('.pl')];
+    if(b>=l) return ['이전 직장 '+(i+1)+'의 퇴사일은 마지막 회사 퇴사일보다 빨라야 합니다.',row.querySelector('.pl')];
+    jobs.push({join:ymd(a),leave:ymd(b),got:row.querySelector('.pr').checked,no:i+1});
+  }
+  return {join:ymd(j),leave:ymd(l),pay,bonus:num($('bonus').value),hours:h,senior:$('senior').checked,reason:$('reason').value,jobs};
 }
 const shown=()=>$('res').style.display==='block';
 function render(){
-  const o=read(), r=calcBenefit(o), co=$('doc-co').value.trim(), who=$('doc-who').value.trim();
-  const no=o.reason==='self', short=r.worked<180;
+  const o=read(), r=calcBenefit(o), nOk=Object.values(r.status).filter(x=>x==='ok').length, co=$('doc-co').value.trim(), who=$('doc-who').value.trim();
+  const self=o.reason==='self', short=!r.ok, no=self||short;
   $('res-title').textContent=(who?who+' 님 ':'')+'실업급여 예상액';
   $('res-sub').textContent=[co,'근무 '+fd(o.join)+' ~ '+fd(o.leave),REASON[o.reason]].filter(Boolean).join(' · ');
   $('call').className='call'+(no?' no':'');
-  $('call').innerHTML=no
+  $('call').innerHTML=short
+    ?'<div class="lbl">퇴사 전 18개월 동안 임금 받은 날 약 '+r.units+'일</div><div class="val">실업급여 대상이 아닙니다</div><div class="sub">임금 받은 날이 180일 이상이어야 받을 수 있습니다. 다른 회사에서 일한 기간이 있으면 이전 직장에 넣어 보세요.</div>'
+    :self
     ?'<div class="lbl">개인 사정으로 자진퇴사하면</div><div class="val">받기 어렵습니다</div><div class="sub">정당한 사유가 있다면 하루 '+won(r.day)+'원 × '+r.days+'일 = '+won(r.total)+'원을 받을 수 있습니다.</div>'
     :'<div class="lbl">하루 '+won(r.day)+'원 × '+r.days+'일</div><div class="val">'+won(r.total)+'<small>원</small></div>'
       +'<div class="sub">4주마다 28일분 '+won(r.per28)+'원씩 받습니다. 처음 7일은 대기기간이라 지급하지 않습니다.</div>';
@@ -391,17 +459,21 @@ function render(){
     '<tr><td>평균임금 (하루)<small>퇴사 전 3개월 '+r.span+'일</small></td><td>'+won(r.wage3)+'원 ÷ '+r.span+'일</td><td>'+won(Math.floor(r.avg))+'</td></tr>'
    +'<tr><td>평균임금의 60%</td><td>'+won(Math.floor(r.avg))+'원 × 60%</td><td>'+won(r.raw)+'</td></tr>'
    +'<tr><td>하루 받는 금액<small>'+(r.capped?'상한 적용':r.floored?'하한 적용':'상한·하한 안')+'</small></td><td>하한 '+won(r.minDay)+' ~ 상한 '+won(MAX_DAY)+'</td><td>'+won(r.day)+'</td></tr>'
-   +'<tr><td>받는 날수<small>가입기간 '+ym(r.months)+(o.senior?' · 50세 이상·장애인':'')+'</small></td><td>고용보험법 별표 1</td><td>'+r.days+'일</td></tr>'
-   +'<tr class="tot"><td>실업급여 총액</td><td>'+won(r.day)+'원 × '+r.days+'일</td><td>'+won(r.total)+'</td></tr>';
+   +'<tr><td>임금 받은 날<small>퇴사 전 18개월 · 180일 이상이어야 함</small></td><td>달력 '+r.winDays+'일 × 6/7 (주 5일 근무)</td><td>약 '+r.units+'일</td></tr>'
+   +'<tr><td>받는 날수<small>가입기간 '+dy(r.insured)+(nOk?' · 이전 직장 '+nOk+'곳 합산':'')+(o.senior?' · 50세 이상·장애인':'')+'</small></td><td>고용보험법 별표 1</td><td>'+r.days+'일</td></tr>'
+   +'<tr class="tot"><td>'+(no?'받을 수 있다면 총액':'실업급여 총액')+'</td><td>'+won(r.day)+'원 × '+r.days+'일</td><td>'+won(r.total)+'</td></tr>';
   const notes=[];
-  if(no) notes.push({warn:1,t:'<b>개인 사정으로 자진퇴사하면 실업급여를 받을 수 없습니다.</b> 임금 체불, 최저임금 미달, 회사 이사로 출퇴근 왕복 3시간 이상, 질병, 직장 내 괴롭힘처럼 정당한 사유가 있으면 증빙을 갖춰 신청할 수 있습니다.'});
+  if(short) notes.push({warn:1,t:'<b>퇴사 전 18개월 동안 임금 받은 날이 약 '+r.units+'일로 180일에 못 미쳐 실업급여 대상이 아닙니다.</b> 주 5일 근무(토요일 무급) 기준으로 달력 날수의 7분의 6으로 셌습니다. 다른 회사에서 일한 기간이 있으면 이전 직장에 넣으면 합쳐집니다.'});
+  if(self) notes.push({warn:1,t:'<b>개인 사정으로 자진퇴사하면 실업급여를 받을 수 없습니다.</b> 임금 체불, 최저임금 미달, 회사 이사로 출퇴근 왕복 3시간 이상, 질병, 직장 내 괴롭힘처럼 정당한 사유가 있으면 증빙을 갖춰 신청할 수 있습니다.'});
   if(o.reason==='just') notes.push({t:'정당한 사유가 있는 자진퇴사는 그 사유를 증명할 자료(임금 체불 확인서, 진단서 등)가 있어야 받을 수 있습니다.'});
-  if(short) notes.push({warn:1,t:'근무 기간이 '+r.worked+'일로 180일보다 짧습니다. 퇴사 전 18개월 동안 임금을 받은 날(피보험단위기간)이 180일 이상이어야 받을 수 있어, 전 직장 기간을 합치지 않으면 받기 어렵습니다.'});
-  else if(r.worked<220) notes.push({t:'피보험단위기간은 임금을 받은 날만 세므로, 주 5일 근무하고 토요일이 무급이면 대략 7개월 이상 일해야 180일이 됩니다. 근무 기간이 짧으면 고용센터에서 확인해 보세요.'});
+  if(!short&&r.units<210) notes.push({t:'임금 받은 날이 180일을 조금 넘습니다. 토요일 무급·무급휴직 같은 날은 빠지므로 고용24에서 피보험단위기간을 확인해 보세요.'});
+  (o.jobs||[]).forEach((p,k)=>{ const st=r.status[k], nm='이전 직장 '+p.no+'('+fd(p.join)+' ~ '+fd(p.leave)+')';
+    notes.push({t:st==='ok'?nm+'은 그만두고 3년 안에 다시 취업해 가입기간에 합쳤습니다.':st==='got'?nm+'은 그만두고 실업급여를 받아 가입기간에 합치지 않았습니다.':st==='gap'?nm+'은 그만두고 3년이 지나 다시 취업해 가입기간에 합치지 않았습니다.':nm+'은 그 뒤에 실업급여를 받았거나 3년 넘게 쉰 기간이 있어 가입기간에 합치지 않았습니다.'}); });
+  if((o.jobs||[]).length) notes.push({t:'받을 수 있는지는 마지막으로 그만둔 회사의 퇴사 사유로 판단합니다. 전 직장을 자진퇴사했어도 마지막이 권고사직·계약만료면 받을 수 있습니다.'});
   if(r.floored) notes.push({t:'평균임금의 60%가 하한보다 적어 하한 '+won(r.minDay)+'원(최저시급 × '+Math.min(8,o.hours)+'시간 × 80%)을 적용했습니다.'});
   if(r.capped) notes.push({t:'평균임금의 60%가 상한보다 많아 2026년 하루 상한 '+won(MAX_DAY)+'원을 적용했습니다.'});
   notes.push({t:'퇴사 다음 날부터 12개월 안에 다 받아야 하므로, 퇴사하면 바로 고용24에서 구직 등록을 하고 신청하세요. 실업급여를 받는 동안 일하거나 소득이 생기면 반드시 신고해야 합니다.'});
-  $('verdict').innerHTML=(no?'개인 사정 자진퇴사는 <b>받기 어렵습니다.</b>':'실업급여는 하루 <b>'+won(r.day)+'원</b>씩 <b>'+r.days+'일</b>, 모두 <b>'+won(r.total)+'원</b>입니다.')
+  $('verdict').innerHTML=(short?'임금 받은 날이 180일에 못 미쳐 <b>실업급여 대상이 아닙니다.</b>':self?'개인 사정 자진퇴사는 <b>받기 어렵습니다.</b>':'실업급여는 하루 <b>'+won(r.day)+'원</b>씩 <b>'+r.days+'일</b>, 모두 <b>'+won(r.total)+'원</b>입니다.')
     +notes.map(x=>'<span class="note'+(x.warn?' warn':'')+'">'+x.t+'</span>').join('');
   $('res').style.display='block';
 }
