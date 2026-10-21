@@ -63,6 +63,7 @@
 - [창업 세액감면, 우리도 받을 수 있나요?](https://www.hantax47.com/tools/startup-tax-credit.html)
 - [사무실, 월세로 쓸까요 살까요?](https://www.hantax47.com/tools/office-buy.html)
 - [집 살 돈, 설명할 수 있나요?](https://www.hantax47.com/tools/fund-source.html)
+- [상속세, 얼마나 나올까요?](https://www.hantax47.com/tools/inheritance-tax.html)
 - [증여, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/gift-tax.html)
 - [주식을 팔면, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/stock-transfer.html)
 - [비상장주식, 우리 회사 주식은 대략 얼마일까요?](https://www.hantax47.com/tools/stock-value.html)

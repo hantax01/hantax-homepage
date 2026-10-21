@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>상속세 계산기 2026, 배우자·자녀 공제까지 | 한택스</title>
+<meta name="description" content="상속재산과 채무, 가족 구성을 넣으면 상속세를 계산합니다. 일괄공제 5억 원, 배우자공제(최소 5억~최대 30억 원), 금융재산공제, 10년 안 사전증여 합산과 신고세액공제 3%까지 반영하고, 상속세가 없는 기준도 함께 보여 줍니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/inheritance-tax.html">
+<meta property="og:title" content="상속세, 얼마나 나올까요?">
+<meta property="og:description" content="상속재산과 가족 구성으로 배우자·일괄공제를 반영한 상속세를 계산합니다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/inheritance-tax.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-inheritance-tax.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=33">
+<style>
+.sim{max-width:900px;margin:0 auto}
+.sim-in{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;background:var(--soft);border-radius:14px;padding:26px 28px}
+.sim label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
+.sim label small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;
+  border:1px solid var(--blue-line);border-radius:50%;background:#fff;color:var(--blue);
+  font-family:inherit;font-size:11.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:1px}
+.help:hover{background:var(--blue-soft)}
+.helpbox{display:none;margin-top:9px;background:var(--blue-soft);border-radius:8px;padding:12px 14px;
+  font-size:12.5px;line-height:1.7;color:var(--char)}
+.helpbox.on{display:block}
+.helpbox b{display:block;color:var(--ink);margin-bottom:3px}
+.helpbox+.helpbox{margin-top:8px}
+[hidden]{display:none!important}
+.sim input,.sim select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
+.sim .unit input{padding-right:40px;text-align:right}
+.divider{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
+.divider:first-child{border-top:0;padding-top:0}
+.divider b{font-size:14.5px;color:var(--ink)}
+.divider span{font-size:12.5px;color:var(--mute)}
+.wide{grid-column:1/-1}
+.ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
+.sim .ichk{display:inline-flex}
+.ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
+.simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
+.res{display:none;margin-top:34px}
+.reshead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px}
+.reshead h2{font-size:20px;margin-bottom:4px}
+.reshead .sub{font-size:14px;color:var(--mute)}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.call{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center;margin-bottom:22px}
+.call .lbl{font-size:14px;opacity:.85}
+.call .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.35}
+.call .val small{font-size:18px;font-weight:700;opacity:.9}
+.call .sub{font-size:14px;opacity:.88;line-height:1.75}
+.rtable{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+.rtable th,.rtable td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:right}
+.rtable th:first-child,.rtable td:first-child{text-align:left;color:var(--char)}
+.rtable thead th{background:var(--soft);font-size:13.5px;color:var(--ink);border-bottom:2px solid var(--line)}
+.rtable td+td{white-space:nowrap}
+.rtable td small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.rtable tr.sub td{color:var(--mute);font-size:13.5px}
+.rtable tr.sub td:first-child{padding-left:26px;color:var(--mute)}
+.rtable tr.sum td{font-weight:700;color:var(--ink);background:var(--soft)}
+.rtable tr.tot td{font-weight:800;color:var(--ink);background:var(--blue-soft);border-bottom:2px solid var(--line)}
+.rtable tr.tot td+td{color:var(--blue)}
+.verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;margin-top:22px;font-size:15.5px;line-height:1.8;color:var(--ink)}
+.verdict b{color:var(--blue)}
+.verdict .note{display:block;margin-top:12px;font-size:14px;color:var(--mute)}
+.verdict .note.warn{color:var(--seal)}
+.verdict a{color:var(--blue);font-weight:700}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.disc a{color:var(--blue)}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+@media(max-width:660px){
+.sim-in{grid-template-columns:1fr;padding:20px 16px}
+.call{padding:22px 16px}.call .val{font-size:24px}
+.rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
+.rtable tr.sub td:first-child{padding-left:14px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "상속재산이 얼마부터 상속세를 내나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "배우자와 자녀가 함께 상속받으면 일괄공제 5억 원과 배우자공제 최소 5억 원을 더해 대략 10억 원까지는 상속세가 없습니다. 배우자 없이 자녀만 상속받으면 대략 5억 원까지입니다. 여기에 금융재산공제와 채무·장례비가 더 빠집니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "배우자 상속공제는 얼마인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "배우자가 실제로 받은 재산만큼 빼 주되 법정상속분과 30억 원을 넘을 수 없고, 적게 받아도 5억 원은 뺍니다. 법정상속분은 배우자 1.5, 자녀 1씩의 비율이라 자녀가 2명이면 배우자 몫은 7분의 3입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "상속세 세율은 어떻게 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "과세표준 1억 원 이하 10%, 5억 원 이하 20%, 10억 원 이하 30%, 30억 원 이하 40%, 30억 원 초과 50%입니다. 구간마다 넘는 부분에만 높은 세율이 붙습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미리 증여한 재산도 상속세에 합쳐지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "돌아가시기 전 10년 안에 상속인에게, 5년 안에 그 밖의 사람에게 증여한 재산은 상속재산에 다시 더해 상속세를 계산합니다. 그때 낸 증여세는 상속세에서 뺍니다. 그래서 증여는 일찍 시작할수록 효과가 큽니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "상속세 신고는 언제까지 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "돌아가신 날이 속한 달의 마지막 날부터 6개월 안에 신고·납부합니다(해외에 살면 9개월). 기한 안에 신고하면 상속세의 3%를 빼 줍니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "상속세를 한 번에 내기 어려우면 어떻게 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "상속세가 2천만 원을 넘으면 담보를 제공하고 최대 10년에 걸쳐 나눠 내는 연부연납을 신청할 수 있습니다. 금융재산보다 부동산이 많으면 부동산으로 내는 물납도 요건에 따라 가능합니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"상속세, 얼마나 나올까요?","url":"https://www.hantax47.com/tools/inheritance-tax.html","description":"상속재산과 채무, 가족 구성을 넣으면 상속세를 계산합니다. 일괄공제 5억 원, 배우자공제(최소 5억~최대 30억 원), 금융재산공제, 10년 안 사전증여 합산과 신고세액공제 3%까지 반영하고, 상속세가 없는 기준도 함께 보여 줍니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">상속세 계산</span>
+    <h1>상속세,<br>얼마나 나올까요?</h1>
+    <p class="lead">물려받을 재산과 채무, 가족 구성을 넣으면 상속세를 계산합니다. 일괄공제와 배우자공제, 금융재산공제, 10년 안에 미리 준 재산까지 반영하고, 세금이 없는 기준도 함께 보여 드립니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sim-in">
+        <div class="divider"><b>물려받을 재산</b><span>돌아가신 날 기준 금액</span></div>
+        <div>
+          <label for="estate">부동산 등 <small>금융재산 말고</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="집·땅·상가, 자동차, 회사 지분처럼 예금이 아닌 재산입니다. 아파트는 비슷한 아파트의 최근 거래가(시가), 단독주택·토지는 공시가격이 기본이라 어떤 금액으로 평가하느냐에 따라 세금이 크게 달라집니다.">?</button></label>
+          <div class="unit"><input type="text" id="estate" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="fin">금융재산 <small>예금·주식·보험금</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="예금·적금, 주식·펀드, 사망보험금처럼 금융기관에 있는 재산입니다. 2천만 원까지는 전액, 1억 원까지는 2천만 원, 그 넘으면 20%(최대 2억 원)를 금융재산 상속공제로 뺍니다.">?</button></label>
+          <div class="unit"><input type="text" id="fin" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="debt">채무 <small>대출·임대보증금 등</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="돌아가신 분이 갚아야 했던 대출, 세입자에게 돌려줄 임대보증금, 내지 못한 세금·병원비 등입니다. 상속재산에서 뺍니다.">?</button></label>
+          <div class="unit"><input type="text" id="debt" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="funeral">장례비 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="증빙이 없어도 500만 원은 빼 주고, 증빙이 있으면 1천만 원까지 뺍니다. 봉안시설·자연장지 비용은 500만 원까지 따로 더 뺄 수 있는데 이 계산기에는 넣지 않았습니다.">?</button></label>
+          <div class="unit"><input type="text" id="funeral" inputmode="numeric" placeholder="비우면 500만 원"><span>원</span></div>
+        </div>
+        <div>
+          <label for="pre">10년 안에 미리 준 재산 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="돌아가시기 전 10년 안에 상속인(배우자·자녀)에게, 5년 안에 그 밖의 사람에게 증여한 재산입니다. 증여할 때의 금액으로 상속재산에 다시 더하고, 그때 낸 증여세는 상속세에서 뺍니다.">?</button></label>
+          <div class="unit"><input type="text" id="pre" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div>
+          <label for="pretax">그때 낸 증여세 <small>선택</small></label>
+          <div class="unit"><input type="text" id="pretax" inputmode="numeric"><span>원</span></div>
+        </div>
+
+        <div class="divider"><b>가족</b><span>상속받는 사람</span></div>
+        <div>
+          <label class="ichk" for="spouse"><input type="checkbox" id="spouse" checked><span>배우자가 있습니다</span></label>
+        </div>
+        <div>
+          <label for="kids">자녀 수</label>
+          <select id="kids"><option value="0">없음</option><option value="1">1명</option><option value="2" selected>2명</option><option value="3">3명</option><option value="4">4명</option><option value="5">5명</option><option value="6">6명</option><option value="7">7명</option><option value="8">8명</option></select>
+        </div>
+        <div class="wide" id="sg-w">
+          <label for="sget">배우자가 실제로 받는 금액 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="배우자공제는 배우자가 실제로 받은 재산만큼(법정상속분까지, 최대 30억 원) 빼 주고, 적게 받아도 5억 원은 뺍니다. 비워 두면 법정상속분(배우자 1.5 : 자녀 1씩)만큼 받는 것으로 계산합니다. 배우자공제를 받으려면 신고기한 다음 날부터 9개월 안에 배우자 몫을 나눠 등기 등을 마쳐야 합니다.">?</button></label>
+          <div class="unit" style="max-width:420px"><input type="text" id="sget" inputmode="numeric" placeholder="비우면 법정상속분만큼"><span>원</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary simbtn" id="calc">상속세 계산하기</button>
+
+      <div class="res" id="res">
+        <div class="reshead">
+          <div><h2>상속세 계산 결과</h2><p class="sub" id="res-sub"></p></div>
+          <button type="button" class="savebtn" id="save-img">이미지 저장</button>
+        </div>
+        <div class="call" id="call"></div>
+        <div style="overflow-x:auto">
+          <table class="rtable" id="rt">
+            <thead><tr><th>항목</th><th>금액</th></tr></thead>
+            <tbody id="rt-body"></tbody>
+          </table>
+        </div>
+        <div class="verdict" id="verdict"></div>
+        <div class="ask">
+          <p><b>상속세는 재산을 어떻게 평가하고 어떻게 나누느냐에 따라 크게 달라집니다.</b><br>감정평가, 배우자 몫 나누기, 사전증여 계획과 신고까지 함께 살펴 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>상속재산이 얼마부터 상속세를 내나요?</summary>
+          <div class="a">배우자와 자녀가 함께 상속받으면 일괄공제 5억 원과 배우자공제 최소 5억 원을 더해 대략 10억 원까지는 상속세가 없습니다. 배우자 없이 자녀만 상속받으면 대략 5억 원까지입니다. 여기에 금융재산공제와 채무·장례비가 더 빠집니다.</div>
+        </details>
+        <details>
+          <summary>배우자 상속공제는 얼마인가요?</summary>
+          <div class="a">배우자가 실제로 받은 재산만큼 빼 주되 법정상속분과 30억 원을 넘을 수 없고, 적게 받아도 5억 원은 뺍니다. 법정상속분은 배우자 1.5, 자녀 1씩의 비율이라 자녀가 2명이면 배우자 몫은 7분의 3입니다.</div>
+        </details>
+        <details>
+          <summary>상속세 세율은 어떻게 되나요?</summary>
+          <div class="a">과세표준 1억 원 이하 10%, 5억 원 이하 20%, 10억 원 이하 30%, 30억 원 이하 40%, 30억 원 초과 50%입니다. 구간마다 넘는 부분에만 높은 세율이 붙습니다.</div>
+        </details>
+        <details>
+          <summary>미리 증여한 재산도 상속세에 합쳐지나요?</summary>
+          <div class="a">돌아가시기 전 10년 안에 상속인에게, 5년 안에 그 밖의 사람에게 증여한 재산은 상속재산에 다시 더해 상속세를 계산합니다. 그때 낸 증여세는 상속세에서 뺍니다. 그래서 증여는 일찍 시작할수록 효과가 큽니다.</div>
+        </details>
+        <details>
+          <summary>상속세 신고는 언제까지 하나요?</summary>
+          <div class="a">돌아가신 날이 속한 달의 마지막 날부터 6개월 안에 신고·납부합니다(해외에 살면 9개월). 기한 안에 신고하면 상속세의 3%를 빼 줍니다.</div>
+        </details>
+        <details>
+          <summary>상속세를 한 번에 내기 어려우면 어떻게 하나요?</summary>
+          <div class="a">상속세가 2천만 원을 넘으면 담보를 제공하고 최대 10년에 걸쳐 나눠 내는 연부연납을 신청할 수 있습니다. 금융재산보다 부동산이 많으면 부동산으로 내는 물납도 요건에 따라 가능합니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 계산 결과는 참고용입니다. 2026년 현재 상속세 및 증여세법 기준이며, 재산 평가 방법과 실제 나누는 방식에 따라 세금이 달라집니다.<br>
+        · 상속공제는 일괄공제 5억 원과 기초공제 2억 원 + 자녀 1인당 5천만 원 중 큰 금액(배우자 혼자 상속받으면 일괄공제 불가), 배우자공제, 금융재산공제만 반영했습니다. 동거주택·가업·영농 상속공제, 미성년·연로자·장애인 공제, 세대를 건너뛴 상속 할증, 감정평가 수수료는 넣지 않았습니다.<br>
+        · 상속공제는 과세가액에서 미리 준 재산을 뺀 금액까지만 받을 수 있어 그 한도를 적용했습니다(증여 때 받은 증여재산공제만큼은 실제 한도가 조금 더 큽니다). 자녀가 없으면 배우자가 혼자 상속받는 것으로 보았습니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="gift-tax.html">증여세 계산기</a>
+        <a href="stock-value.html">비상장주식 계산기</a>
+        <a href="fund-source.html">자금출처 계산기</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 상속세 계산 (2026년 상속세 및 증여세법) ── */
+// 세율: [과세표준 상한, 세율, 누진공제]
+const RATES=[[1e8,0.1,0],[5e8,0.2,1e7],[10e8,0.3,6e7],[30e8,0.4,1.6e8],[Infinity,0.5,4.6e8]];
+function taxOf(base){ if(base<500000) return 0; for(const [lim,r,d] of RATES) if(base<=lim) return Math.floor(base*r-d); }   // 과세표준 50만 원 미만은 과세하지 않음
+const bracketOf=base=>RATES.find(x=>base<=x[0]);
+// 금융재산 상속공제: 2천만 원까지 전액, 1억 원까지 2천만 원, 넘으면 20%(최대 2억 원)
+const finDed=n=>n<=0?0:n<=2e7?n:n<=1e8?2e7:Math.min(2e8,Math.floor(n*0.2));
+function calcInherit(o){
+  const funeral=Math.min(1e7,Math.max(5e6,o.funeral||0));          // 증빙 없어도 500만 원, 최대 1천만 원
+  const gross=o.estate+o.fin;
+  const net=Math.max(0,gross-o.debt-funeral);                       // 상속재산가액 (채무·장례비 뺀 금액)
+  const taxable=net+o.pre;                                          // 상속세 과세가액 (미리 준 재산 더함)
+  // 인적공제: 일괄공제 5억 원 vs 기초공제 2억 원 + 자녀 1인당 5천만 원 (배우자 혼자 상속받으면 일괄공제 불가)
+  const sole=o.spouse&&o.kids===0;
+  const basic=2e8+o.kids*5e7, lump=sole?0:5e8, personal=Math.max(basic,lump);
+  // 배우자공제: 실제 받는 금액(비우면 법정상속분), 법정상속분·30억 원 한도, 적어도 5억 원
+  const share=o.spouse?(o.kids?1.5/(1.5+o.kids):1):0;
+  const legal=Math.floor(taxable*share);
+  const got=o.spouse?(o.sget>0?o.sget:legal):0;
+  const spouseDed=o.spouse?Math.max(5e8,Math.min(got,legal,30e8)):0;
+  const fin=finDed(o.fin);
+  const sum=personal+spouseDed+fin;
+  const limit=Math.max(0,taxable-o.pre);                            // 상속공제 한도 (미리 준 재산은 공제 대상에서 제외)
+  const ded=Math.min(sum,limit);
+  const base=Math.max(0,taxable-ded);                               // 과세표준
+  const calc=taxOf(base);                                           // 산출세액
+  const giftCr=Math.min(o.pretax,calc);                             // 증여세액공제
+  const report=Math.floor((calc-giftCr)*0.03);                      // 신고세액공제 3%
+  const pay=calc-giftCr-report;
+  return {funeral,gross,net,taxable,sole,basic,lump,personal,share,legal,got,spouseDed,fin,sum,limit,ded,limited:sum>limit,base,calc,giftCr,report,pay};
+}
+
+/* ── 화면 ─────────────────────────────────── */
+const $=id=>document.getElementById(id);
+const won=n=>Math.round(n).toLocaleString('ko-KR');
+const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+const man=v=>{ const a=Math.round(v/1e4); if(a<1e4) return a.toLocaleString('ko-KR')+'만 원'; const e=Math.floor(a/1e4), m=a%1e4; return e+'억'+(m?' '+m.toLocaleString('ko-KR')+'만':'')+' 원'; };
+const MONEY=['estate','fin','debt','funeral','pre','pretax','sget'];
+MONEY.forEach(id=>$(id).addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }));
+const syncSpouse=()=>{ $('sg-w').hidden=!$('spouse').checked; };
+$('spouse').addEventListener('change',syncSpouse); syncSpouse();
+
+function read(){
+  const o={spouse:$('spouse').checked,kids:+$('kids').value};
+  MONEY.forEach(id=>o[id]=num($(id).value));
+  if(!o.estate&&!o.fin) return ['물려받을 재산(부동산 등이나 금융재산)을 넣어 주세요.',$('estate')];
+  return o;
+}
+const shown=()=>$('res').style.display==='block';
+function render(){
+  const o=read(), r=calcInherit(o);
+  const fam=[o.spouse?'배우자':'',o.kids?'자녀 '+o.kids+'명':'',(!o.spouse&&!o.kids)?'자녀 외 상속인':''].filter(Boolean).join(' + ');
+  $('res-sub').textContent='상속재산 '+man(r.gross)+' · '+fam;
+  $('call').innerHTML=r.pay>0
+    ?'<div class="lbl">신고기한 안에 신고하면 낼 상속세</div><div class="val">'+won(r.pay)+'<small>원</small></div><div class="sub">과세표준 '+man(r.base)+'에 '+Math.round(bracketOf(r.base)[1]*100)+'% 구간 세율을 적용하고 신고세액공제 3%를 뺀 금액입니다.</div>'
+    :'<div class="lbl">공제가 상속재산보다 커서</div><div class="val">상속세가 없습니다</div><div class="sub">받을 수 있는 상속공제 '+man(r.sum)+'이 과세가액 '+man(r.taxable)+'보다 큽니다. 그래도 재산 평가를 위해 신고해 두는 것이 좋은 경우가 많습니다.</div>';
+  const row=(l,v,cls,s)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(s?'<small>'+s+'</small>':'')+'</td><td>'+v+'</td></tr>';
+  $('rt-body').innerHTML=
+    row('상속재산',won(r.gross),'','부동산 등 '+won(o.estate)+' + 금융재산 '+won(o.fin))
+   +row('채무·장례비','− '+won(o.debt+r.funeral),'','채무 '+won(o.debt)+' + 장례비 '+won(r.funeral))
+   +(o.pre?row('10년 안에 미리 준 재산','+ '+won(o.pre)):'')
+   +row('상속세 과세가액',won(r.taxable),'sum')
+   +row(r.personal===r.lump&&!r.sole?'일괄공제':'기초공제 + 자녀공제',won(r.personal),'sub',r.sole?'배우자 혼자 상속받아 일괄공제 불가':r.personal===r.lump?'기초공제 2억 + 자녀 '+o.kids+'명 = '+man(r.basic)+'보다 큼':'일괄공제 5억 원보다 큼')
+   +(o.spouse?row('배우자공제',won(r.spouseDed),'sub',(o.sget?'실제 받는 금액 '+won(r.got):'법정상속분('+(o.kids?'1.5 / '+(1.5+o.kids):'혼자 상속')+') '+won(r.legal))+(r.spouseDed===5e8&&r.got<5e8?' · 최소 5억 적용':r.spouseDed===30e8?' · 최대 30억 적용':'')):'')
+   +(r.fin?row('금융재산공제',won(r.fin),'sub'):'')
+   +row('상속공제 합계','− '+won(r.ded),'sum',r.limited?'공제 한도 '+won(r.limit)+' 적용':'')
+   +row('과세표준',won(r.base),'sum')
+   +row('산출세액',won(r.calc),'',r.base>=5e5?Math.round(bracketOf(r.base)[1]*100)+'% 구간 (누진공제 '+won(bracketOf(r.base)[2])+')':'')
+   +(r.giftCr?row('증여세액공제','− '+won(r.giftCr),'sub','미리 준 재산에 낸 증여세'):'')
+   +(r.report?row('신고세액공제 3%','− '+won(r.report),'sub'):'')
+   +row('낼 상속세',won(r.pay),'tot');
+  const notes=[];
+  if(o.spouse) notes.push({t:'배우자공제는 배우자가 실제로 그만큼 상속받아야 받을 수 있습니다. 신고기한 다음 날부터 9개월 안에 배우자 몫을 나눠 등기·명의변경을 마쳐야 하고, 배우자가 적게 받으면 공제도 줄어듭니다.'});
+  if(r.sole) notes.push({warn:1,t:'자녀가 없어 배우자가 혼자 상속받는 것으로 보았습니다. 이때는 일괄공제 5억 원을 받을 수 없고 기초공제 2억 원만 받습니다. 돌아가신 분의 부모님이 계시면 함께 상속인이 되어 계산이 달라집니다.'});
+  if(r.limited) notes.push({t:'미리 준 재산이 있어 상속공제는 '+won(r.limit)+'원까지만 받습니다.'});
+  if(r.pay>2e7) notes.push({t:'상속세가 2천만 원을 넘어 담보를 제공하고 최대 10년에 걸쳐 나눠 내는 연부연납을 신청할 수 있습니다.'});
+  notes.push({t:'돌아가신 날이 속한 달의 마지막 날부터 6개월 안에 신고·납부해야 신고세액공제 3%를 받습니다. 아파트는 비슷한 아파트의 최근 거래가로, 단독주택·토지는 공시가격이나 감정가로 평가해 세금이 크게 달라질 수 있습니다.'});
+  $('verdict').innerHTML=(r.pay>0?'상속세는 <b>'+won(r.pay)+'원</b>입니다. 상속공제는 모두 <b>'+man(r.ded)+'</b>입니다.':'받을 수 있는 상속공제 <b>'+man(r.sum)+'</b>이 과세가액보다 커서 <b>상속세가 없습니다.</b>')
+    +notes.map(x=>'<span class="note'+(x.warn?' warn':'')+'">'+x.t+'</span>').join('');
+  $('res').style.display='block';
+}
+$('calc').addEventListener('click',()=>{
+  const bad=read();
+  if(Array.isArray(bad)){ alert(bad[0]); bad[1].focus(); return; }
+  render();
+  $('res').scrollIntoView({behavior:'smooth',block:'start'});
+});
+const upd=()=>{ if(shown()&&!Array.isArray(read())) render(); };
+document.querySelector('.sim-in').addEventListener('input',upd);
+document.querySelector('.sim-in').addEventListener('change',upd);
+</script>
+<script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('rt'),
+  ()=>({ title:'상속세 계산 결과', sub:document.getElementById('res-sub').textContent, filename:'한택스_상속세' })
+);
+</script>
+</body>
+</html>
