@@ -268,7 +268,7 @@
           <input type="date" id="i-start">
         </div>
         <div>
-          <label for="i-end">퇴임일 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="임원에서 물러나는 날입니다. 근속 기간은 취임일부터 퇴임일까지의 개월 수로 보고, 한 달이 안 되는 끝수는 버립니다.">?</button></label>
+          <label for="i-end">퇴임일 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="임원에서 물러나는 날입니다. 근속 기간은 취임일부터 퇴임일까지(퇴임일 포함)의 개월 수로 보고, 한 달이 안 되는 끝수는 한 달로 봅니다.">?</button></label>
           <input type="date" id="i-end">
         </div>
 
@@ -367,7 +367,7 @@
       <p class="disc">
         · 계산 결과는 참고용입니다. 실제 인정 여부는 정관과 지급규정의 내용, 지급 경위에 따라 달라집니다.<br>
         · 소득세법 한도는 퇴직 전 3년 평균급여 × 10% × 근속연수에 2020년 이후 근속분 2배, 2012~2019년 근속분 3배를 적용해 계산했고 2011년 이전 근속분은 한도 없이 퇴직소득으로 보았습니다.<br>
-        · 근속연수는 개월 수로 계산하며 한 달이 안 되는 끝수는 버립니다. 퇴직소득세 계산에서는 1년이 안 되는 끝수를 1년으로 봅니다.<br>
+        · 근속 기간은 개월 수로 계산하며 한 달이 안 되는 끝수는 한 달로 봅니다(소득세법 제22조 제4항). 2012~2019년분과 2020년 이후분도 각각 이렇게 셉니다. 퇴직소득세 계산에서는 1년이 안 되는 끝수를 1년으로 봅니다.<br>
         · 한도를 넘는 금액의 세금은 고르신 세율로 가늠한 금액입니다. 실제로는 그해 다른 소득과 합산해 정해집니다.<br>
         · PDF 저장을 누르면 인쇄 창이 열리니 대상을 PDF로 저장으로 고르세요. 카카오톡 안에서 열었다면 다른 브라우저로 열어 주세요.
       </p>
@@ -429,23 +429,24 @@ function convDeduct(c){
   return 151700000+(c-300000000)*0.35;
 }
 const parse=s=>{ const p=String(s||'').split('-').map(Number); return p.length===3&&p[0]?new Date(p[0],p[1]-1,p[2]):null; };
-// 두 날짜 사이의 개월 수 (한 달이 안 되는 끝수는 버립니다)
+// a일부터 b일(그날 포함)까지의 개월 수, 한 달이 안 되는 끝수는 한 달로 봅니다 (소득세법 제22조 제4항)
 function monthsBetween(a,b){
-  if(!a||!b||b<=a) return 0;
-  let m=(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth());
-  if(b.getDate()<a.getDate()) m--;
-  return Math.max(0,m);
+  if(!a||!b||b<a) return 0;
+  // m개월이 끝나는 날: m달 뒤 같은 날짜의 전날, 그 달에 같은 날짜가 없으면 그 달 말일 (민법 제160조)
+  const endOf=m=>{ const last=new Date(a.getFullYear(),a.getMonth()+m+1,0).getDate(); return a.getDate()>last?new Date(a.getFullYear(),a.getMonth()+m,last):new Date(a.getFullYear(),a.getMonth()+m,a.getDate()-1); };
+  let m=(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth())+1;
+  while(m>1&&endOf(m-1)>=b) m--;
+  return m;
 }
-const B2012=new Date(2012,0,1), B2020=new Date(2020,0,1);
+const B2012=new Date(2012,0,1), B2020=new Date(2020,0,1), E2011=new Date(2011,11,31), E2019=new Date(2019,11,31);
 const MULT_1219=3, MULT_2020=2;   // 2012~2019년 근속분 3배, 2020년 이후 2배
 
 function calcExec(c){
   const start=parse(c.start), end=parse(c.end);
   const months=monthsBetween(start,end);
-  // 근속 기간을 세 구간으로 나눕니다 (합계가 전체 개월 수와 맞도록 경계까지의 개월 수로 계산)
-  const to2011=start&&end?Math.min(monthsBetween(start,end<B2012?end:B2012),months):0;
-  const to2019=start&&end?Math.min(monthsBetween(start,end<B2020?end:B2020),months):0;
-  const m2011=to2011, m1219=Math.max(0,to2019-to2011), m2020=Math.max(0,months-to2019);
+  // 근속 기간을 세 구간으로 나눠 구간마다 개월 수를 셉니다 (구간마다 한 달 미만은 한 달)
+  const seg=(from,to)=>start&&end?monthsBetween(start>from?start:from,end<to?end:to):0;
+  const m2011=seg(start,E2011), m1219=seg(B2012,E2019), m2020=seg(B2020,end);
 
   const years=months/12;
   // 규정이 있으면 3년 평균급여로 2배수(2012~2019년분은 3배수) 한도를, 없으면 1년 급여로 1배수 한도를 봅니다
@@ -580,7 +581,7 @@ function render(){
   const row=(l,sm,v,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+(sm?'<small>'+sm+'</small>':'')+'</td><td>'+v+'</td></tr>';
   const limitName=c.rule?'소득세법 한도':'회사 비용으로 인정되는 한도';
   const limitWords=c.rule
-    ?(r.m1219?'2012~2019년 '+yearWords(r.m1219)+' × 3배':'')+(r.m1219&&r.m2020?' + ':'')+(r.m2020?'2020년 이후 '+yearWords(r.m2020)+' × 2배':'')
+    ?'평균급여의 10% × '+(r.m1219&&r.m2020?'(':'')+(r.m1219?'2012~2019년 '+yearWords(r.m1219)+' × 3배':'')+(r.m1219&&r.m2020?' + ':'')+(r.m2020?'2020년 이후 '+yearWords(r.m2020)+' × 2배':'')+(r.m1219&&r.m2020?')':'')
     :'규정이 없어 1년 급여의 10% × '+r.years.toFixed(2)+'년 (1배수)';
   $('rt-body').innerHTML=
       (r.limitMode?'':row('지급할 퇴직금','재임 '+yearWords(r.months),won(r.amount)+'원','sum'))
@@ -636,7 +637,7 @@ function render(){
 
   const srow=(l,m,v)=>'<tr><td>'+l+'</td><td class="mid">'+m+'</td><td>'+v+'</td></tr>';
   $('steps').innerHTML='<table class="stable">'
-    +srow('재임 기간','취임일부터 퇴임일까지, 한 달 미만 끝수 버림',yearWords(r.months))
+    +srow('재임 기간','취임일부터 퇴임일까지, 한 달 미만은 한 달로',yearWords(r.months))
     +srow(c.rule?'1년 평균급여':'퇴직 전 1년 총급여',c.rule?(r.months>=36?'퇴직 전 3년 총급여 '+won(c.pay3)+' ÷ 3':'총급여 '+won(c.pay3)+' ÷ '+r.years.toFixed(2)+'년'):'입력한 금액',won(r.avg)+'원')
     +(r.m1219?srow('2012~2019년분','평균급여 × 10% × '+(r.m1219/12).toFixed(2)+'년 × 3배',won(r.limit1219)+'원'):'')
     +(r.m2020?srow('2020년 이후분','평균급여 × 10% × '+(r.m2020/12).toFixed(2)+'년 × 2배',won(r.limit2020)+'원'):'')
