@@ -160,6 +160,14 @@
   },
   {
    "@type": "Question",
+   "name": "지역가입자도 건강보험료를 정산하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "작년에 소득이 줄어 공단에 보험료 조정을 받은 경우에만 정산합니다. 깎아 준 기간의 소득 보험료를 확정된 그해 소득으로 다시 계산해 다음 해 11월에 차액을 더 걷거나 돌려주고, 더 낼 금액은 12회까지 나눠 낼 수 있습니다. 조정을 받지 않은 지역가입자는 작년 보험료를 정산하지 않고, 11월부터 새 보험료만 바뀝니다. 모든 지역가입자를 직장가입자처럼 매년 정산하는 방안은 정부가 검토 중입니다(2026년 10월 기준)."
+   }
+  },
+  {
+   "@type": "Question",
    "name": "직원을 뽑으면 건강보험료가 어떻게 달라지나요?",
    "acceptedAnswer": {
     "@type": "Answer",
@@ -265,6 +273,18 @@
           <label for="anow">지금 내는 월 보험료 <small>선택 · 비교용</small></label>
           <div class="unit"><input type="text" id="anow" inputmode="numeric"><span>원</span></div>
         </div>
+        <div class="divider m-area"><b>작년 보험료 조정</b><span>조정을 받았으면 올해 11월에 정산합니다</span></div>
+        <div class="wide m-area">
+          <label class="ichk"><input type="checkbox" id="aadj"><span>작년(2025년)에 소득이 줄어 보험료 조정을 받았어요</span> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="폐업·휴업·해촉 등으로 소득이 줄었다고 공단에 신청해 보험료를 깎아 받았다면 체크하세요. 깎아 준 기간의 소득 보험료는 확정된 그해 소득으로 다시 계산해, 다음 해 11월에 모자란 만큼 더 걷고 더 낸 만큼 돌려줍니다(국민건강보험법 시행령 제41조의2). 조정을 받지 않았다면 지역가입자는 작년 보험료를 정산하지 않습니다.">?</button></label>
+        </div>
+        <div class="m-area adj" hidden>
+          <label for="amon">조정된 보험료를 낸 달 수 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="깎인 보험료를 낸 달 수입니다. 보통 신청한 다음 달부터 그해 10월까지입니다.">?</button></label>
+          <div class="unit"><input type="text" id="amon" inputmode="numeric"><span>개월</span></div>
+        </div>
+        <div class="m-area adj" hidden>
+          <label for="apaid">그동안 낸 소득 보험료 (월) <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="조정 기간 고지서 산출내역의 소득 보험료(건강보험분, 장기요양 제외)입니다. 소득이 없다고 조정됐으면 비워 두세요. 2025년 최저보험료 19,780원으로 봅니다.">?</button></label>
+          <div class="unit"><input type="text" id="apaid" inputmode="numeric"><span>원</span></div>
+        </div>
       </div>
 
       <button class="btn btn-primary simbtn" id="calc">건강보험료 계산하기</button>
@@ -314,6 +334,10 @@
           <div class="a">지역가입자는 폐업·휴업을 했거나 소득이 크게 줄었으면 공단에 보험료 조정을 신청할 수 있고, 나중에 확정 소득으로 정산합니다. 직원이 있는 대표자도 사업 소득이 줄었다는 자료로 보수월액 변경을 신청할 수 있으니 공단에 확인해 보세요.</div>
         </details>
         <details>
+          <summary>지역가입자도 건강보험료를 정산하나요?</summary>
+          <div class="a">작년에 소득이 줄어 공단에 보험료 조정을 받은 경우에만 정산합니다. 깎아 준 기간의 소득 보험료를 확정된 그해 소득으로 다시 계산해 다음 해 11월에 차액을 더 걷거나 돌려주고, 더 낼 금액은 12회까지 나눠 낼 수 있습니다. 조정을 받지 않은 지역가입자는 작년 보험료를 정산하지 않고, 11월부터 새 보험료만 바뀝니다. 모든 지역가입자를 직장가입자처럼 매년 정산하는 방안은 정부가 검토 중입니다(2026년 10월 기준).</div>
+        </details>
+        <details>
           <summary>직원을 뽑으면 건강보험료가 어떻게 달라지나요?</summary>
           <div class="a">직원을 한 명이라도 고용보험·건강보험에 가입시키면 대표자도 직장가입자가 되어 재산은 보지 않고 사업소득만으로 보험료를 냅니다. 대신 직원 보험료의 절반을 회사가 부담하고, 대표자 보험료는 직원 중 가장 높은 월급보다 낮을 수 없습니다.</div>
         </details>
@@ -323,7 +347,8 @@
         · 계산 결과는 참고용이며 실제 금액은 국민건강보험공단 고지서로 확인하세요. 원 단위는 10원 미만을 버렸습니다.<br>
         · 2026년 건강보험료율 7.19%, 장기요양보험료(건강보험료의 13.14%), 재산 점수당 211.5원, 지역 최저 월 20,160원·최고 월 4,591,740원 기준입니다. 작년(2025년) 보험료 정산에는 2025년 요율 7.09%, 장기요양 12.95%를 썼습니다.<br>
         · 직장가입자 대표자는 사업소득금액만 반영했습니다. 사업소득 외 다른 소득이 연 2천만 원을 넘으면 11월부터 소득월액보험료가 따로 붙습니다.<br>
-        · 지역가입자 재산은 재산세 과세표준과 전월세(보증금 + 월세 × 40의 30%)만 반영했고, 실거주 주택 대출 공제와 피부양자·세대원 소득은 넣지 않았습니다. 재산 점수는 국민건강보험법 시행령 별표 4(2024. 5. 7. 개정) 기준입니다.
+        · 지역가입자 재산은 재산세 과세표준과 전월세(보증금 + 월세 × 40의 30%)만 반영했고, 실거주 주택 대출 공제와 피부양자·세대원 소득은 넣지 않았습니다. 재산 점수는 국민건강보험법 시행령 별표 4(2024. 5. 7. 개정) 기준입니다.<br>
+        · 지역가입자 정산은 작년에 보험료 조정을 받은 경우만 계산하며, 소득 보험료만 2025년 요율 7.09%, 장기요양 12.95%, 최저보험료 19,780원으로 다시 계산했습니다.
       </p>
 
       <div class="morelinks">
@@ -386,6 +411,13 @@ function propGrade(net){   // net: 1억 원을 뺀 재산 금액(원)
   const man=net/1e4; const i=PROP.findIndex(x=>man<=x[0]);
   return {grade:i+1,point:PROP[i][1]};
 }
+// 작년에 조정받았으면: 조정 기간의 소득 보험료를 확정된 작년 소득으로 다시 계산해 11월에 정산 (시행령 제41조의2, 2025년 요율·최저보험료, 재산 보험료는 정산하지 않음)
+const AREA_MIN25=19780;
+function calcAdj(o,monthly){
+  const R=RATE[2025], n=Math.min(12,o.amon), conf=Math.max(AREA_MIN25,f10(monthly*R.hi)), paid=o.apaid||AREA_MIN25;
+  const confL=f10(conf*R.ltc), paidL=f10(paid*R.ltc), hi=(conf-paid)*n, ltc=(confL-paidL)*n;
+  return {n,conf,paid,confL,paidL,hi,ltc,total:hi+ltc};
+}
 function calcArea(o){
   const intDiv=o.aint>1e7?o.aint:0;                                   // 이자·배당 합 1천만 원 이하는 반영 안 함
   const income=o.abiz+intDiv+Math.floor(o.awage*0.5)+o.aetc;          // 근로·연금소득은 50%
@@ -395,7 +427,7 @@ function calcArea(o){
   const prop=o.aprop+rentVal, net=Math.max(0,prop-1e8);
   const g=propGrade(net), hiProp=f10(g.point*POINT);
   const hi=Math.min(AREA_MAX,hiInc+hiProp), ltc=f10(hi*RATE[2026].ltc);
-  return {intDiv,income,monthly,hiInc,rentVal,prop,net,grade:g.grade,point:g.point,hiProp,hi,ltc,total:hi+ltc};
+  return {intDiv,income,monthly,hiInc,rentVal,prop,net,grade:g.grade,point:g.point,hiProp,hi,ltc,total:hi+ltc,adj:o.aadj&&o.amon?calcAdj(o,monthly):null};
 }
 
 /* ── 화면 ─────────────────────────────────── */
@@ -403,7 +435,7 @@ const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const sgn=n=>(n>0?'+ ':n<0?'− ':'')+won(Math.abs(n));
-const IDS=['j25','j24','j23','jmax','abiz','aint','awage','aetc','aprop','adep','arent','anow'];
+const IDS=['j25','j24','j23','jmax','abiz','aint','awage','aetc','aprop','adep','arent','anow','amon','apaid'];
 IDS.forEach(id=>$(id).addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }));
 let MODE='job';
 const MODES={
@@ -416,17 +448,19 @@ function setMode(m,init){
   if(!init){ try{ history.replaceState(null,'','#'+m); }catch(e){} }
   if(shown()) Array.isArray(read())?($('res').style.display='none'):render();
 }
+$('aadj').addEventListener('change',e=>document.querySelectorAll('.adj').forEach(d=>d.hidden=!e.target.checked));
 document.querySelector('.tabs').addEventListener('click',e=>{ const b=e.target.closest('button[data-mode]'); if(b) setMode(b.dataset.mode); });
 
 function read(){
   const o={}; IDS.forEach(id=>o[id]=num($(id).value));
-  o.jsincere=$('jsincere').checked;
+  o.jsincere=$('jsincere').checked; o.aadj=$('aadj').checked;
   if(MODE==='job'){
     if(!o.j25&&!o.jmax) return ['2025년 사업소득금액을 넣어 주세요.',$('j25')];
     if(!$('j24').value.trim()) o.j24=o.j25;
     if(!$('j23').value.trim()) o.j23=o.j24;
   }else{
     if(!o.abiz&&!o.aint&&!o.awage&&!o.aetc&&!o.aprop&&!o.adep) return ['작년 소득이나 재산을 넣어 주세요.',$('abiz')];
+    if(o.aadj&&!o.amon) return ['조정된 보험료를 낸 달 수를 넣어 주세요.',$('amon')];
   }
   return o;
 }
@@ -466,20 +500,28 @@ function renderArea(o){
   const r=calcArea(o), T=r.total;
   $('res-title').textContent='지역가입자 건강보험료';
   $('res-sub').textContent='작년 소득 '+won(r.income)+'원 · 재산 '+won(r.prop)+'원';
-  $('calls').innerHTML=
-    '<div class="call"><div class="lbl">11월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원 · 다음 해 10월까지</div></div>'
+  const A=r.adj, cmpNow=o.anow?' · 지금 '+won(o.anow)+'원에서 '+(T===o.anow?'그대로':(T>o.anow?won(T-o.anow)+'원 오름':won(o.anow-T)+'원 내림')):'';
+  $('calls').innerHTML=A
+    ?'<div class="call"><div class="lbl">11월 정산 (작년 조정 '+A.n+'개월분)</div><div class="val">'+(A.total>=0?won(A.total):'돌려받음 '+won(-A.total))+'<small>원</small></div><div class="sub">'+(A.total>0?'11월분 보험료에 더해 냅니다. 12회까지 나눠 낼 수 있습니다.':A.total<0?'더 낸 보험료라 돌려받거나 다음 보험료에서 뺍니다.':'조정한 보험료가 확정 소득과 같아 정산할 금액이 없습니다.')+'</div></div>'
+     +'<div class="call lt"><div class="lbl">11월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원'+cmpNow+'</div></div>'
+    :'<div class="call"><div class="lbl">11월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원 · 다음 해 10월까지</div></div>'
    +(o.anow?'<div class="call lt"><div class="lbl">지금 내는 보험료와 비교</div><div class="val">'+(T===o.anow?'그대로':(T>o.anow?'+ ':'− ')+won(Math.abs(T-o.anow))+'<small>원</small>')+'</div><div class="sub">지금 '+won(o.anow)+'원 → 11월부터 '+won(T)+'원 (1년이면 '+(T>=o.anow?'':'− ')+won(Math.abs(T-o.anow)*12)+'원)</div></div>'
      :'<div class="call lt"><div class="lbl">1년(11월~다음 해 10월) 합계</div><div class="val">'+won(T*12)+'<small>원</small></div><div class="sub">지금 내는 보험료를 넣으면 얼마나 바뀌는지 비교해 드립니다.</div></div>');
   $('rt-body').innerHTML=
     row('소득 보험료',r.hiInc,'','','반영 소득 '+won(r.income)+'원 ÷ 12 = '+won(r.monthly)+'원 × 7.19%'+(r.hiInc===AREA_MIN&&f10(r.monthly*RATE[2026].hi)<AREA_MIN?' · 최저 보험료':''))
    +row('재산 보험료',r.hiProp,'','',r.grade?'재산 '+won(r.prop)+'원 − 1억 → '+r.grade+'등급 '+r.point+'점 × 211.5원':'재산이 1억 원 이하라 재산 보험료 없음')
-   +row('월 보험료',r.hi,r.ltc,'tot',r.hi===AREA_MAX?'월 상한 적용':'장기요양 = 건강보험료 × 13.14%');
+   +row('월 보험료',r.hi,r.ltc,'tot',r.hi===AREA_MAX?'월 상한 적용':'장기요양 = 건강보험료 × 13.14%')
+   +(A?row('작년 조정 기간 확정 소득 보험료 (월)',A.conf,A.confL,'','2025년 소득 ÷ 12 = '+won(r.monthly)+'원 × 7.09%'+(A.conf===AREA_MIN25&&f10(r.monthly*0.0709)<AREA_MIN25?' · 최저 보험료':'')+' · 장기요양 12.95%')
+     +row('조정 기간에 낸 소득 보험료 (월)',A.paid,A.paidL,'',o.apaid?'입력한 금액':'소득 없음으로 조정 · 최저 보험료')
+     +'<tr class="tot"><td>11월 정산 금액<small>(확정 − 낸 금액) × '+A.n+'개월</small></td><td>'+sgn(A.hi)+'</td><td>'+sgn(A.ltc)+'</td><td>'+sgn(A.total)+'</td></tr>':'');
   const notes=[];
   if(r.intDiv===0&&o.aint) notes.push('이자·배당소득이 1천만 원 이하라 보험료에 반영하지 않았습니다.');
   if(o.awage) notes.push('근로·연금소득 '+won(o.awage)+'원은 절반만 반영했습니다.');
   if(r.rentVal) notes.push('전월세는 (보증금 + 월세 × 40)의 30%인 '+won(r.rentVal)+'원을 재산으로 봤습니다.');
+  notes.push(A?'작년에 조정받은 '+A.n+'개월 동안의 소득 보험료를 확정된 2025년 소득으로 다시 계산해 차액을 정산했습니다(국민건강보험법 시행령 제41조의2). 재산 보험료는 정산하지 않습니다.'
+    :'지역가입자는 직장가입자와 달리 작년 보험료를 정산하지 않습니다. 작년에 소득이 줄어 보험료 조정을 받았다면 그 기간만 올해 11월에 정산하니 아래 칸에 체크해 계산해 보세요.');
   notes.push('폐업·휴업했거나 소득이 크게 줄었으면 공단에 보험료 조정을 신청할 수 있습니다. 직원을 뽑으면 직장가입자가 되어 재산은 보지 않고 사업소득으로만 보험료를 냅니다.');
-  $('verdict').innerHTML='11월부터 매달 <b>'+won(T)+'원</b>을 냅니다(소득 '+won(r.hiInc)+'원 + 재산 '+won(r.hiProp)+'원 + 장기요양 '+won(r.ltc)+'원).'
+  $('verdict').innerHTML=(A&&A.total?'11월 정산으로 <b>'+won(Math.abs(A.total))+'원</b>을 '+(A.total>0?'더 내고, ':'돌려받고, '):'')+'11월부터 매달 <b>'+won(T)+'원</b>을 냅니다(소득 '+won(r.hiInc)+'원 + 재산 '+won(r.hiProp)+'원 + 장기요양 '+won(r.ltc)+'원).'
     +notes.map(t=>'<span class="note">'+t+'</span>').join('');
 }
 $('calc').addEventListener('click',()=>{
