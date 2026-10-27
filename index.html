@@ -92,9 +92,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<!-- 글꼴은 화면을 먼저 그린 뒤 받습니다(처음 잠깐 기본 글꼴로 보일 수 있음) -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap" media="print" onload="this.media='all'">
-<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<!-- 글꼴은 첫 화면이 다 뜬 뒤(늦어도 2초 뒤) 받습니다. 그 전에는 기본 글꼴로 보입니다 -->
+<script>(function(){var d=0;function f(){if(d++)return;[['https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap',0],['https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css',1]].forEach(function(x){var l=document.createElement('link');l.rel='stylesheet';l.href=x[0];if(x[1])l.crossOrigin='anonymous';document.head.appendChild(l);});}addEventListener('load',f);setTimeout(f,2000);})();</script>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap"><link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
 <link rel="stylesheet" href="style.css?v=34">
 <script src="assets/ga.js?v=1" async></script>
@@ -142,7 +141,7 @@
         </div>
         <div class="shot" data-i="0">
           <div class="shot-bar"><i></i><i></i><i></i><span>사전알림</span></div>
-          <img src="assets/hero/hero_alert-800.webp" srcset="assets/hero/hero_alert-480.webp 480w, assets/hero/hero_alert-800.webp 800w, assets/hero/hero_alert-1200.webp 1200w" sizes="(max-width:660px) 100vw, (max-width:880px) 50vw, 230px" alt="사전알림 화면 · 창업감면 종료, 노란우산공제 추가 공제 여력, 통합고용세액공제, 부가세 예정고지 등 이 회사에 해당하는 점검 항목만 골라 보여주는 화면" width="2880" height="1520">
+          <img fetchpriority="high" src="assets/hero/hero_alert-800.webp" srcset="assets/hero/hero_alert-480.webp 480w, assets/hero/hero_alert-800.webp 800w, assets/hero/hero_alert-1200.webp 1200w" sizes="(max-width:660px) 100vw, (max-width:880px) 50vw, 230px" alt="사전알림 화면 · 창업감면 종료, 노란우산공제 추가 공제 여력, 통합고용세액공제, 부가세 예정고지 등 이 회사에 해당하는 점검 항목만 골라 보여주는 화면" width="2880" height="1520">
         </div>
       </div>
       <div class="hdots"><button class="hdot" data-d="0" aria-label="사전알림 화면 보기"></button><button class="hdot" data-d="1" aria-label="세무 캘린더 화면 보기"></button><button class="hdot" data-d="2" aria-label="활동 타임라인 화면 보기"></button><button class="hdot" data-d="3" aria-label="신고서 결재 이력 화면 보기"></button></div>
