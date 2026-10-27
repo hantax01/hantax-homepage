@@ -446,6 +446,25 @@ dots.forEach((d,k)=>d.addEventListener('click',e=>{e.stopPropagation();let g=0;w
 hs.addEventListener('mouseenter',()=>clearInterval(t));
 hs.addEventListener('mouseleave',reset);
 upd();}
+// 같은 페이지 안 메뉴 이동: 브라우저 기본 속도는 급해서 거리에 따라 0.7~1.3초에 걸쳐 천천히 출발·정지합니다
+(function(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const root=document.documentElement; let raf=0;
+  const stop=()=>{cancelAnimationFrame(raf);raf=0;root.style.scrollBehavior='';};
+  ['wheel','touchstart','keydown'].forEach(t=>addEventListener(t,()=>{if(raf)stop();},{passive:true}));
+  document.addEventListener('click',e=>{
+    const a=e.target.closest&&e.target.closest('a[href^="#"]'); if(!a) return;
+    const id=a.getAttribute('href'), el=id==='#top'?document.body:document.querySelector(id); if(!el) return;
+    e.preventDefault();
+    const pad=parseFloat(getComputedStyle(root).scrollPaddingTop)||0;
+    const from=scrollY, to=id==='#top'?0:Math.max(0,el.getBoundingClientRect().top+scrollY-pad), dist=to-from;
+    const dur=Math.min(1300,Math.max(700,Math.abs(dist)*.4)), t0=performance.now();
+    const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    stop(); root.style.scrollBehavior='auto';
+    const step=now=>{const k=Math.min(1,(now-t0)/dur); scrollTo(0,from+dist*ease(k)); if(k<1) raf=requestAnimationFrame(step); else {stop(); history.pushState(null,'',id);}};
+    raf=requestAnimationFrame(step);
+  });
+})();
 const mb=document.querySelector('.menu-btn'),nl=document.getElementById('nav-links');
 mb.addEventListener('click',()=>{const open=document.body.classList.toggle('menu-open');mb.setAttribute('aria-expanded',open);mb.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');});
 nl.addEventListener('click',e=>{if(e.target.tagName==='A'){document.body.classList.remove('menu-open');mb.setAttribute('aria-expanded','false');}});
