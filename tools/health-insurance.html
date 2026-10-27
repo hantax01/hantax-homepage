@@ -43,6 +43,10 @@
 .divider b{font-size:14.5px;color:var(--ink)}
 .divider span{font-size:12.5px;color:var(--mute)}
 .wide{grid-column:1/-1}
+.months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px}
+.months button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 0;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer}
+.months button:hover{border-color:var(--blue-line)}
+.months button[aria-pressed=true]{background:var(--blue-soft);border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue);color:var(--blue)}
 .ichk{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--char);cursor:pointer;margin:0}
 .sim .ichk{display:inline-flex}
 .ichk input{width:17px;height:17px;accent-color:var(--blue);padding:0;flex:none}
@@ -108,6 +112,7 @@
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .calls{grid-template-columns:1fr}
+.months{grid-template-columns:repeat(6,minmax(0,1fr))}
 .call{padding:20px 16px}.call .val{font-size:24px}
 .rtable{font-size:13.5px}.rtable th,.rtable td{padding:10px 7px}
 }
@@ -290,13 +295,9 @@
         <div class="wide m-area">
           <label class="ichk"><input type="checkbox" id="aemp"><span>작년에 직원이 있었는데 올해 6월 전에 없어졌어요</span> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년(2025년)에 직원이 있어 대표자도 직장가입자였고, 올해 6월 전에 직원이 모두 없어져 지역가입자가 됐다면 체크하세요. 직장가입자였던 기간의 대표자 보험료를 5월에 신고한 2025년 사업소득으로 다시 계산해, 보통 11월 보험료와 함께 정산합니다. 작년 6~12월에 낸 보험료는 위 2024년 사업소득금액으로 계산합니다(비우면 2025년과 같게). 올해 6월에도 직원이 있었다면 작년분 정산은 6월에 끝났으니 직원이 있어요 탭을 보세요.">?</button></label>
         </div>
-        <div class="m-area emp" hidden>
-          <label for="afrom">직장가입자였던 첫 달 <small>2025년</small></label>
-          <select id="afrom"><option value="1" selected>1월</option><option value="2">2월</option><option value="3">3월</option><option value="4">4월</option><option value="5">5월</option><option value="6">6월</option><option value="7">7월</option><option value="8">8월</option><option value="9">9월</option><option value="10">10월</option><option value="11">11월</option><option value="12">12월</option></select>
-        </div>
-        <div class="m-area emp" hidden>
-          <label for="ato">마지막 달 <small>2025년</small></label>
-          <select id="ato"><option value="1">1월</option><option value="2">2월</option><option value="3">3월</option><option value="4">4월</option><option value="5">5월</option><option value="6">6월</option><option value="7">7월</option><option value="8">8월</option><option value="9">9월</option><option value="10">10월</option><option value="11">11월</option><option value="12" selected>12월</option></select>
+        <div class="wide m-area emp" hidden>
+          <label>직장가입자였던 달 <small>2025년 · 직원이 없던 달은 눌러서 빼세요</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="직원이 있어 대표자도 직장가입자로 보험료를 낸 달만 남겨 두세요. 2~4월, 7~9월처럼 끊겨 있어도 그 달들만 고르면 됩니다. 1~5월분은 2023년, 6~12월분은 2024년 소득 기준으로 낸 것으로 봅니다.">?</button></label>
+          <div class="months" id="amonths"><button type="button" data-m="1" aria-pressed="true">1월</button><button type="button" data-m="2" aria-pressed="true">2월</button><button type="button" data-m="3" aria-pressed="true">3월</button><button type="button" data-m="4" aria-pressed="true">4월</button><button type="button" data-m="5" aria-pressed="true">5월</button><button type="button" data-m="6" aria-pressed="true">6월</button><button type="button" data-m="7" aria-pressed="true">7월</button><button type="button" data-m="8" aria-pressed="true">8월</button><button type="button" data-m="9" aria-pressed="true">9월</button><button type="button" data-m="10" aria-pressed="true">10월</button><button type="button" data-m="11" aria-pressed="true">11월</button><button type="button" data-m="12" aria-pressed="true">12월</button></div>
         </div>
         <div class="m-area emp" hidden>
           <label for="a23">2023년 사업소득금액 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년 1~5월 대표자 보험료의 기준이 된 소득입니다. 비우면 2024년과 같게 봅니다.">?</button></label>
@@ -428,15 +429,16 @@ const f10=x=>Math.floor(x/10+1e-9)*10;   // 10원 미만 버림
 // 직장가입자 대표자: 보수월액 = 사업소득금액 ÷ 12, 직원 중 가장 높은 보수월액보다 낮을 수 없음
 const bosu=(inc,maxw)=>Math.max(inc>0?Math.floor(inc/12):0,maxw||0);
 function jobMonth(bm,y){ const R=RATE[y], hi=Math.min(R.cap,f10(bm*R.hi)); return {hi,ltc:f10(hi*R.ltc),bm}; }
-// 직장가입자였던 달이 작년 일부(from~to월)뿐이면 그 달만 정산합니다
-function calcJob(o,from,to){
-  from=from||1; to=to||12;
-  const m15=Math.max(0,Math.min(to,5)-from+1), m612=Math.max(0,to-Math.max(from,6)+1), n=m15+m612;   // 1~5월분, 6~12월분 달 수
+// 직장가입자였던 달이 작년 일부뿐이면 그 달만 정산합니다 (months: 고른 달, 없으면 1~12월)
+const ALL_MONTHS=[1,2,3,4,5,6,7,8,9,10,11,12];
+function calcJob(o,months){
+  months=months&&months.length?months:ALL_MONTHS;
+  const n=months.length, m15=months.filter(m=>m<=5).length, m612=n-m15;   // 1~5월분, 6~12월분 달 수
   const b25=bosu(o.j25,o.jmax), b24=bosu(o.j24,o.jmax), b23=bosu(o.j23,o.jmax);
   const due=jobMonth(b25,2025), p1=jobMonth(b23,2025), p2=jobMonth(b24,2025);   // 작년(2025) 확정분, 1~5월분, 6~12월분
   const sHi=due.hi*n-(p1.hi*m15+p2.hi*m612), sLtc=due.ltc*n-(p1.ltc*m15+p2.ltc*m612);   // 정산 (+ 더 냄, − 돌려받음)
   const now=jobMonth(b24,2026), next=jobMonth(b25,2026);                           // 올해 1~5월 / 6월부터
-  return {from,to,m15,m612,n,b25,b24,b23,due,p1,p2,sHi,sLtc,settle:sHi+sLtc,now,next};
+  return {months,m15,m612,n,b25,b24,b23,due,p1,p2,sHi,sLtc,settle:sHi+sLtc,now,next};
 }
 // 지역가입자 재산 등급별 점수 (국민건강보험법 시행령 별표 4, 재산금액 만원 이하 기준)
 const PROP=[[450,22],[900,44],[1350,66],[1800,97],[2250,122],[2700,146],[3150,171],[3600,195],[4050,219],[4500,244],
@@ -469,11 +471,16 @@ function calcArea(o){
   const hi=Math.min(AREA_MAX,hiInc+hiProp), ltc=f10(hi*RATE[2026].ltc);
   return {intDiv,income,monthly,hiInc,rentVal,prop,net,grade:g.grade,point:g.point,hiProp,hi,ltc,total:hi+ltc,adj:o.aadj&&o.amon?calcAdj(o,monthly):null,
     // 작년에 직원이 있다가 올해 6월 전에 없어졌으면 작년 직장가입자 기간 정산이 11월에 함께 나옵니다
-    emp:o.aemp&&(o.abiz||o.ajmax)?calcJob({j25:o.abiz,j24:o.a24||o.abiz,j23:o.a23||o.a24||o.abiz,jmax:o.ajmax},o.afrom,o.ato):null};
+    emp:o.aemp&&(o.abiz||o.ajmax)?calcJob({j25:o.abiz,j24:o.a24||o.abiz,j23:o.a23||o.a24||o.abiz,jmax:o.ajmax},o.amonths):null};
 }
 
 /* ── 화면 ─────────────────────────────────── */
 const $=id=>document.getElementById(id);
+// [2,3,4,7,8,9] → "2~4월, 7~9월"
+function monthWords(ms){
+  const runs=[]; ms.forEach(m=>{ const r=runs[runs.length-1]; if(r&&m===r[1]+1) r[1]=m; else runs.push([m,m]); });
+  return runs.map(([a,b])=>a===b?a+'월':a+'~'+b+'월').join(', ');
+}
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const sgn=n=>(n>0?'+ ':n<0?'− ':'')+won(Math.abs(n));
@@ -491,13 +498,14 @@ function setMode(m,init){
   if(shown()) Array.isArray(read())?($('res').style.display='none'):render();
 }
 $('aadj').addEventListener('change',e=>document.querySelectorAll('.adj').forEach(d=>d.hidden=!e.target.checked));
+$('amonths').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true')); upd(); });
 $('aemp').addEventListener('change',e=>document.querySelectorAll('.emp').forEach(d=>d.hidden=!e.target.checked));
 document.querySelector('.tabs').addEventListener('click',e=>{ const b=e.target.closest('button[data-mode]'); if(b) setMode(b.dataset.mode); });
 
 function read(){
   const o={}; IDS.forEach(id=>o[id]=num($(id).value));
   o.jsincere=$('jsincere').checked; o.aadj=$('aadj').checked; o.aemp=$('aemp').checked;
-  o.afrom=Number($('afrom').value); o.ato=Number($('ato').value);
+  o.amonths=[...document.querySelectorAll('#amonths [aria-pressed=true]')].map(b=>+b.dataset.m);
   if(MODE==='job'){
     if(!o.j25&&!o.jmax) return ['2025년 사업소득금액을 넣어 주세요.',$('j25')];
     if(!$('j24').value.trim()) o.j24=o.j25;
@@ -506,7 +514,7 @@ function read(){
     if(!o.abiz&&!o.aint&&!o.awage&&!o.aetc&&!o.aprop&&!o.adep) return ['작년 소득이나 재산을 넣어 주세요.',$('abiz')];
     if(o.aadj&&!o.amon) return ['조정된 보험료를 낸 달 수를 넣어 주세요.',$('amon')];
     if(o.aemp&&!o.abiz&&!o.ajmax) return ['작년(2025년) 사업소득금액을 넣어 주세요.',$('abiz')];
-    if(o.aemp&&o.afrom>o.ato) return ['직장가입자였던 첫 달이 마지막 달보다 늦습니다.',$('afrom')];
+    if(o.aemp&&!o.amonths.length) return ['직장가입자였던 달을 하나 이상 골라 주세요.',document.querySelector('#amonths button')];
   }
   return o;
 }
@@ -546,14 +554,14 @@ function renderArea(o){
   const r=calcArea(o), T=r.total;
   $('res-title').textContent='지역가입자 건강보험료';
   $('res-sub').textContent='작년 소득 '+won(r.income)+'원 · 재산 '+won(r.prop)+'원';
-  const A=r.adj, E=r.emp, mr=(a,b)=>a===b?a+'월':a+'~'+b+'월';
+  const A=r.adj, E=r.emp;
   // 지금(1~10월) 보험료: 넣은 금액, 없으면 2024년 사업소득으로 계산 (다른 소득·재산은 올해와 같다고 봄)
   const cur=o.anow||(o.a24?calcArea(Object.assign({},o,{abiz:o.a24,aadj:false,aemp:false})).total:0), curName=o.anow?'지금':'지금(2024년 소득 기준)';
   const cmpNow=cur?' · '+curName+' '+won(cur)+'원에서 '+(T===cur?'그대로':(T>cur?won(T-cur)+'원 오름':won(cur-T)+'원 내림')):'';
   const extra=(A?A.total:0)+(E?E.settle:0), bill=T+extra;
   $('calls').innerHTML=(A||E)
     ?'<div class="call"><div class="lbl">11월 고지서 (예상)</div><div class="val">'+(bill>=0?won(bill):'돌려받음 '+won(-bill))+'<small>원</small></div><div class="sub">'
-       +[E?'작년 직장 기간('+mr(E.from,E.to)+') 정산 '+(E.settle<0?'− ':'')+won(Math.abs(E.settle))+'원':'',A?'조정 기간 정산 '+(A.total<0?'− ':'')+won(Math.abs(A.total))+'원':'','11월분 보험료 '+won(T)+'원'].filter(Boolean).join(' + ')+'</div></div>'
+       +[E?'작년 직장 기간('+monthWords(E.months)+') 정산 '+(E.settle<0?'− ':'')+won(Math.abs(E.settle))+'원':'',A?'조정 기간 정산 '+(A.total<0?'− ':'')+won(Math.abs(A.total))+'원':'','11월분 보험료 '+won(T)+'원'].filter(Boolean).join(' + ')+'</div></div>'
      +'<div class="call lt"><div class="lbl">12월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원'+cmpNow+' · 다음 해 10월까지</div></div>'
     :'<div class="call"><div class="lbl">11월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원 · 다음 해 10월까지</div></div>'
    +(cur?'<div class="call lt"><div class="lbl">지금 내는 보험료와 비교</div><div class="val">'+(T===cur?'그대로':(T>cur?'+ ':'− ')+won(Math.abs(T-cur))+'<small>원</small>')+'</div><div class="sub">'+curName+' '+won(cur)+'원 → 11월부터 '+won(T)+'원 (1년이면 '+(T>=cur?'':'− ')+won(Math.abs(T-cur)*12)+'원)</div></div>'
@@ -566,9 +574,9 @@ function renderArea(o){
      +row('조정 기간에 낸 소득 보험료 (월)',A.paid,A.paidL,'',o.apaid?'입력한 금액':'소득 없음으로 조정 · 최저 보험료')
      +'<tr class="tot"><td>조정 기간 정산<small>(확정 − 낸 금액) × '+A.n+'개월</small></td><td>'+sgn(A.hi)+'</td><td>'+sgn(A.ltc)+'</td><td>'+sgn(A.total)+'</td></tr>':'')
    +(E?row('작년 직장 기간 확정 보험료 (월)',E.due.hi,E.due.ltc,'','2025년 사업소득 기준 보수월액 '+won(E.b25)+'원 × 7.09% · 장기요양 12.95%')
-     +row('직장 기간 확정 보험료 ('+E.n+'개월)',E.due.hi*E.n,E.due.ltc*E.n,'sum','2025년 '+mr(E.from,E.to))
-     +(E.m15?row(mr(E.from,Math.min(E.to,5))+'에 낸 보험료',E.p1.hi*E.m15,E.p1.ltc*E.m15,'','2023년 소득 기준 보수월액 '+won(E.b23)+'원 × '+E.m15+'개월'):'')
-     +(E.m612?row(mr(Math.max(E.from,6),E.to)+'에 낸 보험료',E.p2.hi*E.m612,E.p2.ltc*E.m612,'','2024년 소득 기준 보수월액 '+won(E.b24)+'원 × '+E.m612+'개월'):'')
+     +row('직장 기간 확정 보험료 ('+E.n+'개월)',E.due.hi*E.n,E.due.ltc*E.n,'sum','2025년 '+monthWords(E.months))
+     +(E.m15?row(monthWords(E.months.filter(m=>m<=5))+'에 낸 보험료',E.p1.hi*E.m15,E.p1.ltc*E.m15,'','2023년 소득 기준 보수월액 '+won(E.b23)+'원 × '+E.m15+'개월'):'')
+     +(E.m612?row(monthWords(E.months.filter(m=>m>5))+'에 낸 보험료',E.p2.hi*E.m612,E.p2.ltc*E.m612,'','2024년 소득 기준 보수월액 '+won(E.b24)+'원 × '+E.m612+'개월'):'')
      +'<tr class="tot"><td>작년 직장 기간 정산<small>확정 보험료 − 낸 보험료</small></td><td>'+sgn(E.sHi)+'</td><td>'+sgn(E.sLtc)+'</td><td>'+sgn(E.settle)+'</td></tr>':'')
    +(A||E?'<tr class="tot"><td>11월 고지서 (예상)<small>정산 + 11월분 보험료</small></td><td>'+sgn(r.hi+(A?A.hi:0)+(E?E.sHi:0)).replace(/^\+ /,'')+'</td><td>'+sgn(r.ltc+(A?A.ltc:0)+(E?E.sLtc:0)).replace(/^\+ /,'')+'</td><td>'+sgn(bill).replace(/^\+ /,'')+'</td></tr>':'');
   const notes=[];
@@ -577,7 +585,7 @@ function renderArea(o){
   if(r.rentVal) notes.push('전월세는 (보증금 + 월세 × 40)의 30%인 '+won(r.rentVal)+'원을 재산으로 봤습니다.');
   if(E){
     if(o.ajmax&&E.b25===o.ajmax&&o.abiz/12<o.ajmax) notes.push('2025년 사업소득금액 ÷ 12가 직원 중 가장 높은 월급보다 적어 그 월급('+won(o.ajmax)+'원)으로 계산했습니다.');
-    notes.push('작년 '+mr(E.from,E.to)+' 직장가입자였던 기간의 대표자 보험료를 확정된 2025년 사업소득으로 다시 계산해 정산했습니다. 올해 6월 전에 직원이 없어져 사업장이 탈퇴되면 이 정산은 보통 11월 보험료와 함께 고지되고, 금액이 크면 공단에 나눠 내기를 신청할 수 있습니다. 올해도 직원이 있던 달이 있으면 그 기간 정산은 내년에 나옵니다.');
+    notes.push('작년 '+monthWords(E.months)+' 직장가입자였던 기간의 대표자 보험료를 확정된 2025년 사업소득으로 다시 계산해 정산했습니다. 올해 6월 전에 직원이 없어져 사업장이 탈퇴되면 이 정산은 보통 11월 보험료와 함께 고지되고, 금액이 크면 공단에 나눠 내기를 신청할 수 있습니다. 올해도 직원이 있던 달이 있으면 그 기간 정산은 내년에 나옵니다.');
   }
   if(A) notes.push('작년에 조정받은 '+A.n+'개월 동안의 소득 보험료를 확정된 2025년 소득으로 다시 계산해 차액을 정산했습니다(국민건강보험법 시행령 제41조의2). 재산 보험료는 정산하지 않고, 더 낼 금액은 12회까지 나눠 낼 수 있습니다.');
   if(!A&&!E) notes.push('지역가입자는 직장가입자와 달리 작년 보험료를 정산하지 않습니다. 작년에 직원이 있었거나 보험료 조정을 받았다면 작년(2025년) 상황에 체크해 11월 정산까지 계산해 보세요.');
