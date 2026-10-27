@@ -91,16 +91,19 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="style.css?v=33">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<!-- 글꼴은 화면을 먼저 그린 뒤 받습니다(처음 잠깐 기본 글꼴로 보일 수 있음) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap"><link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
+<link rel="stylesheet" href="style.css?v=34">
 <script src="assets/ga.js?v=1" async></script>
 </head>
 <body>
 
 <header class="nav">
   <div class="wrap">
-    <a href="#top" class="logo" aria-label="한택스 홈"><img src="assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <a href="#top" class="logo" aria-label="한택스 홈"><img src="assets/logo.webp" alt="HanTax Story" width="150" height="46"></a>
     <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
     <nav class="nav-links" id="nav-links">
       <a href="#report">세무리포트</a>
@@ -121,9 +124,9 @@
 <!-- 1. HERO -->
 <section class="hero">
   <div class="wrap">
-    <p class="lead rv d1">회사에는 저마다의 이야기가 있고 그 이야기는 숫자 뒤에 가려져 있습니다.<br>한택스는 그 이야기를 먼저 읽습니다.</p>
-    <h1 class="rv d2">사장님의 <em>스토리</em>를 기억하는 세무사</h1>
-    <div class="rv d4">
+    <p class="lead">회사에는 저마다의 이야기가 있고 그 이야기는 숫자 뒤에 가려져 있습니다.<br>한택스는 그 이야기를 먼저 읽습니다.</p>
+    <h1>사장님의 <em>스토리</em>를 기억하는 세무사</h1>
+    <div>
       <div class="stack-hero" title="누르면 다음 화면이 보입니다">
         <div class="shot" data-i="3">
           <div class="shot-bar"><i></i><i></i><i></i><span>신고서 결재 이력</span></div>
@@ -142,7 +145,7 @@
           <img src="assets/hero/hero_alert-800.webp" srcset="assets/hero/hero_alert-480.webp 480w, assets/hero/hero_alert-800.webp 800w, assets/hero/hero_alert-1200.webp 1200w" sizes="(max-width:660px) 100vw, (max-width:880px) 50vw, 230px" alt="사전알림 화면 · 창업감면 종료, 노란우산공제 추가 공제 여력, 통합고용세액공제, 부가세 예정고지 등 이 회사에 해당하는 점검 항목만 골라 보여주는 화면" width="2880" height="1520">
         </div>
       </div>
-      <div class="hdots" aria-hidden="true"><button class="hdot" data-d="0"></button><button class="hdot" data-d="1"></button><button class="hdot" data-d="2"></button><button class="hdot" data-d="3"></button></div>
+      <div class="hdots"><button class="hdot" data-d="0" aria-label="사전알림 화면 보기"></button><button class="hdot" data-d="1" aria-label="세무 캘린더 화면 보기"></button><button class="hdot" data-d="2" aria-label="활동 타임라인 화면 보기"></button><button class="hdot" data-d="3" aria-label="신고서 결재 이력 화면 보기"></button></div>
       <div class="btns">
         <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
         <a href="tel:0507-1361-6622" class="btn btn-ghost">0507-1361-6622</a>
@@ -403,7 +406,7 @@
 <footer class="foot">
   <div class="wrap">
     <div>
-      <img src="assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <img src="assets/logo.webp" alt="HanTax Story" width="130" height="40">
       <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>서울 여의도에서 법인과 개인사업자의 기장·세무신고, 세무조사 대응, 법인설립까지 맡고 있는 세무사무소입니다.<br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
     </div>
     <div class="foot-links">

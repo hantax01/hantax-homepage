@@ -70,9 +70,11 @@ body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45
 .stack-hero .shot:nth-child(4){order:1}
 .stack-hero .shot img{aspect-ratio:36/19;object-fit:cover;object-position:left top}
 .stack-hero .shot-bar span{font-size:11px}
-.hdots{display:none;gap:8px;justify-content:center;margin-top:20px}
-.hdot{width:8px;height:8px;border-radius:99px;background:rgba(255,255,255,.28);border:0;padding:0;cursor:pointer;transition:width .25s,background .25s}
-.hdot.on{background:#FEE500;width:24px}
+.hdots{display:none;justify-content:center;margin:12px 0 -8px}
+.hdot{position:relative;width:24px;height:24px;background:none;border:0;padding:0;cursor:pointer;transition:width .25s}
+.hdot::before{content:"";position:absolute;left:8px;top:8px;width:8px;height:8px;border-radius:99px;background:rgba(255,255,255,.28);transition:width .25s,background .25s}
+.hdot.on{width:40px}
+.hdot.on::before{background:#FEE500;width:24px}
 .hero .shot-note{color:rgba(255,255,255,.5)}
 .cta-sub{margin-top:20px;font-size:14px;text-align:center}
 .cta-sub a{color:rgba(255,255,255,.75);text-decoration:underline;text-underline-offset:3px}
