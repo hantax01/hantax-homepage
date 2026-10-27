@@ -68,6 +68,12 @@
 .gauge input[type=range]{width:100%;accent-color:var(--blue);margin:2px 0 0}
 .gauge.big .gval{width:190px}
 .gauge.big .gval input{font-size:18px;font-weight:800;padding:10px 36px 10px 12px;border-width:2px}
+.kids{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin-top:10px}
+.kids[hidden],.kids>div[hidden]{display:none}
+.kids .kn{grid-column:1/-1;font-size:12.5px;color:var(--mute);line-height:1.6;margin:0}
+.kids small{display:block;font-size:12px;font-weight:700;color:var(--char);margin-bottom:3px}
+.gauge input[readonly]{background:transparent;border-style:dashed}
+.sim .kids .unit input{padding:7px 34px 7px 10px;font-size:14px}
 .glist{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px}
 /* 결과 */
 .res{margin-top:34px}
@@ -82,9 +88,13 @@
 .yhero .main small{color:#cfdcf5}
 .marg{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 18px;font-size:14.5px;color:var(--char);line-height:1.7}
 .marg b{color:var(--ink)}
-.refund{margin-top:10px}
-.refund b.plus{color:var(--blue)}
-.refund b.minus{color:var(--seal)}
+.rbig{display:flex;align-items:center;gap:8px 22px;flex-wrap:wrap;border:2px solid var(--blue);border-radius:14px;background:var(--blue-soft);padding:16px 22px;margin-bottom:12px}
+.rbig div span{display:block;font-size:14px;font-weight:700;color:var(--blue)}
+.rbig div b{display:block;font-size:30px;font-weight:800;color:var(--blue);margin-top:2px;font-variant-numeric:tabular-nums}
+.rbig p{flex:1 1 320px;font-size:13.5px;line-height:1.7;color:var(--char);margin:0}
+.rbig p b{color:var(--ink)}
+.rbig.minus{border-color:var(--seal);background:var(--seal-soft)}
+.rbig.minus div span,.rbig.minus div b{color:var(--seal)}
 .dlist{display:grid;gap:12px}
 .cliffs{margin-top:22px;border:1px solid var(--line);border-radius:12px;padding:18px 20px}
 .cliffs h3{font-size:15.5px;margin-bottom:4px;color:var(--ink)}
@@ -122,6 +132,9 @@
 .rtable tr.grp td{text-align:left!important;background:var(--soft);font-weight:800;color:var(--ink);font-size:13px}
 .rtable tr.key td{font-weight:800;color:var(--ink)}
 .rtable tr.key td:last-child{color:var(--blue)}
+.rtable tr.hl td{background:var(--blue-soft);font-size:15px}
+.rtable tr.hl.minus td{background:var(--seal-soft)}
+.rtable tr.hl.minus td:last-child{color:var(--seal)}
 .rtable tr.off td{color:var(--mute)}
 .rtable tr.off td:last-child{color:var(--mute);font-weight:400}
 .faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
@@ -150,6 +163,7 @@
 .gauge .gval{width:130px}
 .gauge.big .gval{width:170px}
 .rtable{font-size:13px}
+.rbig div b{font-size:26px}
 .rtable td.mid{display:none}
 }
 </style>
@@ -260,13 +274,13 @@
 
       <p class="marg" id="res-empty" style="margin-top:34px;text-align:center">연봉을 넣거나 원천징수영수증을 올리면 결과가 나옵니다.</p>
       <div class="res" id="res">
+        <div class="rbig" id="rbig"><div><span id="rb-t"></span><b id="rb-v"></b></div><p id="refund"></p></div>
         <div class="yhero">
           <div class="main"><span>연간 세후 실수령액</span><b id="h-net"></b><small id="h-net-m"></small></div>
           <div><span>소득세와 지방소득세</span><b id="h-tax"></b><small id="h-tax-r"></small></div>
           <div><span>4대보험</span><b id="h-ins"></b><small>근로자 부담분</small></div>
         </div>
         <p class="marg" id="marg"></p>
-        <p class="marg refund" id="refund"></p>
 
         <div class="cliffs" id="cliffs">
           <h3>연봉이 오르면 달라지는 공제</h3>
@@ -307,7 +321,7 @@
         · 카드 최저사용금액(총급여 25%)은 공제율 낮은 사용분(신용카드 → 체크·현금·문화비 → 전통시장·대중교통)부터 뺍니다. 소비증가분 추가공제는 넣지 않았습니다.<br>
         · 기부금은 1천만 원 초과분 30%까지 반영했고, 3천만 원 초과분 한시 상향과 이월 기부금은 넣지 않았습니다.<br>
         · 주택자금 공제는 무주택·1주택, 주택 가격, 국민주택규모 등 요건을 갖춘 것으로 봅니다.<br>
-        · 이미 낸 세금을 비워 두면 매달 간이세액표(100%)대로 뗀 것으로 추정합니다. 상여금이 있었거나 80%·120%를 고르셨다면 원천징수영수증의 기납부세액을 넣어 주세요.<br>
+        · 이미 낸 세금을 비워 두면 매달 간이세액표(100%)대로 뗀 것으로 추정합니다. 중소기업 취업자 감면을 매달 받았다면 감면율만큼(연 200만 원까지) 덜 뗀 것으로 봅니다. 상여금이 있었거나 80%·120%를 고르셨다면 원천징수영수증의 기납부세액을 넣어 주세요.<br>
         · 연금저축·IRP는 합계 900만 원까지 계산했습니다. 연금저축만 넣으셨다면 600만 원이 한도입니다.<br>
         · 가족 세부 항목은 기본공제 요건(나이·소득)을 갖춘 것으로 보고 계산합니다. 이직하셨다면 전 근무지 급여를 연봉에 더하고, 4대보험과 이미 낸 세금도 합계로 넣어 주세요.<br>
         · 입력한 금액과 올린 원천징수영수증은 이 화면에서만 읽고 계산하며, 어디에도 저장하거나 보내지 않습니다.
@@ -454,7 +468,8 @@ function calc(p,g){
   const don=donCredit(earned,p);
   const insCr=Math.min(p.ins,1e6)*.12+Math.min(p.disIns,1e6)*.15;
   const medCr=medCredit(g,p);
-  const eduCr=(Math.min(p.edu,3e6*p.stuKids)+Math.min(p.univ,9e6*p.univKids)+p.eduSelf+p.eduDis)*.15;
+  const kidEdu=(each,tot,n,cap)=>each?each.reduce((a,v)=>a+Math.min(v,cap),0):Math.min(tot,cap*n);   // 1명당 한도
+  const eduCr=(kidEdu(p.eduK,p.edu,p.stuKids,3e6)+kidEdu(p.univK,p.univ,p.univKids,9e6)+p.eduSelf+p.eduDis)*.15;
   const rentRate=g<=55e6?.17:.15, rentCr= p.home&&g<=8e7 ? Math.min(p.rent*12,1e7)*rentRate : 0;
   const common=childCr+birthCr+marryCr+penCr+don.cond+p.etcCr;
   // 가: 특별공제를 받는 경우  나: 표준세액공제 13만 원.  중소기업 취업자 감면은 산출세액에서 먼저 빼고 근로소득세액공제를 그만큼 줄입니다
@@ -483,7 +498,9 @@ function ganiseYear(p){
   else if(k>=10000){ const T=G.top[fam];
     base= m<=14e6?T+(m-1e7)*.98*.35+25000 : m<=28e6?T+1397000+(m-14e6)*.98*.38 : m<=30e6?T+6610600+(m-28e6)*.98*.4 : m<=45e6?T+7394600+(m-3e7)*.4 : m<=87e6?T+13394600+(m-45e6)*.42 : T+31034600+(m-87e6)*.45; }
   const c=p.kids<=0?0:p.kids===1?20830:p.kids===2?45830:45830+33330*(p.kids-2);
-  return Math.floor(Math.max(0,base-c)/10)*10*12;
+  const mon=Math.floor(Math.max(0,base-c)/10)*10;
+  const sme=p.smeRate&&p.smeMonthly?Math.min(Math.floor(mon*p.smeRate/10)*10*12,2e6):0;   // 매달 감면받은 금액 (연 200만 원 한도)
+  return mon*12-sme;
 }
 
 /* ── 입력 ─────────────────────────────────────── */
@@ -491,16 +508,16 @@ const GAUGES=[
   ['credit','신용카드',0,60e6,500000,0,'1년 동안 신용카드로 쓴 금액입니다. 총급여의 25%를 넘게 쓴 부분부터 15%를 소득공제합니다.'],
   ['debit','체크카드·현금영수증',0,40e6,500000,0,'체크카드와 현금영수증 사용액은 30%를 소득공제합니다. 최저사용금액(총급여 25%)은 신용카드 사용분에서 먼저 뺍니다.'],
   ['med','의료비 (본인 등)',0,20e6,100000,0,'본인·65세 이상·장애인·6세 이하 가족의 의료비는 한도 없이, 총급여 3%를 넘는 부분의 15%를 세액공제합니다. 그 밖의 가족 의료비는 아래 세부 항목에 넣으세요.'],
-  ['edu','자녀 교육비 (유치원~고교)',0,20e6,100000,0,'유치원·초·중·고 자녀 교육비의 15%를 세액공제합니다. 1명당 300만 원까지이고, 학생 자녀 수와 대학생·본인 교육비는 아래 세부 항목에서 넣을 수 있습니다.'],
+  ['edu','자녀 교육비 (유치원~고교)',0,20e6,100000,0,'유치원·초·중·고 자녀 교육비의 15%를 세액공제합니다. 1명당 300만 원까지라 자녀가 2명 이상이면 자녀별로 나눠 넣습니다. 학생 자녀 수와 대학생·본인 교육비는 아래 세부 항목에서 넣을 수 있습니다.'],
   ['ins','보장성 보험료',0,3e6,100000,0,'자동차보험·실손보험처럼 보장성 보험료는 100만 원까지 12%를 세액공제합니다.'],
-  ['rent','월세',0,2e6,50000,0,'한 달 월세입니다. 무주택 세대주이고 총급여 8,000만 원 이하면 1년 월세(1,000만 원까지)의 15~17%를 세액공제합니다.','월'],
+  ['rent','월세',0,2e6,50000,0,'한 달 월세입니다. 중간에 이사했거나 월세가 바뀌었다면 1년 동안 낸 월세 합계를 12로 나눠 넣으세요. 무주택 세대주이고 총급여 8,000만 원 이하면 1년 월세(1,000만 원까지)의 15~17%를 세액공제합니다.','1년 합계 ÷ 12'],
   ['pension','연금저축·IRP',0,9e6,100000,0,'연금저축과 IRP 납입액은 합계 900만 원까지 세액공제합니다. 총급여 5,500만 원 이하는 15%, 넘으면 12%입니다.'],
   ['sub','주택청약 납입',0,3e6,100000,0,'무주택 세대주이고 총급여 7,000만 원 이하면 300만 원까지 40%를 소득공제합니다.']
 ];
 const $=id=>document.getElementById(id);
 const fmt=v=>v?Number(v).toLocaleString('ko-KR'):'0';
 $('gauges').innerHTML=GAUGES.map(([k,label,min,max,step,def,help,per])=>
-  '<div class="gauge"><div class="gtop"><label for="v-'+k+'">'+label+(per?' <small>한 달</small>':'')+' <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="'+help+'">?</button></label>'
+  '<div class="gauge"><div class="gtop"><label for="v-'+k+'">'+label+(per?' <small>'+per+'</small>':'')+' <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="'+help+'">?</button></label>'
   +'<div class="gval unit"><input type="text" id="v-'+k+'" inputmode="numeric" value="'+fmt(def)+'"><span>원</span></div></div>'
   +'<input type="range" id="r-'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+def+'" aria-label="'+label+'"></div>').join('');
 /* 세부 항목: [키, 이름, 설명, 종류]. 종류 'w'=금액, 's:옵션'=선택, 'a'=비우면 자동 */
@@ -515,7 +532,7 @@ const DETAILS=[
   ['medPre','미숙아·선천성이상아 의료비','20%를 세액공제합니다.'],
   ['silson','실손보험금 받은 금액','실손보험으로 돌려받은 금액은 의료비에서 뺍니다.'],
   ['stuKids','유치원~고교 자녀 수','자녀 교육비 한도(1명당 300만 원)를 계산하는 인원입니다.','s:0,1,2,3,4,5'],
-  ['univ','대학생 자녀 교육비','1명당 900만 원까지 15%를 세액공제합니다.'],
+  ['univ','대학생 자녀 교육비','1명당 900만 원까지 15%를 세액공제합니다. 대학생 자녀가 2명 이상이면 자녀별로 나눠 넣습니다.'],
   ['univKids','대학생 자녀 수','','s:0,1,2,3'],
   ['eduSelf','본인 교육비','대학원 등 본인 교육비는 한도 없이 15%를 세액공제합니다.'],
   ['eduDis','장애인 특수교육비','한도 없이 15%를 세액공제합니다.'],
@@ -538,6 +555,7 @@ const DETAILS=[
   ['ytfund','청년형 장기펀드 납입액','600만 원까지 40%를 소득공제합니다. 가입 요건을 갖춘 경우만 해당합니다.'],
   ['isa','ISA 만기 연금계좌 전환액','전환액의 10%(300만 원까지)를 연금계좌 세액공제 대상에 더합니다.'],
   ['smeRate','중소기업 취업자 감면','청년은 소득세의 90%, 60세 이상·장애인·경력단절여성은 70%를 감면합니다. 연 200만 원까지입니다.','s:0=없음,0.9=청년 (90%),0.7=고령자·장애인·경력단절여성 (70%)'],
+  ['smeMonthly','매달 급여에서 감면받았나요','회사에 감면신청서를 내면 다음 달부터 매달 떼는 소득세도 감면율만큼 줄어듭니다. 이미 낸 소득세를 비워 두면, 매달 감면받은 경우 그만큼(연 200만 원까지) 덜 뗀 것으로 추정합니다.','s:1=네 (매달 감면받음),0=아니요 (연말정산 때 처음 신청)'],
   ['etcDed','기타 소득공제','위에 없는 소득공제를 원천징수영수증 금액 그대로 넣으세요.'],
   ['etcCr','기타 세액공제','외국납부세액공제 등 위에 없는 세액공제를 원천징수영수증 금액 그대로 넣으세요.']]],
  ['이미 낸 세금과 4대보험','원천징수영수증 금액을 넣으면 그 값으로 계산합니다',[
@@ -554,6 +572,25 @@ $('details').innerHTML=DETAILS.map(([title,sub,items],i)=>'<details class="assum
       +type.slice(2).split(',').map(o=>{ const [v,t]=o.includes('=')?o.split('='):[o,+o?o+'명':'없음']; return '<option value="'+v+'">'+t+'</option>'; }).join('')+'</select></div>';
     return '<div><label for="d-'+k+'">'+label+h+'</label><div class="unit"><input type="text" id="d-'+k+'" inputmode="numeric"'+(type==='a'?' placeholder="자동"':'')+'><span>원</span></div></div>';
   }).join('')+'</div></details>').join('');
+/* 교육비 한도는 1명당이라, 자녀가 2명 이상이면 자녀별로 받아 따로 한도를 적용합니다. 합계 칸은 더한 값만 보여 줍니다 */
+const SPLIT=[['edu','stuKids','v-edu',3e6],['univ','univKids','d-univ',9e6]], ORD=['첫째','둘째','셋째','넷째','다섯째'];
+SPLIT.forEach(([k,,tot,cap])=>{
+  const box=document.createElement('div'); box.className='kids'; box.id='kids-'+k; box.hidden=true;
+  box.innerHTML='<p class="kn">자녀가 2명 이상이라 자녀별로 넣어 주세요. 1명당 '+man(cap)+' 원까지 공제합니다.</p>'
+    +ORD.map((o,i)=>'<div><small>'+o+'</small><div class="unit"><input type="text" id="k-'+k+i+'" inputmode="numeric" aria-label="'+o+' 교육비"><span>원</span></div></div>').join('');
+  $(tot).closest(k==='edu'?'.gauge':'.ab > div').append(box);
+});
+$('kids-edu').addEventListener('input',e=>{ const n=num(e.target.value); e.target.value=n?fmt(n):''; render(); });   // 대학생 칸은 세부 항목 입력으로 처리됩니다
+function syncKids(){
+  SPLIT.forEach(([k,cnt,tot])=>{
+    const n=+$('d-'+cnt).value, box=$('kids-'+k), ins=[...box.querySelectorAll('input')], t=$(tot);
+    if(n>=2&&box.hidden&&!ins.some(i=>num(i.value))&&num(t.value)) ins[0].value=t.value;   // 처음 나눌 때는 지금 금액을 첫째 칸으로
+    box.hidden=n<2;
+    ins.forEach((i,j)=>{ i.closest('.kids > div').hidden=j>=n; if(j>=n||n<2) i.value=''; });
+    t.readOnly=n>=2; if(k==='edu') $('r-edu').hidden=n>=2;
+    if(n>=2){ const sum=ins.reduce((a,i)=>a+num(i.value),0); t.value=fmt(sum); if(k==='edu') $('r-edu').value=sum; }
+  });
+}
 let stuTouched=false;
 $('d-stuKids').addEventListener('change',()=>{ stuTouched=true; });
 $('details').addEventListener('input',e=>{ if(e.target.tagName==='INPUT'){ const n=num(e.target.value); e.target.value=n?fmt(n):''; } render(); });
@@ -582,6 +619,7 @@ function read(){
     old:+$('i-old').value,dis:+$('i-dis').value,birth:+$('i-birth').value,woman:$('i-woman').checked,single:$('i-single').checked,marry:$('i-marry').checked};
   GAUGES.forEach(([k])=>p[k]=num($('v-'+k).value));
   DKEYS.forEach(([k,,,type])=>{ const el=$('d-'+k); p[k]= type&&type.startsWith('s:') ? Number(el.value) : num(el.value); });
+  SPLIT.forEach(([k,cnt])=>{ p[k+'K']=p[cnt]>=2?ORD.slice(0,p[cnt]).map((_,i)=>num($('k-'+k+i).value)):null; });   // 자녀별 금액
   p.salary=num($('v-sal').value);
   const gNow=Math.max(0,p.salary-p.nontax*12), atReceipt=receiptG==null||gNow===receiptG;
   p.g0=gNow;
@@ -626,7 +664,7 @@ function fillReceipt(v){
   receiptLocal=v.paidLocal; receiptPaid=v.paid; receiptNo={np:!((v.np||0)+(v.pubPen||0)),ei:!v.ei};
   const sal=num($('v-sal').value); receiptSal=sal; receiptG=Math.max(0,sal-Math.min(num($('i-nontax').value),sal/12)*12);
   // 값이 들어간 칸은 펼쳐 둡니다
-  document.querySelectorAll('#details details').forEach(d=>{ d.open=[...d.querySelectorAll('input')].some(i=>num(i.value)>0)||[...d.querySelectorAll('select')].some(x=>x.id!=='d-mortLimit'&&+x.value>0); });
+  document.querySelectorAll('#details details').forEach(d=>{ d.open=[...d.querySelectorAll('input')].some(i=>num(i.value)>0)||[...d.querySelectorAll('select')].some(x=>!['d-mortLimit','d-smeMonthly'].includes(x.id)&&+x.value>0); });
   $('fam-more').open=!!(v.old||v.dis||v.woman||v.single||v.marry||v.birthCr);
   render();
 }
@@ -745,6 +783,8 @@ var gaT, gaLast='';
 function countRun(sig){ clearTimeout(gaT); gaT=setTimeout(function(){ if(sig!==gaLast&&window.gtag){ gaLast=sig; gtag('event','calc_run'); } },2000); }
 
 function render(){
+  syncKids();
+  $('d-smeMonthly').closest('.ab > div').hidden=!+$('d-smeRate').value;
   const p=read(), g=Math.max(0,p.salary-p.nontax*12), r=calc(p,g);
   $('res-empty').hidden=p.salary>0; $('res').hidden=!(p.salary>0);
   if(!(p.salary>0)) return;
@@ -761,10 +801,12 @@ function render(){
   if(p.paidIn){ paid=p.paid; paidLocal=p.paidLocal!=null?p.paidLocal:Math.floor(paid*.1); how='이미 낸 소득세 '; }
   else if(receiptG!=null){ const d=ganiseYear(p)-ganiseYear({...p,salary:receiptSal});
     paid=Math.max(0,receiptPaid+d); paidLocal=Math.max(0,receiptLocal+Math.floor(d/100)*10); how='이미 낸 소득세(영수증 금액에 연봉 차이분을 더한 추정치) '; }
-  else { paid=ganiseYear(p); paidLocal=Math.floor(paid*.1); how='매달 뗀 소득세(간이세액표 추정) '; }
+  else { paid=ganiseYear(p); paidLocal=Math.floor(paid*.1); how='매달 뗀 소득세(간이세액표 추정'+(p.smeRate&&p.smeMonthly?', 감면 반영':'')+') '; }
   const t10=x=>Math.trunc(x/10)*10, diff=-(t10(r.fin-paid)+t10(r.local-paidLocal));   // 차감징수세액은 10원 미만을 버립니다
-  $('refund').innerHTML=how+'<b>'+won(paid)+'원</b>과 지방소득세 '+won(paidLocal)+'원을 기준으로, 연말정산에서 '
-    +(diff>=0?'<b class="plus">'+won(diff)+'원을 돌려받습니다.</b>':'<b class="minus">'+won(-diff)+'원을 더 냅니다.</b>')
+  $('rbig').className='rbig'+(diff<0?' minus':'');
+  $('rb-t').textContent='연말정산에서 '+(diff>=0?'돌려받을 세금':'더 낼 세금');
+  $('rb-v').textContent=won(Math.abs(diff))+'원';
+  $('refund').innerHTML=how+'<b>'+won(paid)+'원</b>과 지방소득세 '+won(paidLocal)+'원을 냈고, 결정세액은 소득세 <b>'+won(r.fin)+'원</b>과 지방소득세 '+won(r.local)+'원입니다.'
     +(p.paidIn||receiptG!=null?'':' <span style="font-size:13px;color:var(--mute)">원천징수영수증의 기납부세액을 넣으면 더 정확합니다.</span>');
   const cl=cliffs(p,g);
   $('cliff-list').innerHTML= cl.length ? cl.map(c=>'<div class="cliff'+(c.past?' past':'')+'"><div class="at">총급여 '+man(c.T)+' 원<small>'+(c.past?'이미 넘었습니다':'앞으로 '+man(c.T-g)+' 원')+'</small></div><div>'
@@ -816,7 +858,7 @@ function render(){
     +row('결정세액','소득세',won(r.fin)+'원','key')
     +row('지방소득세','결정세액 × 10%',won(r.local)+'원')
     +row(p.paidIn?'이미 낸 세금':'이미 낸 세금 (추정)','소득세 + 지방소득세',won(paid+paidLocal)+'원')
-    +row(diff>=0?'돌려받을 세금':'더 낼 세금','이미 낸 세금 − 결정세액',won(Math.abs(diff))+'원','key')
+    +row(diff>=0?'돌려받을 세금':'더 낼 세금','차감징수세액 (이미 낸 세금 − 결정세액)',won(Math.abs(diff))+'원','key hl'+(diff<0?' minus':''))
     +'<tr class="grp"><td colspan="3">4대보험 (근로자 부담)</td></tr>'
     +row('국민연금',p.insFrom.np?'원천징수영수증 금액':'4.75%',won(r.ins.np)+'원')
     +row('건강·장기요양보험',p.insFrom.hi?'원천징수영수증 금액':'3.595%, 건강보험료의 13.14%',won(r.ins.hi+r.ins.ltc)+'원')
