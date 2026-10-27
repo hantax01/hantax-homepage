@@ -330,11 +330,6 @@
           <label for="wetc">기타소득금액 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="강연료·원고료 등에서 필요경비를 뺀 기타소득금액입니다.">?</button></label>
           <div class="unit"><input type="text" id="wetc" inputmode="numeric"><span>원</span></div>
         </div>
-        <div class="divider m-wage"><b>지금 월급</b><span>선택 · 월급에서 떼는 보험료와 합쳐 봅니다</span></div>
-        <div class="m-wage">
-          <label for="wsal">월급 <small>선택 · 비과세 빼고 세전</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="넣으면 월급에서 떼는 건강보험료(근로자 몫 3.595%)와 따로 내는 보험료를 합쳐 보여 드립니다.">?</button></label>
-          <div class="unit"><input type="text" id="wsal" inputmode="numeric"><span>원</span></div>
-        </div>
       </div>
 
       <button class="btn btn-primary simbtn" id="calc">건강보험료 계산하기</button>
@@ -497,8 +492,6 @@ function calcExtra(o){
   const hi=Math.min(AREA_MAX,f10(monthly*RATE[2026].hi)), ltc=f10(hi*RATE[2026].ltc);
   return {fin,full,half,total,over,monthly,hi,ltc,sum:hi+ltc};
 }
-// 월급에서 떼는 근로자 몫 (회사와 반씩)
-function salMonth(m){ const R=RATE[2026], hi=Math.min(R.cap/2,f10(m*R.hi/2)), ltc=f10(hi*R.ltc); return {hi,ltc,sum:hi+ltc}; }
 
 /* ── 화면 ─────────────────────────────────── */
 const $=id=>document.getElementById(id);
@@ -510,7 +503,7 @@ function monthWords(ms){
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const sgn=n=>(n>0?'+ ':n<0?'− ':'')+won(Math.abs(n));
-const IDS=['j25','j24','j23','jmax','abiz','aint','awage','aetc','aprop','adep','arent','a24','a23','ajmax','wbiz','wint','wpen','wetc','wsal'];
+const IDS=['j25','j24','j23','jmax','abiz','aint','awage','aetc','aprop','adep','arent','a24','a23','ajmax','wbiz','wint','wpen','wetc'];
 IDS.forEach(id=>$(id).addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }));
 let MODE='job';
 const MODES={
@@ -614,13 +607,12 @@ function renderArea(o){
     +notes.map(t=>'<span class="note">'+t+'</span>').join('');
 }
 function renderWage(o){
-  const r=calcExtra({biz:o.wbiz,int:o.wint,pen:o.wpen,etc:o.wetc}), S=o.wsal?salMonth(o.wsal):null, left=EXTRA_FREE-r.total;
+  const r=calcExtra({biz:o.wbiz,int:o.wint,pen:o.wpen,etc:o.wetc}), left=EXTRA_FREE-r.total;
   $('res-title').textContent='직장인 월급 외 소득 건강보험료';
-  $('res-sub').textContent='2025년 월급 외 소득 '+won(r.total)+'원'+(o.wsal?' · 월급 '+won(o.wsal)+'원':'');
+  $('res-sub').textContent='2025년 월급 외 소득 '+won(r.total)+'원';
   $('calls').innerHTML=r.sum
     ?'<div class="call"><div class="lbl">11월부터 매달 더 낼 보험료</div><div class="val">'+won(r.sum)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원 · 월급과 따로 고지 · 다음 해 10월까지</div></div>'
-     +(S?'<div class="call lt"><div class="lbl">매달 내는 건강보험료 합계</div><div class="val">'+won(S.sum+r.sum)+'<small>원</small></div><div class="sub">월급에서 떼는 '+won(S.sum)+'원 + 따로 내는 '+won(r.sum)+'원</div></div>'
-        :'<div class="call lt"><div class="lbl">1년(11월~다음 해 10월) 합계</div><div class="val">'+won(r.sum*12)+'<small>원</small></div><div class="sub">월 '+won(r.sum)+'원 × 12개월</div></div>')
+     +'<div class="call lt"><div class="lbl">1년(11월~다음 해 10월) 합계</div><div class="val">'+won(r.sum*12)+'<small>원</small></div><div class="sub">월 '+won(r.sum)+'원 × 12개월</div></div>'
     :'<div class="call"><div class="lbl">더 낼 보험료</div><div class="val">0<small>원</small></div><div class="sub">월급 외 소득이 연 2천만 원 이하라 붙지 않습니다.</div></div>'
      +'<div class="call lt"><div class="lbl">2천만 원까지 남은 금액</div><div class="val">'+won(left)+'<small>원</small></div><div class="sub">월급 외 소득이 이보다 늘면 넘는 부분에만 붙습니다.</div></div>';
   // 소득 금액은 건강보험·장기요양 칸을 합쳐 한 칸에
@@ -631,8 +623,7 @@ function renderWage(o){
    +(r.sum?wide('2천만 원을 넘는 금액',won(r.over)+'원','합계 − 2,000만 원')
       +wide('보수 외 소득월액',won(r.monthly)+'원','넘는 금액 ÷ 12'+(r.half?' · 연금 몫은 50%만 반영':''))
       +row('월 보험료',r.hi,r.ltc,'tot',(r.hi===AREA_MAX?'월 상한 적용 · ':'')+'소득월액 × 7.19% · 장기요양 = 건강보험료 × 13.14%')
-     :wide('더 낼 보험료','0원','연 2천만 원 이하','sum'))
-   +(S?row('월급에서 떼는 보험료',S.hi,S.ltc,'','월급 '+won(o.wsal)+'원 × 3.595% (회사와 반씩)')+row('매달 내는 건강보험료 합계',S.hi+r.hi,S.ltc+r.ltc,'sum'):'');
+     :wide('더 낼 보험료','0원','연 2천만 원 이하','sum'));
   const notes=[];
   if(o.wint&&!r.fin) notes.push('이자·배당소득은 합쳐 1천만 원 이하라 넣지 않았습니다. 1천만 원을 넘으면 전액이 더해집니다.');
   if(r.half) notes.push('공적연금은 절반만 반영했습니다. 연금저축·퇴직연금 같은 사적연금은 넣지 않습니다.');
