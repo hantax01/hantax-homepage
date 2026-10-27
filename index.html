@@ -99,6 +99,13 @@
 <script>if(matchMedia('(min-width:881px)').matches){var l=document.createElement('link');l.rel='stylesheet';l.crossOrigin='anonymous';l.href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css';document.head.appendChild(l);}</script>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap&text=!%22%25%2B,-.0123456789?O~·가간개게겠겨결계고곳과궁그금급기김까나내낼넣년는니님다단담당대도되드득들떼라람램려로록를리립마맡먼명모몰무물박받번범법보봉부비빈빠사산서세소손숫스습시식신실아앞야어억얼업없에여연영올와요용우원월윤으은을읍의이인일임있자장저적전정제종주증지직진짐차찾챙철출키택템토퇴판표프하한할합해현확회"><link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="(min-width:881px)"></noscript>
 <link rel="stylesheet" href="style.css?v=34">
+<style>
+/* 첫 화면은 투명도 1%에서 바로 올라오게 합니다(완전히 숨겼다가 나타나면 첫 화면 측정이 효과가 끝날 때까지 늦어짐) */
+@keyframes rise{from{opacity:.01;transform:translateY(22px)}to{opacity:1;transform:none}}
+.rise{animation:rise .8s cubic-bezier(.2,.7,.3,1) both}
+.rise.d1{animation-delay:.1s}.rise.d2{animation-delay:.2s}.rise.d4{animation-delay:.4s}
+@media(prefers-reduced-motion:reduce){.rise{animation:none}}
+</style>
 <script src="assets/ga.js?v=1" async></script>
 </head>
 <body>
@@ -126,9 +133,9 @@
 <!-- 1. HERO -->
 <section class="hero">
   <div class="wrap">
-    <p class="lead">회사에는 저마다의 이야기가 있고 그 이야기는 숫자 뒤에 가려져 있습니다.<br>한택스는 그 이야기를 먼저 읽습니다.</p>
-    <h1>사장님의 <em>스토리</em>를 기억하는 세무사</h1>
-    <div>
+    <p class="lead rise d1">회사에는 저마다의 이야기가 있고 그 이야기는 숫자 뒤에 가려져 있습니다.<br>한택스는 그 이야기를 먼저 읽습니다.</p>
+    <h1 class="rise d2">사장님의 <em>스토리</em>를 기억하는 세무사</h1>
+    <div class="rise d4">
       <div class="stack-hero" title="누르면 다음 화면이 보입니다">
         <div class="shot" data-i="3">
           <div class="shot-bar"><i></i><i></i><i></i><span>신고서 결재 이력</span></div>
