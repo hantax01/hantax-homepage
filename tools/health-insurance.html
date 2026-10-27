@@ -282,22 +282,17 @@
           <label for="arent">월세 <small>선택</small></label>
           <div class="unit"><input type="text" id="arent" inputmode="numeric"><span>원</span></div>
         </div>
-        <div class="divider m-area"><b>올해 1~10월 보험료</b><span>2024년 소득 기준 · 비교용</span></div>
-        <div class="m-area">
-          <label for="a24">2024년 사업소득금액 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="올해 1~10월 보험료는 2024년 소득으로 정해집니다. 넣으면 지금 보험료를 계산해 11월부터와 비교합니다(다른 소득과 재산은 올해와 같다고 봅니다). 작년에 직원이 있었다면 작년 6~12월 대표자 보험료의 기준이기도 합니다.">?</button></label>
-          <div class="unit"><input type="text" id="a24" inputmode="numeric"><span>원</span></div>
-        </div>
-        <div class="m-area">
-          <label for="anow">지금 내는 월 보험료 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="고지서의 월 보험료(건강보험 + 장기요양)입니다. 넣으면 2024년 소득으로 계산한 금액 대신 이 금액과 비교합니다.">?</button></label>
-          <div class="unit"><input type="text" id="anow" inputmode="numeric"><span>원</span></div>
-        </div>
         <div class="divider m-area"><b>작년(2025년) 상황</b><span>해당하면 체크하세요 · 올해 11월에 정산합니다</span></div>
         <div class="wide m-area">
-          <label class="ichk"><input type="checkbox" id="aemp"><span>작년에 직원이 있었는데 올해 6월 전에 없어졌어요</span> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년(2025년)에 직원이 있어 대표자도 직장가입자였고, 올해 6월 전에 직원이 모두 없어져 지역가입자가 됐다면 체크하세요. 직장가입자였던 기간의 대표자 보험료를 5월에 신고한 2025년 사업소득으로 다시 계산해, 보통 11월 보험료와 함께 정산합니다. 작년 6~12월에 낸 보험료는 위 2024년 사업소득금액으로 계산합니다(비우면 2025년과 같게). 올해 6월에도 직원이 있었다면 작년분 정산은 6월에 끝났으니 직원이 있어요 탭을 보세요.">?</button></label>
+          <label class="ichk"><input type="checkbox" id="aemp"><span>작년에 직원이 있었는데 올해 6월 전에 없어졌어요</span> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년(2025년)에 직원이 있어 대표자도 직장가입자였고, 올해 6월 전에 직원이 모두 없어져 지역가입자가 됐다면 체크하세요. 직장가입자였던 기간의 대표자 보험료를 5월에 신고한 2025년 사업소득으로 다시 계산해, 보통 11월 보험료와 함께 정산합니다. 작년에 낸 보험료는 아래 2023·2024년 사업소득금액으로 계산합니다(비우면 2025년과 같게). 올해 6월에도 직원이 있었다면 작년분 정산은 6월에 끝났으니 직원이 있어요 탭을 보세요.">?</button></label>
         </div>
         <div class="wide m-area emp" hidden>
           <label>직장가입자였던 달 <small>2025년 · 직원이 없던 달은 눌러서 빼세요</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="직원이 있어 대표자도 직장가입자로 보험료를 낸 달만 남겨 두세요. 2~4월, 7~9월처럼 끊겨 있어도 그 달들만 고르면 됩니다. 1~5월분은 2023년, 6~12월분은 2024년 소득 기준으로 낸 것으로 봅니다.">?</button></label>
           <div class="months" id="amonths"><button type="button" data-m="1" aria-pressed="true">1월</button><button type="button" data-m="2" aria-pressed="true">2월</button><button type="button" data-m="3" aria-pressed="true">3월</button><button type="button" data-m="4" aria-pressed="true">4월</button><button type="button" data-m="5" aria-pressed="true">5월</button><button type="button" data-m="6" aria-pressed="true">6월</button><button type="button" data-m="7" aria-pressed="true">7월</button><button type="button" data-m="8" aria-pressed="true">8월</button><button type="button" data-m="9" aria-pressed="true">9월</button><button type="button" data-m="10" aria-pressed="true">10월</button><button type="button" data-m="11" aria-pressed="true">11월</button><button type="button" data-m="12" aria-pressed="true">12월</button></div>
+        </div>
+        <div class="m-area emp" hidden>
+          <label for="a24">2024년 사업소득금액 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년 6~12월 대표자 보험료의 기준이 된 소득입니다. 비우면 2025년과 같게 봅니다.">?</button></label>
+          <div class="unit"><input type="text" id="a24" inputmode="numeric"><span>원</span></div>
         </div>
         <div class="m-area emp" hidden>
           <label for="a23">2023년 사업소득금액 <small>선택</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="작년 1~5월 대표자 보험료의 기준이 된 소득입니다. 비우면 2024년과 같게 봅니다.">?</button></label>
@@ -484,7 +479,7 @@ function monthWords(ms){
 const won=n=>Math.round(n).toLocaleString('ko-KR');
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const sgn=n=>(n>0?'+ ':n<0?'− ':'')+won(Math.abs(n));
-const IDS=['j25','j24','j23','jmax','abiz','aint','awage','aetc','aprop','adep','arent','anow','amon','apaid','a24','a23','ajmax'];
+const IDS=['j25','j24','j23','jmax','abiz','aint','awage','aetc','aprop','adep','arent','amon','apaid','a24','a23','ajmax'];
 IDS.forEach(id=>$(id).addEventListener('input',e=>{ const v=num(e.target.value); e.target.value=v?v.toLocaleString('ko-KR'):''; }));
 let MODE='job';
 const MODES={
@@ -555,20 +550,17 @@ function renderArea(o){
   $('res-title').textContent='지역가입자 건강보험료';
   $('res-sub').textContent='작년 소득 '+won(r.income)+'원 · 재산 '+won(r.prop)+'원';
   const A=r.adj, E=r.emp;
-  // 지금(1~10월) 보험료: 넣은 금액, 없으면 2024년 사업소득으로 계산 (다른 소득·재산은 올해와 같다고 봄)
-  const cur=o.anow||(o.a24?calcArea(Object.assign({},o,{abiz:o.a24,aadj:false,aemp:false})).total:0), curName=o.anow?'지금':'지금(2024년 소득 기준)';
-  const cmpNow=cur?' · '+curName+' '+won(cur)+'원에서 '+(T===cur?'그대로':(T>cur?won(T-cur)+'원 오름':won(cur-T)+'원 내림')):'';
   const extra=(A?A.total:0)+(E?E.settle:0), bill=T+extra;
   $('calls').innerHTML=(A||E)
     ?'<div class="call"><div class="lbl">11월 고지서 (예상)</div><div class="val">'+(bill>=0?won(bill):'돌려받음 '+won(-bill))+'<small>원</small></div><div class="sub">'
        +[E?'작년 직장 기간('+monthWords(E.months)+') 정산 '+(E.settle<0?'− ':'')+won(Math.abs(E.settle))+'원':'',A?'조정 기간 정산 '+(A.total<0?'− ':'')+won(Math.abs(A.total))+'원':'','11월분 보험료 '+won(T)+'원'].filter(Boolean).join(' + ')+'</div></div>'
-     +'<div class="call lt"><div class="lbl">12월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원'+cmpNow+' · 다음 해 10월까지</div></div>'
+     +'<div class="call lt"><div class="lbl">12월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원 · 다음 해 10월까지</div></div>'
     :'<div class="call"><div class="lbl">11월부터 매달 낼 보험료</div><div class="val">'+won(T)+'<small>원</small></div><div class="sub">건강보험 '+won(r.hi)+'원 + 장기요양 '+won(r.ltc)+'원 · 다음 해 10월까지</div></div>'
-   +(cur?'<div class="call lt"><div class="lbl">지금 내는 보험료와 비교</div><div class="val">'+(T===cur?'그대로':(T>cur?'+ ':'− ')+won(Math.abs(T-cur))+'<small>원</small>')+'</div><div class="sub">'+curName+' '+won(cur)+'원 → 11월부터 '+won(T)+'원 (1년이면 '+(T>=cur?'':'− ')+won(Math.abs(T-cur)*12)+'원)</div></div>'
-     :'<div class="call lt"><div class="lbl">1년(11월~다음 해 10월) 합계</div><div class="val">'+won(T*12)+'<small>원</small></div><div class="sub">2024년 사업소득이나 지금 내는 보험료를 넣으면 얼마나 바뀌는지 비교해 드립니다.</div></div>');
+   +'<div class="call lt"><div class="lbl">1년(11월~다음 해 10월) 합계</div><div class="val">'+won(T*12)+'<small>원</small></div><div class="sub">월 '+won(T)+'원 × 12개월</div></div>';
+  const lt='<small>합계에 매김</small>';   // 장기요양은 소득·재산 줄마다가 아니라 건강보험료 합계에 매깁니다
   $('rt-body').innerHTML=
-    row('소득 보험료',r.hiInc,'','','반영 소득 '+won(r.income)+'원 ÷ 12 = '+won(r.monthly)+'원 × 7.19%'+(r.hiInc===AREA_MIN&&f10(r.monthly*RATE[2026].hi)<AREA_MIN?' · 최저 보험료':''))
-   +row('재산 보험료',r.hiProp,'','',r.grade?'재산 '+won(r.prop)+'원 − 1억 → '+r.grade+'등급 '+r.point+'점 × 211.5원':'재산이 1억 원 이하라 재산 보험료 없음')
+    row('소득 보험료',r.hiInc,lt,'','반영 소득 '+won(r.income)+'원 ÷ 12 = '+won(r.monthly)+'원 × 7.19%'+(r.hiInc===AREA_MIN&&f10(r.monthly*RATE[2026].hi)<AREA_MIN?' · 최저 보험료':''))
+   +row('재산 보험료',r.hiProp,lt,'',r.grade?'재산 '+won(r.prop)+'원 − 1억 → '+r.grade+'등급 '+r.point+'점 × 211.5원':'재산이 1억 원 이하라 재산 보험료 없음')
    +row('월 보험료',r.hi,r.ltc,'tot',r.hi===AREA_MAX?'월 상한 적용':'장기요양 = 건강보험료 × 13.14%')
    +(A?row('작년 조정 기간 확정 소득 보험료 (월)',A.conf,A.confL,'','2025년 소득 ÷ 12 = '+won(r.monthly)+'원 × 7.09%'+(A.conf===AREA_MIN25&&f10(r.monthly*0.0709)<AREA_MIN25?' · 최저 보험료':'')+' · 장기요양 12.95%')
      +row('조정 기간에 낸 소득 보험료 (월)',A.paid,A.paidL,'',o.apaid?'입력한 금액':'소득 없음으로 조정 · 최저 보험료')
@@ -589,7 +581,6 @@ function renderArea(o){
   }
   if(A) notes.push('작년에 조정받은 '+A.n+'개월 동안의 소득 보험료를 확정된 2025년 소득으로 다시 계산해 차액을 정산했습니다(국민건강보험법 시행령 제41조의2). 재산 보험료는 정산하지 않고, 더 낼 금액은 12회까지 나눠 낼 수 있습니다.');
   if(!A&&!E) notes.push('지역가입자는 직장가입자와 달리 작년 보험료를 정산하지 않습니다. 작년에 직원이 있었거나 보험료 조정을 받았다면 작년(2025년) 상황에 체크해 11월 정산까지 계산해 보세요.');
-  if(!o.anow&&o.a24) notes.push('지금 보험료는 2024년 사업소득만 바꾸고 다른 소득과 재산은 올해와 같다고 보고 계산했습니다. 고지서 금액을 넣으면 그 금액과 비교합니다.');
   notes.push('폐업·휴업했거나 소득이 크게 줄었으면 공단에 보험료 조정을 신청할 수 있습니다. 직원을 뽑으면 직장가입자가 되어 재산은 보지 않고 사업소득으로만 보험료를 냅니다.');
   $('verdict').innerHTML=(A||E?'11월에는 정산 '+(extra<0?'− ':'')+won(Math.abs(extra))+'원과 11월분 '+won(T)+'원을 합쳐 <b>'+(bill>=0?won(bill)+'원</b>이 나오고':won(-bill)+'원</b>을 돌려받고')+', 12월부터 매달 <b>'+won(T)+'원</b>을 냅니다(':'11월부터 매달 <b>'+won(T)+'원</b>을 냅니다(')+'소득 '+won(r.hiInc)+'원 + 재산 '+won(r.hiProp)+'원 + 장기요양 '+won(r.ltc)+'원).'
     +notes.map(t=>'<span class="note">'+t+'</span>').join('');
