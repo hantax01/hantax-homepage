@@ -92,8 +92,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<!-- 글꼴은 첫 화면이 다 뜬 뒤(늦어도 2초 뒤) 받습니다. 그 전에는 기본 글꼴로 보입니다 -->
-<script>(function(){var d=0;function f(){if(d++)return;[['https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap',0],['https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css',1]].forEach(function(x){var l=document.createElement('link');l.rel='stylesheet';l.href=x[0];if(x[1])l.crossOrigin='anonymous';document.head.appendChild(l);});}addEventListener('load',f);setTimeout(f,2000);})();</script>
+<!-- 글꼴은 화면을 먼저 그린 뒤 받습니다(처음 잠깐 기본 글꼴로 보일 수 있음) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap"><link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
 <link rel="stylesheet" href="style.css?v=34">
 <script src="assets/ga.js?v=1" async></script>
