@@ -25,6 +25,7 @@
 - `column/_template.html` 복사 → 영문 파일명 → `column/index.html` 목록에 카드 추가(.empty 블록은 첫 글에서 제거)
 - 구조화 데이터: 템플릿에 Article·BreadcrumbList(홈 › 세무 칼럼 › 글 제목)·FAQPage가 들어 있으니 [질문형 제목]·[파일명]을 모두 바꿀 것. `column/index.html`의 **ItemList(칼럼 목록, 최신순)에도 새 글을 맨 앞에 넣고 position 번호를 1부터 다시 매길 것**(카드 순서와 같게)
 - 법이 바뀌면 본문과 dateModified 수정
+- **첨부 양식(워드 등)**: `assets/docs/`에 영문 파일명으로 두고 링크에 `download="한글이름.docx"`. 올리기 전 본문 빈칸화(고객명·주소·날짜)와 파일 속성(작성자·회사) 삭제 필수(공개 저장소). 다운로드는 GA4가 file_download로 자동 집계
 - **공유 미리보기(썸네일)**: `node assets/og/make.js column <파일명> "<제목 첫 줄<br>둘째 줄>" "<한 줄 설명>"` → `assets/og/column-<파일명>.png` 생성, 템플릿의 og:image와 Article JSON-LD `image`의 `[파일명]`을 바꿔 연결 (계산기는 `tool`)
 
 ## 문구 원칙 (확정 사항 — 임의 변경 금지)
