@@ -51,7 +51,7 @@
 
 ## 세금 계산기
 - [부가가치세, 이번에 얼마나 나올까요?](https://www.hantax47.com/tools/vat.html)
-- [사업자 세무 체크리스트, 몇 개나 맞힐까요?](https://www.hantax47.com/tools/checklist.html)
+- [사업자 세무 체크리스트, 얼마나 알고 있나요?](https://www.hantax47.com/tools/checklist.html)
 - [법인세, 올해 얼마나 나올까요?](https://www.hantax47.com/tools/corporate-tax.html)
 - [종합소득세, 올해 얼마나 나올까요?](https://www.hantax47.com/tools/income-tax.html)
 - [사업자 건강보험료, 6월·11월에 얼마나 바뀔까요?](https://www.hantax47.com/tools/health-insurance.html)
@@ -66,6 +66,7 @@
 - [임원 퇴직금, 얼마까지 인정되나요?](https://www.hantax47.com/tools/executive-severance.html)
 - [대표 연봉, 얼마가 적당할까요?](https://www.hantax47.com/tools/income-transfer.html)
 - [연봉과 배당, 어떻게 나눌까요?](https://www.hantax47.com/tools/pay-mix.html)
+- [사업자 노무 체크리스트, 얼마나 알고 있나요?](https://www.hantax47.com/tools/labor-checklist.html)
 - [법인전환, 세금이 얼마나 달라질까요?](https://www.hantax47.com/tools/incorporation.html)
 - [법인설립, 비용이 얼마나 들까요?](https://www.hantax47.com/tools/company-setup.html)
 - [우리 사업의 영업권, 얼마로 평가될까요?](https://www.hantax47.com/tools/goodwill.html)
