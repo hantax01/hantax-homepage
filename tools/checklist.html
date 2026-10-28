@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사업자 세무 체크리스트, 몇 개나 맞힐까요? | 한택스</title>
+<meta name="description" content="개인·법인, 과세·면세, 업종을 고르면 우리 사업에 해당하는 세무 O·X 문제 20개가 나옵니다. 다 풀면 정답과 해설, 근거 법령, 챙겨야 할 일을 한 번에 보여 드립니다. 2026년 세법 기준입니다.">
+<link rel="canonical" href="https://www.hantax47.com/tools/checklist.html">
+<meta property="og:title" content="사업자 세무 체크리스트, 몇 개나 맞힐까요?">
+<meta property="og:description" content="개인·법인, 과세·면세, 업종별로 골라 나오는 세무 O·X 20문제와 해설">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/tools/checklist.html">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/tool-checklist.png?v=1">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=34">
+<style>
+.sim{max-width:720px;margin:0 auto}
+.pick,.qbox{background:var(--soft);border-radius:14px;padding:26px 28px}
+.pick h2,.qbox h2{font-size:20px;font-weight:800;line-height:1.5;margin:0 0 18px;font-family:var(--sans);letter-spacing:-.01em}
+.grp+.grp{margin-top:18px}
+.grp>b{display:block;font-size:14px;color:var(--ink);margin-bottom:8px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 16px;font-family:inherit;
+  font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer;line-height:1.3}
+.chip:hover{border-color:var(--blue)}
+.chip[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.hint{display:block;font-size:13px;color:var(--mute);line-height:1.7;margin-top:8px}
+.seg .hint{margin-top:0}
+.pick .go{margin-top:24px;width:100%;justify-content:center;text-align:center;border:0;cursor:pointer;font-family:inherit;font-size:16px}
+.pick .go:disabled{opacity:.45;cursor:default;box-shadow:none}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.qtop .step{font-size:12.5px;font-weight:800;letter-spacing:.08em;color:var(--blue)}
+.qtop .back{border:0;background:none;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--mute);cursor:pointer;padding:4px}
+.qtop .back:hover{color:var(--blue)}
+.qbar{height:4px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:22px}
+.qbar i{display:block;height:100%;background:var(--blue);transition:width .25s}
+.qt{display:inline-block;font-size:12px;font-weight:700;color:var(--blue);background:var(--blue-soft);border-radius:99px;padding:3px 10px;margin-bottom:10px}
+.qbox h2{min-height:3em}
+.ox{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ox button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:16px 10px;font-family:inherit;cursor:pointer;
+  font-size:14px;font-weight:600;color:var(--mute)}
+.ox button b{display:block;font-size:30px;font-weight:800;line-height:1.2;color:var(--ink)}
+.ox button:hover{border-color:var(--blue);background:var(--blue-soft)}
+.ox button:hover b{color:var(--blue)}
+.verdict{background:var(--navy);color:#fff;border-radius:14px;padding:26px 28px;text-align:center}
+.verdict .lbl{font-size:14px;opacity:.85}
+.verdict .val{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:8px 0 6px;line-height:1.3}
+.verdict .sub{font-size:14px;opacity:.85;line-height:1.7}
+.box{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.box h3{font-size:15.5px;color:var(--ink);margin:0}
+.okbox summary{cursor:pointer;list-style:none;position:relative;padding-right:28px}
+.okbox summary::-webkit-details-marker{display:none}
+.okbox summary::after{content:"";position:absolute;right:6px;top:50%;width:8px;height:8px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:translateY(-70%) rotate(45deg)}
+.okbox[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.ans{list-style:none;margin:12px 0 0;padding:0}
+.ans li{position:relative;padding:14px 0 14px;border-top:1px solid var(--soft)}
+.ans li:first-child{border-top:0}
+.ans li b{display:block;font-size:15px;line-height:1.6;color:var(--ink);padding-right:76px}
+.ans li p{font-size:14px;line-height:1.8;color:var(--char);margin:6px 0 0}
+.ans li p.basis{font-size:12.5px;color:var(--mute);margin-top:4px}
+.ans li p.basis a{color:var(--blue);font-weight:700;text-decoration:none}
+.ans .tag{position:absolute;right:0;top:15px;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.tag.best{background:var(--blue-soft);color:var(--blue)}
+.tag.no{background:var(--seal-soft);color:var(--seal)}
+.restop{display:flex;justify-content:flex-end;margin-bottom:12px}
+.savebtn,.again button{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover,.again button:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
+.again{margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ask{margin-top:18px;border:2px solid var(--blue-line);border-radius:14px;padding:22px 24px;text-align:center}
+.ask p{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:14px}
+.ask .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.disc{font-size:13px;color:var(--mute);line-height:1.75;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+@media(max-width:660px){
+.pick,.qbox{padding:20px 16px}.pick h2,.qbox h2{font-size:18px}
+.chip{padding:9px 13px;font-size:14px}
+.verdict{padding:22px 16px}.verdict .val{font-size:24px}
+.box{padding:16px}
+.ans li b{padding-right:70px;font-size:14.5px}
+}
+.faq{margin-top:30px;border-top:1px solid var(--line);padding-top:8px}
+.faq h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 4px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;position:relative;padding:16px 34px 16px 2px;
+  font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue)}
+.faq summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;
+  border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+  transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.faq details[open] summary::after{transform:translateY(-20%) rotate(-135deg)}
+.faq .a{padding:0 10px 18px 2px;font-size:14px;line-height:1.85;color:var(--char)}
+.morelinks{margin-top:30px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.morelinks a{border:1px solid var(--blue-line);border-radius:999px;padding:10px 17px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--blue);text-decoration:none}
+.morelinks a:hover{background:var(--blue-soft)}
+.morelinks a.all{border-color:var(--line);color:var(--mute)}
+.morelinks a.all:hover{background:var(--soft)}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "사업자 세무 체크리스트 문제는 어떻게 고르나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "고르신 사업 형태(개인·법인), 부가세(과세·면세), 업종에 해당하는 문제 가운데 업종 문제 5개, 사업 형태 문제 6개, 부가세 문제 4개, 모든 사업자에게 해당하는 문제 5개를 뽑아 20문제를 만듭니다. 다시 풀면 다른 문제가 섞여 나옵니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "체크리스트 점수가 낮으면 세금 문제가 있다는 뜻인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "아닙니다. 문제를 몰랐다고 바로 세금을 더 내는 것은 아닙니다. 다만 틀린 문제에 해당하는 일이 실제로 있었다면 신고나 증빙을 다시 확인해 보시는 것이 좋습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "해설 내용이 우리 사업에도 그대로 적용되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "2026년 세법의 일반 원칙을 짧게 줄인 설명입니다. 감면과 공제는 요건이 많고 예외도 있어 실제 적용은 장부와 계약 내용을 보고 판단해야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "체크리스트에 고른 답이 저장되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "저장되지 않습니다. 채점은 보고 계신 화면 안에서만 이루어집니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"사업자 세무 체크리스트, 몇 개나 맞힐까요?","url":"https://www.hantax47.com/tools/checklist.html","description":"개인·법인, 과세·면세, 업종을 고르면 우리 사업에 해당하는 세무 O·X 문제 20개가 나옵니다. 다 풀면 정답과 해설, 근거 법령, 챙겨야 할 일을 한 번에 보여 드립니다. 2026년 세법 기준입니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">자가진단</span>
+    <h1>사업자 세무 체크리스트,<br>몇 개나 맞힐까요?</h1>
+    <p class="lead">사업 형태와 업종을 고르시면 우리 사업에 해당하는 O·X 문제 20개가 나옵니다. 다 푸신 뒤 정답과 해설을 한 번에 보여 드립니다. 틀린 문제가 곧 챙겨야 할 일입니다.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sim" id="sim">
+      <div class="pick" id="pick">
+        <h2>우리 사업을 골라 주세요</h2>
+        <div class="grp"><b>사업자 형태</b>
+          <div class="seg" data-k="who"><button type="button" class="chip" data-v="i" aria-pressed="false">개인사업자</button><button type="button" class="chip" data-v="c" aria-pressed="false">법인</button></div>
+        </div>
+        <div class="grp"><b>부가세</b>
+          <div class="seg" data-k="vat"><button type="button" class="chip" data-v="t" aria-pressed="false">과세사업자</button><button type="button" class="chip" data-v="f" aria-pressed="false">면세사업자</button></div>
+          <span class="hint">병의원·학원처럼 부가세가 없는 사업은 면세입니다. 간이과세자는 과세를 고르세요.</span>
+        </div>
+        <div class="grp"><b>업종</b>
+          <div class="seg" data-k="biz" id="biz"></div>
+        </div>
+        <button type="button" class="btn btn-primary go" id="go" disabled>문제 20개 풀기</button>
+      </div>
+
+      <div class="qbox" id="qbox" hidden>
+        <div class="qtop"><span class="step" id="q-step"></span><button type="button" class="back" id="q-back">이전 문제</button></div>
+        <div class="qbar"><i id="q-bar"></i></div>
+        <span class="qt" id="q-topic"></span>
+        <h2 id="q-title"></h2>
+        <div class="ox" id="ox"><button type="button" data-v="1"><b>O</b>맞다</button><button type="button" data-v="0"><b>X</b>아니다</button></div>
+      </div>
+
+      <div class="res" id="res" hidden>
+        <div class="restop"><button type="button" class="savebtn" id="save-img">이미지 복사·저장</button></div>
+        <div class="verdict" id="verdict"></div>
+        <div class="box" id="wrongbox"><h3 id="wrong-h"></h3><ul class="ans" id="wrong"></ul></div>
+        <details class="box okbox" id="okbox"><summary><h3 id="right-h"></h3></summary><ul class="ans" id="right"></ul></details>
+        <div class="again"><button type="button" id="again">다른 문제로 다시 풀기</button><button type="button" id="reset">업종 다시 고르기</button></div>
+        <div class="ask">
+          <p><b>틀린 문제가 우리 사업 이야기인가요?</b><br>해당 내용을 보내 주시면 실제로 챙겨야 할 것이 있는지 봐 드립니다.</p>
+          <div class="btns">
+            <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-kakao">카카오톡으로 문의하기</a>
+            <a href="../consult/" class="btn btn-primary">상담 신청서 남기기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>사업자 세무 체크리스트 문제는 어떻게 고르나요?</summary>
+          <div class="a">고르신 사업 형태(개인·법인), 부가세(과세·면세), 업종에 해당하는 문제 가운데 업종 문제 5개, 사업 형태 문제 6개, 부가세 문제 4개, 모든 사업자에게 해당하는 문제 5개를 뽑아 20문제를 만듭니다. 다시 풀면 다른 문제가 섞여 나옵니다.</div>
+        </details>
+        <details>
+          <summary>체크리스트 점수가 낮으면 세금 문제가 있다는 뜻인가요?</summary>
+          <div class="a">아닙니다. 문제를 몰랐다고 바로 세금을 더 내는 것은 아닙니다. 다만 틀린 문제에 해당하는 일이 실제로 있었다면 신고나 증빙을 다시 확인해 보시는 것이 좋습니다.</div>
+        </details>
+        <details>
+          <summary>해설 내용이 우리 사업에도 그대로 적용되나요?</summary>
+          <div class="a">2026년 세법의 일반 원칙을 짧게 줄인 설명입니다. 감면과 공제는 요건이 많고 예외도 있어 실제 적용은 장부와 계약 내용을 보고 판단해야 합니다.</div>
+        </details>
+        <details>
+          <summary>체크리스트에 고른 답이 저장되나요?</summary>
+          <div class="a">저장되지 않습니다. 채점은 보고 계신 화면 안에서만 이루어집니다.</div>
+        </details>
+      </div>
+
+      <p class="disc">
+        · 2026년 10월 시행 법령 기준입니다. 문제와 해설은 일반 원칙을 줄여 쓴 것이라 사업 상황에 따라 달라질 수 있습니다.<br>
+        · 금액 기준(복식부기, 성실신고, 전자세금계산서 등)은 대부분 직전 연도 매출로 판단합니다.
+      </p>
+
+      <div class="morelinks">
+        <a href="vat.html">부가세 계산기</a>
+        <a href="income-tax.html">종합소득세 계산기</a>
+        <a href="corporate-tax.html">법인세 계산기</a>
+        <a href="startup-tax-credit.html">창업 세액감면 진단</a>
+        <a href="./" class="all">다른 계산기 모두 보기</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../column/">세무 칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+
+/* ── 사업자 세무 체크리스트 ───────────────
+   문제마다 who(i 개인, c 법인), vat(t 과세, f 면세), biz(업종 목록)를 달아 두고, 비어 있으면 모두에게 해당합니다.
+   a: 1이면 정답 O, 0이면 정답 X. 문제 순서 = 화면에 나오는 순서 */
+const BOOK='직전 연도 매출이 도소매업은 3억 원, 음식점·제조·건설·정보통신업은 1억 5천만 원, 부동산임대·서비스·교육·보건업은 7,500만 원 이상이면 복식부기 의무자가 됩니다. 기준보다 적으면 간편장부를 써도 됩니다.';
+const SINCERE='그해 매출이 도소매업 15억 원, 음식점·제조·건설·정보통신업 7억 5천만 원, 부동산임대·서비스·교육·보건업 5억 원 이상이면 세무사에게 장부 확인을 받아 6월 30일까지 신고합니다. 확인 비용의 60%(120만 원 한도)는 세액공제됩니다.';
+const STARTUP='창업감면은 법에 정한 업종만 받습니다. 제조·건설·음식점·통신판매·정보통신·전문서비스 등은 대상이고, 도소매(통신판매 제외)·부동산임대·병의원·일반 입시학원은 대상이 아닙니다. 대상 업종이면 창업 지역과 대표 나이에 따라 5년 동안 소득세·법인세를 25~100% 줄여 줍니다.';
+const CARD='직전 연도 공급가액이 10억 원 이하인 개인사업자는 카드·현금영수증 매출의 1.3%(1년 1,000만 원 한도, 2026년까지)를 부가세에서 공제받습니다. 법인은 받을 수 없습니다.';
+const QS=[
+ // 신고·기한
+ {who:'i',t:'신고',q:'개인사업자의 종합소득세는 다음 해 5월에 신고하고, 성실신고확인 대상이면 6월 말까지 신고한다',a:1,w:'1년 동안의 사업소득을 다음 해 5월 1일부터 31일까지 신고합니다. 매출이 업종별 기준을 넘어 성실신고확인을 받는 사업자는 6월 30일까지입니다.',l:'소득세법 제70조, 제70조의2',go:['income-tax.html','종합소득세 계산기']},
+ {who:'c',t:'신고',q:'12월 결산 법인은 법인세를 다음 해 3월 31일까지 신고한다',a:1,w:'사업연도가 끝난 달의 말일부터 3개월 안에 신고·납부합니다. 12월 결산이면 3월 31일, 성실신고확인 대상 법인은 4월 30일까지입니다.',l:'법인세법 제60조, 제60조의2',go:['corporate-tax.html','법인세 계산기']},
+ {who:'c',t:'신고',q:'법인세는 1년에 한 번, 3월 신고 때만 내면 된다',a:0,w:'12월 결산 법인은 8월에 중간예납으로 올해 법인세 일부를 미리 냅니다. 보통 작년 법인세의 절반이고, 올해 상반기 실적으로 계산해 낼 수도 있습니다. 중소기업은 계산한 금액이 50만 원 미만이면 내지 않습니다.',l:'법인세법 제63조, 제63조의2'},
+ {who:'i',t:'신고',q:'개인사업자는 11월에 종합소득세 일부를 미리 내라는 고지서를 받을 수 있다',a:1,w:'작년 종합소득세의 절반을 11월에 중간예납으로 고지합니다. 올해 실적이 많이 줄었다면 11월에 직접 계산해 신고하고 줄여 낼 수 있습니다.',l:'소득세법 제65조'},
+ {who:'i',vat:'t',t:'신고',q:'개인 일반과세자는 4월과 10월에는 부가세를 신고하지 않고 고지서대로 내면 된다',a:1,w:'개인사업자는 1월과 7월에 1년에 두 번 신고하고, 4월과 10월에는 직전 6개월 납부세액의 절반이 고지됩니다. 고지 금액이 50만 원 미만이면 고지하지 않습니다. 실적이 크게 줄었거나 환급받을 일이 있으면 직접 신고해도 됩니다.',l:'부가가치세법 제48조제3항·제4항',go:['../column/vat-preliminary-notice.html','부가세 예정고지 칼럼']},
+ {who:'c',vat:'t',t:'신고',q:'법인은 매출 규모와 상관없이 부가세를 1년에 네 번 신고해야 한다',a:0,w:'직전 6개월 공급가액이 1억 5천만 원 미만인 법인은 개인사업자처럼 4월과 10월에는 고지서로 냅니다. 그 이상인 법인은 1·4·7·10월 네 번 신고합니다.',l:'부가가치세법 제48조제3항',go:['../column/vat-preliminary-notice.html','부가세 예정고지 칼럼']},
+ {vat:'t',t:'신고',q:'매출이 하나도 없던 기간에는 부가세 신고를 하지 않아도 된다',a:0,w:'일반과세자는 매출이 없어도 신고해야 합니다. 그 기간에 산 물건이나 비용이 있었다면 신고해야 그 부가세를 돌려받을 수 있습니다.',l:'부가가치세법 제48조, 제49조'},
+ {vat:'t',t:'신고',q:'부가세를 돌려받을 때는 확정신고기한이 지나고 30일 안에 환급된다',a:1,w:'일반 환급은 확정신고기한이 지난 뒤 30일 안에 돌려줍니다. 설비 투자나 수출이 있으면 조기환급을 신청해 신고기한이 지나고 15일 안에 받을 수 있습니다.',l:'부가가치세법 제59조'},
+ {who:'i',vat:'f',t:'신고',q:'면세 개인사업자는 부가세 신고가 없으니 따로 할 신고도 없다',a:0,w:'병의원·학원 같은 면세 개인사업자는 매년 2월 10일까지 작년 수입금액과 사업장 현황을 신고합니다(사업장현황신고). 병의원이 신고하지 않거나 수입을 적게 신고하면 가산세도 있습니다.',l:'소득세법 제78조, 제81조의3'},
+ {who:'c',vat:'f',t:'신고',q:'면세 법인은 부가세 신고가 없으니 받은 세금계산서를 따로 낼 일이 없다',a:0,w:'면세 법인도 1년 동안 받은 세금계산서를 모아 다음 해 2월 10일까지 매입처별 세금계산서합계표로 냅니다. 주고받은 계산서도 계산서합계표로 냅니다.',l:'법인세법 제120조의3, 제121조'},
+ {who:'i',t:'신고',q:'사업을 그만두면(폐업) 그해 소득은 신고하지 않아도 된다',a:0,w:'폐업한 해의 소득도 다음 해 5월에 종합소득세로 신고합니다. 과세사업자는 폐업한 달의 다음 달 25일까지 부가세도 따로 신고합니다.',l:'소득세법 제70조, 부가가치세법 제49조'},
+ {who:'i',t:'신고',q:'직장에 다니면서 개인사업을 하면 회사 연말정산과 별도로 5월에 합쳐 신고해야 한다',a:1,w:'근로소득과 사업소득은 합쳐서 종합소득세로 신고합니다. 연말정산을 했어도 5월에 사업소득과 함께 다시 계산하며, 세금이 더 나올 수 있습니다. 월급 외 소득이 2천만 원을 넘으면 건강보험료도 더 붙습니다.',l:'소득세법 제14조, 제70조',go:['health-insurance.html#wage','건강보험료 계산기 (직장인 부수입)']},
+ {biz:['online'],t:'신고',q:'온라인으로 물건을 팔려면 사업자등록과 별도로 통신판매업 신고를 해야 한다',a:1,w:'인터넷 판매는 사업자등록과 따로 시·군·구청에 통신판매업 신고를 합니다. 간이과세자이거나 거래 규모가 아주 작으면 면제될 수 있습니다.',l:'전자상거래 등에서의 소비자보호에 관한 법률 제12조'},
+ {biz:['clinic'],t:'신고',q:'건강보험공단에서 받는 진료비도 병의원 수입에 들어간다',a:1,w:'환자 본인부담금뿐 아니라 공단 부담금도 수입금액입니다. 사업장현황신고와 종합소득세 신고 때 공단 지급 내역과 맞춰 봐야 합니다.',l:'소득세법 제24조'},
+ {who:'i',biz:['rent'],t:'신고',q:'상가를 부부 공동명의로 임대하면 소득이 나뉘어 세금이 줄어들 수 있다',a:1,w:'공동사업은 지분대로 소득을 나눠 각자 신고하므로 누진세율이 낮아질 수 있습니다. 공동사업자로 등록하고 지분 약정을 해 두어야 합니다.',l:'소득세법 제43조'},
+ // 장부·증빙
+ {t:'증빙',q:'3만 원 넘게 쓰고 간이영수증만 받으면 가산세 대상이 될 수 있다',a:1,w:'3만 원(부가세 포함)이 넘는 지출은 세금계산서·계산서·카드영수증·현금영수증 같은 적격증빙을 받아야 합니다. 간이영수증만 있으면 비용으로는 인정되더라도 금액의 2%를 가산세로 냅니다. 개업 첫해나 매출이 작은 개인사업자는 가산세가 없습니다.',l:'법인세법 제76조, 소득세법 제81조의6'},
+ {t:'증빙',q:'거래처 경조사비는 청첩장·부고 문자를 남겨 두면 한 번에 20만 원까지 비용이 된다',a:1,w:'경조사비는 카드 결제가 어려워 청첩장·부고장 같은 증빙으로 한 건에 20만 원까지 비용으로 인정합니다. 20만 원을 넘으면 적격증빙이 없는 한 전액 인정되지 않습니다.',l:'법인세법 시행령 제41조'},
+ {biz:['clinic','edu'],t:'증빙',q:'병의원·학원은 10만 원 이상 현금을 받으면 손님이 원하지 않아도 현금영수증을 발급해야 한다',a:1,w:'현금영수증 의무발행 업종은 건당 10만 원(부가세 포함) 이상 현금 거래 때 손님이 요청하지 않아도 발급해야 합니다. 손님 정보를 모르면 국세청 지정번호(010-000-1234)로 발급합니다. 발급하지 않으면 미발급액의 20%가 가산세입니다(건강보험 진료비 등은 제외).',l:'소득세법 제162조의3제4항, 제81조의9'},
+ {who:'i',t:'장부',q:'개인사업자는 장부를 쓰지 않고 추계로 신고해도 불이익이 없다',a:0,w:'장부 없이 신고하면 무기장가산세(산출세액의 20%)가 붙고, 적자가 나도 인정받지 못해 다음 해로 넘겨 쓸 수 없습니다. 복식부기 의무자가 장부 없이 신고하면 신고하지 않은 것으로 봅니다. 개업 첫해나 매출이 작은 사업자는 무기장가산세가 없습니다.',l:'소득세법 제81조의5, 제45조'},
+ {who:'i',t:'장부',q:'개인사업자는 누구나 사업용 계좌를 세무서에 신고해야 한다',a:0,w:'사업용 계좌는 복식부기 의무자만 신고 의무가 있습니다. 대상이 되면 그해 6월 말까지 신고하고, 거래 대금과 인건비·임차료는 이 계좌로 주고받아야 합니다. 신고하지 않으면 가산세가 있습니다.',l:'소득세법 제160조의5'},
+ {who:'i',biz:['retail','online'],t:'장부',q:'도소매업 개인사업자는 직전 연도 매출이 3억 원 이상이면 복식부기로 장부를 써야 한다',a:1,w:BOOK,l:'소득세법 시행령 제208조제5항'},
+ {who:'i',biz:['food','mfg','build'],t:'장부',q:'음식점·제조·건설업 개인사업자는 매출이 3억 원은 넘어야 복식부기 의무가 생긴다',a:0,w:BOOK,l:'소득세법 시행령 제208조제5항'},
+ {who:'i',biz:['rent','edu'],t:'장부',q:'상가 임대업이나 학원은 직전 연도 매출이 7,500만 원 이상이면 복식부기 의무자가 된다',a:1,w:BOOK,l:'소득세법 시행령 제208조제5항'},
+ {who:'i',biz:['clinic'],t:'장부',q:'개원 첫해 의원은 매출이 적으면 간편장부로 신고할 수 있다',a:0,w:'의사·치과의사·한의사 같은 의료업은 매출과 상관없이 복식부기 의무자입니다. 사업용 계좌 신고와 현금영수증 가맹도 의무입니다.',l:'소득세법 시행령 제208조제5항, 부가가치세법 시행령 제109조제2항제7호'},
+ {who:'i',biz:['retail','online'],t:'장부',q:'도소매업 개인사업자는 1년 매출이 15억 원 이상이면 성실신고확인을 받아야 한다',a:1,w:SINCERE,l:'소득세법 제70조의2, 같은 법 시행령 제133조',go:['../column/sincere-filing.html','성실신고확인 칼럼']},
+ {who:'i',biz:['food','mfg','build'],t:'장부',q:'음식점·제조·건설업 개인사업자는 매출이 15억 원은 넘어야 성실신고확인 대상이 된다',a:0,w:SINCERE,l:'소득세법 제70조의2, 같은 법 시행령 제133조',go:['../column/sincere-filing.html','성실신고확인 칼럼']},
+ {who:'i',biz:['rent','edu','clinic'],t:'장부',q:'병의원·학원·상가 임대업은 1년 매출이 5억 원 이상이면 성실신고확인 대상이다',a:1,w:SINCERE,l:'소득세법 제70조의2, 같은 법 시행령 제133조',go:['../column/sincere-filing.html','성실신고확인 칼럼']},
+ // 비용
+ {biz:['retail','online','mfg'],t:'비용',q:'그해 팔지 못하고 남은 재고 구입비도 그해 비용으로 전부 처리된다',a:0,w:'비용이 되는 것은 그해 팔린 물건의 원가입니다. 연말에 남은 재고는 다음 해 원가로 넘어가므로 연말 재고를 세어 기록해 두어야 이익이 맞게 계산됩니다.',l:'법인세법 시행령 제74조'},
+ {biz:['retail','online','food'],t:'비용',q:'유통기한이 지나 버린 재고는 기록이 없어도 비용으로 인정된다',a:0,w:'버린 재고도 비용이 되지만 폐기 사진·목록·폐기업체 확인서 같은 기록이 있어야 인정받기 쉽습니다. 기록 없이 재고가 줄면 매출을 빠뜨린 것으로 볼 수 있습니다.',l:'소득세법 제27조, 법인세법 제19조'},
+ {t:'비용',q:'1개에 100만 원 이하인 비품은 산 해에 한 번에 비용으로 처리할 수 있다',a:1,w:'거래 단위로 100만 원 이하인 자산은 몇 년에 나눠 감가상각하지 않고 산 해에 바로 비용으로 처리할 수 있습니다. 사업을 시작하거나 넓히면서 한꺼번에 산 것은 제외됩니다.',l:'법인세법 시행령 제31조제4항'},
+ {t:'비용',q:'적자(결손금)는 다음 해 이후 이익에서 빼서 세금을 줄일 수 있다',a:1,w:'적자는 15년 동안 넘겨 이후 이익에서 뺄 수 있습니다(2020년 이후 발생분). 개인사업자는 장부를 써야 인정되니 적자인 해에도 장부로 신고해 두세요.',l:'소득세법 제45조, 법인세법 제13조'},
+ {t:'비용',q:'거래처 접대에 쓴 돈은 금액과 상관없이 모두 비용으로 인정된다',a:0,w:'접대비(기업업무추진비)는 기본 한도가 1년 3,600만 원(중소기업)이고 매출에 따라 조금 늘어납니다. 3만 원 넘는 접대비는 카드·세금계산서 같은 적격증빙이 없으면 비용으로 인정되지 않습니다.',l:'법인세법 제25조, 소득세법 제35조'},
+ {who:'c',t:'비용',q:'법인 접대비는 대표 개인 카드로 결제해도 비용으로 인정된다',a:0,w:'법인의 접대비는 법인 명의 카드로 결제해야 합니다. 임직원 개인 카드로 결제한 3만 원 넘는 접대비는 비용으로 인정되지 않습니다.',l:'법인세법 제25조제2항, 같은 법 시행령 제41조'},
+ {t:'비용',q:'사업자가 낸 기부금은 금액과 상관없이 전부 비용이 된다',a:0,w:'기부금은 종류에 따라 한도가 있습니다. 일반 기부금은 법인은 소득의 10%, 개인은 30%까지만 인정되고, 동창회·향우회에 낸 돈처럼 법에 정하지 않은 기부금은 비용이 되지 않습니다.',l:'법인세법 제24조, 소득세법 제34조'},
+ {who:'c',t:'비용',q:'법인 카드로 산 것은 무엇이든 회사 비용으로 처리된다',a:0,w:'대표나 가족의 개인 물건을 법인 카드로 사면 비용이 아니라 대표가 받은 급여(상여)로 처리되어 소득세가 붙습니다. 주말·심야 사용이나 집 근처 결제는 세무조사에서 자주 확인하는 항목입니다.',l:'법인세법 제19조, 제67조',go:['../column/business-card-use.html','법인카드 비용 처리 칼럼']},
+ {t:'비용',q:'업무용 승용차는 운행기록부가 없어도 1년에 1,500만 원까지는 비용으로 인정된다',a:1,w:'운행기록부가 없으면 감가상각비·유류비·보험료 등을 합쳐 1년 1,500만 원까지만 인정되고, 기록부가 있으면 업무에 쓴 비율만큼 인정됩니다. 감가상각비는 1년 800만 원이 한도입니다. 개인은 복식부기 의무자에게 적용되고, 경차·9인승 이상 승합차·화물차는 이 규정이 없습니다.',l:'법인세법 제27조의2, 소득세법 제33조의2',go:['business-car.html','업무용 차량 계산기']},
+ {who:'c',t:'비용',q:'법인 차량은 업무전용 자동차보험에 들지 않으면 비용으로 인정받지 못한다',a:1,w:'법인 명의 승용차는 임직원만 운전하도록 한 업무전용 자동차보험에 가입해야 합니다. 가입하지 않으면 차량 관련 비용 전액이 인정되지 않습니다.',l:'법인세법 시행령 제50조의2'},
+ {who:'i',t:'비용',q:'개인사업자 대표가 자기 월급을 정해 가져가면 그만큼 비용이 된다',a:0,w:'개인사업자는 사업 이익 자체가 대표의 소득이라 대표 본인 급여는 비용이 되지 않습니다. 대신 대표 본인의 건강보험료는 비용으로 인정됩니다.',l:'소득세법 시행령 제55조'},
+ {who:'i',t:'비용',q:'개인사업자가 낸 본인 건강보험료는 비용으로 인정된다',a:1,w:'대표 본인의 건강보험료와 장기요양보험료는 직장가입자든 지역가입자든 비용(필요경비)이 됩니다. 국민연금 보험료는 비용이 아니라 소득공제로 따로 빼 줍니다.',l:'소득세법 시행령 제55조제1항제11호의2·제11호의3',go:['health-insurance.html','건강보험료 계산기']},
+ {t:'비용',q:'가족에게 준 급여는 실제로 일했어도 비용으로 인정되지 않는다',a:0,w:'가족도 실제로 일하고 일한 만큼 받았다면 비용으로 인정됩니다. 출근 기록·업무 내용·급여 이체 내역을 남기고 원천세와 4대보험 신고를 해 두세요. 일하지 않았거나 다른 직원보다 지나치게 많이 받으면 인정되지 않을 수 있습니다.',l:'소득세법 제27조, 법인세법 제19조'},
+ // 부가세
+ {vat:'t',t:'부가세',q:'사업용 카드로 결제했으면 그 부가세는 모두 공제받을 수 있다',a:0,w:'사업과 관련 없는 지출, 접대비, 일반 승용차 구입·유지비, 면세 물품, 면세사업자나 영수증만 주는 간이과세자에게 산 것은 카드로 결제했어도 공제되지 않습니다.',l:'부가가치세법 제39조, 제46조',go:['../column/vat-card-credit.html','카드 매입 공제 칼럼']},
+ {vat:'t',t:'부가세',q:'직원 회식비에 붙은 부가세는 공제받을 수 있다',a:1,w:'직원 회식·간식 같은 복리후생비는 사업 관련 지출이라 공제됩니다. 반면 거래처 접대에 쓴 돈의 부가세는 공제되지 않습니다.',l:'부가가치세법 제38조, 제39조제1항제6호'},
+ {vat:'t',t:'부가세',q:'일반 승용차(5인승 세단·SUV)를 사거나 기름을 넣을 때 낸 부가세는 공제받을 수 있다',a:0,w:'개별소비세가 붙는 일반 승용차는 구입·임차·유지비의 부가세를 공제받지 못합니다. 경차, 9인승 이상 승합차, 화물차는 공제됩니다. 운수업·렌터카처럼 차가 곧 영업에 쓰이는 업종은 예외입니다.',l:'부가가치세법 제39조제1항제5호',go:['car-choice.html','차량 구입 방법 진단']},
+ {vat:'t',t:'부가세',q:'세금계산서를 거래한 다음 달 10일이 지나서 발급하면 가산세가 붙는다',a:1,w:'세금계산서는 거래한 때 발급하고, 한 달치를 모아 발급할 때도 다음 달 10일까지 발급해야 합니다. 늦으면 공급가액의 1%, 그 과세기간 확정신고기한까지도 발급하지 않으면 2%가 가산세입니다.',l:'부가가치세법 제34조, 제60조제2항'},
+ {vat:'t',t:'부가세',q:'거래처가 세금계산서를 늦게 보내 주면 그 부가세는 공제받을 수 없다',a:0,w:'공급 시기가 지나 받은 세금계산서도 확정신고기한 다음 날부터 1년 안에 발급된 것이면 공제받을 수 있습니다. 대신 공급가액의 0.5%를 가산세로 냅니다.',l:'부가가치세법 시행령 제75조, 부가가치세법 제60조'},
+ {who:'i',vat:'t',t:'부가세',q:'개인사업자는 매출이 많아도 종이 세금계산서를 발급해도 된다',a:0,w:'직전 연도 공급가액(면세 포함)이 8천만 원 이상인 개인사업자는 다음 해 7월부터 전자세금계산서를 발급해야 합니다. 종이로 발급하면 공급가액의 1%가 가산세입니다.',l:'부가가치세법 제32조제2항, 같은 법 시행령 제68조'},
+ {vat:'t',t:'부가세',q:'폐업할 때 팔지 않고 남은 재고와 비품에도 부가세가 붙는다',a:1,w:'살 때 부가세를 공제받은 재고·비품이 폐업할 때 남아 있으면 스스로에게 판 것으로 보고 부가세를 냅니다(비품은 지난 기간만큼 줄여 계산). 폐업 전에 처분하거나 사업을 통째로 넘기는 포괄양수도를 검토하세요.',l:'부가가치세법 제10조제6항',go:['business-transfer.html','포괄양수도 점검']},
+ {vat:'t',biz:['food','retail','online','mfg'],t:'부가세',q:'가게 재고를 대표가 집에 가져가 써도 판 것이 아니니 부가세는 없다',a:0,w:'부가세를 공제받고 산 물건을 대표나 가족이 쓰면 판 것으로 보고 시가로 부가세를 냅니다(개인적 공급). 법인이라면 대표 상여로도 처리됩니다.',l:'부가가치세법 제10조제4항'},
+ {vat:'t',biz:['food'],t:'부가세',q:'음식점은 쌀·채소·고기 같은 면세 재료를 사도 부가세 일부를 공제받을 수 있다',a:1,w:'면세 농·축·수산물을 계산서·카드·현금영수증으로 사면 매입액의 일정 비율(개인 108분의 8, 매출 2억 원 이하는 109분의 9, 법인 106분의 6)을 의제매입세액으로 공제합니다. 매출에 비례한 한도가 있습니다.',l:'부가가치세법 제42조'},
+ {vat:'t',biz:['food'],t:'부가세',q:'음식점이 시장에서 영수증 없이 산 채소도 의제매입세액공제를 받을 수 있다',a:0,w:'음식점은 계산서나 카드·현금영수증이 있어야 공제됩니다. 증빙 없이 농어민에게 직접 산 것을 공제하는 것은 제조업만 가능합니다. 시장에서도 카드로 결제하거나 계산서를 받아 두세요.',l:'부가가치세법 시행령 제84조제5항'},
+ {vat:'t',biz:['mfg'],t:'부가세',q:'제조업은 농어민에게 직접 산 농산물도 증빙 없이 의제매입세액공제를 받을 수 있다',a:1,w:'제조업은 농어민에게 면세 농산물을 직접 사면 계산서가 없어도 의제매입세액 공제신고서만 내고 공제받을 수 있습니다. 대금은 계좌로 보내 거래 사실을 남겨 두세요.',l:'부가가치세법 시행령 제84조제5항·제6항'},
+ {who:'i',biz:['food','retail'],t:'부가세',q:'개인 음식점·소매점은 카드 매출에 대해 부가세를 일부 깎아 준다',a:1,w:CARD,l:'부가가치세법 제46조',go:['../column/vat-saving-tips.html','부가세 절세 칼럼']},
+ {who:'c',biz:['food','retail'],t:'부가세',q:'법인 음식점·소매점도 카드 매출 세액공제를 받을 수 있다',a:0,w:CARD,l:'부가가치세법 제46조',go:['../column/vat-saving-tips.html','부가세 절세 칼럼']},
+ {biz:['food','online'],t:'부가세',q:'배달앱·오픈마켓 매출은 플랫폼이 알아서 신고하니 따로 챙길 필요가 없다',a:0,w:'배달앱과 오픈마켓은 판매 내역을 매달 국세청에 내지만 신고는 사업자가 직접 해야 합니다. 카드·현금·플랫폼 매출을 빠짐없이 합쳐 신고하세요. 국세청 자료와 다르면 바로 드러납니다.',l:'부가가치세법 제75조'},
+ {vat:'t',biz:['online','mfg'],t:'부가세',q:'해외 고객에게 판 물건에도 국내와 똑같이 부가세 10%를 낸다',a:0,w:'수출은 영세율(0%)이라 부가세를 내지 않고, 오히려 살 때 낸 부가세를 돌려받습니다. 수출신고필증이나 해외 판매 플랫폼 정산서 같은 증빙을 남겨 신고해야 합니다.',l:'부가가치세법 제21조'},
+ {vat:'t',biz:['it'],t:'부가세',q:'해외 회사에 제공한 개발·디자인 용역도 조건을 갖추면 부가세가 0%다',a:1,w:'국내에 사업장이 없는 외국 회사에 용역을 제공하고 대금을 외화로 받으면 영세율(0%)을 적용받을 수 있습니다. 업종과 받는 방법 요건이 있으니 계약서와 외화 입금 내역을 남겨 두세요.',l:'부가가치세법 제24조, 같은 법 시행령 제33조'},
+ {vat:'t',biz:['mfg','build'],t:'부가세',q:'공장 기계 같은 사업 설비를 사면 부가세를 일찍 돌려받을 수 있다',a:1,w:'사업 설비를 새로 사거나 늘리면 조기환급을 신청해 신고기한이 지난 뒤 15일 안에 부가세를 돌려받을 수 있습니다. 매달이나 두 달 단위로도 신청할 수 있습니다.',l:'부가가치세법 제59조제2항'},
+ {vat:'t',biz:['build'],t:'부가세',q:'공사 대금을 나눠 받는 계약은 공사가 다 끝난 뒤 한 번에 세금계산서를 발급하면 된다',a:0,w:'계약금·중도금·잔금처럼 나눠 받기로 한 공사(중간지급조건부·완성도기준)는 각 대금을 받기로 한 날마다 세금계산서를 발급합니다. 늦게 발급하면 가산세가 붙습니다.',l:'부가가치세법 시행령 제29조'},
+ {vat:'t',biz:['rent'],t:'부가세',q:'상가 임대보증금에는 부가세가 붙지 않는다',a:0,w:'보증금도 은행 이자만큼 임대료를 받은 것으로 보고(간주임대료) 부가세를 냅니다. 보증금 × 정기예금이자율 × 일수 ÷ 365로 계산하며, 이 부분은 세금계산서를 발급하지 않습니다.',l:'부가가치세법 시행령 제65조'},
+ {vat:'t',biz:['rent'],t:'부가세',q:'세입자가 월세를 늦게 주면 실제로 받은 날 세금계산서를 발급하면 된다',a:0,w:'임대료는 계약서에 정한 지급일이 공급 시기입니다. 받지 못했어도 그날 기준으로 세금계산서를 발급하고 부가세를 신고해야 합니다.',l:'부가가치세법 제16조, 같은 법 시행령 제29조'},
+ {vat:'t',biz:['rent'],t:'부가세',q:'상가 건물을 팔 때는 건물값에 부가세가 붙는다',a:1,w:'토지는 면세지만 건물은 과세라 건물분 부가세를 받아 세금계산서를 발급해야 합니다. 임대사업을 그대로 넘기는 포괄양수도면 부가세 없이 넘길 수 있습니다.',l:'부가가치세법 제9조, 제10조제9항',go:['business-transfer.html','포괄양수도 점검']},
+ {vat:'f',biz:['clinic'],t:'부가세',q:'쌍꺼풀·피부미용 같은 미용 목적 시술에는 부가세가 붙는다',a:1,w:'질병 치료가 아닌 미용 목적 성형수술과 피부 시술은 과세입니다. 이런 진료가 있으면 사업자등록을 과세·면세 겸업으로 바꾸고 부가세를 신고해야 합니다.',l:'부가가치세법 시행령 제35조'},
+ {vat:'f',biz:['edu'],t:'부가세',q:'교육청에 등록하지 않은 학원 수업료에도 부가세가 붙지 않는다',a:0,w:'교육 용역이 면세되려면 주무관청에 허가·인가·등록·신고된 학원이어야 합니다. 등록하지 않았거나 무도학원·자동차운전학원이면 과세입니다.',l:'부가가치세법 시행령 제36조'},
+ {vat:'f',biz:['edu'],t:'부가세',q:'학원에서 파는 교재(책)에는 부가세가 붙지 않는다',a:1,w:'도서는 면세라 교재를 따로 팔아도 부가세가 없습니다. 다만 학용품이나 전자기기처럼 책이 아닌 물건을 팔면 과세입니다.',l:'부가가치세법 제26조제1항제8호'},
+ {vat:'f',t:'부가세',q:'면세사업자는 사업자 거래처에게 팔아도 계산서를 발급할 필요가 없다',a:0,w:'면세사업자도 사업자에게 공급하면 계산서를 발급해야 합니다(법인과 일정 규모 이상 개인은 전자계산서). 일반 소비자에게는 영수증이나 현금영수증으로 대신합니다.',l:'소득세법 제163조, 법인세법 제121조'},
+ {vat:'f',t:'부가세',q:'면세사업자도 사업용으로 산 물건의 부가세를 돌려받을 수 있다',a:0,w:'면세사업자는 부가세를 신고하지 않으므로 살 때 낸 부가세를 돌려받지 못합니다. 대신 그 부가세는 비용(원가)으로 처리됩니다.',l:'부가가치세법 제39조제1항제7호'},
+ {vat:'f',t:'부가세',q:'면세사업자가 과세되는 매출이 생기면 사업자등록을 바꿔야 한다',a:1,w:'면세사업자로만 등록한 상태에서 과세 매출이 생기면 과세·면세 겸업 사업자로 등록을 바꾸고 부가세를 신고해야 합니다. 그대로 두면 미등록 가산세가 붙을 수 있습니다.',l:'부가가치세법 제8조'},
+ // 인건비
+ {t:'인건비',q:'직원 급여에서 뗀 소득세는 다음 달 10일까지 세무서에 내야 한다',a:1,w:'원천징수한 세금은 다음 달 10일까지 신고·납부합니다. 직원이 20명 이하인 사업장은 승인을 받아 6개월마다(7월·1월 10일) 낼 수도 있습니다.',l:'소득세법 제128조'},
+ {t:'인건비',q:'일용직은 세금이 안 나오면 지급명세서를 내지 않아도 된다',a:0,w:'일용직에게 준 일당은 세금이 0원이어도 다음 달 말일까지 일용근로소득 지급명세서를 내야 합니다. 내지 않으면 지급액의 0.25%가 가산세이고, 인건비를 비용으로 인정받을 때도 근거가 됩니다.',l:'소득세법 제164조'},
+ {t:'인건비',q:'프리랜서에게 3.3%를 떼고 줬다면 따로 낼 서류는 없다',a:0,w:'뗀 3.3% 가운데 3%는 다음 달 10일까지 원천세로 신고·납부하고(0.3%는 지방소득세), 다음 달 말일까지 간이지급명세서를 매달 냅니다. 빠뜨리면 가산세가 있습니다.',l:'소득세법 제127조, 제164조의3'},
+ {t:'인건비',q:'주 15시간 이상 일하는 아르바이트도 1년 넘게 일하면 퇴직금을 줘야 한다',a:1,w:'4주 평균 주 15시간 이상, 1년 이상 일했다면 아르바이트·단기직도 퇴직금 대상입니다. 5인 미만 사업장도 같습니다.',l:'근로자퇴직급여 보장법 제4조, 제8조',go:['severance-pay.html','퇴직금 계산기']},
+ {t:'인건비',q:'직원이 5명이 안 되는 사업장도 연차휴가를 줘야 한다',a:0,w:'근로기준법의 연차휴가 규정은 상시 5인 이상 사업장에만 적용됩니다. 다만 주휴수당, 퇴직금, 최저임금은 5인 미만에도 그대로 적용됩니다.',l:'근로기준법 제11조, 제60조, 같은 법 시행령 별표 1',go:['annual-leave.html','연차휴가 계산기']},
+ {t:'인건비',q:'주 15시간 이상 일하는 아르바이트에게는 주휴수당을 줘야 한다',a:1,w:'1주에 정한 날을 다 일했고 주 15시간 이상이면 하루치 임금을 주휴수당으로 줍니다. 직원 수와 상관없이 적용됩니다.',l:'근로기준법 제55조, 같은 법 시행령 제30조',go:['hourly-wage.html','시급 계산기']},
+ {t:'인건비',q:'2026년 최저임금은 시간당 10,320원이다',a:1,w:'2026년 최저임금은 시간당 10,320원, 주 40시간 기준 월 2,156,880원(주휴 포함 209시간)입니다. 수습 3개월 감액은 1년 이상 계약일 때만 10%까지 가능하고 단순노무직은 안 됩니다.',l:'최저임금법 제5조, 고용노동부 고시',go:['monthly-wage.html','월급 계산기']},
+ {t:'인건비',q:'근로계약서를 쓰지 않으면 벌금이 나올 수 있다',a:1,w:'임금·근로시간·휴일 등을 적은 근로계약서를 써서 직원에게 한 부 줘야 합니다. 위반하면 500만 원 이하 벌금입니다. 아르바이트도 같습니다.',l:'근로기준법 제17조, 제114조'},
+ {t:'인건비',q:'직원이 퇴사하면 남은 월급과 퇴직금은 다음 정기 급여일에 주면 된다',a:0,w:'퇴사한 날부터 14일 안에 남은 임금과 퇴직금을 모두 줘야 합니다. 직원과 합의하면 기한을 늘릴 수 있습니다.',l:'근로기준법 제36조, 근로자퇴직급여 보장법 제9조'},
+ {t:'인건비',q:'직원 연말정산은 다음 해 2월 급여 때 하고, 지급명세서는 3월 10일까지 낸다',a:1,w:'2월분 급여를 줄 때 1년치 세금을 다시 계산해 돌려주거나 더 걷고, 근로소득 지급명세서를 3월 10일까지 냅니다.',l:'소득세법 제137조, 제164조',go:['year-end-tax.html','연말정산 계산기']},
+ {who:'i',t:'인건비',q:'4대보험에 가입한 직원을 1명이라도 두면 대표도 건강보험 직장가입자가 된다',a:1,w:'직원이 있는 개인사업장의 대표는 직장가입자가 되어 사업소득을 기준으로 건강보험료를 냅니다. 직원이 모두 퇴사하면 다시 지역가입자로 바뀝니다.',l:'국민건강보험법 제6조',go:['health-insurance.html','건강보험료 계산기']},
+ {who:'c',t:'인건비',q:'법인 대표는 급여를 받지 않아도 건강보험 직장가입자가 된다',a:0,w:'보수를 받지 않는 법인 대표는 근로자로 보지 않아 직장가입자가 되지 않고, 다른 소득·재산으로 지역보험료를 냅니다. 급여를 받기 시작하면 직장가입자가 됩니다.',l:'국민건강보험법 제3조, 제6조',go:['health-insurance.html','건강보험료 계산기']},
+ {biz:['build'],t:'인건비',q:'공사 현장 일용직도 고용보험 근로내용확인신고를 해야 한다',a:1,w:'일용직을 쓴 달의 다음 달 15일까지 근로복지공단에 근로내용확인신고를 합니다. 이 신고서에 국세청 소득 항목을 함께 적어 내면 일용근로소득 지급명세서 제출을 대신할 수 있습니다.',l:'고용보험법 제15조, 소득세법 제164조'},
+ {biz:['edu','it'],t:'인건비',q:'강사나 외주 인력을 3.3% 프리랜서로 처리했다면 4대보험 문제는 생기지 않는다',a:0,w:'계약서 이름이 프리랜서여도 정해진 시간에 출근하고 업무 지시를 받으며 고정급을 받으면 근로자로 볼 수 있습니다. 그러면 4대보험과 퇴직금을 거슬러 올라가 부담할 수 있습니다.',l:'근로기준법 제2조'},
+ // 대표·법인
+ {who:'c',t:'법인',q:'대표가 회사 돈을 잠시 썼다가 갚으면 세금 문제는 없다',a:0,w:'갚기 전까지는 가지급금으로 남아, 회사가 연 4.6%의 이자를 받은 것으로 보고 법인세를 매깁니다. 받지 않은 이자는 대표 상여가 되고, 회사에 빌린 돈이 있으면 그만큼 이자 비용도 인정되지 않습니다.',l:'법인세법 제52조, 같은 법 시행령 제89조'},
+ {who:'c',t:'법인',q:'대표가 회사에 빌려준 돈(가수금)은 돌려받을 때 세금이 붙지 않는다',a:1,w:'빌려준 원금을 돌려받는 것은 소득이 아니라 세금이 없습니다. 다만 이자를 받으면 이자소득으로 27.5%(지방소득세 포함)를 떼고, 가수금이 크면 출자전환 같은 정리 방법도 검토할 수 있습니다.',l:'소득세법 제16조, 제129조',go:['../column/ceo-loan-conversion.html','가수금 정리 칼럼']},
+ {who:'c',t:'법인',q:'법인 대표의 급여는 얼마로 정하든 전액 회사 비용이 된다',a:0,w:'임원 급여는 정관이나 주주총회에서 정한 한도 안에서 줘야 합니다. 지배주주인 대표가 같은 일을 하는 다른 임원보다 지나치게 많이 받으면 넘는 부분은 비용으로 인정되지 않습니다.',l:'법인세법 시행령 제43조',go:['../column/executive-pay-rules.html','임원 보수 규정 칼럼']},
+ {who:'c',t:'법인',q:'임원 상여금은 정관이나 주주총회에서 정한 지급 기준을 넘으면 비용으로 인정되지 않는다',a:1,w:'임원에게 주는 상여금은 정관·주주총회·이사회에서 정한 급여지급기준 안에서만 비용으로 인정됩니다. 기준 없이 연말에 주는 상여는 인정받기 어렵습니다.',l:'법인세법 시행령 제43조제2항',go:['../column/executive-bonus.html','임원 상여금 칼럼']},
+ {who:'c',t:'법인',q:'정관에 임원 퇴직금 규정이 없으면 대표 퇴직금 중 비용으로 인정되는 금액이 줄어든다',a:1,w:'규정이 없으면 퇴직 전 1년 급여의 10%에 근속연수를 곱한 금액까지만 비용으로 인정됩니다. 규정을 미리 정해 두면 그 기준대로 인정받을 수 있습니다.',l:'법인세법 시행령 제44조제4항',go:['executive-severance.html','임원 퇴직금 계산기']},
+ {who:'c',t:'법인',q:'법인 배당금을 받으면 금액과 상관없이 15.4%만 떼면 끝난다',a:0,w:'이자·배당을 합친 금융소득이 1년 2,000만 원 이하면 15.4% 원천징수로 끝나지만, 넘으면 다른 소득과 합쳐 종합소득세로 다시 계산합니다.',l:'소득세법 제14조제3항',go:['pay-mix.html','연봉·배당 비교 계산기']},
+ {who:'c',t:'법인',q:'대표이사 주소가 바뀌면 2주 안에 법인 등기도 바꿔야 한다',a:1,w:'대표이사 주소는 등기 사항이라 바뀌면 2주 안에 변경등기를 해야 합니다. 늦으면 대표에게 과태료가 나옵니다. 본점 이전이나 임원 변경도 같습니다.',l:'상법 제317조, 제183조, 제635조'},
+ {who:'c',t:'법인',q:'주식회사 이사의 임기가 끝나도 그대로 두면 특별한 문제는 없다',a:0,w:'이사 임기는 3년을 넘지 못하고, 임기가 끝나면 다시 선임(중임)해 등기해야 합니다. 등기를 놓치면 과태료가 나옵니다.',l:'상법 제383조, 제635조'},
+ {who:'c',t:'법인',q:'대표가 가족에게 주식을 넘기면 법인세 신고 때 그 내용을 함께 내야 한다',a:1,w:'주주가 바뀌면 법인세 신고 때 주식등변동상황명세서를 냅니다. 무상으로 넘기면 증여세, 팔면 양도소득세 신고도 따로 해야 합니다.',l:'법인세법 제119조',go:['stock-value.html','비상장주식 평가 계산기']},
+ {who:'c',biz:['rent'],t:'법인',q:'부동산 임대가 주업이고 직원이 5명 미만인 작은 법인은 성실신고확인을 받아야 한다',a:1,w:'지배주주 지분이 50%를 넘고 상시근로자가 5명 미만이며 부동산임대업이 주업(또는 임대·이자·배당 수입이 50% 이상)인 법인은 성실신고확인을 받아 4월 30일까지 신고합니다. 법인세율도 일반 중소법인보다 높게 적용됩니다.',l:'법인세법 제60조의2, 제55조'},
+ // 감면·공제
+ {biz:['food','mfg','build','it','online'],t:'감면',q:'음식점·제조·건설·IT·온라인 쇼핑몰은 창업중소기업 세액감면을 받을 수 있는 업종이다',a:1,w:STARTUP,l:'조세특례제한법 제6조',go:['startup-tax-credit.html','창업 세액감면 진단']},
+ {biz:['retail','rent','clinic','edu'],t:'감면',q:'도소매·부동산임대·병의원·입시학원도 창업중소기업 세액감면을 받을 수 있다',a:0,w:STARTUP,l:'조세특례제한법 제6조',go:['startup-tax-credit.html','창업 세액감면 진단']},
+ {biz:['etc'],t:'감면',q:'창업하면 업종과 상관없이 창업중소기업 세액감면을 받을 수 있다',a:0,w:STARTUP,l:'조세특례제한법 제6조',go:['startup-tax-credit.html','창업 세액감면 진단']},
+ {biz:['mfg','it'],t:'감면',q:'연구소나 연구전담부서가 없어도 연구원 인건비로 세액공제를 받을 수 있다',a:0,w:'연구·인력개발비 세액공제(중소기업은 인건비의 25%)는 인정받은 기업부설연구소나 연구개발전담부서에서 일하는 전담 연구원의 인건비가 대상입니다. 인정받기 전에 쓴 인건비는 공제되지 않습니다.',l:'조세특례제한법 제10조, 같은 법 시행령 별표 6'},
+ {biz:['mfg','build'],t:'감면',q:'중소기업이 사업용 기계장치를 사면 투자금액의 일부를 세금에서 빼 준다',a:1,w:'통합투자세액공제로 중소기업은 기계장치 같은 사업용 자산 투자금액의 10%를 기본으로 공제받습니다. 중고품과 토지·건물·차량은 대상이 아닙니다.',l:'조세특례제한법 제24조'},
+ {t:'감면',q:'고용 세액공제를 받은 뒤 2년 안에 직원 수가 줄면 받은 세금을 돌려내야 할 수 있다',a:1,w:'2024·2025년에 처음 받은 통합고용세액공제는 2년 안에 인원이 줄면 추징됩니다. 2026년 이후 처음 받는 분부터는 추징 대신 다음 해부터 공제가 줄어듭니다.',l:'조세특례제한법 제29조의8',go:['../column/tonghap-goyong-2026.html','통합고용세액공제 2026 칼럼']},
+ {who:'i',t:'감면',q:'노란우산공제에 넣은 돈은 종합소득세를 계산할 때 소득에서 빼 준다',a:1,w:'사업소득금액에 따라 1년 최대 600만 원까지 소득공제됩니다. 폐업하거나 나이가 들어 받는 공제금은 압류되지 않아 생활 안전판도 됩니다.',l:'조세특례제한법 제86조의3',go:['../column/noran-usan-gongje.html','노란우산공제 칼럼']}
+];
+
+const BIZ={t:[['food','음식점'],['retail','도소매'],['online','온라인 판매'],['mfg','제조'],['it','IT·서비스'],['build','건설'],['rent','상가 임대'],['etc','그 밖의 업종']],
+           f:[['clinic','병의원'],['edu','학원'],['etc','그 밖의 업종']]};
+const WHO={i:'개인사업자',c:'법인'}, VAT={t:'과세',f:'면세'};
+const $=id=>document.getElementById(id);
+const sel={who:null,vat:null,biz:null};
+
+function chips(){
+  $('biz').innerHTML=sel.vat
+    ?BIZ[sel.vat].map(([k,n])=>'<button type="button" class="chip" data-v="'+k+'" aria-pressed="'+(sel.biz===k)+'">'+n+'</button>').join('')
+    :'<span class="hint">부가세를 먼저 골라 주세요.</span>';
+  document.querySelectorAll('.seg[data-k=who] .chip,.seg[data-k=vat] .chip').forEach(b=>b.setAttribute('aria-pressed',sel[b.parentNode.dataset.k]===b.dataset.v));
+  $('go').disabled=!(sel.who&&sel.vat&&sel.biz);
+}
+$('pick').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  const k=b.closest('.seg').dataset.k; sel[k]=b.dataset.v;
+  if(k==='vat'&&!BIZ[sel.vat].some(x=>x[0]===sel.biz)) sel.biz=null;   // 면세로 바꾸면 과세 업종 선택은 지웁니다
+  chips();
+});
+
+// 업종 5 · 사업 형태 6 · 부가세 4 · 공통 5개를 무작위로, 모자라면 남은 문제로 채웁니다
+const QUOTA=[5,6,4,5], N=20;
+const fits=(q,s)=>(!q.who||q.who===s.who)&&(!q.vat||q.vat===s.vat)&&(!q.biz||q.biz.includes(s.biz));
+const group=q=>q.biz?0:q.who?1:q.vat?2:3;
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+function pick(s){
+  const out=[],rest=[];
+  QUOTA.forEach((n,g)=>{const l=shuffle(QS.filter(q=>fits(q,s)&&group(q)===g)); out.push(...l.slice(0,n)); rest.push(...l.slice(n));});
+  out.push(...shuffle(rest).slice(0,N-out.length));
+  return out.sort((a,b)=>QS.indexOf(a)-QS.indexOf(b));
+}
+
+let set=[],ans=[],idx=0;
+function show(id){
+  ['pick','qbox','res'].forEach(k=>$(k).hidden=k!==id);
+  const top=$('sim').getBoundingClientRect().top+scrollY-90;
+  if(scrollY>top) window.scrollTo({top,behavior:'smooth'});
+}
+function start(){ set=pick(sel); ans=[]; idx=0; ask(); show('qbox'); }
+function ask(){
+  const q=set[idx];
+  $('q-step').textContent=(idx+1)+' / '+set.length;
+  $('q-bar').style.width=idx/set.length*100+'%';
+  $('q-back').style.visibility=idx?'visible':'hidden';
+  $('q-topic').textContent=q.t;
+  $('q-title').textContent=q.q;
+}
+$('go').addEventListener('click',start);
+$('again').addEventListener('click',start);
+$('reset').addEventListener('click',()=>show('pick'));
+$('ox').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  ans[idx]=+b.dataset.v;
+  if(++idx<set.length) ask(); else result();
+});
+$('q-back').addEventListener('click',()=>{ if(idx){ idx--; ask(); } });
+
+const bizName=()=>BIZ[sel.vat].find(x=>x[0]===sel.biz)[1];
+function item(q){
+  return '<li><span class="tag '+(q.ok?'best':'no')+'">정답 '+(q.a?'O':'X')+'</span><b>'+q.q+'</b><p>'+q.w+'</p>'
+    +'<p class="basis">근거: '+q.l+(q.go?' · <a href="'+q.go[0]+'">'+q.go[1]+' →</a>':'')+'</p></li>';
+}
+function result(){
+  const done=set.map((q,i)=>Object.assign({ok:ans[i]===q.a},q)), bad=done.filter(q=>!q.ok), good=done.filter(q=>q.ok), n=good.length;
+  $('verdict').innerHTML='<div class="lbl">'+WHO[sel.who]+' · '+VAT[sel.vat]+' · '+bizName()+'</div>'
+    +'<div class="val">'+set.length+'문제 중 '+n+'개 맞혔습니다</div>'
+    +'<div class="sub">'+(n===set.length?'모두 맞히셨습니다. 기본은 잘 챙기고 계십니다.'
+      :n>=16?'대부분 잘 알고 계십니다. 틀린 문제만 확인해 보세요.'
+      :n>=11?'놓치기 쉬운 부분이 몇 가지 있습니다. 아래 틀린 문제부터 확인해 보세요.'
+      :'세금에서 손해 보기 쉬운 부분이 여럿 보입니다. 아래 틀린 문제를 꼭 확인해 보세요.')+'</div>';
+  $('wrongbox').hidden=!bad.length;
+  $('wrong-h').textContent='틀린 문제 '+bad.length+'개 · 챙겨 볼 일';
+  $('wrong').innerHTML=bad.map(item).join('');
+  $('okbox').hidden=!good.length;
+  $('okbox').open=!bad.length;
+  $('right-h').textContent='맞힌 문제 '+good.length+'개 · 해설 보기';
+  $('right').innerHTML=good.map(item).join('');
+  show('res');
+  if(window.gtag){ gtag('event','checklist_result',{score:n}); gtag('event','calc_run'); }
+}
+chips();
+</script>
+<script src="../assets/save-image.js?v=3"></script>
+<script>
+HantaxImage.attach(
+  document.getElementById('save-img'),
+  ()=>document.getElementById('res'),
+  ()=>({ title:'사업자 세무 체크리스트 결과', sub:document.querySelector('#verdict .lbl').textContent+' · 2026년 세법 기준', filename:'한택스_세무체크리스트' }),
+  (()=>{ let cut=[];   // 이미지에는 틀린 문제와 해설만 담고, 근거·링크 줄은 잠시 뺐다가 돌려놓습니다
+    return { before:()=>{ document.getElementById('okbox').style.display='none'; cut=[...document.querySelectorAll('#wrong .basis')].map(p=>[p,p.parentNode]); cut.forEach(([p])=>p.remove()); },
+             after:()=>{ document.getElementById('okbox').style.display=''; cut.forEach(([p,li])=>li.appendChild(p)); cut=[]; } }; })()
+);
+</script>
+</body>
+</html>
