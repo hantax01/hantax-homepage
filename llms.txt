@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [임원 상여금, 어떻게 줘야 비용으로 인정되나요?](https://www.hantax47.com/column/executive-bonus.html)
 - [11월 건강보험료, 왜 갑자기 올랐나요?](https://www.hantax47.com/column/health-insurance-november.html)
 - [중간배당, 결산 전에도 배당을 받을 수 있나요?](https://www.hantax47.com/column/interim-dividend.html)
 - [법인세 절세 방법, 연말 전에 무엇을 챙겨야 하나요?](https://www.hantax47.com/column/corporate-tax-saving.html)
