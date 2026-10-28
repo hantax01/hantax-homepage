@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [직원 인건비 신고, 상용직·일용직·프리랜서는 어떻게 다른가요?](https://www.hantax47.com/column/payroll-basics.html)
 - [사업자 기본 절세 방법, 사장님이 직접 챙길 것은 무엇인가요?](https://www.hantax47.com/column/basic-tax-saving.html)
 - [임원 퇴직금 한도, 대표님은 얼마까지 받을 수 있나요?](https://www.hantax47.com/column/executive-retirement.html)
 - [임원 보수·퇴직금 규정, 주주총회에서 꼭 정해야 하나요?](https://www.hantax47.com/column/executive-pay-rules.html)
