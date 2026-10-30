@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [재고를 폐기 처분할 때, 비용으로 인정받으려면 무엇을 남겨야 하나요?](https://www.hantax47.com/column/inventory-disposal.html)
 - [개인사업자가 꼭 알아야 할 세무 관리, 법인과 무엇이 다른가요?](https://www.hantax47.com/column/sole-proprietor-basics.html)
 - [법인사업자가 꼭 알아야 할 세무 관리, 개인사업자와 무엇이 다른가요?](https://www.hantax47.com/column/corporate-basics.html)
 - [직원 인건비 신고, 상용직·일용직·프리랜서는 어떻게 다른가요?](https://www.hantax47.com/column/payroll-basics.html)
