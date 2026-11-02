@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [사업자 연간 세무일정, 몇 월에 무엇을 신고하나요?](https://www.hantax47.com/column/tax-calendar.html)
 - [재고를 폐기 처분할 때, 비용으로 인정받으려면 무엇을 남겨야 하나요?](https://www.hantax47.com/column/inventory-disposal.html)
 - [개인사업자가 꼭 알아야 할 세무 관리, 법인과 무엇이 다른가요?](https://www.hantax47.com/column/sole-proprietor-basics.html)
 - [법인사업자가 꼭 알아야 할 세무 관리, 개인사업자와 무엇이 다른가요?](https://www.hantax47.com/column/corporate-basics.html)
