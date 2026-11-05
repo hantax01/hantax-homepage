@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [회사를 매각하면 세금은 얼마나 나오나요?](https://www.hantax47.com/column/company-sale-tax.html)
 - [주식 양도소득세 세율, 벤처기업 주식은 어떻게 다른가요?](https://www.hantax47.com/column/stock-tax-rate.html)
 - [11월 종합소득세 중간예납, 고지서대로 다 내야 하나요?](https://www.hantax47.com/column/income-tax-interim.html)
 - [사업자 연간 세무일정, 몇 월에 무엇을 신고하나요?](https://www.hantax47.com/column/tax-calendar.html)
