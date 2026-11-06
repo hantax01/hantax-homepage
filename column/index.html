@@ -69,6 +69,9 @@
 .pager button:hover{border-color:var(--blue);color:var(--blue)}
 .pager button[aria-current="page"]{background:var(--blue);border-color:var(--blue);color:#fff}
 [data-per]{scroll-margin-top:110px}
+.list-search{display:block;width:100%;max-width:440px;height:48px;margin-top:16px;padding:0 16px 0 44px;border:1px solid var(--line);border-radius:12px;background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2718%27 height=%2718%27 fill=%27none%27 stroke=%27%235C6572%27 stroke-width=%272%27 stroke-linecap=%27round%27%3E%3Ccircle cx=%278%27 cy=%278%27 r=%276%27/%3E%3Cpath d=%27m17 17-4.5-4.5%27/%3E%3C/svg%3E") no-repeat 16px center;font:inherit;font-size:16px;color:var(--ink)}
+.list-search::placeholder{color:var(--mute)}
+.list-search:focus{border-color:var(--blue)}
 </style>
 </head>
 <body>
@@ -96,6 +99,7 @@
     <div class="col-cats">
       <span>부가가치세</span><span>종합소득세</span><span>법인세</span><span>사업자등록·법인설립</span><span>세무조사·해명자료</span><span>급여·4대보험</span><span>상속·증여</span>
     </div>
+    <input type="search" class="list-search" data-index="search.json" placeholder="제목이나 내용으로 찾기 (예: 운행기록부)" aria-label="칼럼 검색" enterkeyhint="search" autocomplete="off">
   </div>
 </section>
 
@@ -344,6 +348,6 @@ const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-lin
 mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);mb.setAttribute("aria-label",open?"메뉴 닫기":"메뉴 열기");});
 nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
 </script>
-<script src="../assets/list.js?v=1"></script>
+<script src="../assets/list.js?v=2"></script>
 </body>
 </html>

@@ -27,6 +27,7 @@
 - 법이 바뀌면 본문과 dateModified 수정
 - **첨부 양식(워드 등)**: `assets/docs/`에 영문 파일명으로 두고 링크에 `download="한글이름.docx"`. 올리기 전 본문 빈칸화(고객명·주소·날짜)와 파일 속성(작성자·회사) 삭제 필수(공개 저장소). 다운로드는 GA4가 file_download로 자동 집계
 - **공유 미리보기(썸네일)**: `node assets/og/make.js column <파일명> "<제목 첫 줄<br>둘째 줄>" "<한 줄 설명>"` → `assets/og/column-<파일명>.png` 생성, 템플릿의 og:image와 Article JSON-LD `image`의 `[파일명]`을 바꿔 연결 (계산기는 `tool`)
+- **칼럼 검색 색인**: 칼럼 목록 검색창은 제목·요약(카드)과 본문(`column/search.json`)을 함께 찾는다. 새 칼럼을 올리거나 본문을 고치면 `node assets/search-index.js`를 실행해 `column/search.json`도 함께 커밋(빠뜨려도 제목·요약 검색은 됨). 검색·주제·쪽 나누기 동작은 `assets/list.js` 공용
 
 ## 문구 원칙 (확정 사항 — 임의 변경 금지)
 - 슬로건: **"사장님의 스토리를 기억하는 세무사"**
