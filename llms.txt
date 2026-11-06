@@ -20,6 +20,8 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [법인차 비용처리, 1년에 얼마까지 인정되나요?](https://www.hantax47.com/column/business-car-corporate.html)
+- [개인사업자 차량 비용처리, 얼마까지 경비로 인정되나요?](https://www.hantax47.com/column/business-car-sole.html)
 - [회사를 매각하면 세금은 얼마나 나오나요?](https://www.hantax47.com/column/company-sale-tax.html)
 - [주식 양도소득세 세율, 벤처기업 주식은 어떻게 다른가요?](https://www.hantax47.com/column/stock-tax-rate.html)
 - [11월 종합소득세 중간예납, 고지서대로 다 내야 하나요?](https://www.hantax47.com/column/income-tax-interim.html)
