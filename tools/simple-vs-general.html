@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>간이과세자 vs 일반과세자 계산기, 인테리어 환급까지 비교 | 한택스</title>
-<meta name="description" content="창업할 때 간이과세자와 일반과세자 가운데 어느 쪽이 세금을 덜 내는지 몇 년치로 비교합니다. 인테리어 부가세 환급, 간이과세 전환 때 다시 내는 재고납부세액, 카드 매출·의제매입 공제까지 반영합니다.">
+<meta name="description" content="창업할 때 간이과세자와 일반과세자 가운데 어느 쪽이 세금을 덜 내는지 일반과세자로 바뀌는 날까지 비교합니다. 인테리어 부가세 환급, 과세 유형이 바뀔 때의 재고납부세액·재고매입세액, 카드 매출·의제매입 공제까지 반영합니다.">
 <link rel="canonical" href="https://www.hantax47.com/tools/simple-vs-general.html">
 <meta property="og:title" content="간이과세자와 일반과세자, 어느 쪽으로 시작할까요?">
-<meta property="og:description" content="인테리어 부가세 환급과 간이과세 절세를 몇 년치로 비교하는 계산기">
+<meta property="og:description" content="인테리어 부가세 환급과 간이과세 절세를 일반과세자로 바뀌는 날까지 비교하는 계산기">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.hantax47.com/tools/simple-vs-general.html">
 <meta property="og:image" content="https://www.hantax47.com/assets/og/tool-simple-vs-general.png">
@@ -89,7 +89,7 @@
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
 .cards{grid-template-columns:1fr}
-.rtable{font-size:12.5px}.rtable th,.rtable td{padding:10px 4px}
+.rtable{font-size:12px}.rtable th,.rtable td{padding:10px 4px}.rtable td+td{white-space:nowrap}
 .steps .body{padding:16px 14px}
 }
 </style>
@@ -99,6 +99,11 @@
  "@context": "https://schema.org",
  "@type": "FAQPage",
  "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "간이과세자는 언제 일반과세자로 바뀌나요?",
+   "acceptedAnswer": {"@type": "Answer", "text": "1월부터 12월까지 매출(부가세 포함)이 1억 400만 원 이상이 되면 그다음 해 7월 1일부터 일반과세자가 됩니다. 개업한 해는 개업한 달부터 12월까지 매출을 12개월로 환산해 봅니다. 그래서 전환일은 늘 7월 1일이고, 가장 빠른 때가 개업 다음 해 7월 1일입니다. 부동산임대업과 과세유흥장소는 4,800만 원이 기준입니다."}
+  },
   {
    "@type": "Question",
    "name": "간이과세자는 무엇이 유리한가요?",
@@ -128,7 +133,7 @@
 }
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"간이과세자와 일반과세자, 어느 쪽으로 시작할까요?","url":"https://www.hantax47.com/tools/simple-vs-general.html","description":"창업할 때 간이과세자와 일반과세자 가운데 어느 쪽이 세금을 덜 내는지 몇 년치로 비교합니다. 인테리어 부가세 환급, 간이과세 전환 때 다시 내는 재고납부세액, 카드 매출·의제매입 공제까지 반영합니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
+{"@context":"https://schema.org","@type":"WebApplication","name":"간이과세자와 일반과세자, 어느 쪽으로 시작할까요?","url":"https://www.hantax47.com/tools/simple-vs-general.html","description":"창업할 때 간이과세자와 일반과세자 가운데 어느 쪽이 세금을 덜 내는지 일반과세자로 바뀌는 날까지 비교합니다. 인테리어 부가세 환급, 과세 유형이 바뀔 때의 재고납부세액·재고매입세액, 카드 매출·의제매입 공제까지 반영합니다.","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"author":{"@type":"Person","@id":"https://www.hantax47.com/about/#hanjinsik","name":"한진식"},"provider":{"@type":"AccountingService","@id":"https://www.hantax47.com/#org","name":"한택스"}}
 </script>
 </head>
 <body>
@@ -153,7 +158,7 @@
   <div class="wrap">
     <span class="eyebrow">창업</span>
     <h1>간이과세자와 일반과세자,<br>어느 쪽으로 시작할까요?</h1>
-    <p class="lead">인테리어 부가세를 돌려받는 일반과세자와, 해마다 세금을 적게 내는 간이과세자를 몇 년치로 비교합니다. 일반과세자로 시작해 다음 해 간이과세자로 바뀌는 경우까지 함께 계산합니다.</p>
+    <p class="lead">인테리어 부가세를 돌려받는 일반과세자와, 해마다 세금을 적게 내는 간이과세자를 매출이 늘어 일반과세자로 바뀌는 날까지 비교합니다. 일반과세자로 시작해 다음 해 간이과세자로 바뀌는 경우까지 함께 계산합니다.</p>
   </div>
 </section>
 
@@ -199,13 +204,23 @@
           <div class="unit"><input type="text" id="i-farm" class="money" inputmode="numeric" value="1,500,000" autocomplete="off"><span>원</span></div>
         </div>
         <div>
-          <label for="i-years">비교 기간</label>
-          <select id="i-years"><option value="2">개업 후 2년</option><option value="3" selected>개업 후 3년</option><option value="5">개업 후 5년</option></select>
+          <label for="i-conv">일반과세자 전환 예상일 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="간이과세자는 1~12월 매출(부가세 포함)이 1억 400만 원 이상이 되면 그다음 해 7월 1일 일반과세자로 바뀝니다. 매출이 언제쯤 그만큼 늘지 예상해 고르세요. 일반과세자가 되면 세 경로가 모두 같아지므로 그 전날까지를 비교합니다. 매출이 계속 기준보다 적을 것 같으면 가장 먼 날짜를 고르세요.">?</button></label>
+          <select id="i-conv"></select>
         </div>
         <div>
           <label for="i-asset">인테리어를 보는 기준 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="일반과세자로 시작했다가 간이과세자로 바뀌면 인테리어 환급분의 일부를 다시 냅니다. 그 밖의 감가상각자산으로 보면 반기마다 25%씩 줄어 2년이 지나면 0이 되고, 건물·구축물로 보면 반기마다 5%씩 줄어 10년이 걸립니다. 임차한 가게의 인테리어를 어느 쪽으로 볼지는 사안마다 달라 세무사와 확인이 필요합니다.">?</button></label>
           <select id="i-asset"><option value="etc">그 밖의 감가상각자산 (2년)</option><option value="bldg">건물·구축물 (10년)</option></select>
         </div>
+        <details class="steps fw" id="g-rule" style="margin-top:0;background:#fff">
+          <summary>간이과세자가 일반과세자로 바뀌는 기준</summary>
+          <div class="body"><ul>
+            <li><b>1년 매출 1억 400만 원:</b> 1월부터 12월까지 매출(부가세 포함 금액)이 1억 400만 원 이상이면 그다음 해 7월 1일부터 일반과세자가 됩니다. 부동산임대업과 과세유흥장소는 4,800만 원이 기준입니다.</li>
+            <li><b>개업한 해는 12개월로 환산:</b> 개업한 달부터 12월까지 매출을 12개월로 늘려 봅니다. 10월에 개업해 석 달 동안 3,000만 원을 팔았다면 1억 2,000만 원으로 보아 다음 해 7월 1일 일반과세자가 됩니다.</li>
+            <li><b>그래서 전환일은 늘 7월 1일:</b> 가장 빠른 때가 개업 다음 해 7월 1일입니다. 그 뒤로는 어느 해 매출이 기준을 넘으면 그다음 해 7월 1일에 바뀌고, 그 사이(다음 해 1~6월)는 간이과세자로 남습니다. 매출이 다시 줄어 기준에 못 미치면 그다음 해 7월 1일 간이과세자로 돌아옵니다.</li>
+            <li><b>매출과 관계없이 바뀌는 경우:</b> 간이과세가 안 되는 업종을 함께 하거나 일반과세가 적용되는 사업장을 하나 더 내면 간이과세자로 있을 수 없습니다. 스스로 간이과세 포기 신고를 해도 일반과세자가 되고, 이때는 3년간 간이과세를 다시 받지 못합니다.</li>
+            <li><b>바뀔 때 돌려받는 세금:</b> 일반과세자가 되는 날 갖고 있는 재고와 인테리어 같은 시설(취득 후 2년, 건물·구축물은 10년 이내)은 바뀌기 직전 신고 때 재고품 신고를 하면 매입세액 일부를 공제받습니다(재고매입세액). 이 계산기는 인테리어분을 반영했습니다.</li>
+          </ul></div>
+        </details>
       </div>
 
       <button class="btn btn-primary simbtn" id="calc">비교하기</button>
@@ -224,6 +239,10 @@
 
       <div class="faq">
         <h3>자주 묻는 질문</h3>
+        <details>
+          <summary>간이과세자는 언제 일반과세자로 바뀌나요?</summary>
+          <div class="a">1월부터 12월까지 매출(부가세 포함)이 1억 400만 원 이상이 되면 그다음 해 7월 1일부터 일반과세자가 됩니다. 개업한 해는 개업한 달부터 12월까지 매출을 12개월로 환산해 봅니다. 그래서 전환일은 늘 7월 1일이고, 가장 빠른 때가 개업 다음 해 7월 1일입니다. 부동산임대업과 과세유흥장소는 4,800만 원이 기준입니다.</div>
+        </details>
         <details>
           <summary>간이과세자는 무엇이 유리한가요?</summary>
           <div class="a">매출에 업종별 부가가치율(음식점·소매업 15%)을 곱한 금액에만 10%를 매겨, 음식점이면 매출의 1.5% 정도만 냅니다. 한 해 매출이 4,800만 원에 못 미치면 납부 의무도 면제됩니다. 대신 매입 부가세는 매입액의 0.5%만 빼 주고 돌려받지 못하며, 음식점 의제매입세액공제도 받을 수 없습니다.</div>
@@ -247,7 +266,8 @@
       </div>
 
       <p class="disc">
-        · 부가가치세법과 시행령(2026년 현재)을 기준으로 한 참고용 계산입니다. 매출과 매입은 매달 같다고 보고 계산했습니다.<br>
+        · 부가가치세법과 시행령(2026년 현재)을 기준으로 한 참고용 계산입니다. 매출과 매입은 매달 같다고 보고, 일반과세자로 바뀌는 날 전날까지를 비교했습니다. 그 뒤로는 세 경로 모두 일반과세자라 내는 세금이 같습니다.<br>
+        · 일반과세자로 시작해 간이로 바뀌었다가 다시 일반이 될 때의 인테리어 재고매입세액은 간이로 시작한 경우와 같은 식(시행령 제86조)으로 어림했습니다.<br>
         · 카드 매출 세액공제(1.3%, 연 1,000만 원)와 음식점 의제매입 9/109 공제율은 2026년 말까지, 의제매입 한도 우대(과세표준의 75%·70%·60%)는 2027년 말까지 적용되는 특례라 그 뒤는 현행법 원칙대로 계산했습니다. 연장되면 결과가 조금 달라집니다.<br>
         · 부가세는 소득세 계산에도 영향을 줍니다. 돌려받지 못한 부가세는 비용이 되고 덜 낸 부가세는 이익이 되어, 실제 차이는 이 표보다 소득세율만큼 작아지지만 어느 쪽이 유리한지는 대체로 바뀌지 않습니다.<br>
         · 간이과세자 가운데 한 해 매출 4,800만 원 이상은 세금계산서를 발급해야 하고, 그 미만은 발급할 수 없습니다. 거래처가 세금계산서를 요구하는 사업이면 함께 따져 보세요. 상품 재고에 대한 재고납부세액, 전자신고 세액공제는 반영하지 않았습니다.
@@ -314,13 +334,14 @@ const man=v=>{ v=Math.round(v); if(Math.abs(v)<1e6) return won(v)+'원'; const a
 function read(){
   const v=$('i-open').value||'2026-12', biz=$('i-biz').value;
   return {biz,vr:VR[biz],food:biz==='food',y:+v.slice(0,4),m:+v.slice(5,7)-1,S:num($('i-sales').value),r:Math.min(100,num($('i-card').value))/100,
-    C:num($('i-int').value),P:num($('i-buy').value),F:biz==='food'?num($('i-farm').value):0,N:+$('i-years').value,asset:$('i-asset').value};
+    C:num($('i-int').value),P:num($('i-buy').value),F:biz==='food'?num($('i-farm').value):0,asset:$('i-asset').value,
+    k:+$('i-conv').value||3, get T(){ return (12-this.m)+12*(this.k-1)+6; }};   // T: 개업 달부터 일반과세자 전환(개업 k년 뒤 7월 1일) 전까지의 개월 수
 }
 
-/* 한 경로를 개업 달부터 N년 동안 과세기간별로 계산합니다.
+/* 한 경로를 개업 달부터 일반과세자로 바뀌기 전날까지 과세기간별로 계산합니다.
    A: 간이과세자로 시작 / B: 일반과세자 계속(간이과세 포기) / C: 일반과세자로 시작해 다음 해 7월 1일 간이과세자로 전환 */
 function sim(o,path){
-  const total=o.N*12, conv=path==='C'?(12-o.m)+6:Infinity;   // 개업 달부터 다음 해 7월까지의 개월 수
+  const total=o.T, conv=path==='C'?(12-o.m)+6:Infinity;   // C가 간이로 바뀌는 개업 다음 해 7월까지의 개월 수
   const B=[]; let cur=null;
   for(let i=0;i<total;i++){
     const ab=o.m+i, y=o.y+Math.floor(ab/12), cm=ab%12, simple=path==='A'||i>=conv;
@@ -358,8 +379,17 @@ function sim(o,path){
     stock=o.C*Math.max(0,1-rate*elapsed)*0.1*(1-0.005*11);
     const cb=rows.find(r=>r.key==='S'+(o.y+1)+'c'); if(cb){ cb.stock=stock; cb.due+=stock; }   // 납부 면제여도 냅니다
   }
+  // 간이 → 일반 전환 때 인테리어 재고매입세액(시행령 제86조): 취득가액(부가세 포함) × (1 − 감가율 × 경과 과세기간 수) × 10/110 × (1 − 0.5% × 110/10)
+  //   감가율은 건물·구축물 10%, 그 밖의 감가상각자산 50%(간이 과세기간은 1년이 한 기간), 취득 후 10년·2년 안의 것만
+  let back=0, backElapsed=0;
+  if(o.C&&(path==='A'||(path==='C'&&conv<total))){
+    backElapsed=rows.length;                                        // 공사한 과세기간부터 전환 직전 과세기간까지
+    const bldg=o.asset==='bldg', rate=bldg?0.10:0.50;
+    back=total<=(bldg?120:24)?o.C*1.1*Math.max(0,1-rate*backElapsed)*10/110*(1-0.005*11):0;
+    if(back) rows.push({key:'X',conv:true,y:o.y+o.k,k:0,sales:0,due:-back,d:{}});
+  }
   const byYear={}; rows.forEach(r=>byYear[r.y]=(byYear[r.y]||0)+r.due);
-  return {rows,byYear,total:rows.reduce((s,r)=>s+r.due,0),stock,elapsed};
+  return {rows,byYear,total:rows.reduce((s,r)=>s+r.due,0),stock,elapsed,back,backElapsed};
 }
 
 /* ── 화면 ───────────────────────────────────── */
@@ -378,6 +408,7 @@ function periodName(r){
 function stepsHtml(o,res,p){
   return '<b class="ttl">'+PATH[p]+'</b><ul>'+res.rows.map(r=>{
     const d=r.d, s='매출 '+man(r.sales);
+    if(r.conv) return '<li><b>'+r.y+'년 7월 1일 일반과세자 전환</b> 인테리어 재고매입세액 '+man(o.C*1.1)+' × (1 − '+(o.asset==='bldg'?'10%':'50%')+' × 경과 과세기간 '+res.backElapsed+') × 10/110 × (1 − 5.5%) → <b>'+man(r.due)+'</b></li>';
     if(r.simple) return '<li><b>'+periodName(r)+'</b> '+s+' × '+Math.round(o.vr*100)+'% × 10% = '+man(d.base)+', 매입 공제 − '+man(Math.min(d.credit,d.base))
       +(d.card?', 카드 공제 − '+man(d.card):'')+(d.free?' → 한 해 매출 4,800만 원 미만이라 납부 면제':'')+(r.stock?', 재고납부세액 + '+man(r.stock):'')+' → <b>'+man(r.due)+'</b></li>';
     return '<li><b>'+periodName(r)+'</b> 매출세액 '+man(d.out)+' − 매입세액 '+man(d.in)+(d.int?' − 인테리어 매입세액 '+man(d.int):'')+(d.deem?' − 의제매입 '+man(d.deem):'')+(d.card?' − 카드 공제 '+man(d.card):'')+' → <b>'+man(r.due)+'</b></li>';
@@ -386,36 +417,37 @@ function stepsHtml(o,res,p){
 function render(scroll){
   sync();
   const o=read(), annual=o.S*12, canSimple=annual<SIMPLE_MAX;
-  const paths=canSimple?['A','B','C']:['B'];
+  const paths=!canSimple?['B']:o.k>1?['A','B','C']:['A','B'];   // 개업 다음 해 7월에 바로 일반이 되면 C는 간이로 바뀌지 않아 B와 같습니다
   const R={}; paths.forEach(p=>R[p]=sim(o,p));
   const best=paths.reduce((a,p)=>R[p].total<R[a].total?p:a,paths[0]);
   // 간이와 일반을 한 해 단위로 견줘 봅니다 (인테리어 없이, 개업 다음 해 1~12월)
-  const steady=Object.assign({},o,{C:0,m:0,y:o.y+1,N:1});
+  const steady={...o,C:0,m:0,y:o.y+1,T:12};
   const yA=sim(steady,'A').total, yB=sim(steady,'B').total, gain=yB-yA;
   const refund=o.C*0.1, simpleInt=o.C*1.1*0.005;
   const v=$('verdict');
   if(!canSimple){
     v.innerHTML='<p>예상 연 매출이 <b>'+man(annual)+'</b>으로 간이과세 기준(1억 400만 원) 이상이라 <b>일반과세자로만 시작할 수 있습니다.</b></p>'
-      +'<p>인테리어 부가세 '+man(refund)+'은 세금계산서를 받아 시설투자 조기환급으로 돌려받으세요. '+o.N+'년 동안 부가세는 모두 '+man(R.B.total)+'으로 예상됩니다.</p>';
+      +'<p>인테리어 부가세 '+man(refund)+'은 세금계산서를 받아 시설투자 조기환급으로 돌려받으세요. '+(o.y+o.k)+'년 6월 30일까지 부가세는 모두 '+man(R.B.total)+'으로 예상됩니다.</p>';
   } else {
-    const n=o.N;
-    let p1='<p>개업 후 '+n+'년을 합치면 <b>'+PATH[best]+'</b>이 가장 적게 냅니다. 간이로 시작 '+man(R.A.total)+', 일반 계속 '+man(R.B.total)+', 일반으로 시작해 간이 전환 '+man(R.C.total)+'입니다.</p>';
+    let p1='<p>개업부터 일반과세자로 바뀌기 전날('+(o.y+o.k)+'년 6월 30일)까지 합치면 <b>'+PATH[best]+'</b>이 가장 적게 냅니다. '+paths.map(p=>PATH[p]+' '+man(R[p].total)).join(', ')+'입니다.</p>';
     let p2='<p>일반과세자는 인테리어 부가세 '+man(refund)+'을 돌려받고, 간이과세자는 최대 '+man(simpleInt)+'만 빼 줍니다. ';
     if(annual<SIMPLE_FREE) p2+='대신 한 해 매출이 4,800만 원 미만이라 간이과세자는 부가세를 내지 않습니다';
     else if(gain>0) p2+='대신 간이과세자는 해마다 약 '+man(gain)+'을 덜 내서, 간이로 '+(Math.round((refund-simpleInt)/gain*10)/10)+'년쯤 지나면 환급 차이를 따라잡습니다';
     else p2+='이 조건에서는 간이과세자도 해마다 내는 세금이 줄지 않습니다(매입'+(o.food?'과 의제매입':'')+'이 많아서)';
     p2+='.</p>';
-    const cy=o.y+1;
-    let p3=R.C.stock||o.C?'<p>일반과세자로 등록하고 따로 신청하지 않으면 '+cy+'년 7월 1일부터 간이과세자로 바뀝니다. 이때 인테리어 환급분 가운데 <b>'+man(R.C.stock)+'</b>을 재고납부세액으로 다시 냅니다'
+    const cy=o.y+1, ky=o.y+o.k;
+    if(R.A.back) p2+='<p>간이로 시작해도 '+ky+'년 7월 1일 일반과세자가 될 때 인테리어 재고매입세액 '+man(R.A.back)+'을 돌려받아 위 합계에 넣었습니다.</p>';
+    else if(o.C) p2+='<p>간이로 시작한 경우 '+ky+'년 7월 1일 일반과세자가 될 때 인테리어는 '+(o.asset==='bldg'?'취득 후 10년이 지났거나 ':'취득 후 2년이 지났거나 ')+'남은 가치가 없어 재고매입세액이 없습니다.</p>';
+    let p3=o.k===1?'<p>개업한 해 매출이 1억 400만 원 이상이면 일반과세자로 시작해도 다음 해 간이과세자로 바뀌지 않아, 일반으로 시작하는 경로는 일반 계속과 같습니다.</p>':R.C.stock||o.C?'<p>일반과세자로 등록하고 따로 신청하지 않으면 '+cy+'년 7월 1일부터 간이과세자로 바뀝니다. 이때 인테리어 환급분 가운데 <b>'+man(R.C.stock)+'</b>을 재고납부세액으로 다시 냅니다'
       +(o.asset==='etc'?'(인테리어를 건물·구축물로 보면 '+man(o.C*Math.max(0,1-0.05*R.C.elapsed)*0.1*0.945)+')':'(그 밖의 감가상각자산으로 보면 '+man(o.C*Math.max(0,1-0.25*R.C.elapsed)*0.1*0.945)+')')
-      +'. 계속 일반과세자로 남으려면 '+cy+'년 6월 30일까지 간이과세 포기 신고를 하세요.</p>':'';
+      +'. 그 뒤 '+ky+'년 7월 1일 다시 일반과세자가 될 때 '+(R.C.back?'재고매입세액 '+man(R.C.back)+'을 돌려받습니다':'인테리어는 남은 가치가 없어 돌려받는 재고매입세액이 없습니다')+'. 처음부터 계속 일반과세자로 남으려면 '+cy+'년 6월 30일까지 간이과세 포기 신고를 하세요.</p>':'';
     v.innerHTML=p1+p2+p3;
   }
-  $('cards').innerHTML=['A','B','C'].map(p=>R[p]?'<div class="card'+(p===best&&paths.length>1?' best':'')+'"><span>'+PATH[p]+(p===best&&paths.length>1?' · 가장 적음':'')+'</span><b>'+man(R[p].total)+'</b><small>'+o.N+'년 합계, '+PATH_SUB[p]+'</small></div>':'').join('');
+  $('cards').innerHTML=['A','B','C'].map(p=>R[p]?'<div class="card'+(p===best&&paths.length>1?' best':'')+'"><span>'+PATH[p]+(p===best&&paths.length>1?' · 가장 적음':'')+'</span><b>'+man(R[p].total)+'</b><small>전환 전까지 합계, '+PATH_SUB[p]+'</small></div>':'').join('');
   $('cards').style.gridTemplateColumns=paths.length>1?'':'1fr';
   const years=[...new Set(paths.flatMap(p=>Object.keys(R[p].byYear)))].sort();
   $('y-head').innerHTML='<tr><th>연도</th>'+paths.map(p=>'<th>'+PATH[p]+'</th>').join('')+'</tr>';
-  $('y-body').innerHTML=years.map(y=>'<tr><td>'+y+'년'+(+y===o.y?'<small>'+(o.m+1)+'월 개업</small>':'')+'</td>'+paths.map(p=>cell(R[p].byYear[y]||0)).join('')+'</tr>').join('')
+  $('y-body').innerHTML=years.map(y=>'<tr><td>'+y+'년'+(+y===o.y?'<small>'+(o.m+1)+'월 개업</small>':+y===o.y+o.k?'<small>1~6월, 7월 1일 일반 전환</small>':'')+'</td>'+paths.map(p=>cell(R[p].byYear[y]||0)).join('')+'</tr>').join('')
     +'<tr class="tot"><td>합계</td>'+paths.map(p=>cell(R[p].total)).join('')+'</tr>';
   $('steps').innerHTML=paths.map(p=>stepsHtml(o,R[p],p)).join('')
     +(R.C&&R.C.stock?'<p style="margin:12px 0 0">재고납부세액 = 인테리어 '+man(o.C)+' × (1 − '+(o.asset==='bldg'?'5%':'25%')+' × 경과 과세기간 '+R.C.elapsed+') × 10% × (1 − 5.5%) = '+man(R.C.stock)+'</p>':'');
@@ -425,6 +457,14 @@ function render(scroll){
 
 /* ── 이벤트 ─────────────────────────────────── */
 (function(){ const t=new Date(), n=new Date(t.getFullYear(),t.getMonth()+1,1); $('i-open').value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); })();
+// 전환 예상일: 개업 다음 해부터 5년 뒤까지의 7월 1일 (고른 순번은 개업 월을 바꿔도 유지)
+function fillConv(){
+  const sel=$('i-conv'), k=+sel.value||3, y=+($('i-open').value||'2026-12').slice(0,4);
+  sel.innerHTML=[1,2,3,4,5].map(i=>'<option value="'+i+'">'+(y+i)+'년 7월 1일 ('+(i===1?'개업한 해':(y+i-1)+'년')+' 매출 1억 400만 원 이상)</option>').join('');
+  sel.value=k;
+}
+fillConv();
+$('i-open').addEventListener('change',fillConv);
 $('in').addEventListener('input',e=>{
   const el=e.target;
   if(el.classList.contains('money')){ const n=num(el.value); el.value=n?won(n):''; }
