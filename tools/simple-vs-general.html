@@ -42,6 +42,12 @@
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
 .res{display:none;margin-top:36px}
 .res h3{font-family:var(--sans);font-size:17px;font-weight:800;color:var(--ink);margin:30px 0 10px}
+.reshead{display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;margin:30px 0 10px}
+.res .reshead h3{margin:0}
+.savebtn{border:1px solid var(--blue-line);background:#fff;color:var(--blue);font-family:inherit;
+  font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:8px;cursor:pointer}
+.savebtn:hover{background:var(--blue-soft)}
+.savebtn:disabled{opacity:.55;cursor:default}
 .verdict{background:var(--soft);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 22px;font-size:15.5px;line-height:1.85;color:var(--ink)}
 .verdict b{color:var(--blue)}
 .verdict p{margin:0}
@@ -224,7 +230,7 @@
       <div class="res" id="res">
         <div class="verdict" id="verdict"></div>
         <div class="cards" id="cards"></div>
-        <h3 id="t-year">연도별로 내는 부가세</h3>
+        <div class="reshead"><h3 id="t-year">연도별로 내는 부가세</h3><button type="button" class="savebtn" id="save-img">이미지 저장</button></div>
         <div style="overflow-x:auto"><table class="rtable"><thead id="y-head"></thead><tbody id="y-body"></tbody></table></div>
         <p class="rnote">음수(파란색)는 돌려받는 금액입니다. 한 해 금액은 그해 과세기간 신고분을 합친 것이고, 실제로 내거나 받는 때는 신고기한(일반 1·7월, 간이 1월) 기준입니다.</p>
         <details class="steps">
@@ -449,5 +455,17 @@ $('calc').addEventListener('click',()=>{ if(!num($('i-sales').value)){ alert('�
 sync();
 </script>
 <script src="../assets/help.js?v=1"></script>
+<script src="../assets/save-image.js?v=2"></script>
+<script>
+HantaxImage.attach(
+  $('save-img'),
+  ()=>document.querySelector('#res .rtable'),
+  ()=>{ const o=read();
+    return { title:'간이로 시작 vs 일반으로 시작, 부가세 비교',
+      sub:[$('i-biz').selectedOptions[0].text.split(' (')[0], o.y+'년 '+(o.m+1)+'월 개업', '한 달 매출 '+man(o.S), (o.y+o.k)+'년 7월 1일 일반 전환'].concat(o.C?['인테리어 '+man(o.C)]:[]).join(' · '),
+      note:'참고용 계산입니다. 실제 신고 전에 세무사와 확인해 주세요.',
+      filename:'한택스_간이일반비교' }; }
+);
+</script>
 </body>
 </html>
