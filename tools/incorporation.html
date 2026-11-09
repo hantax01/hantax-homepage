@@ -35,6 +35,8 @@
 .sim label small{font-weight:400;color:var(--mute);font-size:12.5px;margin-left:5px}
 .sim input,.sim select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15.5px;font-family:inherit;background:#fff;color:var(--ink)}
 .sim input:focus,.sim select:focus{outline:none;border-color:var(--blue)}
+.sim .chkline{display:flex;align-items:center;gap:9px;font-size:14.5px;font-weight:700;margin:0;cursor:pointer}
+.sim .chkline input{width:18px;height:18px;padding:0;accent-color:var(--blue);flex:none}
 .unit{position:relative}
 .unit span{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--mute)}
 .unit input{padding-right:44px;text-align:right}
@@ -239,6 +241,17 @@
           <label for="i-salary">대표님 연봉 <small>법인전환 시 정할 금액</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="법인으로 바꾸면 대표님도 회사에서 급여를 받게 됩니다. 그 급여는 회사의 비용이 되어 법인세를 줄이지만, 대표님 개인에게는 근로소득세가 붙습니다. 얼마로 정하느냐에 따라 전체 세금이 달라지므로 금액을 바꿔 가며 비교해 보세요.">?</button></label>
           <div class="unit"><input type="text" id="i-salary" inputmode="numeric"><span>원</span></div>
         </div>
+        <div class="fw">
+          <label class="chkline"><input type="checkbox" id="i-hascard"> 카드·현금영수증 매출이 있어요 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="소매업, 음식점, 숙박업, 미용실처럼 주로 소비자에게 파는 개인사업자는 카드·현금영수증 매출의 1.3%(연 1,000만 원 한도)를 부가세에서 빼 줍니다. 2027년부터는 1%, 연 500만 원 한도입니다. 법인과 작년 매출(부가세 제외)이 10억 원을 넘는 개인사업자는 받을 수 없어, 법인으로 바꾸면 없어지는 혜택입니다.">?</button></label>
+        </div>
+        <div id="w-card" hidden>
+          <label for="i-card">1년 카드·현금영수증 매출 <small>부가세 포함</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="1년 동안 카드, 현금영수증, 간편결제로 받은 매출 합계입니다. 부가세 신고서의 신용카드매출전표 등 발행금액을 두 기 합쳐 넣으시면 됩니다.">?</button></label>
+          <div class="unit"><input type="text" id="i-card" inputmode="numeric"><span>원</span></div>
+        </div>
+        <div id="w-over" hidden>
+          <label for="i-over">작년 전체 매출 <small>부가세 제외</small></label>
+          <select id="i-over"><option value="0">10억 원 이하</option><option value="1">10억 원 초과 (공제 대상 아님)</option></select>
+        </div>
       </div>
       <div class="slide" id="slide">
         <div class="sl"><label for="s-income">연 소득금액</label><input type="range" id="s-income" min="10000000" max="1000000000" step="5000000"><b id="s-income-v"></b></div>
@@ -312,7 +325,8 @@
 
       <p class="disc">
         · 계산 결과는 참고용입니다. 실제 세금은 업종과 공제, 배당과 퇴직금 계획에 따라 달라집니다.<br>
-        · 세율과 보험료율은 2026년 기준입니다.
+        · 세율과 보험료율은 2026년 기준입니다.<br>
+        · 카드·현금영수증 매출 세액공제는 개인사업자만 받는 부가세 공제로, 2026년 기준(1.3%, 연 1,000만 원 한도)으로 계산했습니다. 공제액이 그 기간 낼 부가세보다 크면 넘는 부분은 없어집니다.
       </p>
 
       <div class="morelinks">
@@ -401,14 +415,18 @@ const r4=v=>Math.round(v/1e4)*1e4;
 const manwon=v=>{ if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.abs(r4(v)), e=Math.floor(a/1e8), m=a%1e8/1e4;
   return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
+/* 카드·현금영수증 매출 세액공제(부가가치세법 제46조): 개인사업자만, 작년 공급가액 10억 원 이하, 2026년까지 1.3%·연 1,000만 원 한도 */
+const CARD_RATE=0.013, CARD_CAP=10000000;
+function cardSales(){ return document.getElementById('i-hascard').checked?num(document.getElementById('i-card').value):0; }
+function cardK(){ return document.getElementById('i-over').value==='1'?0:Math.min(cardSales()*CARD_RATE,CARD_CAP); }
 
 function compute(income,deduct,red,salary){
   const rate=red/100;
   const insP = INS_MODE ? soloInsurance(income) : soloInsurance(0);
   const pBase=Math.max(0,income-deduct-insP.self);
-  const pTax=pit(pBase)*(1-rate);
-  const rows=[{label:'개인사업자 유지',corp:null,per:pTax,ins:insP,total:pTax+insP.total,
-               cash:income-pTax-insP.self,left:0,base:pBase}];
+  const pTax=pit(pBase)*(1-rate), K=cardK();
+  const rows=[{label:'개인사업자 유지',corp:null,per:pTax,ins:insP,card:K,total:pTax+insP.total-K,
+               cash:income-pTax-insP.self+K,left:0,base:pBase}];
   [salary,income].forEach((sal,i)=>{
     const insC = INS_MODE ? salaryInsurance(sal) : salaryInsurance(0);
     const cBase=Math.max(0,income-sal-insC.company);
@@ -422,19 +440,22 @@ function compute(income,deduct,red,salary){
   return rows;
 }
 
+let LAST=null;
 function render(income,deduct,red,salary){
+  LAST=[income,deduct,red,salary];
   const rows=compute(income,deduct,red,salary);
   document.getElementById('h-salary').textContent='연봉 '+won(salary)+'원';
   const min=Math.min(...rows.map(r=>r.total));
   const base=rows[0].total;
   const tb=document.getElementById('res-body');
   // 표 안 숫자끼리 맞도록 만 원으로 반올림한 항목을 더해 합계를 냅니다
-  rows.forEach(r=>{ r.d={corp:r4(r.corp||0),per:r4(r.per),insC:r4(r.ins.company),insS:r4(r.ins.self)}; r.d.total=r.d.corp+r.d.per+r.d.insC+r.d.insS; });
+  rows.forEach(r=>{ r.d={corp:r4(r.corp||0),per:r4(r.per),insC:r4(r.ins.company),insS:r4(r.ins.self),card:r4(r.card||0)}; r.d.total=r.d.corp+r.d.per+r.d.insC+r.d.insS-r.d.card; });
   const dBase=rows[0].d.total;
   const cells=(fn)=>rows.map(r=>fn(r)).join('');
   tb.innerHTML=
     '<tr><td>법인세</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':manwon(r.d.corp))+'</td>')+'</tr>'
    +'<tr><td>대표님 개인 세금</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+manwon(r.d.per)+'</td>')+'</tr>'
+   +(rows[0].card?'<tr><td>카드 매출 세액공제 <small>부가세</small></td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?manwon(-r.d.card):'해당 없음')+'</td>')+'</tr>':'')
    +(INS_MODE?'<tr><td>4대보험 (회사부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+(r.corp===null?'해당 없음':manwon(r.d.insC))+'</td>')+'</tr>'
              +'<tr><td>4대보험 (본인부담)</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+manwon(r.d.insS)+'</td>')+'</tr>':'')
    +'<tr class="tot"><td>'+(INS_MODE?'총 부담 합계':'합계')+'</td>'+cells(r=>'<td class="'+(r.total===min?'best':'')+'">'+manwon(r.d.total)+'</td>')+'</tr>'
@@ -452,7 +473,7 @@ function render(income,deduct,red,salary){
    +'<tr class="cash"><td>대표님 실수령액</td>'+cells(r=>'<td>'+manwon(r.cash)+'</td>')+'</tr>'
    +'<tr><td>법인에 남는 돈</td>'+cells(r=>'<td>'+(r.corp===null?'해당 없음':manwon(r.left))+'</td>')+'</tr>';
   document.getElementById('res-sub').textContent=
-    '소득금액 '+won(income)+'원 · 소득공제 '+won(deduct)+'원'+(red>0?' · 감면 '+red+'%':' · 감면 없음')+(INS_MODE?' · 4대보험 포함':'');
+    '소득금액 '+won(income)+'원 · 소득공제 '+won(deduct)+'원'+(red>0?' · 감면 '+red+'%':' · 감면 없음')+(rows[0].card?' · 카드 매출 공제 반영':'')+(INS_MODE?' · 4대보험 포함':'');
   document.getElementById('res-title').textContent = INS_MODE ? '총 부담 비교 결과' : '세금 비교 결과';
   const best=rows.find(r=>r.total===min);
   const save=base-min;
@@ -461,6 +482,8 @@ function render(income,deduct,red,salary){
   document.getElementById('verdict').innerHTML=
     '<b>'+labels[bestIdx]+'</b>의 '+(INS_MODE?'부담':'세금')+'이 가장 적습니다. 합계는 '+manwon(best.d.total)+', 대표님 실수령액은 '+manwon(best.cash)+'입니다.'
     +(best.left>0?'<br><br>다만 나머지 '+manwon(best.left)+'은 법인에 남습니다. 이 돈을 꺼내 쓰려면 배당이나 퇴직금으로 세금을 한 번 더 내야 하므로, 연봉은 필요한 생활자금과 함께 정하셔야 합니다.':'')
+    + (rows[0].card?'<br><br>개인사업자는 카드·현금영수증 매출 세액공제로 부가세를 해마다 '+manwon(rows[0].card)+' 덜 냅니다. 법인은 이 공제를 받을 수 없어 법인전환 쪽에는 넣지 않았습니다.'
+       :cardSales()?'<br><br>작년 매출(부가세 제외)이 10억 원을 넘으면 개인사업자도 카드 매출 세액공제를 받을 수 없어 반영하지 않았습니다.':'')
     + (INS_MODE
        ? '<br><br><span style="font-size:14px;color:var(--mute)">개인사업자는 소득 전체에 보험료가 붙고 전액 본인이 냅니다. 법인 대표님은 연봉에만 붙고 절반은 회사가 부담하므로, 연봉을 정하는 방식으로 보험료를 조절할 수 있습니다. 다만 개인사업자는 재산과 자동차에 따라 건강보험료가 더 나올 수 있어 실제 금액은 달라집니다.</span>'
        : '<br><br><span style="font-size:14px;color:var(--mute)">여기에 국민연금과 건강보험료가 추가로 나갑니다. 위 탭에서 <b>4대보험까지 보기</b>를 누르면 함께 계산한 결과를 보실 수 있습니다.</span>');
@@ -487,7 +510,7 @@ function drawChart(income,deduct,red,salary){
     pts.push({sal,tax:cTax+wTax+ins.total});
   }
   const insP = INS_MODE ? soloInsurance(income) : soloInsurance(0);
-  const pTax=pit(Math.max(0,income-deduct-insP.self))*(1-rate)+insP.total;  // 개인사업자 유지
+  const pTax=pit(Math.max(0,income-deduct-insP.self))*(1-rate)+insP.total-cardK();  // 개인사업자 유지
   const rawMax=Math.max(pTax,...pts.map(p=>p.tax))*1.12||1;
   const step=(()=>{ const rough=rawMax/4, mag=Math.pow(10,Math.floor(Math.log10(rough))), n=rough/mag;
     return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag; })();
@@ -567,8 +590,9 @@ function renderSteps(income,deduct,red,rows,salary){
     +(INS_MODE?row('4대보험','소득 '+won(income)+' 기준 · 지역가입자 전액 본인부담',won(r0.ins.total)+'원'):'')
     +row('과세표준','소득금액 − 소득공제'+(INS_MODE?' − 본인부담 보험료 '+won(r0.ins.self):''),won(r0.base)+'원')
     +row('종합소득세',won(r0.base)+' × '+(pd.rate*100)+'% − '+won(pd.ded)+(red>0?' → 감면 '+red+'%':'')+' → 지방소득세 포함',won(r0.per)+'원')
-    +(INS_MODE?row('총 부담','세금 '+won(r0.per)+' + 보험료 '+won(r0.ins.total),won(r0.total)+'원',true):'')
-    +row('실수령액','소득 − 세금'+(INS_MODE?' − 본인부담 보험료':''),won(r0.cash)+'원',true)
+    +(r0.card?row('카드 매출 세액공제','카드·현금영수증 매출 '+won(cardSales())+' × 1.3% (연 1,000만 원 한도) → 부가세에서 공제','− '+won(r0.card)+'원'):'')
+    +(INS_MODE?row('총 부담','세금 '+won(r0.per)+' + 보험료 '+won(r0.ins.total)+(r0.card?' − 카드 공제 '+won(r0.card):''),won(r0.total)+'원',true):'')
+    +row('실수령액','소득 − 세금'+(INS_MODE?' − 본인부담 보험료':'')+(r0.card?' + 카드 매출 세액공제':''),won(r0.cash)+'원',true)
     +'</table></div>';
   const titles=['법인으로 전환하고 대표님 연봉을 '+won(salary)+'원으로 정하는 경우','법인으로 전환하고 이익 전액을 연봉으로 가져가는 경우'];
   rows.filter(r=>r.corp!==null).forEach((r,i)=>{
@@ -613,6 +637,7 @@ document.getElementById('calc').addEventListener('click',()=>{
   if(income<=0){alert('연 소득금액을 입력해 주세요.');return;}
   if(salary<=0){alert('대표님 연봉을 입력해 주세요.');return;}
   if(salary>income){alert('대표님 연봉이 소득금액보다 클 수 없습니다.');return;}
+  if(document.getElementById('i-hascard').checked&&!num(document.getElementById('i-card').value)){alert('1년 카드·현금영수증 매출을 입력해 주세요.');document.getElementById('i-card').focus();return;}
   render(income,deduct,red,salary);
   initSlider(income,salary);
 });
@@ -641,10 +666,13 @@ function initSlider(income,salary){
 
 
 /* 숫자 입력 콤마 */
-['i-income','i-deduct','i-salary'].forEach(id=>{
+['i-income','i-deduct','i-salary','i-card'].forEach(id=>{
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{const v=num(el.value); el.value=v?v.toLocaleString('ko-KR'):'';});
 });
+const hasCard=document.getElementById('i-hascard');
+hasCard.addEventListener('change',()=>{ document.getElementById('w-card').hidden=document.getElementById('w-over').hidden=!hasCard.checked; if(hasCard.checked) document.getElementById('i-card').focus(); });
+['i-hascard','i-card','i-over'].forEach(id=>document.getElementById(id).addEventListener(id==='i-card'?'input':'change',()=>{ if(LAST) render(...LAST); }));
 </script>
 <script src="../assets/help.js?v=1"></script>
 <script src="../assets/save-image.js?v=2"></script>
