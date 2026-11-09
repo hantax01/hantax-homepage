@@ -84,6 +84,7 @@
 - [업무용 자동차, 실제 비용은 얼마일까요?](https://www.hantax47.com/tools/business-car.html)
 - [업무용 자동차, 어떻게 사는 게 맞을까요?](https://www.hantax47.com/tools/car-choice.html)
 - [창업 세액감면, 우리도 받을 수 있나요?](https://www.hantax47.com/tools/startup-tax-credit.html)
+- [간이과세자와 일반과세자, 어느 쪽으로 시작할까요?](https://www.hantax47.com/tools/simple-vs-general.html)
 - [사무실, 월세로 쓸까요 살까요?](https://www.hantax47.com/tools/office-buy.html)
 - [집 살 돈, 설명할 수 있나요?](https://www.hantax47.com/tools/fund-source.html)
 - [상속세, 얼마나 나올까요?](https://www.hantax47.com/tools/inheritance-tax.html)
