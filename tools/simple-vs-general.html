@@ -184,24 +184,24 @@
         <p class="warn" id="w-biz" hidden></p>
         <div>
           <label for="i-sales">한 달 예상 매출 <small>부가세 포함</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="카드, 현금영수증, 현금, 배달앱 정산을 모두 합친 한 달 매출(손님에게 받는 금액 그대로)입니다. 한 해로 환산해 1억 400만 원 이상이면 간이과세자로 시작해도 개업 다음 해 7월 1일 일반과세자로 바뀝니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-sales" class="money" inputmode="numeric" value="6,000,000" autocomplete="off"><span>원</span></div>
+          <div class="unit"><input type="text" id="i-sales" class="money" inputmode="numeric" value="" autocomplete="off"><span>원</span></div>
           <span class="sub-note" id="n-sales"></span>
         </div>
         <div>
           <label for="i-card">카드·현금영수증 매출 비율 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="음식점, 소매, 숙박, 미용처럼 주로 개인 손님에게 파는 업종은 카드·현금영수증 매출의 1.3%를 부가세에서 빼 줍니다(2026년까지, 한 해 1,000만 원 한도. 2027년부터는 현행법대로 1%, 500만 원 한도로 계산). 거래처를 상대하는 업종이면 0을 넣으세요.">?</button></label>
-          <div class="unit"><input type="text" id="i-card" inputmode="numeric" value="90" autocomplete="off"><span>%</span></div>
+          <div class="unit"><input type="text" id="i-card" inputmode="numeric" value="" autocomplete="off"><span>%</span></div>
         </div>
         <div>
           <label for="i-int">인테리어·설비 공사비 <small>부가세 별도</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="개업하면서 세금계산서를 받고 쓰는 인테리어, 간판, 주방설비 같은 시설 비용입니다. 부가세를 뺀 공급가액을 넣으세요. 일반과세자는 이 금액의 10%를 돌려받습니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-int" class="money" inputmode="numeric" value="50,000,000" autocomplete="off"><span>원</span></div>
+          <div class="unit"><input type="text" id="i-int" class="money" inputmode="numeric" value="" autocomplete="off"><span>원</span></div>
         </div>
         <div>
           <label for="i-buy">한 달 과세 매입 <small>부가세 별도</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="세금계산서나 사업용 카드로 사는 재료, 상품, 소모품과 세금계산서를 받는 임대료처럼 부가세가 붙은 매입의 공급가액입니다. 간이영수증만 있는 매입은 빼 주세요.">?</button></label>
-          <div class="unit"><input type="text" id="i-buy" class="money" inputmode="numeric" value="1,500,000" autocomplete="off"><span>원</span></div>
+          <div class="unit"><input type="text" id="i-buy" class="money" inputmode="numeric" value="" autocomplete="off"><span>원</span></div>
         </div>
         <div id="w-farm">
           <label for="i-farm">한 달 면세 식재료 매입 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="쌀, 채소, 고기, 생선처럼 부가세가 없는 식재료를 계산서나 카드로 산 금액입니다. 일반과세 음식점은 이 금액의 일부를 의제매입세액으로 빼 주지만, 간이과세자는 받지 못합니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-farm" class="money" inputmode="numeric" value="1,500,000" autocomplete="off"><span>원</span></div>
+          <div class="unit"><input type="text" id="i-farm" class="money" inputmode="numeric" value="" autocomplete="off"><span>원</span></div>
         </div>
         <div>
           <label for="i-conv">일반과세자 전환 예상일 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="간이과세자는 1~12월 매출(부가세 포함)이 1억 400만 원 이상이 되면 그다음 해 7월 1일 일반과세자로 바뀝니다. 매출이 언제쯤 그만큼 늘지 예상해 고르세요. 일반과세자가 되면 두 경우가 같아지므로 그 전날까지를 비교합니다. 매출이 계속 기준보다 적을 것 같으면 가장 먼 날짜를 고르세요. 고른 날짜의 전해 1월부터는 매출이 한 해 1억 400만 원으로 늘었다고 보고 계산합니다.">?</button></label>
@@ -323,8 +323,8 @@ const PATH_SUB={A:'처음부터 간이과세자',B:'처음부터 일반과세자
 const $=id=>document.getElementById(id);
 const num=s=>Number(String(s).replace(/[^0-9]/g,''))||0;
 const won=n=>Math.round(n).toLocaleString('ko-KR');
-// 표·결론은 만 원 단위로 보여 줍니다(100만 원 미만은 원 단위). 계산은 원 단위 그대로입니다
-const man=v=>{ v=Math.round(v); if(Math.abs(v)<1e6) return won(v)+'원'; const a=Math.round(Math.abs(v)/1e4)*1e4, e=Math.floor(a/1e8), m=a%1e8/1e4;
+// 표·결론은 만 원 단위로 보여 줍니다(1만 원 미만만 원 단위). 계산은 원 단위 그대로입니다
+const man=v=>{ v=Math.round(v); if(Math.abs(v)<1e4) return won(v)+'원'; const a=Math.round(Math.abs(v)/1e4)*1e4, e=Math.floor(a/1e8), m=a%1e8/1e4;
   return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 
 function read(){
@@ -413,9 +413,9 @@ function render(scroll){
     +(annual>=SIMPLE_MAX?'개업한 해 매출을 12개월로 환산하면 '+man(annual)+'으로 기준(1억 400만 원) 이상이라, 간이과세자로 시작해도 '+(o.y+1)+'년 7월 1일 일반과세자로 바뀝니다. 다만 간이과세 적용 신고는 이 금액이 기준에 못 미칠 것으로 예상될 때 하는 것이라(부가가치세법 제61조 제3항), 세무서가 일반과세자로 등록할 수도 있습니다.'
     :'일반과세자로 바뀌려면 그 전해 매출이 1억 400만 원 이상이어야 해서, '+(o.y+o.k-1)+'년부터는 매출과 매입이 그만큼 늘었다고 보고 계산했습니다.')+'</p>';
   const cut=annual>=SIMPLE_FREE&&intUsed<simpleInt;               // 개업한 해 낼 세금이 적어 인테리어 공제 일부가 사라짐
-  let p2='<p>일반과세자는 인테리어 부가세 '+man(refund)+'을 돌려받고, 간이과세자는 '+(cut?man(simpleInt)+' 가운데 개업한 해 낼 세금만큼인 '+man(intUsed)+'만':'최대 '+man(simpleInt)+'만')+' 빼 줍니다. ';
-  if(annual<SIMPLE_FREE) p2+='대신 한 해 매출이 4,800만 원 미만이라 간이과세자는 부가세를 내지 않습니다';
-  else if(gain>0) p2+='대신 간이과세자는 해마다 약 '+man(gain)+'을 덜 내서, 간이로 '+(Math.round((refund-intUsed)/gain*10)/10)+'년쯤 지나면 환급 차이를 따라잡습니다';
+  let p2='<p>'+(o.C?'일반과세자는 인테리어 부가세 '+man(refund)+'을 돌려받고, 간이과세자는 '+(cut?man(simpleInt)+' 가운데 개업한 해 낼 세금만큼인 '+man(intUsed)+'만':'최대 '+man(simpleInt)+'만')+' 빼 줍니다. ':'');
+  if(annual<SIMPLE_FREE) p2+=(o.C?'대신 ':'')+'한 해 매출이 4,800만 원 미만이라 간이과세자는 부가세를 내지 않습니다';
+  else if(gain>0) p2+=o.C?'대신 간이과세자는 해마다 약 '+man(gain)+'을 덜 내서, 간이로 '+(Math.round((refund-intUsed)/gain*10)/10)+'년쯤 지나면 환급 차이를 따라잡습니다':'인테리어 공사비가 없으면 돌려받을 큰 매입세액이 없어, 간이과세자가 해마다 약 '+man(gain)+'을 덜 냅니다';
   else p2+='이 조건에서는 간이과세자도 해마다 내는 세금이 줄지 않습니다(매입'+(o.food?'과 의제매입':'')+'이 많아서)';
   p2+='.</p>';
   const cy=o.y+1;
@@ -448,7 +448,7 @@ $('in').addEventListener('input',e=>{
   shown?render(false):sync();
 });
 $('in').addEventListener('change',()=>shown?render(false):sync());
-$('calc').addEventListener('click',()=>render(true));
+$('calc').addEventListener('click',()=>{ if(!num($('i-sales').value)){ alert('한 달 예상 매출을 입력해 주세요.'); $('i-sales').focus(); return; } render(true); });
 sync();
 </script>
 <script src="../assets/help.js?v=1"></script>
