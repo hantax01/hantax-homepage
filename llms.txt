@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [종합소득세 절세 방법, 개인사업자는 연말 전에 무엇을 챙겨야 하나요?](https://www.hantax47.com/column/income-tax-saving.html)
 - [창업중소기업 세액감면, 누가 얼마나 몇 년 동안 받을 수 있나요?](https://www.hantax47.com/column/startup-tax-reduction.html)
 - [간이과세자는 누가 될 수 있고, 일반과세자로 바뀌면 무엇이 달라지나요?](https://www.hantax47.com/column/simplified-taxpayer.html)
 - [매출 5억 음식점, 법인으로 바꾸면 세금이 얼마나 달라지나요?](https://www.hantax47.com/column/restaurant-incorporation.html)
