@@ -37,6 +37,8 @@
 .unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mute)}
 .sim .unit input{padding-right:40px;text-align:right}
 .sub-note{display:block;margin-top:6px;font-size:12.5px;color:var(--mute)}
+.yrs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 14px}
+.sim label.yl{font-size:12.5px;font-weight:400;color:var(--mute);margin-bottom:5px}
 .warn{grid-column:1/-1;margin:0;background:var(--seal-soft);border-radius:10px;padding:12px 16px;font-size:13.5px;line-height:1.7;color:var(--char)}
 .warn b{color:var(--seal)}
 .simbtn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:16px}
@@ -94,6 +96,7 @@
 .morelinks a.all:hover{background:var(--soft)}
 @media(max-width:660px){
 .sim-in{grid-template-columns:1fr;padding:20px 16px}
+.yrs{grid-template-columns:1fr}
 .cards{grid-template-columns:1fr}
 .rtable{font-size:12px}.rtable th,.rtable td{padding:10px 4px}.rtable td+td{white-space:nowrap}
 .steps .body{padding:16px 14px}
@@ -188,9 +191,13 @@
           <input type="month" id="i-open" min="2026-01" max="2027-12">
         </div>
         <p class="warn" id="w-biz" hidden></p>
-        <div>
-          <label for="i-sales">한 달 예상 매출 <small>부가세 포함</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="카드, 현금영수증, 현금, 배달앱 정산을 모두 합친 한 달 매출(손님에게 받는 금액 그대로)입니다. 한 해로 환산해 1억 400만 원 이상이면 간이과세자로 시작해도 개업 다음 해 7월 1일 일반과세자로 바뀝니다.">?</button></label>
-          <div class="unit"><input type="text" id="i-sales" class="money" inputmode="numeric" value="" autocomplete="off"><span>원</span></div>
+        <div class="fw">
+          <label>한 달 예상 매출 <small>부가세 포함</small> <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="카드, 현금영수증, 현금, 배달앱 정산을 모두 합친 한 달 매출(손님에게 받는 금액 그대로)입니다. 해마다 달라질 것 같으면 해별로 넣으세요. 비워 둔 해는 앞 해와 같다고 보고, 넷째 해부터는 셋째 해와 같다고 봅니다. 간이과세자는 한 해 매출(개업한 해는 12개월로 환산)이 1억 400만 원 이상이 되면 그다음 해 7월 1일 일반과세자로 바뀝니다.">?</button></label>
+          <div class="yrs">
+            <div><label for="i-s0" class="yl" id="l-s0">첫해</label><div class="unit"><input type="text" id="i-s0" class="money" inputmode="numeric" value="" autocomplete="off"><span>원</span></div></div>
+            <div><label for="i-s1" class="yl" id="l-s1">둘째 해</label><div class="unit"><input type="text" id="i-s1" class="money" inputmode="numeric" value="" autocomplete="off" placeholder="앞 해와 같음"><span>원</span></div></div>
+            <div><label for="i-s2" class="yl" id="l-s2">셋째 해</label><div class="unit"><input type="text" id="i-s2" class="money" inputmode="numeric" value="" autocomplete="off" placeholder="앞 해와 같음"><span>원</span></div></div>
+          </div>
           <span class="sub-note" id="n-sales"></span>
         </div>
         <div>
@@ -208,10 +215,6 @@
         <div id="w-farm">
           <label for="i-farm">한 달 면세 식재료 매입 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="쌀, 채소, 고기, 생선처럼 부가세가 없는 식재료를 계산서나 카드로 산 금액입니다. 일반과세 음식점은 이 금액의 일부를 의제매입세액으로 빼 주지만, 간이과세자는 받지 못합니다.">?</button></label>
           <div class="unit"><input type="text" id="i-farm" class="money" inputmode="numeric" value="" autocomplete="off"><span>원</span></div>
-        </div>
-        <div>
-          <label for="i-conv">일반과세자 전환 예상일 <button type="button" class="help" aria-label="설명 보기" aria-expanded="false" data-help="간이과세자는 1~12월 매출(부가세 포함)이 1억 400만 원 이상이 되면 그다음 해 7월 1일 일반과세자로 바뀝니다. 매출이 언제쯤 그만큼 늘지 예상해 고르세요. 바뀌는 해 12월까지 비교하고, 그해 7월부터는 두 경우 모두 일반과세자로 계산합니다. 매출이 계속 기준보다 적을 것 같으면 가장 먼 날짜를 고르세요. 매출은 입력한 월 매출 그대로 계산합니다.">?</button></label>
-          <select id="i-conv"></select>
         </div>
         <details class="steps fw" id="g-rule" style="margin-top:0;background:#fff">
           <summary>간이과세자가 일반과세자로 바뀌는 기준</summary>
@@ -268,7 +271,7 @@
       </div>
 
       <p class="disc">
-        · 부가가치세법과 시행령(2026년 현재)을 기준으로 한 참고용 계산입니다. 매출과 매입은 입력한 금액 그대로 매달 같다고 보고, 고른 전환 예상일에 일반과세자로 바뀐다고 보고 계산했습니다. 비교는 일반과세자로 바뀌는 해의 12월까지이고, 그해 7월부터는 두 경우 모두 일반과세자로 계산했습니다.<br>
+        · 부가가치세법과 시행령(2026년 현재)을 기준으로 한 참고용 계산입니다. 매출은 해별로 넣은 한 달 매출이 그해 매달 같다고 보고(넷째 해부터는 셋째 해와 같음), 매입은 입력한 금액 그대로 매달 같다고 보았습니다. 한 해 매출(개업한 해는 12개월 환산)이 1억 400만 원 이상이 되면 그다음 해 7월 1일 일반과세자로 바뀐다고 보고 그해 12월까지 비교했고, 그해 7월부터는 두 경우 모두 일반과세자로 계산했습니다. 셋째 해까지 기준에 못 미치면 셋째 해 12월까지 비교합니다.<br>
         · 일반과세자로 시작하면 계속 일반과세자로 남는다고 보았습니다. 개업한 해 매출(12개월 환산)이 1억 400만 원에 못 미치면 다음 해 7월 1일 간이과세자로 바뀌므로, 일반과세자로 남으려면 그 전날까지 간이과세 포기 신고를 해야 합니다. 과세 유형이 바뀔 때 다시 내거나 돌려받는 인테리어 재고납부세액·재고매입세액은 넣지 않았습니다.<br>
         · 카드 매출 세액공제(1.3%, 연 1,000만 원)와 음식점 의제매입 9/109 공제율은 2026년 말까지, 의제매입 한도 우대(과세표준의 75%·70%·60%)는 2027년 말까지 적용되는 특례라 그 뒤는 현행법 원칙대로 계산했습니다. 연장되면 결과가 조금 달라집니다.<br>
         · 부가세는 소득세 계산에도 영향을 줍니다. 돌려받지 못한 부가세는 비용이 되고 덜 낸 부가세는 이익이 되어, 실제 차이는 이 표보다 소득세율만큼 작아지지만 어느 쪽이 유리한지는 대체로 바뀌지 않습니다.<br>
@@ -339,17 +342,21 @@ const won=n=>Math.round(n).toLocaleString('ko-KR');
 const man=v=>{ v=Math.round(v); if(Math.abs(v)<1e4) return won(v)+'원'; const a=Math.round(Math.abs(v)/1e4)*1e4, e=Math.floor(a/1e8), m=a%1e8/1e4;
   return (v<0?'-':'')+(e?e.toLocaleString('ko-KR')+'억'+(m?' ':''):'')+(m?m.toLocaleString('ko-KR')+'만':'')+' 원'; };
 
+const YN=['첫해','둘째 해','셋째 해'];                // 해별 한 달 매출 칸 (비우면 앞 해와 같음, 넷째 해부터는 셋째 해와 같음)
 function read(){
-  const v=$('i-open').value||'2026-12', biz=$('i-biz').value;
-  return {biz,vr:VR[biz],food:biz==='food',y:+v.slice(0,4),m:+v.slice(5,7)-1,S:num($('i-sales').value),r:Math.min(100,num($('i-card').value))/100,
-    C:num($('i-int').value),P:num($('i-buy').value),F:biz==='food'?num($('i-farm').value):0,
-    k:num($('i-sales').value)*12>=SIMPLE_MAX?1:+$('i-conv').value||3, get T(){ return (12-this.m)+12*this.k; }};   // T: 개업 달부터 일반과세자로 바뀌는 해(개업 k년 뒤) 12월까지의 개월 수
+  const v=$('i-open').value||'2026-12', biz=$('i-biz').value, y=+v.slice(0,4), m=+v.slice(5,7)-1;
+  const S=[]; YN.forEach((_,i)=>S.push(num($('i-s'+i).value)||S[i-1]||0));
+  const c=S.findIndex(x=>x*12>=SIMPLE_MAX);            // 한 해 매출이 처음 1억 400만 원 이상인 해 (개업한 해는 12개월 환산)
+  const k=c<0?0:c+1;                                    // 개업 k년 뒤 7월 1일 일반 전환 (0이면 입력한 기간에는 전환 없음)
+  return {biz,vr:VR[biz],food:biz==='food',y,m,S,ms:yy=>S[Math.min(Math.max(yy-y,0),S.length-1)],
+    r:Math.min(100,num($('i-card').value))/100,C:num($('i-int').value),P:num($('i-buy').value),F:biz==='food'?num($('i-farm').value):0,
+    k,T:(12-m)+12*(k||S.length-1)};                     // T: 개업 달부터 비교 끝(전환한 해, 전환이 없으면 셋째 해 12월)까지의 개월 수
 }
 
 /* 한 경로를 개업 달부터 일반과세자로 바뀌는 해 12월까지 과세기간별로 계산합니다. 간이로 시작해도 그해 7월부터는 일반과세자입니다.
    A: 간이과세자로 시작 / B: 일반과세자로 시작해 계속 일반과세자(필요하면 간이과세 포기) */
 function sim(o,path){
-  const total=o.T, conv=(12-o.m)+12*(o.k-1)+6;                  // 개업 달부터 일반과세자로 바뀌는 7월 1일 전까지의 개월 수
+  const total=o.T, conv=o.k?(12-o.m)+12*(o.k-1)+6:Infinity;                  // 개업 달부터 일반과세자로 바뀌는 7월 1일 전까지의 개월 수
   const B=[]; let cur=null;
   for(let i=0;i<total;i++){
     const ab=o.m+i, y=o.y+Math.floor(ab/12), cm=ab%12, simple=path==='A'&&i<conv;
@@ -359,13 +366,13 @@ function sim(o,path){
   }
   const used={}, rows=[];
   for(const b of B){
-    const sales=o.S*b.k, rem=cardCap(b.y)-(used[b.y]||0), d={};
+    const sales=o.ms(b.y)*b.k, rem=cardCap(b.y)-(used[b.y]||0), d={};
     let due;
     if(b.simple){
       d.base=sales*o.vr*0.1;                                         // 공급대가 × 부가가치율 × 10%
       d.credit=(o.P*b.k+(b.open?o.C:0))*1.1*0.005;                 // 세금계산서 등 매입액(공급대가)의 0.5%
       d.lost=b.open?Math.min(o.C*1.1*0.005,Math.max(0,d.credit-d.base)):0;   // 낼 세금보다 많아 사라지는 인테리어 공제
-      d.free=o.S*12<SIMPLE_FREE;                                     // 12개월로 환산해 4,800만 원 미만이면 납부 면제
+      d.free=o.ms(b.y)*12<SIMPLE_FREE;                                     // 12개월로 환산해 4,800만 원 미만이면 납부 면제
       const after=Math.max(0,d.base-d.credit);                       // 간이과세자는 돌려받지 못합니다
       d.card=d.free?0:Math.min(sales*o.r*cardRate(b.y),rem,after);
       due=d.free?0:after-d.card;
@@ -390,10 +397,10 @@ function sync(){
   const o=read();
   $('w-farm').hidden=!o.food;
   const w=$('w-biz'); w.hidden=!BLOCK[o.biz]; w.innerHTML=BLOCK[o.biz]?'<b>간이과세 배제 업종일 수 있습니다.</b> '+BLOCK[o.biz]:'';
-  const sel=$('i-conv'), lock=o.S*12>=SIMPLE_MAX;
-  if(lock&&!sel.disabled){ sel.dataset.k=sel.value; sel.value='1'; } else if(!lock&&sel.disabled) sel.value=sel.dataset.k||'3';
-  sel.disabled=lock;
-  $('n-sales').textContent=o.S?'한 해로 환산하면 '+man(o.S*12)+(o.S*12>=SIMPLE_MAX?' (1억 400만 원 이상이라 간이로 시작해도 개업 다음 해 7월 1일 일반 전환)':o.S*12<SIMPLE_FREE?' (간이과세면 납부 면제 구간)':''):'';
+  YN.forEach((n,i)=>{ $('l-s'+i).textContent=n+' · '+(o.y+i)+'년'+(i?'':' '+(o.m+1)+'월 개업'); });
+  const cy=o.y+o.k-1;
+  $('n-sales').textContent=!o.S[0]?'':o.k?'→ '+(o.y+o.k)+'년 7월 1일 일반과세자 전환 ('+cy+'년 매출 '+(o.k===1?'12개월 환산 ':'')+man(o.ms(cy)*12)+', 1억 400만 원 이상)'
+    :'→ '+(o.y+YN.length-1)+'년까지 한 해 매출이 1억 400만 원에 못 미쳐 일반과세자로 바뀌지 않습니다'+(o.S[0]*12<SIMPLE_FREE?' (첫해는 간이과세면 납부 면제 구간)':'');
 }
 const cell=v=>'<td'+(v<0?' class="ref"':'')+'>'+man(v)+'</td>';
 function periodName(r){
@@ -410,30 +417,33 @@ function stepsHtml(o,res,p){
 }
 function render(scroll){
   sync();
-  const o=read(), annual=o.S*12;
+  const o=read(), annual=o.S[0]*12, end=o.k?o.y+o.k:o.y+YN.length-1;
   const paths=['A','B'];
   const R={}; paths.forEach(p=>R[p]=sim(o,p));
   const best=paths.reduce((a,p)=>R[p].total<R[a].total?p:a,paths[0]);
   // 간이와 일반을 한 해 단위로 견줘 봅니다 (인테리어 없이, 개업 다음 해 1~12월)
-  const steady={...o,C:0,m:0,y:o.y+1,T:12,k:99};                 // 전환 없는 1년
+  const steady={...o,C:0,m:0,y:o.y+1,T:12,k:0,ms:()=>o.ms(o.y+1)};   // 전환 없는 1년 (둘째 해 매출)
+  const per=new Set(o.S).size>1?(o.y+1)+'년 매출 기준으로 한 해 약 ':'해마다 약 ';
   const yA=sim(steady,'A').total, yB=sim(steady,'B').total, gain=yB-yA;
   const refund=o.C*0.1, simpleInt=o.C*1.1*0.005, intUsed=simpleInt-(R.A?R.A.rows[0].d.lost:0);
   const v=$('verdict');
-  let p1='<p>개업부터 '+(o.y+o.k)+'년 12월까지(그해 7월 1일 일반과세자 전환) 합치면 <b>'+PATH[best]+'</b>이 더 적게 냅니다. '+paths.map(p=>PATH[p]+' '+man(R[p].total)).join(', ')+'입니다. '
-    +(annual>=SIMPLE_MAX?'개업한 해 매출을 12개월로 환산하면 '+man(annual)+'으로 기준(1억 400만 원) 이상이라, 간이과세자로 시작해도 '+(o.y+1)+'년 7월 1일 일반과세자로 바뀝니다. 다만 간이과세 적용 신고는 이 금액이 기준에 못 미칠 것으로 예상될 때 하는 것이라(부가가치세법 제61조 제3항), 세무서가 일반과세자로 등록할 수도 있습니다.':'')+'</p>';
+  let p1='<p>개업부터 '+end+'년 12월까지'+(o.k?'(그해 7월 1일 일반과세자 전환)':'')+' 합치면 <b>'+PATH[best]+'</b>이 더 적게 냅니다. '+paths.map(p=>PATH[p]+' '+man(R[p].total)).join(', ')+'입니다. '
+    +(o.k===1?'개업한 해 매출을 12개월로 환산하면 '+man(annual)+'으로 기준(1억 400만 원) 이상이라, 간이과세자로 시작해도 '+(o.y+1)+'년 7월 1일 일반과세자로 바뀝니다. 다만 간이과세 적용 신고는 이 금액이 기준에 못 미칠 것으로 예상될 때 하는 것이라(부가가치세법 제61조 제3항), 세무서가 일반과세자로 등록할 수도 있습니다.'
+    :o.k?(o.y+o.k-1)+'년 매출이 '+man(o.ms(o.y+o.k-1)*12)+'으로 기준(1억 400만 원) 이상이라, 간이과세자로 시작해도 '+(o.y+o.k)+'년 7월 1일 일반과세자로 바뀝니다.'
+    :'입력한 매출로는 '+end+'년까지 한 해 매출이 1억 400만 원에 못 미쳐, 간이로 시작하면 계속 간이과세자로 남습니다.')+'</p>';
   const cut=annual>=SIMPLE_FREE&&intUsed<simpleInt;               // 개업한 해 낼 세금이 적어 인테리어 공제 일부가 사라짐
   let p2='<p>'+(o.C?'일반과세자는 인테리어 부가세 '+man(refund)+'을 돌려받고, 간이과세자는 '+(cut?man(simpleInt)+' 가운데 개업한 해 낼 세금만큼인 '+man(intUsed)+'만':'최대 '+man(simpleInt)+'만')+' 빼 줍니다. ':'');
-  if(annual<SIMPLE_FREE) p2+=(o.C?'대신 ':'')+'한 해 매출이 4,800만 원 미만이라 간이과세자는 부가세를 내지 않습니다';
-  else if(gain>0) p2+=o.C?'대신 간이과세자는 해마다 약 '+man(gain)+'을 덜 내서, 간이로 '+(Math.round((refund-intUsed)/gain*10)/10)+'년쯤 지나면 환급 차이를 따라잡습니다':'인테리어 공사비가 없으면 돌려받을 큰 매입세액이 없어, 간이과세자가 해마다 약 '+man(gain)+'을 덜 냅니다';
+  if(R.A.rows.every(r=>!r.simple||r.d.free)) p2+=(o.C?'대신 ':'')+'한 해 매출이 4,800만 원 미만이라 간이과세자로 있는 동안 부가세를 내지 않습니다';
+  else if(gain>0) p2+=o.C?'대신 간이과세자는 '+per+man(gain)+'을 덜 내서, 간이로 '+(Math.round((refund-intUsed)/gain*10)/10)+'년쯤 지나면 환급 차이를 따라잡습니다':'인테리어 공사비가 없으면 돌려받을 큰 매입세액이 없어, 간이과세자가 '+per+man(gain)+'을 덜 냅니다';
   else p2+='이 조건에서는 간이과세자도 해마다 내는 세금이 줄지 않습니다(매입'+(o.food?'과 의제매입':'')+'이 많아서)';
   p2+='.</p>';
   const cy=o.y+1;
   const p3=annual<SIMPLE_MAX?'<p>일반과세자로 시작해도 개업한 해 매출(12개월 환산)이 1억 400만 원에 못 미치면 '+cy+'년 7월 1일 간이과세자로 바뀝니다. 위 금액은 '+cy+'년 6월 30일까지 간이과세 포기 신고를 해 계속 일반과세자로 남는다고 보고 계산했습니다.</p>':'';
   v.innerHTML=p1+p2+p3;
-  $('cards').innerHTML=paths.map(p=>'<div class="card'+(p===best?' best':'')+'"><span>'+PATH[p]+(p===best?' · 더 적음':'')+'</span><b>'+man(R[p].total)+'</b><small>'+(o.y+o.k)+'년까지 합계, '+PATH_SUB[p]+'</small></div>').join('');
+  $('cards').innerHTML=paths.map(p=>'<div class="card'+(p===best?' best':'')+'"><span>'+PATH[p]+(p===best?' · 더 적음':'')+'</span><b>'+man(R[p].total)+'</b><small>'+end+'년까지 합계, '+PATH_SUB[p]+'</small></div>').join('');
   const years=[...new Set(paths.flatMap(p=>Object.keys(R[p].byYear)))].sort();
   $('y-head').innerHTML='<tr><th>연도</th>'+paths.map(p=>'<th>'+PATH[p]+'</th>').join('')+'</tr>';
-  $('y-body').innerHTML=years.map(y=>'<tr><td>'+y+'년'+(+y===o.y?'<small>'+(o.m+1)+'월 개업</small>':+y===o.y+o.k?'<small>7월 1일 일반 전환</small>':'')+'</td>'+paths.map(p=>cell(R[p].byYear[y]||0)).join('')+'</tr>').join('')
+  $('y-body').innerHTML=years.map(y=>'<tr><td>'+y+'년'+(+y===o.y?'<small>'+(o.m+1)+'월 개업</small>':o.k&&+y===o.y+o.k?'<small>7월 1일 일반 전환</small>':'')+'</td>'+paths.map(p=>cell(R[p].byYear[y]||0)).join('')+'</tr>').join('')
     +'<tr class="tot"><td>합계</td>'+paths.map(p=>cell(R[p].total)).join('')+'</tr>';
   $('steps').innerHTML=paths.map(p=>stepsHtml(o,R[p],p)).join('');
   $('res').style.display='block'; shown=true;
@@ -442,14 +452,6 @@ function render(scroll){
 
 /* ── 이벤트 ─────────────────────────────────── */
 (function(){ const t=new Date(), n=new Date(t.getFullYear(),t.getMonth()+1,1); $('i-open').value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); })();
-// 전환 예상일: 개업 다음 해부터 5년 뒤까지의 7월 1일 (고른 순번은 개업 월을 바꿔도 유지)
-function fillConv(){
-  const sel=$('i-conv'), k=+sel.value||3, y=+($('i-open').value||'2026-12').slice(0,4);
-  sel.innerHTML=[1,2,3,4,5].map(i=>'<option value="'+i+'">'+(y+i)+'년 7월 1일 ('+(i===1?'개업한 해 연환산':(y+i-1)+'년')+' 매출 1억 400만 원 이상)</option>').join('');
-  sel.value=k;
-}
-fillConv();
-$('i-open').addEventListener('change',fillConv);
 $('in').addEventListener('input',e=>{
   const el=e.target;
   if(el.classList.contains('money')){ const n=num(el.value); el.value=n?won(n):''; }
@@ -457,7 +459,7 @@ $('in').addEventListener('input',e=>{
   shown?render(false):sync();
 });
 $('in').addEventListener('change',()=>shown?render(false):sync());
-$('calc').addEventListener('click',()=>{ if(!num($('i-sales').value)){ alert('한 달 예상 매출을 입력해 주세요.'); $('i-sales').focus(); return; } render(true); });
+$('calc').addEventListener('click',()=>{ if(!num($('i-s0').value)){ alert('첫해 한 달 예상 매출을 입력해 주세요.'); $('i-s0').focus(); return; } render(true); });
 sync();
 </script>
 <script src="../assets/help.js?v=1"></script>
@@ -468,7 +470,7 @@ HantaxImage.attach(
   ()=>document.querySelector('#res .rtable'),
   ()=>{ const o=read();
     return { title:'간이로 시작 vs 일반으로 시작, 부가세 비교',
-      sub:[$('i-biz').selectedOptions[0].text.split(' (')[0], o.y+'년 '+(o.m+1)+'월 개업', '한 달 매출 '+man(o.S), (o.y+o.k)+'년 7월 1일 일반 전환'].concat(o.C?['인테리어 '+man(o.C)]:[]).join(' · '),
+      sub:[$('i-biz').selectedOptions[0].text.split(' (')[0], o.y+'년 '+(o.m+1)+'월 개업', '한 달 매출 '+(new Set(o.S).size>1?o.S.map(man).join(' → '):man(o.S[0])), o.k?(o.y+o.k)+'년 7월 1일 일반 전환':'일반 전환 없음'].concat(o.C?['인테리어 '+man(o.C)]:[]).join(' · '),
       note:'참고용 계산입니다. 실제 신고 전에 세무사와 확인해 주세요.',
       filename:'한택스_간이일반비교' }; }
 );
