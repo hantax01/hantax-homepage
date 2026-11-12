@@ -93,5 +93,6 @@
 - [집 살 돈, 설명할 수 있나요?](https://www.hantax47.com/tools/fund-source.html)
 - [상속세, 얼마나 나올까요?](https://www.hantax47.com/tools/inheritance-tax.html)
 - [증여, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/gift-tax.html)
+- [부동산을 시가보다 싸게 팔면, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/low-price-transfer.html)
 - [주식을 팔면, 세금이 얼마나 나올까요?](https://www.hantax47.com/tools/stock-transfer.html)
 - [비상장주식, 우리 회사 주식은 대략 얼마일까요?](https://www.hantax47.com/tools/stock-value.html)
