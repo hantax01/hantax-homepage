@@ -20,6 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
+- [개인에게 산 중고 물품, 세금계산서 없이 비용 처리할 수 있나요?](https://www.hantax47.com/column/used-goods-purchase.html)
 - [부동산 저가양도, 시가보다 30% 낮게 팔면 세금 문제가 없나요?](https://www.hantax47.com/column/low-price-transfer.html)
 - [종합소득세·법인세 신고 준비서류, 홈택스에 없는 증빙은 무엇인가요?](https://www.hantax47.com/column/tax-filing-documents.html)
 - [종합소득세 절세 방법, 개인사업자는 연말 전에 무엇을 챙겨야 하나요?](https://www.hantax47.com/column/income-tax-saving.html)
