@@ -20,7 +20,7 @@
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
 
 ## 세무 칼럼
-- [모임 회비와 골프 비용, 회사 비용으로 처리할 수 있나요?](https://www.hantax47.com/column/dues-golf-expense.html)
+- [골프 모임 회비, 회사 비용으로 처리할 수 있나요?](https://www.hantax47.com/column/dues-golf-expense.html)
 - [크리에이터·연예인 옷값·미용비·성형비, 경비 처리할 수 있나요?](https://www.hantax47.com/column/creator-styling-expense.html)
 - [대표이사 퇴직연금, 이익이 2억 원을 넘는 해에 넣으면 왜 유리한가요?](https://www.hantax47.com/column/executive-pension.html)
 - [퇴직연금 DC형과 DB형, 무엇이 다르고 어느 쪽이 맞나요?](https://www.hantax47.com/column/pension-dc-db.html)
