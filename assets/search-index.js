@@ -7,6 +7,7 @@ const dir = path.join(__dirname, '..', 'column'), out = {};
 for (const f of fs.readdirSync(dir).sort()) {
   if (!f.endsWith('.html') || f === 'index.html' || f.startsWith('_')) continue;
   let s = fs.readFileSync(path.join(dir, f), 'utf8');
+  if (!s.includes('<h1')) continue;                                    // 주소 이동 안내 페이지는 건너뜀
   s = s.slice(s.indexOf('<h1'));                                       // 제목부터
   s = s.slice(0, s.search(/<div class="(notice|art-cta|more)"|<\/article>/)); // 안내·상담·관련 카드 전까지
   out[f] = s.replace(/<(script|style)[\s\S]*?<\/\1>/g, '').replace(/<[^>]+>/g, '')
