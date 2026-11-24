@@ -15,6 +15,7 @@
 - [홈](https://www.hantax47.com/): 서비스 소개(세무리포트, 사전알림, 고객 기록)
 - [대표 세무사 소개](https://www.hantax47.com/about/)
 - [법인설립](https://www.hantax47.com/company-setup/): 제휴 법무법인과 전자서명으로 사업자등록까지 진행
+- [연말정산 대행](https://www.hantax47.com/year-end/): 직원에게 직접 링크를 보내 자료 받기·상담·지급명세서 제출까지 진행, 인사팀은 연락처만 전달
 - [자주 묻는 질문](https://www.hantax47.com/faq/)
 - [세무 칼럼 목록](https://www.hantax47.com/column/)
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
