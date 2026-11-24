@@ -59,6 +59,13 @@
 .box li{list-style:disc;font-size:14.5px;color:var(--char);line-height:1.75;margin-bottom:6px}
 .box li:last-child{margin-bottom:0}
 .box.blue{background:var(--blue-soft);border-color:var(--blue-line)}
+.shots{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:24px}
+.shots figure{margin:0}
+.shots img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 24px rgba(31,35,40,.08)}
+.shots figcaption{margin-top:12px;font-size:14px;color:var(--mute);line-height:1.6}
+.shots figcaption b{display:block;color:var(--ink);font-size:15px}
+@media(max-width:980px){.shots{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.shots{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 26px;gap:14px;margin:20px -26px 0;padding:0 26px 10px}.shots figure{flex:0 0 72%;scroll-snap-align:start}}
 .cs .faq{margin-top:56px}
 .cs .faq h2{margin:16px 0 4px}
 .cs a.in{color:var(--blue);font-weight:700}
@@ -102,7 +109,22 @@
   </div>
 </section>
 
-<section class="sec" style="padding-top:44px">
+<section class="sec" style="padding:44px 0 0">
+  <div class="wrap">
+    <div class="cs">
+      <h2>직원 화면은 이렇게 생겼습니다</h2>
+      <p class="sub">직원은 휴대폰에서 네 단계로 끝냅니다. 실제 화면을 바탕으로 다시 그린 예시이며, 이름과 금액은 가상입니다.</p>
+    </div>
+    <div class="shots">
+      <figure><img src="../assets/ye/step1.png" width="280" height="520" loading="lazy" alt="1단계 기본정보 화면: 세대주, 혼인신고, 다른 회사 급여 같은 항목에 체크하고 부양가족을 넣는 모습"><figcaption><b>해당하는 것만 체크</b>답에 따라 필요한 서류 칸만 열립니다.</figcaption></figure>
+      <figure><img src="../assets/ye/step2.png" width="280" height="520" loading="lazy" alt="2단계 자료 제출 화면: 간소화 PDF를 올리자 의료비, 보험료, 교육비, 카드 사용액이 자동으로 채워진 모습"><figcaption><b>PDF를 올리면 자동 입력</b>간소화 PDF의 공제 금액이 저절로 채워집니다.</figcaption></figure>
+      <figure><img src="../assets/ye/step3.png" width="280" height="520" loading="lazy" alt="3단계 세액 확인 화면: 예상 환급액과 연금저축을 더 넣으면 늘어나는 환급액을 게이지로 보여 주는 모습"><figcaption><b>환급액과 미리 계산</b>돌려받을 세금을 바로 보고, 게이지로 달라질 금액을 계산합니다.</figcaption></figure>
+      <figure><img src="../assets/ye/chat.png" width="280" height="520" loading="lazy" alt="질문하기 화면: 직원이 영수증 사진을 보내고 연말정산 담당자가 답하는 대화"><figcaption><b>담당자에게 바로 질문</b>사진과 파일을 보내고 같은 화면에서 답을 받습니다.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:56px">
   <div class="wrap">
   <div class="cs">
 
