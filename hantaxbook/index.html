@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한택스북, 낼 세금부터 통장 흐름까지 한 화면에서 | 한택스</title>
+<meta name="description" content="한택스북은 한택스와 함께하는 회사가 쓰는 전용 화면입니다. 홈택스와 장부 자료로 낼 세금을 미리 계산하고, 매출·매입, 통장 흐름, 재무제표, 직원 급여를 정리해 보여 드립니다. 담당자가 묻는 거래에 답하고 서류를 주고받는 일도 여기서 합니다. 앱 설치 없이 휴대폰과 PC에서 엽니다.">
+<link rel="canonical" href="https://www.hantax47.com/hantaxbook/">
+<meta property="og:title" content="한택스북, 낼 세금부터 통장 흐름까지 한 화면에서">
+<meta property="og:description" content="예상 세금, 매출·매입, 통장 흐름, 재무제표, 직원 급여, 세무 서류까지. 한택스 고객사 전용 화면을 샘플 업체로 둘러보세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.hantax47.com/hantaxbook/">
+<meta property="og:image" content="https://www.hantax47.com/assets/og/page-hantaxbook.png">
+<meta property="og:site_name" content="한택스">
+<link rel="icon" href="../assets/favicon.png?v=4">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"한택스북은 누가 쓸 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"한택스에 세무를 맡긴 회사가 쓰는 전용 화면입니다. 담당자에게 말씀하시면 사업자번호로 계정을 만들어 처음 비밀번호를 안내해 드립니다."}},
+    {"@type":"Question","name":"한택스북을 쓰려면 앱을 설치해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 휴대폰이나 PC의 인터넷 브라우저에서 book.hantax47.com 에 들어가 로그인하면 됩니다. 휴대폰에서는 아래 탭으로, PC에서는 위 탭으로 메뉴를 오갑니다."}},
+    {"@type":"Question","name":"한택스북의 예상 세금은 확정 금액인가요?","acceptedAnswer":{"@type":"Answer","text":"아닙니다. 홈택스에 모인 자료로 계산한 예상 금액입니다. 지금까지 모인 자료로 본 금액과 기간 끝까지 늘려 잡은 금액처럼 두 가지 기준으로 나눠 보여 드리고, 계산 근거도 펼쳐 볼 수 있습니다. 확정 금액은 신고 때 정해지니 미리 준비할 범위를 아는 데 쓰시면 됩니다."}},
+    {"@type":"Question","name":"재무제표와 자금일보 메뉴가 잠겨 있어요.","acceptedAnswer":{"@type":"Answer","text":"재무제표, 외상잔액, 자금일보, 자금현황은 통장·카드를 연결하고 매달 결산까지 맡기신 회사에 열립니다. 담당자에게 문의해 주세요."}},
+    {"@type":"Question","name":"한택스북 비밀번호를 잊었어요.","acceptedAnswer":{"@type":"Answer","text":"담당자에게 비밀번호 재설정을 요청해 주세요. 새 임시 비밀번호를 안내해 드리고, 그 비밀번호로 로그인하면 다시 새 비밀번호를 정합니다."}},
+    {"@type":"Question","name":"맡기기 전에 한택스북 화면을 볼 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 가상 업체로 만든 샘플 화면을 로그인 없이 둘러보실 수 있습니다. 숫자는 모두 예시이고, 보기만 할 수 있습니다."}}
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../style.css?v=34">
+<style>
+/* 머리: 왼쪽 글, 오른쪽 첫 화면 */
+.hb-hero{display:grid;grid-template-columns:1fr 300px;gap:56px;align-items:center}
+.hb-hero h1{font-size:40px;line-height:1.3}
+.hb-hero .lead{max-width:560px}
+.nw{white-space:nowrap}
+.hb-first{list-style:none;margin:22px 0 28px;padding:0;display:grid;gap:8px}
+.hb-first li{display:flex;gap:12px;font-size:15px;color:var(--char);line-height:1.6}
+.hb-first b{flex:0 0 44px;color:var(--blue);font-weight:800}
+.hb-note{margin-top:14px;font-size:13.5px;color:var(--mute)}
+/* 휴대폰 화면 */
+.ph{margin:0}
+.ph img{display:block;width:100%;height:auto;border-radius:30px;border:7px solid var(--navy);background:#fff;box-shadow:0 26px 50px -18px rgba(11,30,63,.38)}
+.ph figcaption{margin-top:14px;font-size:13.5px;color:var(--mute);line-height:1.5;text-align:center}
+.ph figcaption b{display:block;color:var(--ink);font-size:15px}
+/* 앱 아래 탭을 닮은 바로가기 줄 */
+.hb-tabs{position:sticky;top:70px;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.hb-tabs nav{display:flex;justify-content:center;gap:4px;max-width:560px;margin:0 auto;padding:0 12px}
+.hb-tabs a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 9px;font-size:12.5px;font-weight:600;color:var(--mute);border-bottom:2px solid transparent;text-decoration:none}
+.hb-tabs svg{width:22px;height:22px}
+.hb-tabs a:hover{color:var(--blue)}
+.hb-tabs a[aria-current="true"]{color:var(--blue);font-weight:800;border-bottom-color:var(--blue)}
+/* 탭별 구역 */
+.hb-sec{padding:100px 0;scroll-margin-top:136px}
+.hb-sec.soft{background:var(--soft)}
+.hb-row{display:grid;grid-template-columns:1fr 470px;gap:64px;align-items:start}
+.hb-row.rev{grid-template-columns:470px 1fr}
+.hb-row.rev .hb-copy{order:2}
+.hb-eye{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--blue);margin-bottom:16px}
+.hb-eye svg{width:20px;height:20px}
+.hb-copy h2{font-size:clamp(26px,3.2vw,34px)}
+.hb-copy .lead{font-size:16.5px}
+.hb-menu{margin:26px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.hb-menu li{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:15px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.7}
+.hb-menu .nm{font-weight:800;color:var(--ink)}
+.hb-menu .tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:99px;background:var(--blue-soft);color:var(--blue);font-size:11.5px;font-weight:800;vertical-align:1px;white-space:nowrap}
+.hb-src{margin-top:16px;font-size:13.5px;color:var(--mute)}
+.hb-phones{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.hb-phones .ph:nth-child(2){margin-top:56px}
+/* 시작 순서 */
+.hb-start{max-width:760px;margin:0 auto}
+.steps{list-style:none;margin:28px 0 0;padding:0;counter-reset:st}
+.steps li{position:relative;padding:0 0 24px 54px;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
+.steps li::after{content:"";position:absolute;left:17.5px;top:40px;bottom:4px;width:1px;background:var(--line)}
+.steps li:last-child::after{display:none}
+.steps b{display:block;font-size:16.5px;color:var(--ink);margin-bottom:4px;padding-top:6px}
+.steps p{margin:0;font-size:15px;color:var(--char);line-height:1.75}
+.hb-start .faq{margin-top:64px}
+.hb-start .faq h2{font-size:26px;margin:16px 0 4px}
+.more{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:48px}
+.more a{display:block;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff;text-decoration:none;transition:border-color .15s}
+.more a:hover{border-color:var(--blue-line)}
+.more span{display:block;font-size:12.5px;font-weight:700;color:var(--mute);margin-bottom:6px}
+.more b{display:block;font-size:16px;color:var(--ink);line-height:1.5}
+.cta .hb-line{font-family:var(--serif);font-size:19px;color:#fff;margin-bottom:14px}
+@media(max-width:900px){
+  .hb-hero{grid-template-columns:1fr;gap:40px}
+  .hb-hero .ph{max-width:260px;margin:0 auto}
+  .hb-row,.hb-row.rev{grid-template-columns:1fr;gap:40px}
+  .hb-row.rev .hb-copy{order:0}
+  .hb-phones{max-width:470px}
+}
+@media(max-width:720px){
+  .hb-hero h1{font-size:29px}
+  .hb-hero .ph{max-width:230px}
+  .hb-sec{padding:64px 0;scroll-margin-top:126px}
+  .hb-phones{gap:14px}
+  .hb-phones .ph:nth-child(2){margin-top:36px}
+  .ph img{border-width:5px;border-radius:22px}
+  .hb-menu li{grid-template-columns:1fr;gap:2px}
+  .more{grid-template-columns:1fr}
+  .hb-tabs a{font-size:11.5px}
+}
+</style>
+<script src="../assets/ga.js?v=1" async></script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-tax" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></symbol>
+  <symbol id="i-biz" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+  <symbol id="i-pay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="../" class="logo" aria-label="한택스 홈"><img src="../assets/logo.png?v=2" alt="HanTax Story" width="150" height="46"></a>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="../">홈</a>
+      <a href="../tools/">세금계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡 문의</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head" id="home">
+  <div class="wrap hb-hero">
+    <div>
+      <span class="eyebrow">한택스북</span>
+      <h1>낼 세금부터 <span class="nw">통장 흐름까지,</span><br>한 화면에서 먼저 봅니다</h1>
+      <p class="lead">한택스북은 한택스와 함께하는 회사가 쓰는 전용 화면입니다. 홈택스와 장부 자료로 낼 세금을 미리 계산해 두고, 매출과 통장, 직원 급여를 정리해 보여 드립니다. 담당자가 묻는 거래에 답하고 서류를 주고받는 일도 여기서 합니다.</p>
+      <ul class="hb-first">
+        <li><b>할 일</b><span>담당자가 물어본 통장·카드 거래에 바로 답합니다.</span></li>
+        <li><b>알림</b><span>한택스가 요청한 자료와 보낼 자료를 첫 화면에서 알려 드립니다.</span></li>
+        <li><b>요약</b><span>밀린 세금, 다음에 낼 세금, 올해 매출과 이익, 통장 잔액을 모았습니다.</span></li>
+      </ul>
+      <div class="btns">
+        <a href="https://book.hantax47.com/demo" target="_blank" rel="noopener" class="btn btn-primary">샘플 화면 둘러보기</a>
+        <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-ghost">카카오톡 문의</a>
+      </div>
+      <p class="hb-note">샘플 화면은 가상 업체로 만들어 로그인 없이 볼 수 있습니다. 앱 설치 없이 휴대폰과 PC 브라우저에서 엽니다.</p>
+    </div>
+    <figure class="ph">
+      <img src="../assets/htb/home.webp" width="600" height="1298" alt="한택스북 홈 화면: 올해 매출·지출·이익과 작년 같은 달 비교 그래프, 자료 요청 알림, 담당자가 물어본 거래가 할 일로 보이는 모습">
+      <figcaption><b>홈</b>샘플 업체 화면 (가상 자료)</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="hb-tabs">
+  <nav aria-label="한택스북 메뉴 바로가기">
+    <a href="#home"><svg aria-hidden="true"><use href="#i-home"/></svg>홈</a>
+    <a href="#tax"><svg aria-hidden="true"><use href="#i-tax"/></svg>세금</a>
+    <a href="#biz"><svg aria-hidden="true"><use href="#i-biz"/></svg>경영</a>
+    <a href="#pay"><svg aria-hidden="true"><use href="#i-pay"/></svg>급여</a>
+    <a href="#box"><svg aria-hidden="true"><use href="#i-box"/></svg>자료</a>
+  </nav>
+</div>
+
+<section class="hb-sec" id="tax">
+  <div class="wrap hb-row">
+    <div class="hb-copy">
+      <span class="hb-eye"><svg aria-hidden="true"><use href="#i-tax"/></svg>세금</span>
+      <h2>낼 세금을, 신고 전에 먼저</h2>
+      <p class="lead">언제 얼마를 내야 하는지, 왜 그 금액인지까지 펼쳐 볼 수 있습니다.</p>
+      <ul class="hb-menu">
+        <li><span class="nm">세금납부</span><span>석 달 안에 낼 세금, 올해 이미 낸 세금, 밀린 세금이 없는지를 한 화면에 모았습니다.</span></li>
+        <li><span class="nm">예상세금</span><span>부가세와 법인세(개인은 종합소득세)를 지금까지 모인 자료와 기간 끝까지 늘려 잡은 금액, 두 가지 기준으로 계산하고 지난 기수와 비교합니다.</span></li>
+        <li><span class="nm">매출매입</span><span>홈택스에 잡힌 매출과 매입을 달별·거래처별로 찾아봅니다.</span></li>
+        <li><span class="nm">통장카드</span><span>담당자가 물어본 거래에 답하고, 기억해 둘 거래에는 메모를 남깁니다.</span></li>
+        <li><span class="nm">절세점검</span><span>비용 증빙을 더 모으면 세금이 얼마나 줄어드는지, 작년에 받은 공제·감면을 올해도 받을 수 있는지 점검합니다.</span></li>
+      </ul>
+      <p class="hb-src">세금 화면은 홈택스 자료로 채워집니다.</p>
+    </div>
+    <div class="hb-phones">
+      <figure class="ph"><img src="../assets/htb/tax-paid.webp" width="600" height="1298" loading="lazy" alt="세금납부 화면: 석 달 안에 낼 세금 870만 원, 올해 낸 세금, 밀린 세금 없음, 원천세·부가세·법인세 납부 기한과 금액"><figcaption><b>세금납부</b>낼 세금과 낸 세금</figcaption></figure>
+      <figure class="ph"><img src="../assets/htb/tax.webp" width="600" height="1298" loading="lazy" alt="예상세금 화면: 이번 기수 부가세를 현재 기준과 환산 기준으로 나눠 보여 주고 지난 3기 매출을 막대그래프로 비교"><figcaption><b>예상세금</b>두 가지 기준과 지난 기수 비교</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="hb-sec soft" id="biz">
+  <div class="wrap hb-row rev">
+    <div class="hb-copy">
+      <span class="hb-eye"><svg aria-hidden="true"><use href="#i-biz"/></svg>경영</span>
+      <h2>번 돈과 남은 돈을 함께</h2>
+      <p class="lead">장부상 이익과 통장에 남은 돈은 다릅니다. 두 숫자를 나란히 놓고 회사 사정을 봅니다.</p>
+      <ul class="hb-menu">
+        <li><span class="nm">대시보드</span><span>매출과 이익을 작년 같은 달과 비교하고, 달마다 통장 입출금과 잔액 흐름을 봅니다.</span></li>
+        <li><span class="nm">재무제표<span class="tag">매달 결산</span></span><span>손익계산서와 재무상태표를 전월·작년과 비교하고, 계정별원장을 엑셀로 받습니다.</span></li>
+        <li><span class="nm">외상잔액<span class="tag">매달 결산</span></span><span>계산서와 통장을 맞춰 아직 받지 못한 돈과 90일 넘은 외상을 거래처별로 보여 드립니다.</span></li>
+        <li><span class="nm">자금일보<span class="tag">매달 결산</span></span><span>하루 동안의 통장 입출금, 카드 사용, 계산서를 정리합니다. 원하시면 매일 아침 알림톡으로도 보내 드립니다.</span></li>
+        <li><span class="nm">자금현황<span class="tag">매달 결산</span></span><span>지금 쓸 수 있는 돈으로 매달 나가는 고정비를 몇 달 낼 수 있는지 계산하고, 이익과 통장 돈이 왜 다른지 풀어 드립니다.</span></li>
+        <li><span class="nm">팀별정산<span class="tag">매달 결산</span></span><span>팀이나 부문을 나눠 관리하는 회사는 팀별 손익도 봅니다.</span></li>
+      </ul>
+      <p class="hb-src">대시보드는 홈택스 자료로, 나머지는 통장·카드를 연결해 매달 결산한 장부로 채워집니다.</p>
+    </div>
+    <div class="hb-phones">
+      <figure class="ph"><img src="../assets/htb/biz.webp" width="600" height="1298" loading="lazy" alt="대시보드 화면: 올해와 작년 월별 매출을 겹쳐 그린 선 그래프와 기간 영업이익·이익률"><figcaption><b>대시보드</b>작년 같은 달과 비교</figcaption></figure>
+      <figure class="ph"><img src="../assets/htb/biz-cash.webp" width="600" height="1298" loading="lazy" alt="자금현황 화면: 가용자금을 월 고정비로 나눈 자금 여력 약 8.3개월과 통장 잔고·외상매출금·납부할 세금 내역"><figcaption><b>자금현황</b>고정비를 몇 달 낼 수 있는지</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="hb-sec" id="pay">
+  <div class="wrap hb-row">
+    <div class="hb-copy">
+      <span class="hb-eye"><svg aria-hidden="true"><use href="#i-pay"/></svg>급여</span>
+      <h2>직원과 급여를 한곳에서</h2>
+      <p class="lead">급여 신고를 맡기시면 직원 명부와 매달 급여가 이곳에 쌓입니다.</p>
+      <ul class="hb-menu">
+        <li><span class="nm">직원명부</span><span>재직·퇴직 직원과 연차, 퇴직금 추정액을 보고, 입사·퇴사는 여기서 신청합니다.</span></li>
+        <li><span class="nm">이달급여</span><span>담당자가 만든 이달 급여를 확인합니다. 바뀐 금액만 고치면 4대보험과 세금은 담당자가 다시 계산하고, 다 보셨으면 마감합니다.</span></li>
+        <li><span class="nm">연간급여</span><span>직원별·달별 급여와 4대보험 고지 내역을 모아 보고 엑셀로 받습니다.</span></li>
+        <li><span class="nm">수당계산</span><span>연장·야간·휴일 근로수당, 주휴수당, 연차수당, 퇴직금을 미리 계산해 봅니다.</span></li>
+      </ul>
+    </div>
+    <div class="hb-phones">
+      <figure class="ph"><img src="../assets/htb/pay.webp" width="600" height="1298" loading="lazy" alt="이달급여 화면: 인원·지급 합계·공제 합계·실지급 합계와 직원별 기본급·식대 입력 칸, 아래에 마감 단추"><figcaption><b>이달급여</b>확인하고 마감</figcaption></figure>
+      <figure class="ph"><img src="../assets/htb/pay-staff.webp" width="600" height="1298" loading="lazy" alt="직원명부 화면: 재직 직원 목록과 입사일, 연차·퇴직금추정액 탭, 입퇴사 신청 단추"><figcaption><b>직원명부</b>입사·퇴사 신청까지</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="hb-sec soft" id="box">
+  <div class="wrap hb-row rev">
+    <div class="hb-copy">
+      <span class="hb-eye"><svg aria-hidden="true"><use href="#i-box"/></svg>자료</span>
+      <h2>주고받는 서류는 여기에 모입니다</h2>
+      <p class="lead">메일과 메신저로 흩어지던 신고서와 증빙을 한곳에서 찾고 보냅니다.</p>
+      <ul class="hb-menu">
+        <li><span class="nm">세무서류</span><span>신고서, 접수증, 급여명세서, 급여대장을 언제든 내려받습니다.</span></li>
+        <li><span class="nm">자료제출</span><span>한택스가 요청한 자료를 확인하고, 파일이나 휴대폰 사진으로 바로 올립니다.</span></li>
+        <li><span class="nm">증명발급</span><span>사업자등록증명, 납세증명서 같은 증명서를 신청하면 한택스가 홈택스에서 발급해 드립니다.</span></li>
+      </ul>
+      <p class="hb-src">궁금한 점은 화면 위 「문의」에서 담당자에게 바로 연락합니다.</p>
+    </div>
+    <div class="hb-phones">
+      <figure class="ph"><img src="../assets/htb/box.webp" width="600" height="1298" loading="lazy" alt="세무서류 화면: 원천세·부가세 접수증, 신고서, 급여명세서 파일 목록과 내려받기 단추"><figcaption><b>세무서류</b>신고서·접수증 내려받기</figcaption></figure>
+      <figure class="ph"><img src="../assets/htb/box-send.webp" width="600" height="1298" loading="lazy" alt="자료제출 화면: 한택스가 요청한 자료 안내와 파일을 끌어 놓거나 사진으로 올리는 칸, 보낸 자료 목록"><figcaption><b>자료제출</b>요청 자료를 사진으로 바로</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="hb-sec">
+  <div class="wrap">
+    <div class="hb-start">
+      <h2>이렇게 시작합니다</h2>
+      <ol class="steps">
+        <li><b>담당자에게 요청</b><p>한택스에 세무를 맡기신 회사라면 담당자에게 한택스북을 쓰고 싶다고 말씀해 주세요. 사업자번호로 계정을 만들어 처음 비밀번호를 안내해 드립니다.</p></li>
+        <li><b>로그인</b><p>휴대폰이나 PC 브라우저에서 book.hantax47.com 에 들어가 사업자번호와 비밀번호로 로그인합니다. 처음 로그인하면 비밀번호를 새로 정합니다.</p></li>
+        <li><b>둘러보기</b><p>휴대폰은 아래 탭, PC는 위 탭으로 홈·세금·경영·급여·자료를 오갑니다. 매달 결산까지 맡기시면 재무제표와 자금일보 같은 화면이 더 열립니다.</p></li>
+      </ol>
+
+      <section class="faq">
+        <h2>자주 묻는 질문</h2>
+        <details><summary>한택스북은 누가 쓸 수 있나요?</summary><p>한택스에 세무를 맡긴 회사가 쓰는 전용 화면입니다. 담당자에게 말씀하시면 사업자번호로 계정을 만들어 처음 비밀번호를 안내해 드립니다.</p></details>
+        <details><summary>한택스북을 쓰려면 앱을 설치해야 하나요?</summary><p>아니요. 휴대폰이나 PC의 인터넷 브라우저에서 book.hantax47.com 에 들어가 로그인하면 됩니다. 휴대폰에서는 아래 탭으로, PC에서는 위 탭으로 메뉴를 오갑니다.</p></details>
+        <details><summary>한택스북의 예상 세금은 확정 금액인가요?</summary><p>아닙니다. 홈택스에 모인 자료로 계산한 예상 금액입니다. 지금까지 모인 자료로 본 금액과 기간 끝까지 늘려 잡은 금액처럼 두 가지 기준으로 나눠 보여 드리고, 계산 근거도 펼쳐 볼 수 있습니다. 확정 금액은 신고 때 정해지니 미리 준비할 범위를 아는 데 쓰시면 됩니다.</p></details>
+        <details><summary>재무제표와 자금일보 메뉴가 잠겨 있어요.</summary><p>재무제표, 외상잔액, 자금일보, 자금현황은 통장·카드를 연결하고 매달 결산까지 맡기신 회사에 열립니다. 담당자에게 문의해 주세요.</p></details>
+        <details><summary>한택스북 비밀번호를 잊었어요.</summary><p>담당자에게 비밀번호 재설정을 요청해 주세요. 새 임시 비밀번호를 안내해 드리고, 그 비밀번호로 로그인하면 다시 새 비밀번호를 정합니다.</p></details>
+        <details><summary>맡기기 전에 한택스북 화면을 볼 수 있나요?</summary><p>네. 가상 업체로 만든 <a href="https://book.hantax47.com/demo" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">샘플 화면</a>을 로그인 없이 둘러보실 수 있습니다. 숫자는 모두 예시이고, 보기만 할 수 있습니다.</p></details>
+      </section>
+
+      <div class="more">
+        <a href="../year-end/"><span>서비스</span><b>연말정산 대행, 인사팀은 직원 연락처만 넘겨주세요</b></a>
+        <a href="../company-setup/"><span>서비스</span><b>법인설립, 세무사가 사업자등록까지 원스톱으로 진행합니다</b></a>
+        <a href="../tools/"><span>세금계산기</span><b>세금 계산기 모음, 결정하시기 전에 숫자로 먼저</b></a>
+        <a href="../faq/"><span>FAQ</span><b>자주 묻는 질문, 세목별로 모아 봤습니다</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <p class="hb-line">숫자는 한택스북이 보여 드리고, 판단은 담당자와 함께 합니다.</p>
+    <h2>우리 회사 화면이<br><em>궁금하시다면</em></h2>
+    <p>샘플 화면을 먼저 둘러보시고, 궁금한 점은 카카오톡으로 물어보세요.</p>
+    <div class="btns">
+      <a href="https://book.hantax47.com/demo" target="_blank" rel="noopener" class="btn btn-ghost">샘플 화면 둘러보기</a>
+      <a href="http://pf.kakao.com/_xmsaxmV/chat" target="_blank" rel="noopener" class="btn btn-primary">카카오톡으로 문의하기</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <img src="../assets/logo.png?v=2" alt="HanTax Story" width="130" height="40">
+      <p><b>한택스는 나이스원세무법인 스마트지점의 브랜드명입니다.</b><br>대표 한진식 세무사 · 서울특별시 영등포구 63로 32(여의도동 61-4), 1211호 라이프콤비빌딩<br>사업자등록번호 394-85-01876 · 전화 0507-1361-6622</p>
+    </div>
+    <div class="foot-links">
+      <a href="../tools/">세금 계산기</a>
+      <a href="../company-setup/">법인설립</a>
+      <a href="../column/">세무칼럼</a>
+      <a href="../faq/">FAQ</a>
+      <a href="../privacy/">개인정보처리방침</a>
+      <a href="../">홈으로</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 HanTax</div>
+</footer>
+
+<script>
+const mb=document.querySelector(".menu-btn"),nl=document.getElementById("nav-links");
+mb.addEventListener("click",()=>{const open=document.body.classList.toggle("menu-open");mb.setAttribute("aria-expanded",open);mb.setAttribute("aria-label",open?"메뉴 닫기":"메뉴 열기");});
+nl.addEventListener("click",e=>{if(e.target.tagName==="A"){document.body.classList.remove("menu-open");mb.setAttribute("aria-expanded","false");}});
+// 바로가기 줄: 지금 보고 있는 구역에 밑줄
+const tabs=[...document.querySelectorAll(".hb-tabs a")];
+if("IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)tabs.forEach(a=>a.setAttribute("aria-current",a.hash==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
+  tabs.forEach(a=>{const s=document.querySelector(a.hash);if(s)io.observe(s)});
+}
+</script>
+</body>
+</html>
