@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>한택스북, 낼 세금부터 통장 흐름까지 한 화면에서 | 한택스</title>
-<meta name="description" content="한택스북은 한택스와 함께하는 회사가 쓰는 전용 화면입니다. 홈택스와 장부 자료로 낼 세금을 미리 계산하고, 매출·매입, 통장 흐름, 재무제표, 직원 급여를 정리해 보여 드립니다. 담당자가 묻는 거래에 답하고 서류를 주고받는 일도 여기서 합니다. 앱 설치 없이 휴대폰과 PC에서 엽니다.">
+<meta name="description" content="한택스북은 한택스와 함께하는 회사가 쓰는 전용 화면입니다. 홈택스와 장부 자료로 낼 세금을 미리 계산하고, 매출·매입, 통장 흐름, 재무제표, 직원 급여를 정리해 보여 드리고, 전날 자금 흐름은 매일 아침 알림톡으로 보내 드립니다. 담당자가 묻는 거래에 답하고 서류를 주고받는 일도 여기서 합니다. 앱 설치 없이 휴대폰과 PC에서 엽니다.">
 <link rel="canonical" href="https://www.hantax47.com/hantaxbook/">
 <meta property="og:title" content="한택스북, 낼 세금부터 통장 흐름까지 한 화면에서">
 <meta property="og:description" content="예상 세금, 매출·매입, 통장 흐름, 재무제표, 직원 급여, 세무 서류까지. 한택스 고객사 전용 화면을 샘플 업체로 둘러보세요.">
@@ -22,6 +22,7 @@
     {"@type":"Question","name":"한택스북을 쓰려면 앱을 설치해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 휴대폰이나 PC의 인터넷 브라우저에서 book.hantax47.com 에 들어가 로그인하면 됩니다. 휴대폰에서는 아래 탭으로, PC에서는 위 탭으로 메뉴를 오갑니다."}},
     {"@type":"Question","name":"한택스북의 예상 세금은 확정 금액인가요?","acceptedAnswer":{"@type":"Answer","text":"아닙니다. 홈택스에 모인 자료로 계산한 예상 금액입니다. 지금까지 모인 자료로 본 금액과 기간 끝까지 늘려 잡은 금액처럼 두 가지 기준으로 나눠 보여 드리고, 계산 근거도 펼쳐 볼 수 있습니다. 확정 금액은 신고 때 정해지니 미리 준비할 범위를 아는 데 쓰시면 됩니다."}},
     {"@type":"Question","name":"재무제표와 자금일보 메뉴가 잠겨 있어요.","acceptedAnswer":{"@type":"Answer","text":"재무제표, 외상잔액, 자금일보, 자금현황은 통장·카드를 연결하고 매달 결산까지 맡기신 회사에 열립니다. 담당자에게 문의해 주세요."}},
+    {"@type":"Question","name":"자금일보 알림톡은 어떻게 받나요?","acceptedAnswer":{"@type":"Answer","text":"매달 결산까지 맡기신 회사에 전날 통장 입출금, 세금계산서·계산서, 카드 사용을 건수와 금액으로 정리해 매일 아침 카카오톡 알림톡으로 보내 드립니다. 받으시려면 담당자에게 말씀해 주세요. 알림톡의 자금일보 보기 단추를 누르면 그날 자금일보 화면이 열립니다."}},
     {"@type":"Question","name":"한택스북 비밀번호를 잊었어요.","acceptedAnswer":{"@type":"Answer","text":"담당자에게 비밀번호 재설정을 요청해 주세요. 새 임시 비밀번호를 안내해 드리고, 그 비밀번호로 로그인하면 다시 새 비밀번호를 정합니다."}},
     {"@type":"Question","name":"맡기기 전에 한택스북 화면을 볼 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 가상 업체로 만든 샘플 화면을 로그인 없이 둘러보실 수 있습니다. 숫자는 모두 예시이고, 보기만 할 수 있습니다."}}
   ]
@@ -87,6 +88,20 @@
 .more a:hover{border-color:var(--blue-line)}
 .more span{display:block;font-size:12.5px;font-weight:700;color:var(--mute);margin-bottom:6px}
 .more b{display:block;font-size:16px;color:var(--ink);line-height:1.5}
+/* 자금일보 알림톡 (카카오톡 대화방 모양) */
+.hb-alim{margin-top:88px;align-items:center}
+.kt{margin:0;max-width:380px;justify-self:center;width:100%}
+.kt-room{background:#B2C7DA;border-radius:22px;padding:20px 18px 22px;box-shadow:0 26px 50px -22px rgba(11,30,63,.35)}
+.kt-from{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.kt-from img{width:36px;height:36px;border-radius:13px;background:#fff;object-fit:contain}
+.kt-from b{font-size:13px;font-weight:600;color:#3A4250}
+.kt-msg{margin-left:45px;background:#fff;border-radius:4px 14px 14px 14px;overflow:hidden}
+.kt-head{background:#FEE500;color:#191919;font-size:13.5px;font-weight:700;padding:11px 14px}
+.kt-body{padding:14px 14px 14px;font-size:13.5px;line-height:1.6;color:#191919}
+.kt-body p{margin:0 0 11px}
+.kt-btn{display:block;margin-top:4px;background:#F2F3F5;border-radius:6px;padding:10px 0;text-align:center;font-size:13.5px;color:#191919}
+.kt figcaption{margin-top:14px;font-size:13.5px;color:var(--mute);text-align:center}
+.kt figcaption b{display:block;color:var(--ink);font-size:15px}
 .cta .hb-line{font-family:var(--serif);font-size:19px;color:#fff;margin-bottom:14px}
 @media(max-width:900px){
   .hb-hero{grid-template-columns:1fr;gap:40px}
@@ -98,6 +113,8 @@
 @media(max-width:720px){
   .hb-hero h1{font-size:29px}
   .hb-hero .ph{max-width:230px}
+  .hb-alim{margin-top:64px}
+  .kt-room{padding:16px 12px 18px}
   .hb-sec{padding:64px 0;scroll-margin-top:126px}
   .hb-phones{gap:14px}
   .hb-phones .ph:nth-child(2){margin-top:36px}
@@ -212,6 +229,40 @@
       <figure class="ph"><img src="../assets/htb/biz-cash.webp" width="600" height="1298" loading="lazy" alt="자금현황 화면: 가용자금을 월 고정비로 나눈 자금 여력 약 8.3개월과 통장 잔고·외상매출금·납부할 세금 내역"><figcaption><b>자금현황</b>고정비를 몇 달 낼 수 있는지</figcaption></figure>
     </div>
   </div>
+  <div class="wrap hb-row hb-alim">
+    <div class="hb-copy">
+      <span class="hb-eye"><svg aria-hidden="true"><use href="#i-biz"/></svg>자금일보 알림톡</span>
+      <h2>어제 돈의 흐름을, 매일 아침 카카오톡으로</h2>
+      <p class="lead">한택스북을 열지 않아도 됩니다. 전날 통장과 계산서, 카드 사용을 건수와 금액으로 정리해 매일 아침 알림톡으로 보내 드립니다.</p>
+      <ul class="hb-menu">
+        <li><span class="nm">계좌 입출금</span><span>들어온 돈과 나간 돈의 건수·금액, 그리고 계좌 잔액</span></li>
+        <li><span class="nm">계산서</span><span>세금계산서·계산서 발급(매출)과 수취(매입)의 건수·금액</span></li>
+        <li><span class="nm">카드 사용</span><span>카드 사용 건수와 금액</span></li>
+        <li><span class="nm">자금일보 보기</span><span>알림톡 단추를 누르면 한택스북의 그날 자금일보로 이어져 거래처별 내역까지 봅니다.</span></li>
+      </ul>
+      <p class="hb-src">매달 결산까지 맡기신 회사에 보내 드립니다. 받으시려면 담당자에게 말씀해 주세요.</p>
+    </div>
+    <figure class="kt">
+      <div class="kt-room">
+        <div class="kt-from"><img src="../assets/favicon.png?v=4" width="36" height="36" alt=""><b>한택스</b></div>
+        <div class="kt-msg">
+          <div class="kt-head">알림톡 도착</div>
+          <div class="kt-body">
+            <p>[자금일보 안내]</p>
+            <p>(주)한택스샘플 대표님 안녕하세요 한택스입니다.</p>
+            <p>11월 11일(수) 자금 현황을 알려드립니다.</p>
+            <p>■ 계좌 입출금<br>· 입금 1건 / 1,980,000원<br>· 출금 2건 / 7,613,100원<br>· 계좌 잔액 217,885,359원</p>
+            <p>■ 세금계산서·계산서<br>· 발급(매출) 1건 / 2,200,000원<br>· 수취(매입) 2건 / 7,960,700원</p>
+            <p>■ 카드 사용<br>· 2건 / 104,200원</p>
+            <p>거래별 상세 내역은 아래 '자금일보 보기'에서 확인하실 수 있습니다.</p>
+            <p>문의사항은 담당자에게 편하게 연락 주세요.</p>
+            <span class="kt-btn">자금일보 보기</span>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>자금일보 알림톡</b>예시 (가상 업체)</figcaption>
+    </figure>
+  </div>
 </section>
 
 <section class="hb-sec" id="pay">
@@ -270,6 +321,7 @@
         <details><summary>한택스북을 쓰려면 앱을 설치해야 하나요?</summary><p>아니요. 휴대폰이나 PC의 인터넷 브라우저에서 book.hantax47.com 에 들어가 로그인하면 됩니다. 휴대폰에서는 아래 탭으로, PC에서는 위 탭으로 메뉴를 오갑니다.</p></details>
         <details><summary>한택스북의 예상 세금은 확정 금액인가요?</summary><p>아닙니다. 홈택스에 모인 자료로 계산한 예상 금액입니다. 지금까지 모인 자료로 본 금액과 기간 끝까지 늘려 잡은 금액처럼 두 가지 기준으로 나눠 보여 드리고, 계산 근거도 펼쳐 볼 수 있습니다. 확정 금액은 신고 때 정해지니 미리 준비할 범위를 아는 데 쓰시면 됩니다.</p></details>
         <details><summary>재무제표와 자금일보 메뉴가 잠겨 있어요.</summary><p>재무제표, 외상잔액, 자금일보, 자금현황은 통장·카드를 연결하고 매달 결산까지 맡기신 회사에 열립니다. 담당자에게 문의해 주세요.</p></details>
+        <details><summary>자금일보 알림톡은 어떻게 받나요?</summary><p>매달 결산까지 맡기신 회사에 전날 통장 입출금, 세금계산서·계산서, 카드 사용을 건수와 금액으로 정리해 매일 아침 카카오톡 알림톡으로 보내 드립니다. 받으시려면 담당자에게 말씀해 주세요. 알림톡의 자금일보 보기 단추를 누르면 그날 자금일보 화면이 열립니다.</p></details>
         <details><summary>한택스북 비밀번호를 잊었어요.</summary><p>담당자에게 비밀번호 재설정을 요청해 주세요. 새 임시 비밀번호를 안내해 드리고, 그 비밀번호로 로그인하면 다시 새 비밀번호를 정합니다.</p></details>
         <details><summary>맡기기 전에 한택스북 화면을 볼 수 있나요?</summary><p>네. 가상 업체로 만든 <a href="https://book.hantax47.com/demo" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">샘플 화면</a>을 로그인 없이 둘러보실 수 있습니다. 숫자는 모두 예시이고, 보기만 할 수 있습니다.</p></details>
       </section>

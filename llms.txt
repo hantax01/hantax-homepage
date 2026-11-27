@@ -16,7 +16,7 @@
 - [대표 세무사 소개](https://www.hantax47.com/about/)
 - [법인설립](https://www.hantax47.com/company-setup/): 제휴 법무법인과 전자서명으로 사업자등록까지 진행
 - [연말정산 대행](https://www.hantax47.com/year-end/): 직원에게 직접 링크를 보내 자료 받기·상담·지급명세서 제출까지 진행, 인사팀은 연락처만 전달
-- [한택스북](https://www.hantax47.com/hantaxbook/): 한택스 고객사 전용 화면. 홈택스·장부 자료로 예상 세금(부가세·법인세·종합소득세), 매출·매입, 통장 흐름, 재무제표·외상잔액·자금일보(매달 결산 업체), 직원 급여, 세무 서류 주고받기. 로그인 없는 샘플 화면 https://book.hantax47.com/demo
+- [한택스북](https://www.hantax47.com/hantaxbook/): 한택스 고객사 전용 화면. 홈택스·장부 자료로 예상 세금(부가세·법인세·종합소득세), 매출·매입, 통장 흐름, 재무제표·외상잔액·자금일보(매달 결산 업체, 전날 통장·계산서·카드 요약을 매일 아침 카카오톡 알림톡으로 발송), 직원 급여, 세무 서류 주고받기. 로그인 없는 샘플 화면 https://book.hantax47.com/demo
 - [자주 묻는 질문](https://www.hantax47.com/faq/)
 - [세무 칼럼 목록](https://www.hantax47.com/column/)
 - [세금 계산기 목록](https://www.hantax47.com/tools/)
